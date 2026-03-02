@@ -1,0 +1,77 @@
+# Dependencias
+node_modules/
+
+# Builds / output
+dist/
+dist-ssr/
+.vite/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Variables de entorno (no subir secretos)
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.example
+
+# Cachés / tooling
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+.cache/
+.parcel-cache/
+.turbo/
+
+# Editor / IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# More OS / thumbnails
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage / test reports
+.nyc_output/
+coverage-report/
+
+# Storybook
+storybook-static/
+
+# Build outputs (some tools)
+build/
+.output/
+
+# SSL / keys
+*.pem
+*.key
+*.p12
+*.crt
+
+# JetBrains workspace files
+*.iml
+
+# Misc caches
+.sass-cache/
+.cache/
+.parcel-cache/
+

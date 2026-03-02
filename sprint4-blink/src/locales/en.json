@@ -1,0 +1,337 @@
+{
+  "app": {
+    "name": "Blink"
+  },
+  "common": {
+    "loading": "Loading...",
+    "logoAlt": "Logo of {app}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "avatar": "Avatar",
+    "search": "Search",
+    "refresh": "Refresh",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "logout": "Sign out"
+  },
+  "language": {
+    "label": "Language",
+    "ca": "Catalan",
+    "es": "Spanish",
+    "en": "English"
+  },
+  "nav": {
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "map": "Map",
+    "tickets": "Tickets",
+    "bookings": "Bookings",
+    "users": "Users",
+    "vehicles": "Vehicles",
+    "geofencing": "Geofencing",
+    "settings": "Settings",
+    "sections": {
+      "client": "Client",
+      "admin": "Admin"
+    }
+  },
+  "auth": {
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "login": {
+      "title": "Sign in",
+      "header": "Sign in to {app}",
+      "cta": "Sign in",
+      "loading": "Loading...",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example.email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "noAccount": "Don’t have an account?",
+      "goRegister": "Create one"
+      ,
+      "forgotPassword": "Forgot password?",
+      "welcome": "Welcome {name}!",
+      "genericError": "Could not sign in. Please try again."
+    },
+    "register": {
+      "title": "Create your Blink account",
+      "cta": "Create account",
+      "loading": "Loading...",
+      "haveAccount": "Already have an account?",
+      "goLogin": "Sign in",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Your name",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "+34 600 000 000",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example.email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmationLabel": "Confirm password",
+      "success": "Account created! Welcome {name}",
+      "genericError": "Could not register. Please try again."
+    }
+  },
+  "roles": {
+    "user": "User",
+    "admin": "Admin"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to the Dashboard!",
+    "userInfo": "User information",
+    "user": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "personalInfo": "Personal information",
+    "personalInfoDesc": "Manage your personal info, password, and account settings.",
+    "userAvatarAlt": "User avatar",
+    "changeAvatar": "Change avatar",
+    "avatarHelp": "JPG, GIF or PNG. 1MB max.",
+    "toast": {
+      "avatarUpdated": "Avatar updated",
+      "personalInfoSaved": "Personal information saved successfully",
+      "deleteWarning": "This action cannot be undone"
+    },
+    "validation": {
+      "fileTooLarge": "The file is too large. Maximum 1MB.",
+      "invalidFileType": "Only JPG, GIF, or PNG files are allowed."
+    },
+    "errors": {
+      "userInfoUnavailable": "Could not retrieve user information",
+      "updateInfo": "Error updating information"
+    },
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "currentPassword": "Current password",
+    "saveChanges": "Save changes",
+    "deleteAccount": "Delete account",
+    "deleteAccountDesc": "No longer want to use our service? You can delete your account here. This action cannot be undone. All information related to this account will be permanently deleted.",
+    "deleteAccountCta": "Yes, delete my account"
+  },
+  "users": {
+    "title": "User management",
+    "description": "Manage system users",
+    "searchPlaceholder": "Search by name or email...",
+    "loading": "Loading users...",
+    "empty": "No users to display",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "createdAt": "Created at",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Full name",
+      "email": "Email",
+      "emailPlaceholder": "email.example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+34 600 000 000",
+      "role": "Role",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmation": "Confirm password",
+      "roleUser": "User",
+      "roleAdmin": "Admin"
+    },
+    "modal": {
+      "deleteTitle": "Delete user",
+      "deleteMessage": "Are you sure you want to delete user {name}? This action cannot be undone.",
+      "detailsTitle": "User details"
+    },
+    "actions": {
+      "newUser": "New user",
+      "createNewUser": "Create new user",
+      "editUser": "Edit user",
+      "createUser": "Create user",
+      "updateUser": "Update user"
+    },
+    "toast": {
+      "created": "User created successfully",
+      "updated": "User updated successfully",
+      "deleted": "User deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load users",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all users.",
+      "search": "Failed to search users",
+      "save": "Failed to save user",
+      "delete": "Failed to delete user",
+      "notFound": "User not found. It may have already been deleted."
+    }
+  },
+  "table": {
+    "previous": "Previous",
+    "next": "Next",
+    "paginationLabel": "Pagination",
+    "showing": "Showing {from} to {to} of {total} results",
+    "empty": "No data to display",
+    "loading": "Loading..."
+  },
+  "filters": {
+    "clear": "Clear filters"
+  },
+  "tickets": {
+    "title": "My Tickets",
+    "description": "Manage your event tickets",
+    "searchPlaceholder": "Search by subject or description...",
+    "loading": "Loading tickets...",
+    "empty": "No tickets to display",
+    "table": {
+      "evento": "Event",
+      "correo": "Email",
+      "asunto": "Subject",
+      "descripcion": "Description",
+      "precio": "Price",
+      "estado": "Status",
+      "usuario": "User",
+      "fechaUsuario": "Date",
+      "fechaCompra": "Purchase date",
+      "createdAt": "Creation date",
+      "actions": "Actions"
+    },
+    "form": {
+      "eventoId": "Event ID",
+      "eventoIdPlaceholder": "Enter event ID",
+      "precio": "Price",
+      "precioPlaceholder": "0.00",
+      "correo": "Email",
+      "correoPlaceholder": "you.example.com",
+      "asunto": "Subject",
+      "asuntoPlaceholder": "Short subject",
+      "fecha": "Date",
+      "fechaPlaceholder": "YYYY-MM-DD",
+      "descripcion": "Description",
+      "descripcionPlaceholder": "Describe the issue or problem",
+      "type": "Type",
+      "typeSelect": "Select type",
+      "typeSupport": "Support",
+      "typeBilling": "Billing",
+      "typeTechnical": "Technical",
+      "typeOther": "Other",
+      "priority": "Priority",
+      "prioritySelect": "Select priority",
+      "priorityLow": "Low",
+      "priorityMedium": "Medium",
+      "priorityHigh": "High",
+      "priorityUrgent": "Urgent"
+    },
+    "estados": {
+      "pendiente": "Pending",
+      "confirmado": "Confirmed",
+      "cancelado": "Cancelled",
+      "usado": "Used"
+    },
+    "modal": {
+      "detailsTitle": "Ticket details"
+    },
+    "actions": {
+      "newTicket": "New ticket",
+      "createNewTicket": "Create new ticket",
+      "createTicket": "Create ticket"
+    },
+    "chat": {
+      "noMessages": "No messages yet. Send your first message to start the conversation.",
+      "admin": "Admin",
+      "you": "You",
+      "messagePlaceholder": "Write your message...",
+      "send": "Send"
+    },
+    "toast": {
+      "created": "Ticket created successfully",
+      "messageSent": "Message sent successfully"
+    },
+    "errors": {
+      "load": "Error loading tickets",
+      "searchEndpointUnavailable": "Search endpoint unavailable. Reload to see all tickets.",
+      "search": "Error searching tickets",
+      "save": "Error saving ticket",
+      "delete": "Error deleting ticket",
+      "invalidId": "Invalid ticket ID."
+    }
+  },
+  "adminTickets": {
+    "title": "Ticket Management",
+    "description": "Manage all system tickets",
+    "searchPlaceholder": "Search by subject, description or user...",
+    "actions": {
+      "editTicket": "Edit ticket",
+      "reply": "Reply"
+    },
+    "modal": {
+      "detailsTitle": "Ticket details",
+      "deleteTitle": "Delete ticket",
+      "deleteMessage": "Are you sure you want to delete the ticket '{asunto}'? This action cannot be undone."
+    },
+    "chat": {
+      "title": "Ticket conversation",
+      "noMessages": "No messages yet",
+      "admin": "Admin",
+      "messagePlaceholder": "Write your reply...",
+      "replyAs": "Reply as",
+      "send": "Send"
+    },
+    "toast": {
+      "updated": "Ticket updated successfully",
+      "deleted": "Ticket deleted successfully",
+      "messageSent": "Message sent successfully"
+    }
+  },
+  "validation": {
+    "fixFormErrors": "Please fix the form errors.",
+    "name": {
+      "required": "Name is required.",
+      "min": "Name must be at least 2 characters.",
+      "max": "Name cannot exceed 100 characters."
+    },
+    "email": {
+      "required": "Email is required.",
+      "invalid": "Email is invalid.",
+      "max": "Email cannot exceed 255 characters."
+    },
+    "phone": {
+      "required": "Phone is required.",
+      "invalid": "Phone is invalid.",
+      "minDigits": "Phone must have at least 7 digits."
+    },
+    "password": {
+      "required": "Password is required.",
+      "min": "Password must be at least 8 characters.",
+      "max": "Password cannot exceed 255 characters."
+    },
+    "passwordConfirmation": {
+      "required": "Password confirmation is required."
+    },
+    "role": {
+      "required": "Role is required.",
+      "invalid": "Role is invalid."
+    },
+    "passwordMismatch": "Passwords do not match.",
+    "ticket": {
+      "eventoRequired": "Event is required.",
+      "eventoInvalid": "Event ID is invalid.",
+      "precioRequired": "Price is required.",
+      "precioInvalid": "Price is invalid.",
+      "precioMax": "Price cannot exceed 999999.99.",
+      "estadoInvalid": "Status is invalid."
+    }
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred.",
+    "invalidLoginResponse": "Invalid login response: missing token.",
+    "requestFailed": "Request failed",
+    "serverConnection": "Server connection error",
+    "notAuthenticated": "You are not authenticated. Please sign in."
+  }
+}

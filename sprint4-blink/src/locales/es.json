@@ -1,0 +1,337 @@
+{
+  "app": {
+    "name": "Blink"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "logoAlt": "Logo de {app}",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "avatar": "Avatar",
+    "search": "Buscar",
+    "refresh": "Actualizar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "logout": "Cerrar sesión"
+  },
+  "language": {
+    "label": "Idioma",
+    "ca": "Catalán",
+    "es": "Español",
+    "en": "Inglés"
+  },
+  "nav": {
+    "menu": "Menú",
+    "dashboard": "Dashboard",
+    "map": "Mapa",
+    "tickets": "Tickets",
+    "bookings": "Reservas",
+    "users": "Usuarios",
+    "vehicles": "Vehículos",
+    "geofencing": "Geofencing",
+    "settings": "Configuración",
+    "sections": {
+      "client": "Cliente",
+      "admin": "Admin"
+    }
+  },
+  "auth": {
+    "sessionExpired": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+    "login": {
+      "title": "Iniciar sesión",
+      "header": "Inicia sesión en {app}",
+      "cta": "Acceder",
+      "loading": "Cargando...",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "ejemplo.correo.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "noAccount": "¿Aún no tienes cuenta?",
+      "goRegister": "Crear cuenta"
+      ,
+      "forgotPassword": "¿Has olvidado tu contraseña?",
+      "welcome": "¡Bienvenido/a {name}!",
+      "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
+    },
+    "register": {
+      "title": "Crea tu cuenta en Blink",
+      "cta": "Crear cuenta",
+      "loading": "Cargando...",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "goLogin": "Iniciar sesión",
+      "nameLabel": "Nombre completo",
+      "namePlaceholder": "Tu nombre",
+      "phoneLabel": "Teléfono",
+      "phonePlaceholder": "+34 600 000 000",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "ejemplo.correo.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmationLabel": "Confirmar contraseña",
+      "success": "¡Cuenta creada! Bienvenido/a {name}",
+      "genericError": "Error al registrarse. Por favor, inténtalo de nuevo."
+    }
+  },
+  "roles": {
+    "user": "Usuario",
+    "admin": "Administrador"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "¡Bienvenido/a al Dashboard!",
+    "userInfo": "Información del usuario",
+    "user": {
+      "name": "Nombre",
+      "email": "Email",
+      "phone": "Teléfono",
+      "role": "Rol"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "personalInfo": "Información personal",
+    "personalInfoDesc": "Gestiona tu información personal, contraseña y configuración de cuenta.",
+    "userAvatarAlt": "Avatar de usuario",
+    "changeAvatar": "Cambiar avatar",
+    "avatarHelp": "JPG, GIF o PNG. 1MB máx.",
+    "toast": {
+      "avatarUpdated": "Avatar actualizado",
+      "personalInfoSaved": "Información personal guardada correctamente",
+      "deleteWarning": "Esta acción no se puede deshacer"
+    },
+    "validation": {
+      "fileTooLarge": "El archivo es demasiado grande. Máximo 1MB.",
+      "invalidFileType": "Solo se permiten archivos JPG, GIF o PNG."
+    },
+    "errors": {
+      "userInfoUnavailable": "No se pudo obtener la información del usuario",
+      "updateInfo": "Error al actualizar la información"
+    },
+    "firstName": "Nombre",
+    "lastName": "Apellidos",
+    "email": "Correo electrónico",
+    "currentPassword": "Contraseña actual",
+    "saveChanges": "Guardar cambios",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteAccountDesc": "¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción no es reversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.",
+    "deleteAccountCta": "Sí, eliminar mi cuenta"
+  },
+  "users": {
+    "title": "Gestión de usuarios",
+    "description": "Administra los usuarios del sistema",
+    "searchPlaceholder": "Buscar por nombre o email...",
+    "loading": "Cargando usuarios...",
+    "empty": "No hay usuarios para mostrar",
+    "table": {
+      "name": "Nombre",
+      "email": "Email",
+      "createdAt": "Fecha de registro",
+      "actions": "Acciones"
+    },
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Nombre completo",
+      "email": "Email",
+      "emailPlaceholder": "correo.ejemplo.com",
+      "phone": "Teléfono",
+      "phonePlaceholder": "+34 600 000 000",
+      "role": "Rol",
+      "password": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmation": "Confirmar contraseña",
+      "roleUser": "Usuario",
+      "roleAdmin": "Administrador"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar usuario",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar al usuario {name}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles del usuario"
+    },
+    "actions": {
+      "newUser": "Nuevo usuario",
+      "createNewUser": "Crear nuevo usuario",
+      "editUser": "Editar usuario",
+      "createUser": "Crear usuario",
+      "updateUser": "Actualizar usuario"
+    },
+    "toast": {
+      "created": "Usuario creado correctamente",
+      "updated": "Usuario actualizado correctamente",
+      "deleted": "Usuario eliminado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar usuarios",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los usuarios.",
+      "search": "Error al buscar usuarios",
+      "save": "Error al guardar usuario",
+      "delete": "Error al eliminar usuario",
+      "notFound": "Usuario no encontrado. Puede que ya haya sido eliminado."
+    }
+  },
+  "table": {
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "paginationLabel": "Paginación",
+    "showing": "Mostrando {from} a {to} de {total} resultados",
+    "empty": "No hay datos para mostrar",
+    "loading": "Cargando..."
+  },
+  "filters": {
+    "clear": "Eliminar filtros"
+  },
+  "tickets": {
+    "title": "Mis Tickets",
+    "description": "Gestiona tus tickets de eventos",
+    "searchPlaceholder": "Buscar por asunto o descripción...",
+    "loading": "Cargando tickets...",
+    "empty": "No hay tickets para mostrar",
+    "table": {
+      "evento": "Evento",
+      "correo": "Correo",
+      "asunto": "Asunto",
+      "descripcion": "Descripción",
+      "precio": "Precio",
+      "estado": "Estado",
+      "usuario": "Usuario",
+      "fechaUsuario": "Fecha",
+      "fechaCompra": "Fecha de compra",
+      "createdAt": "Fecha de creación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "eventoId": "ID de Evento",
+      "eventoIdPlaceholder": "Introduce el ID del evento",
+      "precio": "Precio",
+      "precioPlaceholder": "0.00",
+      "correo": "Correo",
+      "correoPlaceholder": "tu.correo.com",
+      "asunto": "Asunto",
+      "asuntoPlaceholder": "Breve asunto",
+      "fecha": "Fecha",
+      "fechaPlaceholder": "AAAA-MM-DD",
+      "descripcion": "Descripción",
+      "descripcionPlaceholder": "Describe el problema o incidencia",
+      "type": "Tipo",
+      "typeSelect": "Selecciona tipo",
+      "typeSupport": "Soporte",
+      "typeBilling": "Facturación",
+      "typeTechnical": "Técnico",
+      "typeOther": "Otro",
+      "priority": "Prioridad",
+      "prioritySelect": "Selecciona prioridad",
+      "priorityLow": "Baja",
+      "priorityMedium": "Media",
+      "priorityHigh": "Alta",
+      "priorityUrgent": "Urgente"
+    },
+    "estados": {
+      "pendiente": "Pendiente",
+      "confirmado": "Confirmado",
+      "cancelado": "Cancelado",
+      "usado": "Usado"
+    },
+    "modal": {
+      "detailsTitle": "Detalles del ticket"
+    },
+    "actions": {
+      "newTicket": "Nuevo ticket",
+      "createNewTicket": "Crear nuevo ticket",
+      "createTicket": "Crear ticket"
+    },
+    "chat": {
+      "noMessages": "No hay mensajes aún. Envía tu primer mensaje para iniciar la conversación.",
+      "admin": "Administrador",
+      "you": "Tú",
+      "messagePlaceholder": "Escribe tu mensaje...",
+      "send": "Enviar"
+    },
+    "toast": {
+      "created": "Ticket creado correctamente",
+      "messageSent": "Mensaje enviado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar tickets",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los tickets.",
+      "search": "Error al buscar tickets",
+      "save": "Error al guardar ticket",
+      "delete": "Error al eliminar ticket",
+      "invalidId": "ID de ticket inválido."
+    }
+  },
+  "adminTickets": {
+    "title": "Gestión de Tickets",
+    "description": "Administra todos los tickets del sistema",
+    "searchPlaceholder": "Buscar por asunto, descripción o usuario...",
+    "actions": {
+      "editTicket": "Editar ticket",
+      "reply": "Responder"
+    },
+    "modal": {
+      "detailsTitle": "Detalles del ticket",
+      "deleteTitle": "Eliminar ticket",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el ticket '{asunto}'? Esta acción no se puede deshacer."
+    },
+    "chat": {
+      "title": "Conversación del ticket",
+      "noMessages": "No hay mensajes aún",
+      "admin": "Administrador",
+      "messagePlaceholder": "Escribe tu respuesta...",
+      "replyAs": "Responder como",
+      "send": "Enviar"
+    },
+    "toast": {
+      "updated": "Ticket actualizado correctamente",
+      "deleted": "Ticket eliminado correctamente",
+      "messageSent": "Mensaje enviado correctamente"
+    }
+  },
+  "validation": {
+    "fixFormErrors": "Por favor, corrige los errores en el formulario.",
+    "name": {
+      "required": "El nombre es requerido.",
+      "min": "El nombre debe tener al menos 2 caracteres.",
+      "max": "El nombre no puede exceder 100 caracteres."
+    },
+    "email": {
+      "required": "El email es requerido.",
+      "invalid": "El email no es válido.",
+      "max": "El email no puede exceder 255 caracteres."
+    },
+    "phone": {
+      "required": "El teléfono es requerido.",
+      "invalid": "El teléfono no es válido.",
+      "minDigits": "El teléfono debe tener al menos 7 dígitos."
+    },
+    "password": {
+      "required": "La contraseña es requerida.",
+      "min": "La contraseña debe tener al menos 8 caracteres.",
+      "max": "La contraseña no puede exceder 255 caracteres."
+    },
+    "passwordConfirmation": {
+      "required": "La confirmación de contraseña es requerida."
+    },
+    "role": {
+      "required": "El rol es requerido.",
+      "invalid": "El rol no es válido."
+    },
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "ticket": {
+      "eventoRequired": "El evento es requerido.",
+      "eventoInvalid": "El ID del evento no es válido.",
+      "precioRequired": "El precio es requerido.",
+      "precioInvalid": "El precio no es válido.",
+      "precioMax": "El precio no puede exceder 999999.99.",
+      "estadoInvalid": "El estado no es válido."
+    }
+  },
+  "errors": {
+    "unexpected": "Ha ocurrido un error inesperado.",
+    "invalidLoginResponse": "Respuesta de login inválida: falta token.",
+    "requestFailed": "Error en la petición",
+    "serverConnection": "Error de conexión con el servidor",
+    "notAuthenticated": "No estás autenticado. Por favor, inicia sesión."
+  }
+}

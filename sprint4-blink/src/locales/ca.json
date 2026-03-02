@@ -1,0 +1,337 @@
+{
+  "app": {
+    "name": "Blink"
+  },
+  "common": {
+    "loading": "Carregant...",
+    "logoAlt": "Logotip de {app}",
+    "save": "Guardar",
+    "cancel": "Cancel·lar",
+    "close": "Tancar",
+    "avatar": "Avatar",
+    "search": "Buscar",
+    "refresh": "Actualitzar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Veure",
+    "logout": "Tancar sessió"
+  },
+  "language": {
+    "label": "Idioma",
+    "ca": "Català",
+    "es": "Espanyol",
+    "en": "Anglés"
+  },
+  "nav": {
+    "menu": "Menú",
+    "dashboard": "Tauler",
+    "map": "Mapa",
+    "tickets": "Tickets",
+    "bookings": "Reserves",
+    "users": "Usuaris",
+    "vehicles": "Vehicles",
+    "geofencing": "Geofencing",
+    "settings": "Configuració",
+    "sections": {
+      "client": "Client",
+      "admin": "Admin"
+    }
+  },
+  "auth": {
+    "sessionExpired": "La teua sessió ha caducat. Torna a iniciar sessió.",
+    "login": {
+      "title": "Inicia sessió",
+      "header": "Inicia sessió a {app}",
+      "cta": "Accedir",
+      "loading": "Carregant...",
+      "emailLabel": "Adreça electrònica",
+      "emailPlaceholder": "exemple.correu.com",
+      "passwordLabel": "Contrasenya",
+      "passwordPlaceholder": "••••••••",
+      "noAccount": "Encara no tens compte?",
+      "goRegister": "Crear compte"
+      ,
+      "forgotPassword": "Has oblidat la contrasenya?",
+      "welcome": "Benvingut/da {name}!",
+      "genericError": "Error en iniciar sessió. Torna-ho a intentar."
+    },
+    "register": {
+      "title": "Crea el teu compte a Blink",
+      "cta": "Crear compte",
+      "loading": "Carregant...",
+      "haveAccount": "Ja tens compte?",
+      "goLogin": "Inicia sessió",
+      "nameLabel": "Nom complet",
+      "namePlaceholder": "El teu nom",
+      "phoneLabel": "Telèfon",
+      "phonePlaceholder": "+34 600 000 000",
+      "emailLabel": "Adreça electrònica",
+      "emailPlaceholder": "exemple.correu.com",
+      "passwordLabel": "Contrasenya",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmationLabel": "Confirma la contrasenya",
+      "success": "Compte creat! Benvingut/da {name}",
+      "genericError": "Error en registrar-se. Torna-ho a intentar."
+    }
+  },
+  "roles": {
+    "user": "Usuari",
+    "admin": "Administrador"
+  },
+  "dashboard": {
+    "title": "Tauler",
+    "welcome": "Benvingut/da al Tauler!",
+    "userInfo": "Informació de l’usuari",
+    "user": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Telèfon",
+      "role": "Rol"
+    }
+  },
+  "settings": {
+    "title": "Configuració",
+    "personalInfo": "Informació personal",
+    "personalInfoDesc": "Gestiona la teua informació personal, contrasenya i configuració del compte.",
+    "userAvatarAlt": "Avatar d’usuari",
+    "changeAvatar": "Canviar avatar",
+    "avatarHelp": "JPG, GIF o PNG. 1MB màx.",
+    "toast": {
+      "avatarUpdated": "Avatar actualitzat",
+      "personalInfoSaved": "Informació personal guardada correctament",
+      "deleteWarning": "Aquesta acció no es pot desfer"
+    },
+    "validation": {
+      "fileTooLarge": "El fitxer és massa gran. Màxim 1MB.",
+      "invalidFileType": "Només es permeten fitxers JPG, GIF o PNG."
+    },
+    "errors": {
+      "userInfoUnavailable": "No s’ha pogut obtindre la informació de l’usuari",
+      "updateInfo": "Error en actualitzar la informació"
+    },
+    "firstName": "Nom",
+    "lastName": "Cognoms",
+    "email": "Correu electrònic",
+    "currentPassword": "Contrasenya actual",
+    "saveChanges": "Guardar canvis",
+    "deleteAccount": "Eliminar compte",
+    "deleteAccountDesc": "Ja no vols utilitzar el nostre servei? Pots eliminar el teu compte ací. Aquesta acció no és reversible. Tota la informació relacionada amb aquest compte s’eliminarà permanentment.",
+    "deleteAccountCta": "Sí, eliminar el meu compte"
+  },
+  "users": {
+    "title": "Gestió d’usuaris",
+    "description": "Administra els usuaris del sistema",
+    "searchPlaceholder": "Busca per nom o email...",
+    "loading": "Carregant usuaris...",
+    "empty": "No hi ha usuaris per mostrar",
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "createdAt": "Data de registre",
+      "actions": "Accions"
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "Nom complet",
+      "email": "Email",
+      "emailPlaceholder": "correu.exemple.com",
+      "phone": "Telèfon",
+      "phonePlaceholder": "+34 600 000 000",
+      "role": "Rol",
+      "password": "Contrasenya",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmation": "Confirma la contrasenya",
+      "roleUser": "Usuari",
+      "roleAdmin": "Administrador"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar usuari",
+      "deleteMessage": "Estàs segur que vols eliminar l’usuari {name}? Aquesta acció no es pot desfer.",
+      "detailsTitle": "Detalls de l’usuari"
+    },
+    "actions": {
+      "newUser": "Nou usuari",
+      "createNewUser": "Crear nou usuari",
+      "editUser": "Editar usuari",
+      "createUser": "Crear usuari",
+      "updateUser": "Actualitzar usuari"
+    },
+    "toast": {
+      "created": "Usuari creat correctament",
+      "updated": "Usuari actualitzat correctament",
+      "deleted": "Usuari eliminat correctament"
+    },
+    "errors": {
+      "load": "Error en carregar usuaris",
+      "searchEndpointUnavailable": "L’endpoint de cerca no està disponible. Recarrega per veure tots els usuaris.",
+      "search": "Error en buscar usuaris",
+      "save": "Error en guardar l’usuari",
+      "delete": "Error en eliminar l’usuari",
+      "notFound": "Usuari no trobat. Potser ja ha sigut eliminat."
+    }
+  },
+  "table": {
+    "previous": "Anterior",
+    "next": "Següent",
+    "paginationLabel": "Paginació",
+    "showing": "Mostrant {from} a {to} de {total} resultats",
+    "empty": "No hi ha dades per mostrar",
+    "loading": "Carregant..."
+  },
+  "filters": {
+    "clear": "Eliminar filtres"
+  },
+  "tickets": {
+    "title": "Els meus Tickets",
+    "description": "Gestiona els teus tickets d'esdeveniments",
+    "searchPlaceholder": "Buscar per assumpte o descripció...",
+    "loading": "Carregant tickets...",
+    "empty": "No hi ha tickets per mostrar",
+    "table": {
+      "evento": "Esdeveniment",
+      "correo": "Correu",
+      "asunto": "Assumpte",
+      "descripcion": "Descripció",
+      "precio": "Preu",
+      "estado": "Estat",
+      "usuario": "Usuari",
+      "fechaUsuario": "Data",
+      "fechaCompra": "Data de compra",
+      "createdAt": "Data de creació",
+      "actions": "Accions"
+    },
+    "form": {
+      "eventoId": "ID d'Esdeveniment",
+      "eventoIdPlaceholder": "Introdueix l'ID de l'esdeveniment",
+      "precio": "Preu",
+      "precioPlaceholder": "0.00",
+      "correo": "Correu",
+      "correoPlaceholder": "tu.correu.com",
+      "asunto": "Assumpte",
+      "asuntoPlaceholder": "Breu assumpte",
+      "fecha": "Data",
+      "fechaPlaceholder": "AAAA-MM-DD",
+      "descripcion": "Descripció",
+      "descripcionPlaceholder": "Descriu el problema o incidència",
+      "type": "Tipus",
+      "typeSelect": "Selecciona tipus",
+      "typeSupport": "Suport",
+      "typeBilling": "Facturació",
+      "typeTechnical": "Tècnic",
+      "typeOther": "Altre",
+      "priority": "Prioritat",
+      "prioritySelect": "Selecciona prioritat",
+      "priorityLow": "Baixa",
+      "priorityMedium": "Mitjana",
+      "priorityHigh": "Alta",
+      "priorityUrgent": "Urgent"
+    },
+    "estados": {
+      "pendiente": "Pendent",
+      "confirmado": "Confirmat",
+      "cancelado": "Cancel·lat",
+      "usado": "Usat"
+    },
+    "modal": {
+      "detailsTitle": "Detalls del ticket"
+    },
+    "actions": {
+      "newTicket": "Nou ticket",
+      "createNewTicket": "Crear nou ticket",
+      "createTicket": "Crear ticket"
+    },
+    "chat": {
+      "noMessages": "No hi ha missatges encara. Envia el teu primer missatge per iniciar la conversa.",
+      "admin": "Administrador",
+      "you": "Tu",
+      "messagePlaceholder": "Escriu el teu missatge...",
+      "send": "Enviar"
+    },
+    "toast": {
+      "created": "Ticket creat correctament",
+      "messageSent": "Missatge enviat correctament"
+    },
+    "errors": {
+      "load": "Error en carregar tickets",
+      "searchEndpointUnavailable": "Endpoint de cerca no disponible. Recarrega per veure tots els tickets.",
+      "search": "Error en buscar tickets",
+      "save": "Error al guardar ticket",
+      "delete": "Error en eliminar ticket",
+      "invalidId": "ID de ticket no vàlid."
+    }
+  },
+  "adminTickets": {
+    "title": "Gestió de Tickets",
+    "description": "Administra tots els tickets del sistema",
+    "searchPlaceholder": "Cercar per assumpte, descripció o usuari...",
+    "actions": {
+      "editTicket": "Editar ticket",
+      "reply": "Respondre"
+    },
+    "modal": {
+      "detailsTitle": "Detalls del ticket",
+      "deleteTitle": "Eliminar ticket",
+      "deleteMessage": "Estàs segur que vols eliminar el ticket '{asunto}'? Aquesta acció no es pot desfer."
+    },
+    "chat": {
+      "title": "Conversa del ticket",
+      "noMessages": "No hi ha missatges encara",
+      "admin": "Administrador",
+      "messagePlaceholder": "Escriu la teva resposta...",
+      "replyAs": "Respondre com",
+      "send": "Enviar"
+    },
+    "toast": {
+      "updated": "Ticket actualitzat correctament",
+      "deleted": "Ticket eliminat correctament",
+      "messageSent": "Missatge enviat correctament"
+    }
+  },
+  "validation": {
+    "fixFormErrors": "Per favor, corregeix els errors del formulari.",
+    "name": {
+      "required": "El nom és obligatori.",
+      "min": "El nom ha de tindre com a mínim 2 caràcters.",
+      "max": "El nom no pot superar 100 caràcters."
+    },
+    "email": {
+      "required": "L’email és obligatori.",
+      "invalid": "L’email no és vàlid.",
+      "max": "L’email no pot superar 255 caràcters."
+    },
+    "phone": {
+      "required": "El telèfon és obligatori.",
+      "invalid": "El telèfon no és vàlid.",
+      "minDigits": "El telèfon ha de tindre com a mínim 7 dígits."
+    },
+    "password": {
+      "required": "La contrasenya és obligatòria.",
+      "min": "La contrasenya ha de tindre com a mínim 8 caràcters.",
+      "max": "La contrasenya no pot superar 255 caràcters."
+    },
+    "passwordConfirmation": {
+      "required": "La confirmació de la contrasenya és obligatòria."
+    },
+    "role": {
+      "required": "El rol és obligatori.",
+      "invalid": "El rol no és vàlid."
+    },
+    "passwordMismatch": "Les contrasenyes no coincideixen.",
+    "ticket": {
+      "eventoRequired": "L'esdeveniment és obligatori.",
+      "eventoInvalid": "L'ID de l'esdeveniment no és vàlid.",
+      "precioRequired": "El preu és obligatori.",
+      "precioInvalid": "El preu no és vàlid.",
+      "precioMax": "El preu no pot superar 999999.99.",
+      "estadoInvalid": "L'estat no és vàlid."
+    }
+  },
+  "errors": {
+    "unexpected": "S’ha produït un error inesperat.",
+    "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
+    "requestFailed": "Error en la petició",
+    "serverConnection": "Error de connexió amb el servidor",
+    "notAuthenticated": "No estàs autenticat. Si us plau, inicia sessió."
+  }
+}

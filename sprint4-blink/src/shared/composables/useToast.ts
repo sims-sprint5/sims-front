@@ -1,0 +1,65 @@
+import { ref } from 'vue';
+
+export type ToastType = 'success' | 'error' | 'warning' | 'info';
+
+export interface Toast {
+  id: number;
+  type: ToastType;
+  message: string;
+  duration?: number;
+}
+
+const toasts = ref<Toast[]>([]);
+let toastId = 0;
+
+export function useToast() {
+  const addToast = (type: ToastType, message: string, duration = 5000) => {
+    const id = ++toastId;
+
+    toasts.value.push({
+      id,
+      type,
+      message,
+      duration,
+    });
+
+    if (duration > 0) {
+      setTimeout(() => {
+        removeToast(id);
+      }, duration);
+    }
+  };
+
+  const removeToast = (id: number) => {
+    const index = toasts.value.findIndex(toast => toast.id === id);
+    if (index > -1) {
+      toasts.value.splice(index, 1);
+    }
+  };
+
+  const success = (message: string, duration?: number) => {
+    addToast('success', message, duration);
+  };
+
+  const error = (message: string, duration?: number) => {
+    addToast('error', message, duration);
+  };
+
+  const warning = (message: string, duration?: number) => {
+    addToast('warning', message, duration);
+  };
+
+  const info = (message: string, duration?: number) => {
+    addToast('info', message, duration);
+  };
+
+  return {
+    toasts,
+    addToast,
+    removeToast,
+    success,
+    error,
+    warning,
+    info,
+  };
+}
