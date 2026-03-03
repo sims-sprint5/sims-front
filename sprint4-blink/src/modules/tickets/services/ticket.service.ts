@@ -8,6 +8,7 @@ import type {
   TicketMessage,
   TicketsResponse,
 } from '../types/ticket.types';
+import { normalizeTicketMessage } from '@/modules/tickets/utils/normalizers';
 
 function getStoredUserId(): number {
   const user = authService.getUser();
@@ -22,15 +23,7 @@ function getStoredUserId(): number {
  * Suporta: { message, user_id, user: { name } } i { mensaje, usuario_id, usuario_nombre }
  */
 function normalizeMessage(msg: any): TicketMessage {
-  return {
-    id: msg.id,
-    ticket_id: msg.ticket_id,
-    usuario_id: msg.user_id ?? msg.usuario_id ?? 0,
-    mensaje: msg.message ?? msg.mensaje ?? '',
-    is_admin: Boolean(msg.is_admin),
-    created_at: msg.created_at ?? '',
-    usuario_nombre: msg.usuario_nombre ?? msg.user?.name ?? msg.user_name ?? undefined,
-  };
+  return normalizeTicketMessage(msg) as TicketMessage;
 }
 
 /**
@@ -51,6 +44,8 @@ function normalizeTicket(raw: any): Ticket {
     asunto: raw.subject ?? raw.asunto ?? '',
     descripcion: raw.description ?? raw.descripcion ?? '',
     estado: raw.status ?? raw.estado ?? 'pendiente',
+    type: raw.type ?? raw.tipo ?? undefined,
+    priority: raw.priority ?? raw.prioridad ?? undefined,
     created_at: raw.created_at ?? '',
     updated_at: raw.updated_at ?? '',
     mensajes,
@@ -88,11 +83,29 @@ export const ticketService = {
       user_id: userId,
     };
 
-    payload.type = data.type ?? 'support';
+    if (data.type) payload.type = data.type;
     if (data.priority) payload.priority = data.priority;
 
-    const raw = await apiClient.post<any>('/v1/tickets', payload);
-    return normalizeTicket(raw?.data ?? raw);
+    try {
+      const raw = await apiClient.post<any>('/v1/tickets', payload);
+      return normalizeTicket(raw?.data ?? raw);
+    } catch (error: any) {
+      // Si el backend rebutja enums opcionals (422), reintenta 1 vegada sense eixos camps perquè aplique defaults.
+      if (error?.status === 422 && error?.errors && (payload.type || payload.priority)) {
+        const nextPayload: any = { ...payload };
+        if (payload.type && Array.isArray(error.errors.type)) {
+          delete nextPayload.type;
+        }
+        if (payload.priority && Array.isArray(error.errors.priority)) {
+          delete nextPayload.priority;
+        }
+        if (nextPayload.type !== payload.type || nextPayload.priority !== payload.priority) {
+          const raw = await apiClient.post<any>('/v1/tickets', nextPayload);
+          return normalizeTicket(raw?.data ?? raw);
+        }
+      }
+      throw error;
+    }
   },
 
   async getTicketById(id: number): Promise<Ticket> {

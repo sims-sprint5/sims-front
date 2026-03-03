@@ -20,6 +20,8 @@ export interface Ticket {
   descripcion?: string;
   fecha_compra?: string;
   estado?: string;
+  type?: string;
+  priority?: string;
   created_at: string;
   updated_at: string;
   mensajes?: TicketMessage[];

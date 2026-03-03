@@ -171,6 +171,74 @@
       "notFound": "Usuario no encontrado. Puede que ya haya sido eliminado."
     }
   },
+  "vehicles": {
+    "title": "Gestión de vehículos",
+    "description": "Administra los vehículos del sistema",
+    "searchPlaceholder": "Buscar por matrícula, marca o modelo...",
+    "loading": "Cargando vehículos...",
+    "empty": "No hay vehículos para mostrar",
+    "table": {
+      "licensePlate": "Matrícula",
+      "brand": "Marca",
+      "model": "Modelo",
+      "year": "Año",
+      "status": "Estado",
+      "lastLocationUpdate": "Última ubicación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Marca",
+      "model": "Modelo",
+      "modelPlaceholder": "Modelo",
+      "year": "Año",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Estado",
+      "statusPlaceholder": "Selecciona estado",
+      "currentLatitude": "Latitud actual",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Longitud actual",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Última actualización de ubicación",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Activo",
+      "available": "Disponible",
+      "inactive": "Inactivo",
+      "maintenance": "Mantenimiento"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar vehículo",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el vehículo {license_plate}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles del vehículo"
+    },
+    "actions": {
+      "newVehicle": "Nuevo vehículo",
+      "createNewVehicle": "Crear nuevo vehículo",
+      "editVehicle": "Editar vehículo",
+      "createVehicle": "Crear vehículo",
+      "updateVehicle": "Actualizar vehículo"
+    },
+    "toast": {
+      "created": "Vehículo creado correctamente",
+      "updated": "Vehículo actualizado correctamente",
+      "deleted": "Vehículo eliminado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar vehículos",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los vehículos.",
+      "search": "Error al buscar vehículos",
+      "save": "Error al guardar vehículo",
+      "delete": "Error al eliminar vehículo",
+      "notFound": "Vehículo no encontrado. Puede que ya haya sido eliminado.",
+      "invalidId": "ID de vehículo inválido."
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Siguiente",
@@ -229,6 +297,7 @@
     },
     "estados": {
       "pendiente": "Pendiente",
+      "open": "Abierto",
       "confirmado": "Confirmado",
       "cancelado": "Cancelado",
       "usado": "Usado"
@@ -318,6 +387,38 @@
       "invalid": "El rol no es válido."
     },
     "passwordMismatch": "Las contraseñas no coinciden.",
+    "vehicle": {
+      "license_plate": {
+        "required": "La matrícula es requerida."
+      },
+      "brand": {
+        "required": "La marca es requerida."
+      },
+      "model": {
+        "required": "El modelo es requerido."
+      },
+      "year": {
+        "required": "El año es requerido.",
+        "invalid": "El año no es válido.",
+        "min": "El año debe ser mayor o igual a 1900.",
+        "max": "El año no puede ser mayor a 2100."
+      },
+      "color": {
+        "required": "El color es requerido."
+      },
+      "status": {
+        "required": "El estado es requerido."
+      },
+      "current_latitude": {
+        "invalid": "La latitud no es válida."
+      },
+      "current_longitude": {
+        "invalid": "La longitud no es válida."
+      },
+      "last_location_update": {
+        "invalid": "La fecha de última ubicación no es válida."
+      }
+    },
     "ticket": {
       "eventoRequired": "El evento es requerido.",
       "eventoInvalid": "El ID del evento no es válido.",

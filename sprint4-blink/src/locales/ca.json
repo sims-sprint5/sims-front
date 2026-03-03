@@ -171,6 +171,74 @@
       "notFound": "Usuari no trobat. Potser ja ha sigut eliminat."
     }
   },
+  "vehicles": {
+    "title": "Gestió de vehicles",
+    "description": "Administra els vehicles del sistema",
+    "searchPlaceholder": "Buscar per matrícula, marca o model...",
+    "loading": "Carregant vehicles...",
+    "empty": "No hi ha vehicles per mostrar",
+    "table": {
+      "licensePlate": "Matrícula",
+      "brand": "Marca",
+      "model": "Model",
+      "year": "Any",
+      "status": "Estat",
+      "lastLocationUpdate": "Última ubicació",
+      "actions": "Accions"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Marca",
+      "model": "Model",
+      "modelPlaceholder": "Model",
+      "year": "Any",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Estat",
+      "statusPlaceholder": "Selecciona estat",
+      "currentLatitude": "Latitud actual",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Longitud actual",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Última actualització d'ubicació",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Actiu",
+      "available": "Disponible",
+      "inactive": "Inactiu",
+      "maintenance": "Manteniment"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar vehicle",
+      "deleteMessage": "Estàs segur que vols eliminar el vehicle {license_plate}? Aquesta acció no es pot desfer.",
+      "detailsTitle": "Detalls del vehicle"
+    },
+    "actions": {
+      "newVehicle": "Nou vehicle",
+      "createNewVehicle": "Crear nou vehicle",
+      "editVehicle": "Editar vehicle",
+      "createVehicle": "Crear vehicle",
+      "updateVehicle": "Actualitzar vehicle"
+    },
+    "toast": {
+      "created": "Vehicle creat correctament",
+      "updated": "Vehicle actualitzat correctament",
+      "deleted": "Vehicle eliminat correctament"
+    },
+    "errors": {
+      "load": "Error en carregar vehicles",
+      "searchEndpointUnavailable": "L’endpoint de cerca no està disponible. Recarrega per veure tots els vehicles.",
+      "search": "Error en buscar vehicles",
+      "save": "Error en guardar el vehicle",
+      "delete": "Error en eliminar el vehicle",
+      "notFound": "Vehicle no trobat. Potser ja ha sigut eliminat.",
+      "invalidId": "ID de vehicle no vàlid."
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Següent",
@@ -229,6 +297,7 @@
     },
     "estados": {
       "pendiente": "Pendent",
+      "open": "Obert",
       "confirmado": "Confirmat",
       "cancelado": "Cancel·lat",
       "usado": "Usat"
@@ -318,6 +387,38 @@
       "invalid": "El rol no és vàlid."
     },
     "passwordMismatch": "Les contrasenyes no coincideixen.",
+    "vehicle": {
+      "license_plate": {
+        "required": "La matrícula és obligatòria."
+      },
+      "brand": {
+        "required": "La marca és obligatòria."
+      },
+      "model": {
+        "required": "El model és obligatori."
+      },
+      "year": {
+        "required": "L’any és obligatori.",
+        "invalid": "L’any no és vàlid.",
+        "min": "L’any ha de ser major o igual a 1900.",
+        "max": "L’any no pot ser major a 2100."
+      },
+      "color": {
+        "required": "El color és obligatori."
+      },
+      "status": {
+        "required": "L’estat és obligatori."
+      },
+      "current_latitude": {
+        "invalid": "La latitud no és vàlida."
+      },
+      "current_longitude": {
+        "invalid": "La longitud no és vàlida."
+      },
+      "last_location_update": {
+        "invalid": "La data de l’última ubicació no és vàlida."
+      }
+    },
     "ticket": {
       "eventoRequired": "L'esdeveniment és obligatori.",
       "eventoInvalid": "L'ID de l'esdeveniment no és vàlid.",

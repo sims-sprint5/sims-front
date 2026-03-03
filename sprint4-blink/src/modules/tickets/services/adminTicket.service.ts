@@ -7,21 +7,14 @@ import type {
   TicketMessage,
   UpdateTicketData,
 } from '../types/adminTicket.types';
+import { normalizeTicketMessage } from '@/modules/tickets/utils/normalizers';
 
 /**
  * Normalitza un missatge del backend (camps en anglès) als tipus del frontend (camps en espanyol).
  * Suporta: { message, user_id, user: { name } } i { mensaje, usuario_id, usuario_nombre }
  */
 function normalizeMessage(msg: any): TicketMessage {
-  return {
-    id: msg.id,
-    ticket_id: msg.ticket_id,
-    usuario_id: msg.user_id ?? msg.usuario_id ?? 0,
-    mensaje: msg.message ?? msg.mensaje ?? '',
-    is_admin: Boolean(msg.is_admin),
-    created_at: msg.created_at ?? '',
-    usuario_nombre: msg.usuario_nombre ?? msg.user?.name ?? msg.user_name ?? undefined,
-  };
+  return normalizeTicketMessage(msg) as TicketMessage;
 }
 
 /**

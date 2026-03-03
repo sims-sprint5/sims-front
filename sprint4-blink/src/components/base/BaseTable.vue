@@ -41,8 +41,8 @@
     </table>
     
     <!-- Paginación -->
-    <div v-if="pagination && pagination.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-      <div class="flex-1 flex justify-between sm:hidden">
+    <div v-if="pagination && pagination.last_page > 1" class="bg-white px-4 py-3 flex items-center border-t border-gray-200 sm:px-6">
+      <div class="flex-1 flex justify-end gap-3 sm:hidden">
         <BaseButton
           @click="handlePageChange(pagination.current_page - 1)"
           :disabled="pagination.current_page === 1"
@@ -54,13 +54,12 @@
           @click="handlePageChange(pagination.current_page + 1)"
           :disabled="pagination.current_page === pagination.last_page"
           variant="secondary"
-          class="ml-3"
         >
           {{ t('table.next') }}
         </BaseButton>
       </div>
-      <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <div>
+      <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-end sm:gap-4">
+        <div class="mr-auto">
           <p class="text-sm text-gray-700">
             {{ t('table.showing', { from: pagination.from, to: pagination.to, total: pagination.total }) }}
           </p>

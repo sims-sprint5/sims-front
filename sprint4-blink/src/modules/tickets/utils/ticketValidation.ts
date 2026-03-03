@@ -21,13 +21,14 @@ export function validateTicketForm(
     errors.asunto = 'validation.ticket.asuntoMax';
   }
 
-  const allowedPriorities = ['low', 'medium', 'high', 'urgent'];
-  if (!formData.priority || typeof formData.priority !== 'string' || formData.priority.trim().length === 0) {
-    errors.priority = 'validation.ticket.priorityRequired';
-  } else if (formData.priority.length > 20) {
-    errors.priority = 'validation.ticket.priorityMax';
-  } else if (!allowedPriorities.includes(formData.priority)) {
-    errors.priority = 'validation.ticket.priorityInvalid';
+  // Prioritat (i type) són opcionals en el frontend; el backend pot aplicar defaults.
+  // Si s'informa, validem només format bàsic.
+  if (formData.priority) {
+    if (typeof formData.priority !== 'string' || formData.priority.trim().length === 0) {
+      errors.priority = 'validation.ticket.priorityInvalid';
+    } else if (formData.priority.length > 20) {
+      errors.priority = 'validation.ticket.priorityMax';
+    }
   }
   
   return errors;

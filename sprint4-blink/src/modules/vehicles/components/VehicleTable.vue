@@ -1,19 +1,22 @@
 <template>
-  <BaseTable :columns="columns" :data="users" :loading="loading" :loadingText="$t('users.loading')"
-    :emptyText="$t('users.empty')">
-    <template #cell-name="{ value }">
+  <BaseTable
+    :columns="columns"
+    :data="vehicles"
+    :loading="loading"
+    :loadingText="$t('vehicles.loading')"
+    :emptyText="$t('vehicles.empty')"
+  >
+    <template #cell-license_plate="{ value }">
       <div class="text-sm font-medium text-gray-900">{{ value }}</div>
     </template>
 
-    <template #cell-role="{ value }">
-      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-        :class="value === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'">
-        {{ value ? $t(`roles.${value}`) : '' }}
+    <template #cell-status="{ value }">
+      <span
+        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+        :class="String(value).toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+      >
+        {{ statusLabel(value) }}
       </span>
-    </template>
-
-    <template #cell-created_at="{ value }">
-      {{ formatDate(value) }}
     </template>
 
     <template #cell-actions="{ item }">
@@ -47,38 +50,40 @@
 <script setup lang="ts">
 import { BaseTable } from '@/components/base';
 import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
-import type { User } from '@/modules/users/types/user.types';
+import type { Vehicle } from '@/modules/vehicles/types/vehicle.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useDateFormatter } from '@/shared/composables/useDateFormatter';
+import { getVehicleStatusLabel } from '@/modules/vehicles/utils/vehicleStatus';
 
 interface Props {
-  users?: User[];
+  vehicles?: Vehicle[];
   loading?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
-  users: () => [],
+  vehicles: () => [],
   loading: false,
 });
 
 const { t } = useI18n();
 
+const statusLabel = (status: unknown) => {
+  return getVehicleStatusLabel(t, status);
+};
+
 defineEmits<{
-  view: [user: User];
-  edit: [user: User];
-  delete: [user: User];
+  view: [vehicle: Vehicle];
+  edit: [vehicle: Vehicle];
+  delete: [vehicle: Vehicle];
 }>();
 
 const columns = computed<TableColumn[]>(() => [
-  { key: 'name', label: t('users.table.name'), align: 'left' },
-  { key: 'email', label: t('users.table.email'), align: 'left' },
-  { key: 'phone', label: t('dashboard.user.phone'), align: 'left' },
-  { key: 'role', label: t('dashboard.user.role'), align: 'left' },
-  { key: 'created_at', label: t('users.table.createdAt'), align: 'left' },
-  { key: 'actions', label: t('users.table.actions'), align: 'right' },
+  { key: 'license_plate', label: t('vehicles.table.licensePlate'), align: 'left' },
+  { key: 'brand', label: t('vehicles.table.brand'), align: 'left' },
+  { key: 'model', label: t('vehicles.table.model'), align: 'left' },
+  { key: 'year', label: t('vehicles.table.year'), align: 'left' },
+  { key: 'status', label: t('vehicles.table.status'), align: 'left' },
+  { key: 'actions', label: t('vehicles.table.actions'), align: 'right' },
 ]);
-
-const { formatDate } = useDateFormatter({ year: 'numeric', month: 'short', day: 'numeric' });
 </script>

@@ -171,6 +171,74 @@
       "notFound": "User not found. It may have already been deleted."
     }
   },
+  "vehicles": {
+    "title": "Vehicle management",
+    "description": "Manage system vehicles",
+    "searchPlaceholder": "Search by license plate, brand, or model...",
+    "loading": "Loading vehicles...",
+    "empty": "No vehicles to display",
+    "table": {
+      "licensePlate": "License plate",
+      "brand": "Brand",
+      "model": "Model",
+      "year": "Year",
+      "status": "Status",
+      "lastLocationUpdate": "Last location update",
+      "actions": "Actions"
+    },
+    "form": {
+      "licensePlate": "License plate",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Brand",
+      "brandPlaceholder": "Brand",
+      "model": "Model",
+      "modelPlaceholder": "Model",
+      "year": "Year",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Status",
+      "statusPlaceholder": "Select status",
+      "currentLatitude": "Current latitude",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Current longitude",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Last location update",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Active",
+      "available": "Available",
+      "inactive": "Inactive",
+      "maintenance": "Maintenance"
+    },
+    "modal": {
+      "deleteTitle": "Delete vehicle",
+      "deleteMessage": "Are you sure you want to delete vehicle {license_plate}? This action cannot be undone.",
+      "detailsTitle": "Vehicle details"
+    },
+    "actions": {
+      "newVehicle": "New vehicle",
+      "createNewVehicle": "Create new vehicle",
+      "editVehicle": "Edit vehicle",
+      "createVehicle": "Create vehicle",
+      "updateVehicle": "Update vehicle"
+    },
+    "toast": {
+      "created": "Vehicle created successfully",
+      "updated": "Vehicle updated successfully",
+      "deleted": "Vehicle deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load vehicles",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all vehicles.",
+      "search": "Failed to search vehicles",
+      "save": "Failed to save vehicle",
+      "delete": "Failed to delete vehicle",
+      "notFound": "Vehicle not found. It may have already been deleted.",
+      "invalidId": "Invalid vehicle ID."
+    }
+  },
   "table": {
     "previous": "Previous",
     "next": "Next",
@@ -229,6 +297,7 @@
     },
     "estados": {
       "pendiente": "Pending",
+      "open": "Open",
       "confirmado": "Confirmed",
       "cancelado": "Cancelled",
       "usado": "Used"
@@ -318,6 +387,38 @@
       "invalid": "Role is invalid."
     },
     "passwordMismatch": "Passwords do not match.",
+    "vehicle": {
+      "license_plate": {
+        "required": "License plate is required."
+      },
+      "brand": {
+        "required": "Brand is required."
+      },
+      "model": {
+        "required": "Model is required."
+      },
+      "year": {
+        "required": "Year is required.",
+        "invalid": "Year is invalid.",
+        "min": "Year must be greater than or equal to 1900.",
+        "max": "Year must be less than or equal to 2100."
+      },
+      "color": {
+        "required": "Color is required."
+      },
+      "status": {
+        "required": "Status is required."
+      },
+      "current_latitude": {
+        "invalid": "Latitude is invalid."
+      },
+      "current_longitude": {
+        "invalid": "Longitude is invalid."
+      },
+      "last_location_update": {
+        "invalid": "Last location update is invalid."
+      }
+    },
     "ticket": {
       "eventoRequired": "Event is required.",
       "eventoInvalid": "Event ID is invalid.",

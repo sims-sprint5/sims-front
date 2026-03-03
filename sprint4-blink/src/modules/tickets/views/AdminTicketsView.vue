@@ -133,7 +133,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { BaseButton, BaseInput, BaseModal } from '@/components/base';
+import { BaseButton, BaseInput } from '@/components/base';
+import BaseModal from '@/components/base/BaseModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AdminTicketTable from '@/modules/tickets/components/AdminTicketTable.vue';
 import TicketChat from '@/modules/tickets/components/TicketChat.vue';

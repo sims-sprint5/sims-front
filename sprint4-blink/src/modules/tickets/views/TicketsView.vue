@@ -57,7 +57,12 @@
                   <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
                     {{ $t('tickets.actions.createNewTicket') }}
                   </h3>
-                  <TicketForm :loading="submitting" :errors="formErrors" @submit="handleSubmit"
+                  <TicketForm
+                    :loading="submitting"
+                    :errors="formErrors"
+                    :type-options="typeOptions"
+                    :priority-options="priorityOptions"
+                    @submit="handleSubmit"
                     @cancel="closeTicketModal" />
                 </div>
               </div>
@@ -95,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { BaseButton, BaseInput } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import TicketTable from '@/modules/tickets/components/TicketTable.vue';
@@ -112,6 +117,8 @@ const toast = useToast();
 const { t } = useI18n();
 const { translateErrorMessage } = useTranslateError();
 
+type SelectOption = { label: string; value: string };
+
 // Estado
 const tickets = ref<Ticket[]>([]);
 const loading = ref(false);
@@ -125,6 +132,36 @@ const viewingTicket = ref<Ticket | null>(null);
 
 // Errores del formulario
 const formErrors = ref<ValidationErrors>({});
+
+function uniqNonEmpty(values: Array<string | undefined | null>): string[] {
+  return Array.from(new Set(values.map(v => (v ?? '').toString().trim()).filter(Boolean)));
+}
+
+function labelPriority(value: string): string {
+  const v = value.toLowerCase();
+  if (v === 'low') return t('tickets.form.priorityLow');
+  if (v === 'medium') return t('tickets.form.priorityMedium');
+  if (v === 'high') return t('tickets.form.priorityHigh');
+  if (v === 'urgent') return t('tickets.form.priorityUrgent');
+  return value;
+}
+
+function labelType(value: string): string {
+  const v = value.toLowerCase();
+  if (v === 'support') return t('tickets.form.typeSupport');
+  if (v === 'billing') return t('tickets.form.typeBilling');
+  if (v === 'technical') return t('tickets.form.typeTechnical');
+  if (v === 'other') return t('tickets.form.typeOther');
+  return value;
+}
+
+const typeOptions = computed<SelectOption[]>(() =>
+  uniqNonEmpty(tickets.value.map(tk => tk.type)).map(v => ({ value: v, label: labelType(v) }))
+);
+
+const priorityOptions = computed<SelectOption[]>(() =>
+  uniqNonEmpty(tickets.value.map(tk => tk.priority)).map(v => ({ value: v, label: labelPriority(v) }))
+);
 
 // Cargar tickets
 const loadTickets = async () => {

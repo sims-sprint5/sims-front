@@ -26,7 +26,12 @@
     <!-- Tipo -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('tickets.form.type') }}</label>
-      <select v-model="formData.type" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500">
+      <select
+        v-model="formData.type"
+        :disabled="typeOptions.length === 0"
+        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+      >
+        <option disabled value="">{{ $t('tickets.form.typeSelect') }}</option>
         <option v-for="opt in typeOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
       </select>
     </div>
@@ -34,7 +39,11 @@
     <!-- Prioridad -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('tickets.form.priority') }}</label>
-      <select v-model="formData.priority" required class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500">
+      <select
+        v-model="formData.priority"
+        :disabled="priorityOptions.length === 0"
+        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+      >
         <option disabled value="">{{ $t('tickets.form.prioritySelect') }}</option>
         <option v-for="opt in priorityOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
       </select>
@@ -53,21 +62,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { BaseInput, BaseButton } from '@/components/base';
 import type { CreateTicketData } from '@/modules/tickets/types/ticket.types';
 import type { ValidationErrors } from '@/modules/tickets/utils/ticketValidation';
-import { useI18n } from 'vue-i18n';
 import { useFormatError } from '@/shared/composables/useFormatError';
+
+type SelectOption = { label: string; value: string };
 
 interface Props {
   loading?: boolean;
   errors?: ValidationErrors | Record<string, string>;
+  typeOptions?: SelectOption[];
+  priorityOptions?: SelectOption[];
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   loading: false,
   errors: () => ({}),
+  typeOptions: () => [],
+  priorityOptions: () => [],
 });
 
 const emit = defineEmits<{
@@ -75,29 +89,17 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const { t } = useI18n();
 const { formatError } = useFormatError();
 
 const formData = ref<CreateTicketData>({
   asunto: '',
   descripcion: '',
-  type: 'support',
-  priority: 'medium',
+  type: '',
+  priority: '',
 });
 
-const typeOptions = [
-  { label: t('tickets.form.typeSupport'), value: 'support' },
-  { label: t('tickets.form.typeBilling'), value: 'billing' },
-  { label: t('tickets.form.typeTechnical'), value: 'technical' },
-  { label: t('tickets.form.typeOther'), value: 'other' },
-];
-
-const priorityOptions = [
-  { label: t('tickets.form.priorityLow'), value: 'low' },
-  { label: t('tickets.form.priorityMedium'), value: 'medium' },
-  { label: t('tickets.form.priorityHigh'), value: 'high' },
-  { label: t('tickets.form.priorityUrgent'), value: 'urgent' },
-];
+const typeOptions = computed(() => props.typeOptions ?? []);
+const priorityOptions = computed(() => props.priorityOptions ?? []);
 
 const handleSubmit = () => {
   emit('submit', formData.value);
