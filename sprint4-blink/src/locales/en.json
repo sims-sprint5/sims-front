@@ -327,6 +327,75 @@
       "estadoInvalid": "Status is invalid."
     }
   },
+  "mapa": {
+    "title": "Geofencing Map",
+    "geofences": "Geofences",
+    "createZone": "New Zone",
+    "editZone": "Edit Zone",
+    "deleteZone": "Delete Zone",
+    "deleteConfirm": "Are you sure you want to delete the geofence '{name}'?",
+    "viewLogs": "View Logs",
+    "noGeofences": "No geofences created yet.",
+    "noLogs": "No logs for this geofence.",
+    "loadError": "Failed to load geofences",
+    "createError": "Failed to create geofence",
+    "createSuccess": "Geofence created successfully",
+    "updateError": "Failed to update geofence",
+    "updateSuccess": "Geofence updated successfully",
+    "deleteError": "Failed to delete geofence",
+    "deleteSuccess": "Geofence deleted successfully",
+    "logsError": "Failed to load logs",
+    "types": {
+      "allowed": "Allowed",
+      "restricted": "Restricted",
+      "parking": "Parking",
+      "service_area": "Service Area"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "eventType": {
+      "entry": "Entry",
+      "exit": "Exit",
+      "violation": "Violation"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "e.g., Downtown Restricted Zone",
+      "description": "Description",
+      "descriptionPlaceholder": "e.g., No parking after 6pm",
+      "type": "Type",
+      "latitude": "Latitude",
+      "latitudePlaceholder": "41.3851",
+      "longitude": "Longitude",
+      "longitudePlaceholder": "2.1734",
+      "radius": "Radius (meters)",
+      "radiusPlaceholder": "e.g., 250",
+      "clickToSelect": "Click on the map to select the center of the zone",
+      "status": "Status"
+    },
+    "logs": {
+      "vehicle": "Vehicle",
+      "eventType": "Event Type",
+      "timestamp": "Timestamp",
+      "location": "Location"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMaxLength": "Name cannot exceed 100 characters",
+      "radiusRequired": "Radius is required",
+      "radiusMax": "Radius cannot exceed 999999 meters",
+      "latitudeRequired": "Latitude is required",
+      "latitudeInvalid": "Latitude must be between -90 and 90",
+      "longitudeRequired": "Longitude is required",
+      "longitudeInvalid": "Longitude must be between -180 and 180",
+      "typeRequired": "Type is required"
+    }
+  },
+  "actions": {
+    "edit": "Edit"
+  },
   "errors": {
     "unexpected": "An unexpected error occurred.",
     "invalidLoginResponse": "Invalid login response: missing token.",

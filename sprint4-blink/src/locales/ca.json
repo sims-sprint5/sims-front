@@ -326,8 +326,75 @@
       "precioMax": "El preu no pot superar 999999.99.",
       "estadoInvalid": "L'estat no és vàlid."
     }
+  },  "mapa": {
+    "title": "Mapa de Geofencing",
+    "geofences": "Geofences",
+    "createZone": "Nova Zona",
+    "editZone": "Editar Zona",
+    "deleteZone": "Eliminar Zona",
+    "deleteConfirm": "Estàs segur que vols eliminar la geofence '{name}'?",
+    "viewLogs": "Veure Registres",
+    "noGeofences": "Sense geofences creades encara.",
+    "noLogs": "Sense registres per a aquesta geofence.",
+    "loadError": "Error al carregat geofences",
+    "createError": "Error al crear geofence",
+    "createSuccess": "Geofence creada correctament",
+    "updateError": "Error al actualitzar geofence",
+    "updateSuccess": "Geofence actualitzada correctament",
+    "deleteError": "Error al eliminar geofence",
+    "deleteSuccess": "Geofence eliminada correctament",
+    "logsError": "Error al carregat registres",
+    "types": {
+      "allowed": "Permesa",
+      "restricted": "Restringida",
+      "parking": "Estacionament",
+      "service_area": "Àrea de Servei"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "eventType": {
+      "entry": "Entrada",
+      "exit": "Sortida",
+      "violation": "Violació"
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "p.ex., Downtown Zona Restringida",
+      "description": "Descripció",
+      "descriptionPlaceholder": "p.ex., Sense estacionament després de les 6pm",
+      "type": "Tipus",
+      "latitude": "Latitud",
+      "latitudePlaceholder": "41.3851",
+      "longitude": "Longitud",
+      "longitudePlaceholder": "2.1734",
+      "radius": "Radi (metres)",
+      "radiusPlaceholder": "p.ex., 250",
+      "clickToSelect": "Feu clic al mapa per seleccionar el centre de la zona",
+      "status": "Estat"
+    },
+    "logs": {
+      "vehicle": "Vehicle",
+      "eventType": "Tipus d'Esdeveniment",
+      "timestamp": "Marca de Temps",
+      "location": "Ubicació"
+    },
+    "validation": {
+      "nameRequired": "El nom és obligatori",
+      "nameMaxLength": "El nom no pot superar 100 caràcters",
+      "radiusRequired": "El radi és obligatori",
+      "radiusMax": "El radi no pot superar 999999 metres",
+      "latitudeRequired": "La latitud és obligatòria",
+      "latitudeInvalid": "La latitud ha d'estar entre -90 i 90",
+      "longitudeRequired": "La longitud és obligatòria",
+      "longitudeInvalid": "La longitud ha d'estar entre -180 i 180",
+      "typeRequired": "El tipus és obligatori"
+    }
   },
-  "errors": {
+  "actions": {
+    "edit": "Editar"
+  },  "errors": {
     "unexpected": "S’ha produït un error inesperat.",
     "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
     "requestFailed": "Error en la petició",

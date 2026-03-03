@@ -6,6 +6,7 @@ import { dashboardRoutes } from '../modules/dashboard/routes';
 import { settingsRoutes } from '../modules/settings/routes';
 import { usersRoutes } from '../modules/users/routes';
 import { ticketsRoutes } from '../modules/tickets/routes';
+import mapaRoutes from '../modules/mapa/routes';
 import { i18n } from '@/i18n';
 
 const routes: RouteRecordRaw[] = [
@@ -18,6 +19,7 @@ const routes: RouteRecordRaw[] = [
   ...settingsRoutes,
   ...usersRoutes,
   ...ticketsRoutes,
+  ...mapaRoutes,
   {
     path: '/:pathMatch(.*)*',
     redirect: '/login',

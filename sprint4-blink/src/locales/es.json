@@ -327,6 +327,75 @@
       "estadoInvalid": "El estado no es válido."
     }
   },
+  "mapa": {
+    "title": "Mapa de Geofencing",
+    "geofences": "Geofences",
+    "createZone": "Nueva Zona",
+    "editZone": "Editar Zona",
+    "deleteZone": "Eliminar Zona",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar la geofence '{name}'?",
+    "viewLogs": "Ver Registros",
+    "noGeofences": "Sin geofences creadas aún.",
+    "noLogs": "Sin registros para esta geofence.",
+    "loadError": "Error al cargar geofences",
+    "createError": "Error al crear geofence",
+    "createSuccess": "Geofence creada exitosamente",
+    "updateError": "Error al actualizar geofence",
+    "updateSuccess": "Geofence actualizada exitosamente",
+    "deleteError": "Error al eliminar geofence",
+    "deleteSuccess": "Geofence eliminada exitosamente",
+    "logsError": "Error al cargar registros",
+    "types": {
+      "allowed": "Permitida",
+      "restricted": "Restringida",
+      "parking": "Estacionamiento",
+      "service_area": "Área de Servicio"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "eventType": {
+      "entry": "Entrada",
+      "exit": "Salida",
+      "violation": "Violación"
+    },
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "p.ej., Downtown Zona Restringida",
+      "description": "Descripción",
+      "descriptionPlaceholder": "p.ej., Sin estacionamiento después de las 6pm",
+      "type": "Tipo",
+      "latitude": "Latitud",
+      "latitudePlaceholder": "41.3851",
+      "longitude": "Longitud",
+      "longitudePlaceholder": "2.1734",
+      "radius": "Radio (metros)",
+      "radiusPlaceholder": "p.ej., 250",
+      "clickToSelect": "Haz clic en el mapa para seleccionar el centro de la zona",
+      "status": "Estado"
+    },
+    "logs": {
+      "vehicle": "Vehículo",
+      "eventType": "Tipo de Evento",
+      "timestamp": "Marca de Tiempo",
+      "location": "Ubicación"
+    },
+    "validation": {
+      "nameRequired": "El nombre es requerido",
+      "nameMaxLength": "El nombre no puede exceder 100 caracteres",
+      "radiusRequired": "El radio es requerido",
+      "radiusMax": "El radio no puede exceder 999999 metros",
+      "latitudeRequired": "La latitud es requerida",
+      "latitudeInvalid": "La latitud debe estar entre -90 y 90",
+      "longitudeRequired": "La longitud es requerida",
+      "longitudeInvalid": "La longitud debe estar entre -180 y 180",
+      "typeRequired": "El tipo es requerido"
+    }
+  },
+  "actions": {
+    "edit": "Editar"
+  },
   "errors": {
     "unexpected": "Ha ocurrido un error inesperado.",
     "invalidLoginResponse": "Respuesta de login inválida: falta token.",
