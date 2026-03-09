@@ -86,24 +86,63 @@ export const ticketService = {
     if (data.type) payload.type = data.type;
     if (data.priority) payload.priority = data.priority;
 
-    try {
-      const raw = await apiClient.post<any>('/v1/tickets', payload);
+    const postTicket = async (body: any) => {
+      const raw = await apiClient.post<any>('/v1/tickets', body);
       return normalizeTicket(raw?.data ?? raw);
+    };
+
+    const hasFieldError = (err: any, field: string): boolean => {
+      const errors = err?.errors;
+      if (!errors || typeof errors !== 'object') return false;
+      return Object.prototype.hasOwnProperty.call(errors, field) && errors[field] != null;
+    };
+
+    try {
+      return await postTicket(payload);
     } catch (error: any) {
-      // Si el backend rebutja enums opcionals (422), reintenta 1 vegada sense eixos camps perquè aplique defaults.
-      if (error?.status === 422 && error?.errors && (payload.type || payload.priority)) {
+      if (error?.status === 422 && (payload.type || payload.priority)) {
+        const typeValue = String(payload.type ?? '');
+        const isSupport = typeValue.toLowerCase() === 'support';
+
+        // Caso especial: solo falla "support" en backend. Probamos alternativas comunes.
+        if (isSupport) {
+          const candidates = ['soporte', 'suport'];
+          for (const candidate of candidates) {
+            try {
+              return await postTicket({ ...payload, type: candidate });
+            } catch (e: any) {
+              if (e?.status !== 422) throw e;
+            }
+
+            try {
+              const { type, ...rest } = payload;
+              return await postTicket({ ...rest, tipo: candidate });
+            } catch (e: any) {
+              if (e?.status !== 422) throw e;
+            }
+          }
+        }
+
+        // Si el backend marca explícitamente type/priority como inválidos, los eliminamos y reintentamos.
         const nextPayload: any = { ...payload };
-        if (payload.type && Array.isArray(error.errors.type)) {
+        let changed = false;
+
+        if (payload.type && (hasFieldError(error, 'type') || hasFieldError(error, 'tipo'))) {
           delete nextPayload.type;
+          delete nextPayload.tipo;
+          changed = true;
         }
-        if (payload.priority && Array.isArray(error.errors.priority)) {
+        if (payload.priority && (hasFieldError(error, 'priority') || hasFieldError(error, 'prioridad'))) {
           delete nextPayload.priority;
+          delete nextPayload.prioridad;
+          changed = true;
         }
-        if (nextPayload.type !== payload.type || nextPayload.priority !== payload.priority) {
-          const raw = await apiClient.post<any>('/v1/tickets', nextPayload);
-          return normalizeTicket(raw?.data ?? raw);
+
+        if (changed) {
+          return await postTicket(nextPayload);
         }
       }
+
       throw error;
     }
   },

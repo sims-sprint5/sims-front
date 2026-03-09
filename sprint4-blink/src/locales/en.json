@@ -239,6 +239,65 @@
       "invalidId": "Invalid vehicle ID."
     }
   },
+  "reservations": {
+    "title": "Reservations management",
+    "description": "Manage system reservations",
+    "searchPlaceholder": "Search by status, user, vehicle, or dates...",
+    "loading": "Loading reservations...",
+    "empty": "No reservations to display",
+    "table": {
+      "id": "ID",
+      "userId": "User (ID)",
+      "vehicleId": "Vehicle (ID)",
+      "status": "Status",
+      "startAt": "Start",
+      "endAt": "End",
+      "createdAt": "Created",
+      "actions": "Actions"
+    },
+    "form": {
+      "userId": "User ID",
+      "userIdPlaceholder": "1",
+      "vehicleId": "Vehicle ID",
+      "vehicleIdPlaceholder": "1",
+      "status": "Status",
+      "statusPlaceholder": "Select a status",
+      "startAt": "Start",
+      "startAtPlaceholder": "YYYY-MM-DD HH:mm:ss",
+      "endAt": "End",
+      "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed"
+    },
+    "modal": {
+      "deleteTitle": "Delete reservation",
+      "deleteMessage": "Are you sure you want to delete reservation {id}? This action cannot be undone.",
+      "detailsTitle": "Reservation details"
+    },
+    "actions": {
+      "newReservation": "New reservation",
+      "createNewReservation": "Create new reservation",
+      "editReservation": "Edit reservation",
+      "createReservation": "Create reservation",
+      "updateReservation": "Update reservation"
+    },
+    "toast": {
+      "created": "Reservation created successfully",
+      "updated": "Reservation updated successfully",
+      "deleted": "Reservation deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load reservations",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all reservations.",
+      "search": "Failed to search reservations",
+      "save": "Failed to save reservation",
+      "delete": "Failed to delete reservation",
+      "notFound": "Reservation not found. It may have already been deleted.",
+      "invalidId": "Invalid reservation ID"
+    }
+  },
   "table": {
     "previous": "Previous",
     "next": "Next",
@@ -426,6 +485,25 @@
       "precioInvalid": "Price is invalid.",
       "precioMax": "Price cannot exceed 999999.99.",
       "estadoInvalid": "Status is invalid."
+    },
+    "reservation": {
+      "user_id": {
+        "required": "User is required.",
+        "invalid": "User ID is not valid."
+      },
+      "vehicle_id": {
+        "required": "Vehicle is required.",
+        "invalid": "Vehicle ID is not valid."
+      },
+      "status": {
+        "required": "Status is required."
+      },
+      "start_at": {
+        "required": "Start date is required."
+      },
+      "end_at": {
+        "required": "End date is required."
+      }
     }
   },
   "errors": {

@@ -133,9 +133,8 @@ const viewingTicket = ref<Ticket | null>(null);
 // Errores del formulario
 const formErrors = ref<ValidationErrors>({});
 
-function uniqNonEmpty(values: Array<string | undefined | null>): string[] {
-  return Array.from(new Set(values.map(v => (v ?? '').toString().trim()).filter(Boolean)));
-}
+const ALL_TICKET_TYPES = ['support', 'billing', 'technical', 'other'] as const;
+const ALL_TICKET_PRIORITIES = ['low', 'medium', 'high', 'urgent'] as const;
 
 function labelPriority(value: string): string {
   const v = value.toLowerCase();
@@ -156,11 +155,11 @@ function labelType(value: string): string {
 }
 
 const typeOptions = computed<SelectOption[]>(() =>
-  uniqNonEmpty(tickets.value.map(tk => tk.type)).map(v => ({ value: v, label: labelType(v) }))
+  ALL_TICKET_TYPES.map((v) => ({ value: v, label: labelType(v) }))
 );
 
 const priorityOptions = computed<SelectOption[]>(() =>
-  uniqNonEmpty(tickets.value.map(tk => tk.priority)).map(v => ({ value: v, label: labelPriority(v) }))
+  ALL_TICKET_PRIORITIES.map((v) => ({ value: v, label: labelPriority(v) }))
 );
 
 // Cargar tickets

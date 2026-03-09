@@ -7,6 +7,7 @@ import { settingsRoutes } from '../modules/settings/routes';
 import { usersRoutes } from '../modules/users/routes';
 import { vehiclesRoutes } from '../modules/vehicles/routes';
 import { ticketsRoutes } from '../modules/tickets/routes';
+import { reservationsRoutes } from '../modules/reservations/routes';
 import { i18n } from '@/i18n';
 
 const routes: RouteRecordRaw[] = [
@@ -19,6 +20,7 @@ const routes: RouteRecordRaw[] = [
   ...settingsRoutes,
   ...usersRoutes,
   ...vehiclesRoutes,
+  ...reservationsRoutes,
   ...ticketsRoutes,
   {
     path: '/:pathMatch(.*)*',

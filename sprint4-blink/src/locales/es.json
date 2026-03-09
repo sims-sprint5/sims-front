@@ -239,6 +239,65 @@
       "invalidId": "ID de vehículo inválido."
     }
   },
+  "reservations": {
+    "title": "Gestión de reservas",
+    "description": "Administra las reservas del sistema",
+    "searchPlaceholder": "Buscar por estado, usuario, vehículo o fechas...",
+    "loading": "Cargando reservas...",
+    "empty": "No hay reservas para mostrar",
+    "table": {
+      "id": "ID",
+      "userId": "Usuario (ID)",
+      "vehicleId": "Vehículo (ID)",
+      "status": "Estado",
+      "startAt": "Inicio",
+      "endAt": "Fin",
+      "createdAt": "Creado",
+      "actions": "Acciones"
+    },
+    "form": {
+      "userId": "ID de usuario",
+      "userIdPlaceholder": "1",
+      "vehicleId": "ID de vehículo",
+      "vehicleIdPlaceholder": "1",
+      "status": "Estado",
+      "statusPlaceholder": "Selecciona un estado",
+      "startAt": "Inicio",
+      "startAtPlaceholder": "YYYY-MM-DD HH:mm:ss",
+      "endAt": "Fin",
+      "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmada"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar reserva",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar la reserva {id}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles de la reserva"
+    },
+    "actions": {
+      "newReservation": "Nueva reserva",
+      "createNewReservation": "Crear nueva reserva",
+      "editReservation": "Editar reserva",
+      "createReservation": "Crear reserva",
+      "updateReservation": "Actualizar reserva"
+    },
+    "toast": {
+      "created": "Reserva creada correctamente",
+      "updated": "Reserva actualizada correctamente",
+      "deleted": "Reserva eliminada correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar reservas",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todas las reservas.",
+      "search": "Error al buscar reservas",
+      "save": "Error al guardar reserva",
+      "delete": "Error al eliminar reserva",
+      "notFound": "Reserva no encontrada. Puede que ya haya sido eliminada.",
+      "invalidId": "ID de reserva inválido"
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Siguiente",
@@ -426,6 +485,25 @@
       "precioInvalid": "El precio no es válido.",
       "precioMax": "El precio no puede exceder 999999.99.",
       "estadoInvalid": "El estado no es válido."
+    },
+    "reservation": {
+      "user_id": {
+        "required": "El usuario es requerido.",
+        "invalid": "El ID de usuario no es válido."
+      },
+      "vehicle_id": {
+        "required": "El vehículo es requerido.",
+        "invalid": "El ID de vehículo no es válido."
+      },
+      "status": {
+        "required": "El estado es requerido."
+      },
+      "start_at": {
+        "required": "La fecha de inicio es requerida."
+      },
+      "end_at": {
+        "required": "La fecha de fin es requerida."
+      }
     }
   },
   "errors": {
