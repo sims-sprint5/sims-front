@@ -1,25 +1,21 @@
 import axios, { type AxiosRequestConfig } from 'axios';
+import { buildTenantApiUrl } from '../utils/tenantUtils';
 import type { ApiError } from '../types/api.types';
 
-const RAW_API_URL = import.meta.env.VITE_API_URL || '/api';
-const API_URL = String(RAW_API_URL).replace(/\/+$/, '');
-
-function normalizeEndpoint(endpoint: string): string {
-  // If baseURL already points to /api/v1, avoid creating /api/v1/v1/... by stripping the /v1 prefix.
-  const baseHasV1 = /\/api\/v1$/i.test(API_URL);
-  if (baseHasV1 && endpoint.startsWith('/v1/')) return endpoint.replace(/^\/v1/, '');
-  return endpoint;
-}
-
+/**
+ * Axios instance sin baseURL estático
+ * Las URLs se construyen dinámicamente en cada request según el tenant
+ */
 const axiosInstance = axios.create({
-  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
 });
 
-
+/**
+ * Interceptor de request: Agregar token de autenticación
+ */
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
   if (token) {
@@ -29,22 +25,34 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-
+/**
+ * Interceptor de response: Manegar errores y 401
+ */
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // Helpful debugging in dev: log 4xx and 5xx with request/response info
+      // Manejo especial de 401 (no autenticado / token expirado)
+      if (error.response.status === 401) {
+        // Limpiar autenticación del localStorage
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        localStorage.removeItem('auth_tenant');
+
+        // Redirigir al login (usando navegación del navegador para evitar circular imports)
+        window.location.href = '/login';
+      }
+
+      // Helpful debugging in dev: log 4xx y 5xx
       if (import.meta.env.DEV && error.response.status >= 400) {
         const method = String(error.config?.method || 'GET').toUpperCase();
-        const url = String(error.config?.baseURL || '') + String(error.config?.url || '');
+        const url = String(error.config?.url || '');
         const payload = {
           method,
           url,
           status: error.response.status,
           responseData: error.response.data,
           requestData: error.config?.data,
-          requestHeaders: error.config?.headers,
         };
         // eslint-disable-next-line no-console
         if (error.response.status >= 500) {
@@ -60,7 +68,7 @@ axiosInstance.interceptors.response.use(
         status: error.response.status,
       } as ApiError & { status: number };
     }
-    
+
     throw {
       message: 'errors.serverConnection',
       errors: {},
@@ -68,12 +76,17 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+/**
+ * Function genérica para hacer requests
+ * Construye la URL completa dinámicamente según el tenant
+ */
 async function request<T>(
   endpoint: string,
   options: AxiosRequestConfig = {}
 ): Promise<T> {
+  const fullUrl = buildTenantApiUrl(endpoint);
   const response = await axiosInstance.request<T>({
-    url: normalizeEndpoint(endpoint),
+    url: fullUrl,
     ...options,
   });
   return response.data;
