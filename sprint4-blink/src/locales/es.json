@@ -329,6 +329,7 @@
   },
   "mapa": {
     "title": "Mapa de Geofencing",
+    "userTitle": "Mapa",
     "geofences": "Geofences",
     "createZone": "Nueva Zona",
     "editZone": "Editar Zona",
@@ -345,6 +346,13 @@
     "deleteError": "Error al eliminar geofence",
     "deleteSuccess": "Geofence eliminada exitosamente",
     "logsError": "Error al cargar registros",
+    "table": {
+      "name": "Nombre",
+      "type": "Tipo",
+      "radius": "Radio",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
     "types": {
       "allowed": "Permitida",
       "restricted": "Restringida",

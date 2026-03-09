@@ -1,14 +1,24 @@
 import type { RouteRecordRaw } from 'vue-router'
 import MapView from './views/MapView.vue'
+import UserMapView from './views/UserMapView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/mapa',
-    name: 'MapView',
+    path: '/geofencing',
+    name: 'GeofencingView',
     component: MapView,
     meta: {
       requiresAuth: true,
       titleKey: 'mapa.title'
+    }
+  },
+  {
+    path: '/mapa',
+    name: 'UserMapView',
+    component: UserMapView,
+    meta: {
+      requiresAuth: true,
+      titleKey: 'mapa.userTitle'
     }
   }
 ]

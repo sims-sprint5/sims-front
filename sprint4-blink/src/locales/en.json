@@ -329,6 +329,7 @@
   },
   "mapa": {
     "title": "Geofencing Map",
+    "userTitle": "Map",
     "geofences": "Geofences",
     "createZone": "New Zone",
     "editZone": "Edit Zone",
@@ -345,6 +346,13 @@
     "deleteError": "Failed to delete geofence",
     "deleteSuccess": "Geofence deleted successfully",
     "logsError": "Failed to load logs",
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "radius": "Radius",
+      "status": "Status",
+      "actions": "Actions"
+    },
     "types": {
       "allowed": "Allowed",
       "restricted": "Restricted",

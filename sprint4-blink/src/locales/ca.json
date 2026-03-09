@@ -328,6 +328,7 @@
     }
   },  "mapa": {
     "title": "Mapa de Geofencing",
+    "userTitle": "Mapa",
     "geofences": "Geofences",
     "createZone": "Nova Zona",
     "editZone": "Editar Zona",
@@ -344,6 +345,13 @@
     "deleteError": "Error al eliminar geofence",
     "deleteSuccess": "Geofence eliminada correctament",
     "logsError": "Error al carregat registres",
+    "table": {
+      "name": "Nom",
+      "type": "Tipus",
+      "radius": "Radi",
+      "status": "Estat",
+      "actions": "Accions"
+    },
     "types": {
       "allowed": "Permesa",
       "restricted": "Restringida",

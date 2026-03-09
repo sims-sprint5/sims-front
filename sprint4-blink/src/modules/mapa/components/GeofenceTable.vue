@@ -61,8 +61,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { Geofence } from '../types/geofence.types'
 import { BaseTable, BaseButton } from '@/components/base'
+
+const { t } = useI18n()
 
 interface GeofenceTableProps {
   geofences: Geofence[]
@@ -78,13 +82,13 @@ defineEmits<{
   'view-logs': [geofence: Geofence]
 }>()
 
-const columns = [
-  { key: 'name', label: 'mapa.form.name' },
-  { key: 'type', label: 'mapa.form.type' },
-  { key: 'radius', label: 'mapa.form.radius' },
-  { key: 'status', label: 'mapa.form.status' },
-  { key: 'actions', label: 'common.actions' }
-]
+const columns = computed(() => [
+  { key: 'name', label: t('mapa.table.name') },
+  { key: 'type', label: t('mapa.table.type') },
+  { key: 'radius', label: t('mapa.table.radius') },
+  { key: 'status', label: t('mapa.table.status') },
+  { key: 'actions', label: t('mapa.table.actions') }
+])
 
 const getTypeColorClass = (type: string): string => {
   const classes: Record<string, string> = {
