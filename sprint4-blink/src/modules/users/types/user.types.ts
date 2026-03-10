@@ -1,10 +1,6 @@
-/**
- * Tipos relacionados con usuarios
- */
-
 export interface User {
   id: number;
-  user_id?: number; // Alias del backend
+  user_id?: number; // Backend alias
   name: string;
   email: string;
   phone: string;

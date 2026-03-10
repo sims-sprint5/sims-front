@@ -33,9 +33,6 @@ const validationErrors = ref<ValidationErrors>({});
 const showPassword = ref(false);
 const showPasswordConfirmation = ref(false);
 
-/**
- * Valida el formulario antes de enviar
- */
 const validateForm = (): boolean => {
     validationErrors.value = validateRegisterData(
         form.name,
@@ -47,11 +44,7 @@ const validateForm = (): boolean => {
     return Object.keys(validationErrors.value).length === 0;
 };
 
-/**
- * Maneja el envío del formulario de registro
- */
 const handleRegister = async () => {
-    // Validación en cliente
     if (!validateForm()) {
         toast.error(t('validation.fixFormErrors'));
         return;

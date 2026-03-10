@@ -34,7 +34,6 @@ const handleLogoutClick = () => {
     emit('logout');
 };
 
-// Iniciales del nombre del usuario
 const userInitials = computed(() => {
     if (!user.value?.name) return '';
     return user.value.name

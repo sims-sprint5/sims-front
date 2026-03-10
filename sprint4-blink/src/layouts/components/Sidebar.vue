@@ -1,15 +1,12 @@
 <template>
   <div :class="sidebarClasses">
-    <!-- HEADER -->
     <div class="flex h-20 shrink-0 items-center justify-center">
       <img :class="logoClasses" :src="blinkLogo" :alt="t('common.logoAlt', { app: t('app.name') })" />
     </div>
 
-    <!-- NAV -->
     <nav class="relative flex flex-1 flex-col">
       <ul role="list" class="flex flex-1 flex-col gap-y-7 items-center">
 
-        <!-- CLIENTE SECTION -->
         <li class="w-full">
           <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
             {{ t('nav.sections.client') }}
@@ -61,7 +58,6 @@
           </ul>
         </li>
 
-        <!-- ADMIN SECTION -->
         <li class="w-full">
           <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
             {{ t('nav.sections.admin') }}
@@ -80,13 +76,11 @@
                   {{ t(item.nameKey) }}
                 </span>
 
-                <!-- Badge expandido -->
                 <span v-if="!isCollapsed && item.count"
                   class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
                   {{ item.count }}
                 </span>
 
-                <!-- Indicador colapsado -->
                 <span v-if="isCollapsed && item.count"
                   class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
               </button>
@@ -103,13 +97,11 @@
                   {{ t(item.nameKey) }}
                 </span>
 
-                <!-- Badge expandido -->
                 <span v-if="!isCollapsed && item.count"
                   class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
                   {{ item.count }}
                 </span>
 
-                <!-- Indicador colapsado -->
                 <span v-if="isCollapsed && item.count"
                   class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
               </RouterLink>
@@ -171,10 +163,8 @@ const navLinkClasses = computed(() => [
 const getItemClasses = (item: NavItem) => {
   const classes = [...navLinkClasses.value]
   if (route.path === item.href) {
-    // Ruta activa: apagar (sin fondo)
     classes.push('!bg-transparent', '!text-gray-400')
   } else {
-    // Resto: iluminados
     classes.push('!bg-white/10', '!text-white')
   }
   return classes.join(' ')

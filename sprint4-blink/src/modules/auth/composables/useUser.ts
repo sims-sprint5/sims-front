@@ -18,14 +18,10 @@ loadStoredAvatar();
 
 export function useUser() {
   const loadUser = async () => {
-    try {
-      const me = await authService.getCurrentUser();
-      user.value = me;
-      authService.setUser(me);
-      return me;
-    } catch (error) {
-      throw error;
-    }
+    const me = await authService.getCurrentUser();
+    user.value = me;
+    authService.setUser(me);
+    return me;
   };
 
   const updateAvatar = (newAvatarUrl: string) => {

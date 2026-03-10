@@ -1,7 +1,3 @@
-/**
- * Tipos relacionados con la autenticación
- */
-
 export interface LoginCredentials {
   email: string;
   password: string;

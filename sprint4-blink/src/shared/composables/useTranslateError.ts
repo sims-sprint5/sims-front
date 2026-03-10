@@ -1,9 +1,6 @@
 import { useI18n } from 'vue-i18n';
 
-/**
- * Composable que retorna una funció per traduir missatges d'error de l'API.
- * Si el missatge és una clau i18n existent, la tradueix; altrament, la retorna tal qual.
- */
+/** Translates an API error message if it matches an i18n key, otherwise returns it as-is. */
 export function useTranslateError() {
   const { t, te } = useI18n();
 

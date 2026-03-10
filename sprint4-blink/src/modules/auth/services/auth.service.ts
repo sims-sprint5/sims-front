@@ -37,11 +37,10 @@ export const authService = {
     const user = extractUser(payload);
 
     if (!token || !user) {
-      // Keep a predictable error shape for UI
       throw {
         message: 'errors.requestFailed',
         errors: {
-          auth: ['Respuesta inválida del servidor'],
+          auth: ['Invalid server response'],
         },
       };
     }
@@ -70,7 +69,7 @@ export const authService = {
       throw {
         message: 'errors.requestFailed',
         errors: {
-          auth: ['Respuesta inválida del servidor'],
+          auth: ['Invalid server response'],
         },
       };
     }
@@ -101,8 +100,7 @@ export const authService = {
   async getCurrentUser(): Promise<User> {
     const payload = await apiClient.get<any>('/v1/auth/me');
 
-    // extractUser gestiona els wraps { user: ... }, { data: { user: ... } }, { data: ... }
-    // Si cap no fa match (resposta plana), usem el payload directament
+    // extractUser handles { user }, { data: { user } }, { data } wrappers; falls back to raw payload
     let raw = extractUser(payload) ?? payload;
 
     // Intentar camp id des de diverses variants del backend

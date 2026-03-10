@@ -26,7 +26,7 @@ const routes: RouteRecordRaw[] = [
 ];
 
 /**
- * Crear instancia del router
+ * Create router instance
  */
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,9 +34,9 @@ const router = createRouter({
 });
 
 /**
- * Guard global de navegación
- * 1. Valida que el tenant del subdominio coincida con el tenant almacenado (GLOBAL)
- * 2. Protege las rutas que requieren autenticación
+ * Global navigation guard.
+ * 1. Validates that the subdomain tenant matches the stored tenant.
+ * 2. Protects routes that require authentication.
  */
 router.beforeEach((to, _from, next) => {
   const isAuthenticated = authService.isAuthenticated();
@@ -49,32 +49,23 @@ router.beforeEach((to, _from, next) => {
   const pageTitle = titleKey ? i18n.global.t(titleKey) : i18n.global.t('app.name');
   document.title = `${pageTitle} | ${i18n.global.t('app.name')}`;
 
-  // PHASE 1: Validación de Tenant - Protección Multi-Tenant
-  // Si el usuario está autenticado, verificar que el tenant del subdominio actual
-  // coincida con el tenant en el que fue autenticado
+  // If the subdomain has changed since login, clear session and redirect
   if (isAuthenticated && storedTenant && currentTenant !== storedTenant) {
-    // El usuario cambió de subdominio sin desautenticarse
-    // Limpiar la sesión y redirigir al login
     authService.clearAuth();
     next({ name: 'Login' });
     return;
   }
 
-  // Si la ruta requiere autenticación
   if (requiresAuth && !isAuthenticated) {
-    // Redirigir al login
     next({ name: 'Login' });
     return;
   }
 
-  // Si está autenticado e intenta acceder al login
   if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
-    // Redirigir al dashboard
     next({ name: 'Dashboard' });
     return;
   }
 
-  // Permitir navegación
   next();
 });
 

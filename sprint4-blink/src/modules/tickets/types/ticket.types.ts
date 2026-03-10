@@ -1,7 +1,3 @@
-/**
- * Tipos relacionados con tickets
- */
-
 export interface TicketMessage {
   id: number;
   ticket_id: number;

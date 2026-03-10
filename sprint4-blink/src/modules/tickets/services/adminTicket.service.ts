@@ -8,10 +8,7 @@ import type {
   UpdateTicketData,
 } from '../types/adminTicket.types';
 
-/**
- * Normalitza un missatge del backend (camps en anglès) als tipus del frontend (camps en espanyol).
- * Suporta: { message, user_id, user: { name } } i { mensaje, usuario_id, usuario_nombre }
- */
+// Normalizes a message from the backend. Supports both English (message, user_id) and legacy Spanish (mensaje, usuario_id) field names.
 function normalizeMessage(msg: any): TicketMessage {
   return {
     id: msg.id,
@@ -24,11 +21,7 @@ function normalizeMessage(msg: any): TicketMessage {
   };
 }
 
-/**
- * Normalitza un ticket (admin) del backend (camps en anglès) als tipus del frontend (camps en espanyol).
- * Suporta: { subject, description, status, user_id, messages, user: { name, email } }
- * i { asunto, descripcion, estado, usuario_id, mensajes, usuario_nombre, usuario_email }
- */
+// Normalizes an admin ticket from the backend. Supports both English (subject, description, status, messages) and legacy Spanish field names.
 function normalizeAdminTicket(raw: any): AdminTicket {
   const mensajes: TicketMessage[] | undefined = Array.isArray(raw.messages)
     ? raw.messages.map(normalizeMessage)
@@ -51,7 +44,7 @@ function normalizeAdminTicket(raw: any): AdminTicket {
   };
 }
 
-/** Normalitza una resposta paginada o array del backend */
+// Normalizes a paginated or array response from the backend.
 function normalizeAdminTicketsResponse(raw: any): AdminTicketsResponse {
   if (Array.isArray(raw)) {
     return { data: raw.map(normalizeAdminTicket) };
@@ -63,20 +56,12 @@ function normalizeAdminTicketsResponse(raw: any): AdminTicketsResponse {
 }
 
 export const adminTicketService = {
-  /**
-   * Listado de tickets (admin)
-   * Endpoint backend: GET /api/v1/tickets
-   */
   async getTickets(page: number = 1, perPage: number = 10): Promise<AdminTicketsResponse> {
     const query = buildQuery({ page, per_page: perPage });
     const raw = await apiClient.get<any>(`/v1/tickets${query}`);
     return normalizeAdminTicketsResponse(raw);
   },
 
-  /**
-   * Obtenir ticket per ID incloent missatges.
-   * Endpoints: GET /api/v1/tickets/{id} + GET /api/v1/tickets/{id}/messages
-   */
   async getTicketById(id: number): Promise<AdminTicket> {
     const [ticketResult, messagesResult] = await Promise.allSettled([
       apiClient.get<any>(`/v1/tickets/${id}`),
@@ -96,7 +81,7 @@ export const adminTicketService = {
 
     const ticket = normalizeAdminTicket(rawTicket);
 
-    // Combinar missatges de la petició separada si el ticket no els inclou
+    // Merge messages from the separate request if the ticket doesn't include them
     if (!ticket.mensajes || ticket.mensajes.length === 0) {
       if (messagesResult.status === 'fulfilled') {
         const msgs = messagesResult.value?.data ?? messagesResult.value;
@@ -109,10 +94,6 @@ export const adminTicketService = {
     return ticket;
   },
 
-  /**
-   * Actualitzar ticket.
-   * Endpoint backend: PATCH /api/v1/tickets/{id}
-   */
   async updateTicket(id: number, data: UpdateTicketData): Promise<AdminTicket> {
     const payload: any = {};
     if (data.asunto !== undefined) payload.subject = data.asunto;
@@ -122,28 +103,16 @@ export const adminTicketService = {
     return normalizeAdminTicket(raw?.data ?? raw);
   },
 
-  /**
-   * Assignar agent a ticket.
-   * Endpoint backend: PATCH /api/v1/tickets/{id}/assign
-   */
   async assignTicket(id: number, agentId: number): Promise<AdminTicket> {
     const raw = await apiClient.patch<any>(`/v1/tickets/${id}/assign`, { agent_id: agentId });
     return normalizeAdminTicket(raw?.data ?? raw);
   },
 
-  /**
-   * Actualitzar estat del ticket.
-   * Endpoint backend: PATCH /api/v1/tickets/{id}/status
-   */
   async updateStatus(id: number, status: string): Promise<AdminTicket> {
     const raw = await apiClient.patch<any>(`/v1/tickets/${id}/status`, { status });
     return normalizeAdminTicket(raw?.data ?? raw);
   },
 
-  /**
-   * Eliminar ticket.
-   * Endpoint backend: DELETE /api/v1/tickets/{id}
-   */
   async deleteTicket(id: number): Promise<void> {
     await apiClient.delete<void>(`/v1/tickets/${id}`);
   },
@@ -163,10 +132,6 @@ export const adminTicketService = {
     );
   },
 
-  /**
-   * Enviar missatge al ticket.
-   * Endpoint backend: POST /api/v1/tickets/{id}/messages
-   */
   async sendMessage(ticketId: number, data: CreateMessageData): Promise<TicketMessage> {
     const raw = await apiClient.post<any>(`/v1/tickets/${ticketId}/messages`, {
       message: (data as any).mensaje ?? (data as any).message,

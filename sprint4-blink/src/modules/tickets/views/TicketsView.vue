@@ -35,22 +35,15 @@
         </div>
       </div>
 
-      <!-- Tabla de tickets -->
       <TicketTable :tickets="tickets" :loading="loading" @view="openViewModal" />
 
-      <!-- Modal de Crear Ticket -->
       <Teleport to="body">
         <Transition name="modal">
           <div v-if="showTicketModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <!-- Overlay -->
               <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeTicketModal" />
-
-              <!-- Center modal -->
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-              <!-- Modal panel -->
               <div
                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -66,19 +59,13 @@
         </Transition>
       </Teleport>
 
-      <!-- Modal de Visualización de Ticket con Chat -->
       <Teleport to="body">
         <Transition name="modal">
           <div v-if="showViewModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <!-- Overlay -->
               <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeViewModal" />
-
-              <!-- Center modal -->
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-              <!-- Modal panel -->
               <div
                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -112,21 +99,17 @@ const toast = useToast();
 const { t } = useI18n();
 const { translateErrorMessage } = useTranslateError();
 
-// Estado
 const tickets = ref<Ticket[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
 const searchQuery = ref('');
 
-// Modales
 const showTicketModal = ref(false);
 const showViewModal = ref(false);
 const viewingTicket = ref<Ticket | null>(null);
 
-// Errores del formulario
 const formErrors = ref<ValidationErrors>({});
 
-// Cargar tickets
 const loadTickets = async () => {
   loading.value = true;
   try {
@@ -206,7 +189,6 @@ const closeViewModal = () => {
   viewingTicket.value = null;
 };
 
-// Crear ticket
 const handleSubmit = async (data: CreateTicketData) => {
   formErrors.value = validateTicketForm(data);
   if (Object.keys(formErrors.value).length > 0) {
@@ -230,7 +212,6 @@ const handleSubmit = async (data: CreateTicketData) => {
   }
 };
 
-// Enviar mensaje
 const handleSendMessage = async (mensaje: string) => {
   if (!viewingTicket.value) return;
 
@@ -241,7 +222,7 @@ const handleSendMessage = async (mensaje: string) => {
     await ticketService.sendMessage(id, { mensaje });
     toast.success(t('tickets.toast.messageSent'));
     
-    // Recargar el ticket para obtener el mensaje recién enviado
+    // Reload the ticket to show the newly sent message
     const updatedTicket = await ticketService.getTicketById(id!);
     viewingTicket.value = updatedTicket;
     
