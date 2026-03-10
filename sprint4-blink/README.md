@@ -95,11 +95,16 @@ npm run build
 ## ⚙️ Environment Variables
 
 ```env
+
 # API endpoint
 VITE_API_URL=http://localhost:8001/api
 
-# Or use relative path for same domain
-VITE_API_URL=/api
+VITE_CENTRAL_API_URL=http://localhost:8000
+VITE_TENANT_BASE_URL=http://{tenant}.lvh.me:8000/api/v1
+VITE_TENANT_DOMAIN_SUFFIX=.lvh.me:8000
+VITE_PORT=5173
+VITE_API_PORT=8000
+
 ```
 
 ---
@@ -172,4 +177,21 @@ Translation files: `src/locales/` (ca.json, es.json, en.json)
 To add a new language:
 1. Create `src/locales/[lang].json`
 2. Register in `src/i18n.ts`
+
+## 🏢 Multi-Tenancy Setup
+
+This aplication suports multi-tenant deployments. Each tenant is identified by a subdomain.
+
+### Local Development with `lvh.me`
+
+`lvh.me` is a wildcard DNS service that maps all subdomains to `127.0.0.1`:
+- `localhost.lvh.me:5173` → `127.0.0.1:5173`
+- `tenant1.lvh.me:5173` → `127.0.0.1:5173`
+- `tenant2.lvh.me:5173` → `127.0.0.1:5173`
+
+In future, we will change lvh.me to nip.io to simulate SSL.
+
+Tenant subdomains look like -> http://company1.lvh.me:5173
+
+
 
