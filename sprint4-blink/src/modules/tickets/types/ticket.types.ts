@@ -50,6 +50,3 @@ export interface TicketsResponse {
   };
 }
 
-export interface TicketResponse {
-  data: Ticket;
-}

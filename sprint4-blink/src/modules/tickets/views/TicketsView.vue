@@ -166,7 +166,7 @@ const priorityOptions = computed<SelectOption[]>(() =>
 const loadTickets = async () => {
   loading.value = true;
   try {
-    const response = await ticketService.getUserTickets(1, 100);
+    const response = await ticketService.getUserTickets(1, 500);
     if (response && typeof response === 'object' && 'data' in response) {
       tickets.value = Array.isArray(response.data) ? response.data : [];
     } else if (Array.isArray(response)) {

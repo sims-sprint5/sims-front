@@ -156,6 +156,7 @@ const statusLabel = (status: unknown) => {
 const { formatError } = useFormatError();
 
 const isEditing = ref(false);
+
 const formData = ref<CreateVehicleData>({
   license_plate: '',
   brand: '',

@@ -178,9 +178,11 @@
     "loading": "Loading vehicles...",
     "empty": "No vehicles to display",
     "table": {
+
       "licensePlate": "License plate",
       "brand": "Brand",
       "model": "Model",
+      "color": "Color",
       "year": "Year",
       "status": "Status",
       "lastLocationUpdate": "Last location update",
@@ -210,7 +212,10 @@
       "active": "Active",
       "available": "Available",
       "inactive": "Inactive",
-      "maintenance": "Maintenance"
+      "maintenance": "Under Maintenance",
+      "reserved": "Reserved",
+      "rented": "Rented",
+      "out_of_service": "Out of Service"
     },
     "modal": {
       "deleteTitle": "Delete vehicle",

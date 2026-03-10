@@ -133,8 +133,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { BaseButton, BaseInput } from '@/components/base';
-import BaseModal from '@/components/base/BaseModal.vue';
+import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AdminTicketTable from '@/modules/tickets/components/AdminTicketTable.vue';
 import TicketChat from '@/modules/tickets/components/TicketChat.vue';
@@ -170,7 +169,7 @@ const ticketToDelete = ref<AdminTicket | null>(null);
 const loadTickets = async () => {
   loading.value = true;
   try {
-    const response = await adminTicketService.getTickets(1, 100);
+    const response = await adminTicketService.getTickets(1, 500);
     if (response && typeof response === 'object' && 'data' in response) {
       tickets.value = Array.isArray(response.data) ? response.data : [];
     } else if (Array.isArray(response)) {

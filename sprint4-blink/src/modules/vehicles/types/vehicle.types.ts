@@ -52,6 +52,3 @@ export interface VehiclesResponse {
   };
 }
 
-export interface VehicleResponse {
-  data: Vehicle;
-}

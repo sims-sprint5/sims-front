@@ -127,7 +127,8 @@
                     {{ $t('vehicles.modal.detailsTitle') }}
                   </h3> 
 
-                  <div v-if="viewingVehicle" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div v-if="viewingVehicle" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="rounded-lg border border-gray-200 p-3">
                       <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.licensePlate') }}</p>
                       <p class="text-base text-gray-900">{{ viewingVehicle.license_plate }}</p>
@@ -167,6 +168,7 @@
                       <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.currentLongitude') }}</p>
                       <p class="text-base text-gray-900">{{ viewingVehicle.current_longitude ?? '-' }}</p>
                     </div>
+                    </div>
                   </div>
 
                   <div class="flex justify-end space-x-3 pt-6 border-t mt-6">
@@ -189,8 +191,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue';
-import { BaseButton, BaseInput } from '@/components/base';
-import BaseModal from '@/components/base/BaseModal.vue';
+import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import VehicleTable from '@/modules/vehicles/components/VehicleTable.vue';
 import VehicleForm from '@/modules/vehicles/components/VehicleForm.vue';
@@ -241,7 +242,7 @@ const formErrors = ref<ValidationErrors>({});
 const loadVehicles = async () => {
   loading.value = true;
   try {
-    const response = await vehicleService.getVehicles(1, 100);
+    const response = await vehicleService.getVehicles(1, 500);
     if (response && typeof response === 'object' && 'data' in response) {
       vehicles.value = Array.isArray(response.data) ? response.data : [];
     } else if (Array.isArray(response as any)) {

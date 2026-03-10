@@ -181,6 +181,7 @@
       "licensePlate": "Matrícula",
       "brand": "Marca",
       "model": "Model",
+      "color": "Color",
       "year": "Any",
       "status": "Estat",
       "lastLocationUpdate": "Última ubicació",
@@ -210,7 +211,10 @@
       "active": "Actiu",
       "available": "Disponible",
       "inactive": "Inactiu",
-      "maintenance": "Manteniment"
+      "maintenance": "En manteniment",
+      "reserved": "Reservat",
+      "rented": "Llogat",
+      "out_of_service": "Fora de servei"
     },
     "modal": {
       "deleteTitle": "Eliminar vehicle",

@@ -82,6 +82,7 @@ const columns = computed<TableColumn[]>(() => [
   { key: 'license_plate', label: t('vehicles.table.licensePlate'), align: 'left' },
   { key: 'brand', label: t('vehicles.table.brand'), align: 'left' },
   { key: 'model', label: t('vehicles.table.model'), align: 'left' },
+  { key: 'color', label: t('vehicles.table.color'), align: 'left' },
   { key: 'year', label: t('vehicles.table.year'), align: 'left' },
   { key: 'status', label: t('vehicles.table.status'), align: 'left' },
   { key: 'actions', label: t('vehicles.table.actions'), align: 'right' },
