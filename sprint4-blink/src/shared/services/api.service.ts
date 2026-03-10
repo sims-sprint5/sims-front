@@ -1,10 +1,17 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-import { buildTenantApiUrl } from '../utils/tenantUtils';
+import { buildTenantApiUrl, getCurrentTenant } from '../utils/tenantUtils';
 import type { ApiError } from '../types/api.types';
 
 /**
  * Axios instance sin baseURL estático
- * Las URLs se construyen dinámicamente en cada request según el tenant
+ * Les URLs es construeixen dinàmicament en cada request segons el tenant
+ * 
+ * Funcionament:
+ * - Si l'usuari accedeix a http://uberddos.lvh.me:8000/tickets
+ * - Les requests es fan automàticament a http://uberddos.lvh.me:8000/api/tickets
+ * 
+ * - Si l'usuari accedeix a http://localhost:8000 (superadmin/central)
+ * - Les requests es fan a http://localhost:8000/api
  */
 const axiosInstance = axios.create({
   headers: {
@@ -14,14 +21,23 @@ const axiosInstance = axios.create({
 });
 
 /**
- * Interceptor de request: Agregar token de autenticación
+ * Interceptor de request: Afegir tenant i token de autenticació
+ * PHASE 2: Enviar siempre el header X-Tenant para validación backend
  */
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
+  const tenant = getCurrentTenant();
+  
   if (token) {
     config.headers = config.headers ?? {};
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
+  // Enviar header X-Tenant SIEMPRE (no solo en DEV)
+  // El backend lo usa para validar que el request viene al tenant correcto
+  config.headers = config.headers ?? {};
+  config.headers['X-Tenant'] = tenant;
+  
   return config;
 });
 
