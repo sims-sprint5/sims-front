@@ -42,9 +42,6 @@ function onReset() {
 
 <template>
   <div class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 p-5 max-h-[calc(100vh-8.5rem)] overflow-auto">
-    <div class="mb-4 flex justify-center">
-    </div>
-
     <div class="flex items-center justify-between mb-5">
       <h2 class="text-base font-bold text-gray-900">Filtros</h2>
       <BaseButton size="sm" variant="secondary" :disabled="disabled" @click="onReset">

@@ -21,8 +21,11 @@ export function validateTicketForm(
     errors.asunto = 'validation.ticket.asuntoMax';
   }
 
-  // Prioritat (i type) són opcionals en el frontend; el backend pot aplicar defaults.
-  // Si s'informa, validem només format bàsic.
+  // Type és requerit pel backend
+  if (!formData.type || typeof formData.type !== 'string' || formData.type.trim().length === 0) {
+    errors.type = 'validation.ticket.typeRequired';
+  }
+
   if (formData.priority) {
     if (typeof formData.priority !== 'string' || formData.priority.trim().length === 0) {
       errors.priority = 'validation.ticket.priorityInvalid';

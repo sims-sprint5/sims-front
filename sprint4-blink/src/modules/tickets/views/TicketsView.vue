@@ -133,7 +133,7 @@ const viewingTicket = ref<Ticket | null>(null);
 // Errores del formulario
 const formErrors = ref<ValidationErrors>({});
 
-const ALL_TICKET_TYPES = ['support', 'billing', 'technical', 'other'] as const;
+const ALL_TICKET_TYPES = ['technical', 'billing', 'complaint', 'inquiry'] as const;
 const ALL_TICKET_PRIORITIES = ['low', 'medium', 'high', 'urgent'] as const;
 
 function labelPriority(value: string): string {
@@ -147,10 +147,10 @@ function labelPriority(value: string): string {
 
 function labelType(value: string): string {
   const v = value.toLowerCase();
-  if (v === 'support') return t('tickets.form.typeSupport');
-  if (v === 'billing') return t('tickets.form.typeBilling');
   if (v === 'technical') return t('tickets.form.typeTechnical');
-  if (v === 'other') return t('tickets.form.typeOther');
+  if (v === 'billing') return t('tickets.form.typeBilling');
+  if (v === 'complaint') return t('tickets.form.typeComplaint');
+  if (v === 'inquiry') return t('tickets.form.typeInquiry');
   return value;
 }
 
@@ -258,7 +258,9 @@ const handleSubmit = async (data: CreateTicketData) => {
     await loadTickets();
   } catch (error: any) {
     if (error?.errors) {
-      formErrors.value = error.errors;
+      formErrors.value = Object.fromEntries(
+        Object.entries(error.errors).map(([key, val]) => [key, Array.isArray(val) ? val[0] : val])
+      );
     }
     toast.error(translateErrorMessage(error?.message, t('tickets.errors.save')));
   } finally {
@@ -277,11 +279,9 @@ const handleSendMessage = async (mensaje: string) => {
     await ticketService.sendMessage(id, { mensaje });
     toast.success(t('tickets.toast.messageSent'));
     
-    // Recargar el ticket para obtener el mensaje recién enviado
     const updatedTicket = await ticketService.getTicketById(id!);
     viewingTicket.value = updatedTicket;
     
-    // Recargar la lista de tickets
     await loadTickets();
   } catch (error: any) {
     toast.error(translateErrorMessage(error?.message, t('tickets.errors.save')));
@@ -290,7 +290,6 @@ const handleSendMessage = async (mensaje: string) => {
   }
 };
 
-// Cargar datos al montar el componente
 onMounted(() => {
   loadTickets();
 });

@@ -34,6 +34,7 @@
         <option disabled value="">{{ $t('tickets.form.typeSelect') }}</option>
         <option v-for="opt in typeOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
       </select>
+      <p v-if="(errors as any).type" class="text-sm text-red-600 mt-1">{{ formatError((errors as any).type) }}</p>
     </div>
 
     <!-- Prioridad -->

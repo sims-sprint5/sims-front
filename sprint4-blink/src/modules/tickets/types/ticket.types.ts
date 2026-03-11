@@ -18,7 +18,6 @@ export interface Ticket {
   usuario_id: number;
   asunto?: string;
   descripcion?: string;
-  fecha_compra?: string;
   estado?: string;
   type?: string;
   priority?: string;

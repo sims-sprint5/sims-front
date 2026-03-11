@@ -357,10 +357,10 @@
       "descripcionPlaceholder": "Describe el problema o incidencia",
       "type": "Tipo",
       "typeSelect": "Selecciona tipo",
-      "typeSupport": "Soporte",
-      "typeBilling": "Facturación",
       "typeTechnical": "Técnico",
-      "typeOther": "Otro",
+      "typeBilling": "Facturación",
+      "typeComplaint": "Queja",
+      "typeInquiry": "Consulta",
       "priority": "Prioridad",
       "prioritySelect": "Selecciona prioridad",
       "priorityLow": "Baja",
@@ -498,7 +498,14 @@
       "precioRequired": "El precio es requerido.",
       "precioInvalid": "El precio no es válido.",
       "precioMax": "El precio no puede exceder 999999.99.",
-      "estadoInvalid": "El estado no es válido."
+      "estadoInvalid": "El estado no es válido.",
+      "asuntoRequired": "El asunto es requerido.",
+      "asuntoMax": "El asunto no puede exceder 255 caracteres.",
+      "descripcionInvalid": "La descripción no es válida.",
+      "descripcionMax": "La descripción no puede exceder 1000 caracteres.",
+      "typeRequired": "El tipo es requerido.",
+      "priorityInvalid": "La prioridad no es válida.",
+      "priorityMax": "La prioridad no puede exceder 20 caracteres."
     },
     "reservation": {
       "user_id": {

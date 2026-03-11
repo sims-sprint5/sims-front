@@ -357,10 +357,10 @@
       "descripcionPlaceholder": "Descriu el problema o incidència",
       "type": "Tipus",
       "typeSelect": "Selecciona tipus",
-      "typeSupport": "Suport",
-      "typeBilling": "Facturació",
       "typeTechnical": "Tècnic",
-      "typeOther": "Altre",
+      "typeBilling": "Facturació",
+      "typeComplaint": "Queixa",
+      "typeInquiry": "Consulta",
       "priority": "Prioritat",
       "prioritySelect": "Selecciona prioritat",
       "priorityLow": "Baixa",
@@ -498,7 +498,14 @@
       "precioRequired": "El preu és obligatori.",
       "precioInvalid": "El preu no és vàlid.",
       "precioMax": "El preu no pot superar 999999.99.",
-      "estadoInvalid": "L'estat no és vàlid."
+      "estadoInvalid": "L'estat no és vàlid.",
+      "asuntoRequired": "L'assumpte és obligatori.",
+      "asuntoMax": "L'assumpte no pot superar 255 caràcters.",
+      "descripcionInvalid": "La descripció no és vàlida.",
+      "descripcionMax": "La descripció no pot superar 1000 caràcters.",
+      "typeRequired": "El tipus és obligatori.",
+      "priorityInvalid": "La prioritat no és vàlida.",
+      "priorityMax": "La prioritat no pot superar 20 caràcters."
     },
     "reservation": {
       "user_id": {
