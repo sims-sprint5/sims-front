@@ -1,7 +1,3 @@
-/**
- * Tipos para administración de tickets
- */
-
 export interface TicketMessage {
   id: number;
   ticket_id: number;
@@ -21,10 +17,10 @@ export interface AdminTicket {
   estado?: string;
   created_at: string;
   updated_at: string;
-  // Información del usuario asociado (join)
+  // Related user info (joined from backend)
   usuario_nombre?: string;
   usuario_email?: string;
-  // Mensajes del ticket
+  // Ticket messages
   mensajes?: TicketMessage[];
 }
 

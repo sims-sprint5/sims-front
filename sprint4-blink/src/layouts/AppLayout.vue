@@ -47,7 +47,7 @@ onMounted(async () => {
   try {
     await loadUser();
   } catch (_err) {
-    // Ignorar error - el usuario verá mensajes de toast si es necesario
+      // Ignore error — user will see toast messages if needed
   }
 });
 

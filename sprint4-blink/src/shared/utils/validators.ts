@@ -8,9 +8,6 @@ export interface ValidationErrors {
   role?: string;
 }
 
-/**
- * Valida el nombre de usuario
- */
 export function validateName(name: string | undefined): string | null {
   if (!name || !name.trim()) {
     return 'validation.name.required';
@@ -24,9 +21,6 @@ export function validateName(name: string | undefined): string | null {
   return null;
 }
 
-/**
- * Valida el email
- */
 export function validateEmail(email: string | undefined): string | null {
   if (!email || !email.trim()) {
     return 'validation.email.required';
@@ -44,9 +38,6 @@ export function validateEmail(email: string | undefined): string | null {
   return null;
 }
 
-/**
- * Valida el teléfono
- */
 export function validatePhone(phone: string | undefined): string | null {
   if (!phone || !phone.trim()) {
     return 'validation.phone.required';
@@ -65,9 +56,6 @@ export function validatePhone(phone: string | undefined): string | null {
   return null;
 }
 
-/**
- * Valida la contraseña
- */
 export function validatePassword(password: string | undefined, isEditing: boolean = false): string | null {
   if (!isEditing && (!password || !password.trim())) {
     return 'validation.password.required';
@@ -84,9 +72,6 @@ export function validatePassword(password: string | undefined, isEditing: boolea
   return null;
 }
 
-/**
- * Valida la confirmación de contraseña
- */
 export function validatePasswordConfirmation(
   password: string | undefined,
   passwordConfirmation: string | undefined,
@@ -103,9 +88,6 @@ export function validatePasswordConfirmation(
   return null;
 }
 
-/**
- * Valida el rol
- */
 export function validateRole(role: string | undefined): string | null {
   if (!role) {
     return 'validation.role.required';

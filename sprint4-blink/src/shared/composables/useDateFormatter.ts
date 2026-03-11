@@ -7,10 +7,7 @@ const localeMap: Record<string, string> = {
   en: 'en-GB',
 };
 
-/**
- * Composable que retorna una funció `formatDate` reactiva al locale actual.
- * Acepta opcions de Intl.DateTimeFormat opcionals.
- */
+/** Returns a reactive `formatDate` function that respects the current i18n locale. */
 export function useDateFormatter(options?: Intl.DateTimeFormatOptions) {
   const { locale } = useI18n();
 

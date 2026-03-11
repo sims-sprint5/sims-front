@@ -1,9 +1,6 @@
 import { useI18n } from 'vue-i18n';
 
-/**
- * Composable que retorna una funció per formatar errors de validació.
- * Si l'error és una clau i18n, la tradueix; altrament, la retorna tal qual.
- */
+/** Returns a formatted error string: translates i18n keys, otherwise returns as-is. */
 export function useFormatError() {
   const { t } = useI18n();
 
