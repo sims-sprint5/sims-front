@@ -50,7 +50,12 @@
                   <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
                     {{ $t('tickets.actions.createNewTicket') }}
                   </h3>
-                  <TicketForm :loading="submitting" :errors="formErrors" @submit="handleSubmit"
+                  <TicketForm
+                    :loading="submitting"
+                    :errors="formErrors"
+                    :type-options="typeOptions"
+                    :priority-options="priorityOptions"
+                    @submit="handleSubmit"
                     @cancel="closeTicketModal" />
                 </div>
               </div>
@@ -82,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { BaseButton, BaseInput } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import TicketTable from '@/modules/tickets/components/TicketTable.vue';
@@ -99,6 +104,9 @@ const toast = useToast();
 const { t } = useI18n();
 const { translateErrorMessage } = useTranslateError();
 
+type SelectOption = { label: string; value: string };
+
+// Estado
 const tickets = ref<Ticket[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
@@ -110,10 +118,40 @@ const viewingTicket = ref<Ticket | null>(null);
 
 const formErrors = ref<ValidationErrors>({});
 
+const ALL_TICKET_TYPES = ['technical', 'billing', 'complaint', 'inquiry'] as const;
+const ALL_TICKET_PRIORITIES = ['low', 'medium', 'high', 'urgent'] as const;
+
+function labelPriority(value: string): string {
+  const v = value.toLowerCase();
+  if (v === 'low') return t('tickets.form.priorityLow');
+  if (v === 'medium') return t('tickets.form.priorityMedium');
+  if (v === 'high') return t('tickets.form.priorityHigh');
+  if (v === 'urgent') return t('tickets.form.priorityUrgent');
+  return value;
+}
+
+function labelType(value: string): string {
+  const v = value.toLowerCase();
+  if (v === 'technical') return t('tickets.form.typeTechnical');
+  if (v === 'billing') return t('tickets.form.typeBilling');
+  if (v === 'complaint') return t('tickets.form.typeComplaint');
+  if (v === 'inquiry') return t('tickets.form.typeInquiry');
+  return value;
+}
+
+const typeOptions = computed<SelectOption[]>(() =>
+  ALL_TICKET_TYPES.map((v) => ({ value: v, label: labelType(v) }))
+);
+
+const priorityOptions = computed<SelectOption[]>(() =>
+  ALL_TICKET_PRIORITIES.map((v) => ({ value: v, label: labelPriority(v) }))
+);
+
+// Cargar tickets
 const loadTickets = async () => {
   loading.value = true;
   try {
-    const response = await ticketService.getUserTickets(1, 100);
+    const response = await ticketService.getUserTickets(1, 500);
     if (response && typeof response === 'object' && 'data' in response) {
       tickets.value = Array.isArray(response.data) ? response.data : [];
     } else if (Array.isArray(response)) {
@@ -204,7 +242,9 @@ const handleSubmit = async (data: CreateTicketData) => {
     await loadTickets();
   } catch (error: any) {
     if (error?.errors) {
-      formErrors.value = error.errors;
+      formErrors.value = Object.fromEntries(
+        Object.entries(error.errors).map(([key, val]) => [key, Array.isArray(val) ? val[0] : val])
+      );
     }
     toast.error(translateErrorMessage(error?.message, t('tickets.errors.save')));
   } finally {
@@ -222,11 +262,9 @@ const handleSendMessage = async (mensaje: string) => {
     await ticketService.sendMessage(id, { mensaje });
     toast.success(t('tickets.toast.messageSent'));
     
-    // Reload the ticket to show the newly sent message
     const updatedTicket = await ticketService.getTicketById(id!);
     viewingTicket.value = updatedTicket;
     
-    // Recargar la lista de tickets
     await loadTickets();
   } catch (error: any) {
     toast.error(translateErrorMessage(error?.message, t('tickets.errors.save')));
@@ -235,7 +273,6 @@ const handleSendMessage = async (mensaje: string) => {
   }
 };
 
-// Cargar datos al montar el componente
 onMounted(() => {
   loadTickets();
 });

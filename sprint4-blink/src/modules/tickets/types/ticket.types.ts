@@ -14,8 +14,9 @@ export interface Ticket {
   usuario_id: number;
   asunto?: string;
   descripcion?: string;
-  fecha_compra?: string;
   estado?: string;
+  type?: string;
+  priority?: string;
   created_at: string;
   updated_at: string;
   mensajes?: TicketMessage[];
@@ -44,6 +45,3 @@ export interface TicketsResponse {
   };
 }
 
-export interface TicketResponse {
-  data: Ticket;
-}

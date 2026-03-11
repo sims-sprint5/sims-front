@@ -29,6 +29,7 @@
     "map": "Mapa",
     "tickets": "Tickets",
     "bookings": "Reservas",
+    "reservationsAdmin": "Log de reservas",
     "users": "Usuarios",
     "vehicles": "Vehículos",
     "geofencing": "Geofencing",
@@ -171,6 +172,149 @@
       "notFound": "Usuario no encontrado. Puede que ya haya sido eliminado."
     }
   },
+  "vehicles": {
+    "title": "Gestión de vehículos",
+    "description": "Administra los vehículos del sistema",
+    "searchPlaceholder": "Buscar por matrícula, marca o modelo...",
+    "loading": "Cargando vehículos...",
+    "empty": "No hay vehículos para mostrar",
+    "table": {
+      "licensePlate": "Matrícula",
+      "brand": "Marca",
+      "model": "Modelo",
+      "color": "Color",
+      "year": "Año",
+      "status": "Estado",
+      "lastLocationUpdate": "Última ubicación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Marca",
+      "model": "Modelo",
+      "modelPlaceholder": "Modelo",
+      "year": "Año",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Estado",
+      "statusPlaceholder": "Selecciona estado",
+      "currentLatitude": "Latitud actual",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Longitud actual",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Última actualización de ubicación",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Activo",
+      "available": "Disponible",
+      "inactive": "Inactivo",
+      "maintenance": "En mantenimiento",
+      "reserved": "Reservado",
+      "rented": "Alquilado",
+      "out_of_service": "Fuera de servicio"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar vehículo",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el vehículo {license_plate}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles del vehículo"
+    },
+    "actions": {
+      "newVehicle": "Nuevo vehículo",
+      "createNewVehicle": "Crear nuevo vehículo",
+      "editVehicle": "Editar vehículo",
+      "createVehicle": "Crear vehículo",
+      "updateVehicle": "Actualizar vehículo"
+    },
+    "toast": {
+      "created": "Vehículo creado correctamente",
+      "updated": "Vehículo actualizado correctamente",
+      "deleted": "Vehículo eliminado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar vehículos",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los vehículos.",
+      "search": "Error al buscar vehículos",
+      "save": "Error al guardar vehículo",
+      "delete": "Error al eliminar vehículo",
+      "notFound": "Vehículo no encontrado. Puede que ya haya sido eliminado.",
+      "invalidId": "ID de vehículo inválido."
+    }
+  },
+  "reservations": {
+    "title": "Gestión de reservas",
+    "description": "Administra las reservas del sistema",
+    "searchPlaceholder": "Buscar por estado, usuario, vehículo o fechas...",
+    "loading": "Cargando reservas...",
+    "empty": "No hay reservas para mostrar",
+    "createTitle": "Crear reserva",
+    "createDescription": "Selecciona las fechas para registrar la nueva reserva.",
+    "selectDates": "Indica una fecha de inicio y una de fin para guardar la reserva.",
+    "table": {
+      "id": "ID",
+      "logType": "Tipo de log",
+      "userId": "Usuario (ID)",
+      "vehicleId": "Vehículo (ID)",
+      "status": "Estado",
+      "startAt": "Inicio",
+      "endAt": "Fin",
+      "createdAt": "Creado",
+      "actions": "Acciones"
+    },
+    "form": {
+      "userId": "ID de usuario",
+      "userIdPlaceholder": "1",
+      "vehicleId": "ID de vehículo",
+      "vehicleIdPlaceholder": "1",
+      "status": "Estado",
+      "statusPlaceholder": "Selecciona un estado",
+      "startAt": "Inicio",
+      "startAtPlaceholder": "YYYY-MM-DD HH:mm:ss",
+      "endAt": "Fin",
+      "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "active": "Confirmada",
+      "completed": "Completada",
+      "cancelled": "Cancelada"
+    },
+    "log": {
+      "created": "Creada"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar reserva",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar la reserva {id}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles de la reserva"
+    },
+    "actions": {
+      "newReservation": "Nueva reserva",
+      "createNewReservation": "Crear nueva reserva",
+      "editReservation": "Editar reserva",
+      "createReservation": "Crear reserva",
+      "updateReservation": "Actualizar reserva"
+    },
+    "toast": {
+      "created": "Reserva creada correctamente",
+      "updated": "Reserva actualizada correctamente",
+      "deleted": "Reserva eliminada correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar reservas",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todas las reservas.",
+      "search": "Error al buscar reservas",
+      "save": "Error al guardar reserva",
+      "delete": "Error al eliminar reserva",
+      "notFound": "Reserva no encontrada. Puede que ya haya sido eliminada.",
+      "invalidId": "ID de reserva inválido",
+      "missingDates": "Indica fecha de inicio y fin para la reserva.",
+      "create": "Error al crear la reserva. Por favor, inténtalo de nuevo.",
+      "invalidDates": "La fecha de fin debe ser posterior a la de inicio."
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Siguiente",
@@ -216,10 +360,10 @@
       "descripcionPlaceholder": "Describe el problema o incidencia",
       "type": "Tipo",
       "typeSelect": "Selecciona tipo",
-      "typeSupport": "Soporte",
-      "typeBilling": "Facturación",
       "typeTechnical": "Técnico",
-      "typeOther": "Otro",
+      "typeBilling": "Facturación",
+      "typeComplaint": "Queja",
+      "typeInquiry": "Consulta",
       "priority": "Prioridad",
       "prioritySelect": "Selecciona prioridad",
       "priorityLow": "Baja",
@@ -229,6 +373,7 @@
     },
     "estados": {
       "pendiente": "Pendiente",
+      "open": "Abierto",
       "confirmado": "Confirmado",
       "cancelado": "Cancelado",
       "usado": "Usado"
@@ -318,13 +463,71 @@
       "invalid": "El rol no es válido."
     },
     "passwordMismatch": "Las contraseñas no coinciden.",
+    "vehicle": {
+      "license_plate": {
+        "required": "La matrícula es requerida."
+      },
+      "brand": {
+        "required": "La marca es requerida."
+      },
+      "model": {
+        "required": "El modelo es requerido."
+      },
+      "year": {
+        "required": "El año es requerido.",
+        "invalid": "El año no es válido.",
+        "min": "El año debe ser mayor o igual a 1900.",
+        "max": "El año no puede ser mayor a 2100."
+      },
+      "color": {
+        "required": "El color es requerido."
+      },
+      "status": {
+        "required": "El estado es requerido."
+      },
+      "current_latitude": {
+        "invalid": "La latitud no es válida."
+      },
+      "current_longitude": {
+        "invalid": "La longitud no es válida."
+      },
+      "last_location_update": {
+        "invalid": "La fecha de última ubicación no es válida."
+      }
+    },
     "ticket": {
       "eventoRequired": "El evento es requerido.",
       "eventoInvalid": "El ID del evento no es válido.",
       "precioRequired": "El precio es requerido.",
       "precioInvalid": "El precio no es válido.",
       "precioMax": "El precio no puede exceder 999999.99.",
-      "estadoInvalid": "El estado no es válido."
+      "estadoInvalid": "El estado no es válido.",
+      "asuntoRequired": "El asunto es requerido.",
+      "asuntoMax": "El asunto no puede exceder 255 caracteres.",
+      "descripcionInvalid": "La descripción no es válida.",
+      "descripcionMax": "La descripción no puede exceder 1000 caracteres.",
+      "typeRequired": "El tipo es requerido.",
+      "priorityInvalid": "La prioridad no es válida.",
+      "priorityMax": "La prioridad no puede exceder 20 caracteres."
+    },
+    "reservation": {
+      "user_id": {
+        "required": "El usuario es requerido.",
+        "invalid": "El ID de usuario no es válido."
+      },
+      "vehicle_id": {
+        "required": "El vehículo es requerido.",
+        "invalid": "El ID de vehículo no es válido."
+      },
+      "status": {
+        "required": "El estado es requerido."
+      },
+      "start_at": {
+        "required": "La fecha de inicio es requerida."
+      },
+      "end_at": {
+        "required": "La fecha de fin es requerida."
+      }
     }
   },
   "errors": {

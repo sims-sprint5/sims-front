@@ -8,6 +8,7 @@ import type {
   TicketMessage,
   TicketsResponse,
 } from '../types/ticket.types';
+import { normalizeTicketMessage } from '@/modules/tickets/utils/normalizers';
 
 function getStoredUserId(): number {
   const user = authService.getUser();
@@ -19,15 +20,7 @@ function getStoredUserId(): number {
 
 // Normalizes a message from the backend. Supports both English (message, user_id) and legacy Spanish (mensaje, usuario_id) field names.
 function normalizeMessage(msg: any): TicketMessage {
-  return {
-    id: msg.id,
-    ticket_id: msg.ticket_id,
-    usuario_id: msg.user_id ?? msg.usuario_id ?? 0,
-    mensaje: msg.message ?? msg.mensaje ?? '',
-    is_admin: Boolean(msg.is_admin),
-    created_at: msg.created_at ?? '',
-    usuario_nombre: msg.usuario_nombre ?? msg.user?.name ?? msg.user_name ?? undefined,
-  };
+  return normalizeTicketMessage(msg) as TicketMessage;
 }
 
 // Normalizes a ticket from the backend. Supports both English (subject, description, status, messages) and legacy Spanish field names.
@@ -45,6 +38,8 @@ function normalizeTicket(raw: any): Ticket {
     asunto: raw.subject ?? raw.asunto ?? '',
     descripcion: raw.description ?? raw.descripcion ?? '',
     estado: raw.status ?? raw.estado ?? 'pendiente',
+    type: raw.type ?? raw.tipo ?? undefined,
+    priority: raw.priority ?? raw.prioridad ?? undefined,
     created_at: raw.created_at ?? '',
     updated_at: raw.updated_at ?? '',
     mensajes,
@@ -76,10 +71,9 @@ export const ticketService = {
       subject: data.asunto,
       description: data.descripcion ?? '',
       user_id: userId,
+      type: data.type,
+      priority: data.priority,
     };
-
-    payload.type = data.type ?? 'support';
-    if (data.priority) payload.priority = data.priority;
 
     const raw = await apiClient.post<any>('/v1/tickets', payload);
     return normalizeTicket(raw?.data ?? raw);

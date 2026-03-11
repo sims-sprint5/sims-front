@@ -115,11 +115,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type Component } from 'vue'
+import { computed, defineComponent, h, type Component } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
-  ChartPieIcon,
   Cog6ToothIcon,
   HomeIcon,
   MapPinIcon,
@@ -128,6 +127,7 @@ import {
   UsersIcon,
 } from '@heroicons/vue/24/outline'
 import blinkLogo from '@/assets/blink-logo.png'
+import reservesImg from '@/assets/reserves.png'
 
 type NavItem = {
   nameKey: string
@@ -135,6 +135,22 @@ type NavItem = {
   icon: Component
   count?: string
 }
+
+const ReservesIcon = defineComponent({
+  name: 'ReservesIcon',
+  setup(_, { attrs }) {
+    return () =>
+      h('img', {
+        ...attrs,
+        src: reservesImg,
+        alt: '',
+        class: [
+          (attrs as any).class,
+          'brightness-0 invert',
+        ],
+      })
+  },
+})
 
 const props = defineProps<{
   isCollapsed: boolean
@@ -174,15 +190,15 @@ const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.dashboard', href: '/dashboard', icon: HomeIcon },
   { nameKey: 'nav.map', href: '#', icon: MapPinIcon },
   { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
-  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
+  { nameKey: 'nav.bookings', href: '/reservation', icon: ReservesIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])
 
 const adminNavigation = computed<NavItem[]>(() => [
-  { nameKey: 'nav.users', href: '/users', icon: UsersIcon },
-  { nameKey: 'nav.vehicles', href: '#', icon: TruckIcon, count: '12' },
-  { nameKey: 'nav.bookings', href: '#', icon: ChartPieIcon },
-  { nameKey: 'nav.geofencing', href: '#', icon: MapPinIcon, count: '20+' },
+  { nameKey: 'nav.users', href: '/admin/users', icon: UsersIcon },
+  { nameKey: 'nav.vehicles', href: '/admin/vehicles', icon: TruckIcon },
+  { nameKey: 'nav.reservationsAdmin', href: '/admin/reservations', icon: ReservesIcon },
+  { nameKey: 'nav.geofencing', href: '#', icon: MapPinIcon },
   { nameKey: 'nav.tickets', href: '/admin/tickets', icon: TicketIcon },
 ])
 </script>

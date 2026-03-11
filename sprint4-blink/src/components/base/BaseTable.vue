@@ -40,74 +40,18 @@
       </tbody>
     </table>
     
-    <!-- Paginación -->
-    <div v-if="pagination && pagination.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-      <div class="flex-1 flex justify-between sm:hidden">
-        <BaseButton
-          @click="handlePageChange(pagination.current_page - 1)"
-          :disabled="pagination.current_page === 1"
-          variant="secondary"
-        >
-          {{ t('table.previous') }}
-        </BaseButton>
-        <BaseButton
-          @click="handlePageChange(pagination.current_page + 1)"
-          :disabled="pagination.current_page === pagination.last_page"
-          variant="secondary"
-          class="ml-3"
-        >
-          {{ t('table.next') }}
-        </BaseButton>
-      </div>
-      <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <div>
-          <p class="text-sm text-gray-700">
-            {{ t('table.showing', { from: pagination.from, to: pagination.to, total: pagination.total }) }}
-          </p>
-        </div>
-        <div>
-          <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" :aria-label="t('table.paginationLabel')">
-            <BaseButton
-              @click="handlePageChange(pagination.current_page - 1)"
-              :disabled="pagination.current_page === 1"
-              variant="secondary"
-              size="sm"
-              class="rounded-l-md rounded-r-none"
-            >
-              <span class="sr-only">{{ t('table.previous') }}</span>
-              ‹
-            </BaseButton>
-            <BaseButton
-              v-for="page in visiblePages"
-              :key="page"
-              @click="handlePageChange(page)"
-              variant="secondary"
-              size="sm"
-              class="rounded-none"
-            >
-              {{ page }}
-            </BaseButton>
-            <BaseButton
-              @click="handlePageChange(pagination.current_page + 1)"
-              :disabled="pagination.current_page === pagination.last_page"
-              variant="secondary"
-              size="sm"
-              class="rounded-r-md rounded-l-none"
-            >
-              <span class="sr-only">{{ t('table.next') }}</span>
-              ›
-            </BaseButton>
-          </nav>
-        </div>
-      </div>
-    </div>
+    <BasePagination
+      v-if="pagination"
+      :pagination="pagination"
+      @change="handlePageChange"
+    />
   </div>
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import BaseButton from './BaseButton.vue';
+import BasePagination from './BasePagination.vue';
 
 export interface TableColumn {
   key: string;
@@ -150,7 +94,6 @@ const resolvedEmptyText = computed(() => props.emptyText ?? t('table.empty'));
 
 const currentPage = ref(1);
 
-// Calcular paginación automática
 const pagination = computed((): TablePagination | undefined => {
   if (!props.enablePagination) return undefined;
   
@@ -201,29 +144,5 @@ const getItemKey = (item: T, index: number): string | number => {
   return getNestedValue(item, props.itemKey) ?? index;
 };
 
-const visiblePages = computed(() => {
-  if (!pagination.value) return [];
-  
-  const current = pagination.value.current_page;
-  const last = pagination.value.last_page;
-  const pages: number[] = [];
-  
-  // Mostrar máximo 5 páginas
-  let start = Math.max(1, current - 2);
-  let end = Math.min(last, current + 2);
-  
-  // Ajustar si estamos al inicio o al final
-  if (current <= 3) {
-    end = Math.min(5, last);
-  }
-  if (current >= last - 2) {
-    start = Math.max(1, last - 4);
-  }
-  
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
-  
-  return pages;
-});
+
 </script>
