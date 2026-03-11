@@ -30,6 +30,7 @@ const mapContainer = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 const geofenceLayersMap = new Map<number, L.Circle>()
 const vehicleMarkersMap = new Map<number, L.Marker>()
+let userLocationMarker: L.Marker | null = null
 
 const initMap = () => {
   if (!mapContainer.value) return
@@ -82,6 +83,64 @@ const initMap = () => {
 
   renderGeofences()
   renderVehicles()
+  getUserLocation()
+}
+
+const getUserLocation = () => {
+  // Note: Geolocation API works on localhost without HTTPS, but requires HTTPS on production
+  // Once HTTPS is configured (with lvh.me), this will work on all domains
+  
+  if (!navigator.geolocation) {
+    console.warn('Geolocation is not supported by this browser')
+    return
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords
+      
+      if (map) {
+        // Remove existing user location marker
+        if (userLocationMarker) {
+          userLocationMarker.remove()
+        }
+
+        // Create a new marker for user location
+        userLocationMarker = L.marker([latitude, longitude], {
+          icon: L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          }),
+          title: 'Mi ubicación'
+        })
+
+        const popupContent = `
+          <div class="p-2">
+            <b>Tu ubicación</b><br/>
+            Lat: ${latitude.toFixed(4)}<br/>
+            Lon: ${longitude.toFixed(4)}
+          </div>
+        `
+        userLocationMarker.bindPopup(popupContent)
+        userLocationMarker.addTo(map)
+
+        // Center map on user location (optional, uncomment if desired)
+        // map.setView([latitude, longitude], 15)
+      }
+    },
+    (error) => {
+      console.warn('Error getting user location:', error.message)
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  )
 }
 
 const getColorByType = (type: string): string => {
@@ -196,7 +255,7 @@ watch(() => props.vehicles, () => {
 const fitBounds = () => {
   if (!map || geofenceLayersMap.size === 0) return
   const group = new L.FeatureGroup(Array.from(geofenceLayersMap.values()))
-  map.fitBounds(group.getBounds(), { padding: [50, 50] })
+  map.fitBounds(group.getBounds(), { padding: L.point(50, 50) })
 }
 
 defineExpose({
