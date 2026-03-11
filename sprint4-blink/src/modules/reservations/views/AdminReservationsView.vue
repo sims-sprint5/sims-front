@@ -49,11 +49,11 @@ const searchQuery = ref('');
 
 let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
-function loadLogs() {
+async function loadLogs() {
   loading.value = true;
 
   try {
-    logs.value = reservationLogService.getLogs();
+    logs.value = await reservationLogService.getLogs();
   } catch {
     toast.error(t('reservations.errors.load'));
   } finally {
@@ -66,11 +66,11 @@ function handleSearch() {
     clearTimeout(searchTimeout);
   }
 
-  searchTimeout = setTimeout(() => {
+  searchTimeout = setTimeout(async () => {
     loading.value = true;
 
     try {
-      logs.value = reservationLogService.searchLogs(searchQuery.value);
+      logs.value = await reservationLogService.searchLogs(searchQuery.value);
     } catch {
       toast.error(t('reservations.errors.search'));
     } finally {

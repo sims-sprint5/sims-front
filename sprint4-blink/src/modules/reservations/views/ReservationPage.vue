@@ -44,7 +44,7 @@ function normalizeDateTime(value: string): string {
   return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
 }
 
-function createReservation() {
+async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
 
   if (!reservationForm.startAt || !reservationForm.endAt) {
@@ -61,20 +61,25 @@ function createReservation() {
 
   submitting.value = true;
 
-  reservationLogService.createLog({
-    user_id: user.value?.id ?? null,
-    user_name: user.value?.name ?? 'N/A',
-    vehicle_id: Number(selectedVehicle.value.id) || 0,
-    vehicle_name: selectedVehicle.value.name,
-    license_plate: selectedVehicle.value.licensePlate ?? '',
-    status: 'confirmed',
-    start_at: normalizeDateTime(reservationForm.startAt),
-    end_at: normalizeDateTime(reservationForm.endAt),
-  });
+  try {
+    await reservationLogService.createLog({
+      user_id: user.value?.id ?? null,
+      user_name: user.value?.name ?? 'N/A',
+      vehicle_id: Number(selectedVehicle.value.id) || 0,
+      vehicle_name: selectedVehicle.value.name,
+      license_plate: selectedVehicle.value.licensePlate ?? '',
+      status: 'active',
+      start_at: normalizeDateTime(reservationForm.startAt),
+      end_at: normalizeDateTime(reservationForm.endAt),
+    });
 
-  toast.success(t('reservations.toast.created'));
-  closeReservationModal();
-  submitting.value = false;
+    toast.success(t('reservations.toast.created'));
+    closeReservationModal();
+  } catch {
+    toast.error(t('reservations.errors.create'));
+  } finally {
+    submitting.value = false;
+  }
 }
 </script>
 

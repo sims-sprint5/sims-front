@@ -310,7 +310,8 @@
       "notFound": "Reservation not found. It may have already been deleted.",
       "invalidId": "Invalid reservation ID",
       "missingDates": "Provide start and end dates for the reservation.",
-      "invalidDates": "The end date must be later than the start date."
+      "invalidDates": "The end date must be later than the start date.",
+      "create": "Failed to create the reservation. Please try again."
     }
   },
   "table": {

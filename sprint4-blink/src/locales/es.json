@@ -309,6 +309,7 @@
       "notFound": "Reserva no encontrada. Puede que ya haya sido eliminada.",
       "invalidId": "ID de reserva inválido",
       "missingDates": "Indica fecha de inicio y fin para la reserva.",
+      "create": "Error al crear la reserva. Por favor, inténtalo de nuevo.",
       "invalidDates": "La fecha de fin debe ser posterior a la de inicio."
     }
   },

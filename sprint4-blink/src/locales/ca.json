@@ -309,6 +309,7 @@
       "notFound": "Reserva no trobada. Potser ja ha sigut eliminada.",
       "invalidId": "ID de reserva invàlid",
       "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
+      "create": "Error en crear la reserva. Torna-ho a intentar.",
       "invalidDates": "La data de fi ha de ser posterior a la d'inici."
     }
   },
