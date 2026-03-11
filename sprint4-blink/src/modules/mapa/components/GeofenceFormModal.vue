@@ -144,6 +144,11 @@ interface GeofenceFormModalProps {
   open: boolean
   editingGeofence?: Geofence
   loading?: boolean
+  initialMapData?: {
+    center_latitude: number
+    center_longitude: number
+    radius: number
+  }
 }
 
 const props = withDefaults(defineProps<GeofenceFormModalProps>(), {
@@ -163,6 +168,15 @@ const isEditMode = computed(() => !!props.editingGeofence)
 let miniMap: L.Map | null = null
 let marker: L.Marker | null = null
 let previewCircle: L.Circle | null = null
+
+// Initialize form with map data when provided
+watch(() => props.initialMapData, (mapData) => {
+  if (mapData) {
+    form.formData.center_latitude = mapData.center_latitude
+    form.formData.center_longitude = mapData.center_longitude
+    form.formData.radius = mapData.radius
+  }
+}, { immediate: true })
 
 const destroyMiniMap = () => {
   if (miniMap) {

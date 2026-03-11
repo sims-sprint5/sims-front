@@ -31,6 +31,7 @@
     <GeofenceFormModal
       :open="showCreateModal"
       :loading="submitting"
+      :initial-map-data="mapClickData"
       @close="handleCloseCreateModal"
       @submit="handleCreateGeofence"
     />
@@ -148,6 +149,7 @@ const selectedGeofence = ref<Geofence | undefined>()
 const logsGeofence = ref<Geofence | undefined>()
 const geofenceLogs = ref<VehicleGeofenceLog[]>([])
 const deletingGeofence = ref<Geofence | undefined>()
+const mapClickData = ref<{ center_latitude: number; center_longitude: number; radius: number } | undefined>()
 
 // Refs
 // const mapContainer = ref<InstanceType<typeof MapContainer> | null>(null)
@@ -173,8 +175,9 @@ const loadVehicles = async () => {
 }
 
 // Map handlers
-const handleGeofenceCreatedOnMap = async (): Promise<void> => {
-  // Open modal with pre-filled coordinates
+const handleGeofenceCreatedOnMap = async (data: { center_latitude: number; center_longitude: number; radius: number }): Promise<void> => {
+  // Save the map click data and open modal with pre-filled coordinates
+  mapClickData.value = data
   showCreateModal.value = true
 }
 
@@ -216,6 +219,7 @@ const handleOpenCreateModal = () => {
 
 const handleCloseCreateModal = () => {
   showCreateModal.value = false
+  mapClickData.value = undefined
 }
 
 const handleCloseEditModal = () => {
