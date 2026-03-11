@@ -29,6 +29,7 @@
     "map": "Mapa",
     "tickets": "Tickets",
     "bookings": "Reservas",
+    "reservationsAdmin": "Log de reservas",
     "users": "Usuarios",
     "vehicles": "Vehículos",
     "geofencing": "Geofencing",
@@ -249,8 +250,12 @@
     "searchPlaceholder": "Buscar por estado, usuario, vehículo o fechas...",
     "loading": "Cargando reservas...",
     "empty": "No hay reservas para mostrar",
+    "createTitle": "Crear reserva",
+    "createDescription": "Selecciona las fechas para registrar la nueva reserva.",
+    "selectDates": "Indica una fecha de inicio y una de fin para guardar la reserva.",
     "table": {
       "id": "ID",
+      "logType": "Tipo de log",
       "userId": "Usuario (ID)",
       "vehicleId": "Vehículo (ID)",
       "status": "Estado",
@@ -274,6 +279,9 @@
     "status": {
       "pending": "Pendiente",
       "confirmed": "Confirmada"
+    },
+    "log": {
+      "created": "Creada"
     },
     "modal": {
       "deleteTitle": "Eliminar reserva",
@@ -299,7 +307,9 @@
       "save": "Error al guardar reserva",
       "delete": "Error al eliminar reserva",
       "notFound": "Reserva no encontrada. Puede que ya haya sido eliminada.",
-      "invalidId": "ID de reserva inválido"
+      "invalidId": "ID de reserva inválido",
+      "missingDates": "Indica fecha de inicio y fin para la reserva.",
+      "invalidDates": "La fecha de fin debe ser posterior a la de inicio."
     }
   },
   "table": {

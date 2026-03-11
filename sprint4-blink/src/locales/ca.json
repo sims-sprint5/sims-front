@@ -29,6 +29,7 @@
     "map": "Mapa",
     "tickets": "Tickets",
     "bookings": "Reserves",
+    "reservationsAdmin": "Log de reserves",
     "users": "Usuaris",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
@@ -249,8 +250,12 @@
     "searchPlaceholder": "Buscar per estat, usuari, vehicle o dates...",
     "loading": "Carregant reserves...",
     "empty": "No hi ha reserves per mostrar",
+    "createTitle": "Crear reserva",
+    "createDescription": "Selecciona les dates per registrar la nova reserva.",
+    "selectDates": "Indica una data d'inici i una de fi per guardar la reserva.",
     "table": {
       "id": "ID",
+      "logType": "Tipus de log",
       "userId": "Usuari (ID)",
       "vehicleId": "Vehicle (ID)",
       "status": "Estat",
@@ -274,6 +279,9 @@
     "status": {
       "pending": "Pendent",
       "confirmed": "Confirmada"
+    },
+    "log": {
+      "created": "Creada"
     },
     "modal": {
       "deleteTitle": "Eliminar reserva",
@@ -299,7 +307,9 @@
       "save": "Error en guardar la reserva",
       "delete": "Error en eliminar la reserva",
       "notFound": "Reserva no trobada. Potser ja ha sigut eliminada.",
-      "invalidId": "ID de reserva invàlid"
+      "invalidId": "ID de reserva invàlid",
+      "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
+      "invalidDates": "La data de fi ha de ser posterior a la d'inici."
     }
   },
   "table": {

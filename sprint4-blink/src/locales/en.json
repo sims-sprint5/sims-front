@@ -29,6 +29,7 @@
     "map": "Map",
     "tickets": "Tickets",
     "bookings": "Bookings",
+    "reservationsAdmin": "Reservation log",
     "users": "Users",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
@@ -250,8 +251,12 @@
     "searchPlaceholder": "Search by status, user, vehicle, or dates...",
     "loading": "Loading reservations...",
     "empty": "No reservations to display",
+    "createTitle": "Create reservation",
+    "createDescription": "Select the dates to register the new reservation.",
+    "selectDates": "Provide a start and end date to save the reservation.",
     "table": {
       "id": "ID",
+      "logType": "Log type",
       "userId": "User (ID)",
       "vehicleId": "Vehicle (ID)",
       "status": "Status",
@@ -275,6 +280,9 @@
     "status": {
       "pending": "Pending",
       "confirmed": "Confirmed"
+    },
+    "log": {
+      "created": "Created"
     },
     "modal": {
       "deleteTitle": "Delete reservation",
@@ -300,7 +308,9 @@
       "save": "Failed to save reservation",
       "delete": "Failed to delete reservation",
       "notFound": "Reservation not found. It may have already been deleted.",
-      "invalidId": "Invalid reservation ID"
+      "invalidId": "Invalid reservation ID",
+      "missingDates": "Provide start and end dates for the reservation.",
+      "invalidDates": "The end date must be later than the start date."
     }
   },
   "table": {

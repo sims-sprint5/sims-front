@@ -15,6 +15,10 @@ interface Props {
   skeleton?: boolean;
 }
 
+const emit = defineEmits<{
+  reserve: [vehicle: ReservationVehicleCardModel];
+}>();
+
 const props = withDefaults(defineProps<Props>(), {
   vehicle: undefined,
   skeleton: false,
@@ -48,6 +52,11 @@ const isAvailable = computed(() => {
   const key = (props.vehicle?.category ?? '').trim().toLowerCase();
   return key === 'available' || key === 'active';
 });
+
+function handleReserve() {
+  if (!props.vehicle || !isAvailable.value) return;
+  emit('reserve', props.vehicle);
+}
 </script>
 
 <template>
@@ -126,6 +135,7 @@ const isAvailable = computed(() => {
               :variant="isAvailable ? 'primary' : 'secondary'"
               full-width
               :disabled="!isAvailable"
+              @click="handleReserve"
             >
               <CalendarIcon class="h-4 w-4 mr-1.5" />
               {{ isAvailable ? $t('common.confirm') : statusLabel(vehicle?.category) }}

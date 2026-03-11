@@ -10,4 +10,14 @@ export const reservationsRoutes: RouteRecordRaw[] = [
       titleKey: 'nav.bookings',
     },
   },
+  {
+    path: '/admin/reservations',
+    name: 'AdminReservations',
+    component: () => import('./views/AdminReservationsView.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+      titleKey: 'reservations.title',
+    },
+  },
 ];

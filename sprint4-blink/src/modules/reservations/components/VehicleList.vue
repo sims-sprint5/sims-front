@@ -11,6 +11,10 @@ interface Props {
   pageSize?: number;
 }
 
+const emit = defineEmits<{
+  reserve: [vehicle: ReservationVehicleCardModel];
+}>();
+
 const props = withDefaults(defineProps<Props>(), {
   vehicles: () => [],
   loading: false,
@@ -43,6 +47,10 @@ const paginatedVehicles = computed(() => {
 function handlePageChange(page: number) {
   currentPage.value = page;
 }
+
+function handleReserve(vehicle: ReservationVehicleCardModel) {
+  emit('reserve', vehicle);
+}
 </script>
 
 <template>
@@ -55,7 +63,12 @@ function handlePageChange(page: number) {
 
     <template v-else-if="vehicles.length">
       <slot name="items">
-        <VehicleCard v-for="v in paginatedVehicles" :key="v.id" :vehicle="v" />
+        <VehicleCard
+          v-for="v in paginatedVehicles"
+          :key="v.id"
+          :vehicle="v"
+          @reserve="handleReserve"
+        />
       </slot>
 
       <BasePagination
