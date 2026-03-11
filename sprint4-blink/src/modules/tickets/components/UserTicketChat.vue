@@ -110,7 +110,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-// Usuari autenticat actual
 const currentUser = authService.getUser();
 const currentUserName = currentUser?.name ?? t('tickets.chat.you');
 
@@ -129,7 +128,6 @@ const scrollToBottom = () => {
   });
 };
 
-// Scroll al cargar o cuando cambien los mensajes
 watch(messages, () => {
   scrollToBottom();
 }, { immediate: true });

@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/services/api.service';
+import { getCurrentTenant } from '@/shared/utils/tenantUtils';
 import type {
   AuthResponse,
   LoginCredentials,
@@ -8,6 +9,7 @@ import type {
 
 const AUTH_TOKEN_KEY = 'auth_token';
 const AUTH_USER_KEY = 'auth_user';
+const AUTH_TENANT_KEY = 'auth_tenant';
 
 function extractToken(payload: any): string | undefined {
   if (!payload || typeof payload !== 'object') return undefined;
@@ -35,17 +37,17 @@ export const authService = {
     const user = extractUser(payload);
 
     if (!token || !user) {
-      // Keep a predictable error shape for UI
       throw {
         message: 'errors.requestFailed',
         errors: {
-          auth: ['Respuesta inválida del servidor'],
+          auth: ['Invalid server response'],
         },
       };
     }
 
     this.setToken(token);
     this.setUser(user);
+    this.setTenant(getCurrentTenant());
 
     return { token, user };
   },
@@ -67,13 +69,14 @@ export const authService = {
       throw {
         message: 'errors.requestFailed',
         errors: {
-          auth: ['Respuesta inválida del servidor'],
+          auth: ['Invalid server response'],
         },
       };
     }
 
     this.setToken(token);
     this.setUser(user);
+    this.setTenant(getCurrentTenant());
 
     return { token, user };
   },
@@ -97,8 +100,7 @@ export const authService = {
   async getCurrentUser(): Promise<User> {
     const payload = await apiClient.get<any>('/v1/auth/me');
 
-    // extractUser gestiona els wraps { user: ... }, { data: { user: ... } }, { data: ... }
-    // Si cap no fa match (resposta plana), usem el payload directament
+    // extractUser handles { user }, { data: { user } }, { data } wrappers; falls back to raw payload
     let raw = extractUser(payload) ?? payload;
 
     // Intentar camp id des de diverses variants del backend
@@ -141,9 +143,18 @@ export const authService = {
     return stored ? (JSON.parse(stored) as User) : null;
   },
 
+  setTenant(tenant: string): void {
+    localStorage.setItem(AUTH_TENANT_KEY, tenant);
+  },
+
+  getTenant(): string | null {
+    return localStorage.getItem(AUTH_TENANT_KEY);
+  },
+
   clearAuth(): void {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
+    localStorage.removeItem(AUTH_TENANT_KEY);
   },
 
   isAuthenticated(): boolean {

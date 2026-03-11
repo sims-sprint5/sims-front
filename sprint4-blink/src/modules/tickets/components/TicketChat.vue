@@ -120,7 +120,6 @@ const messagesContainer = ref<HTMLElement | null>(null);
 
 const messages = computed(() => props.ticket.mensajes || []);
 
-// Usa el campo is_admin que el backend calcula en base al rol del usuario autenticado
 const isAdminMessage = (msg: { is_admin: boolean }) => msg.is_admin;
 
 const scrollToBottom = () => {
@@ -131,7 +130,6 @@ const scrollToBottom = () => {
   });
 };
 
-// Scroll al cargar o cuando cambien los mensajes
 watch(messages, () => {
   scrollToBottom();
 }, { immediate: true });

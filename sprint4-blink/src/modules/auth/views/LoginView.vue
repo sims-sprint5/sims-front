@@ -28,19 +28,12 @@ const fieldErrors = ref<Record<string, string[]>>({});
 const validationErrors = ref<ValidationErrors>({});
 const showPassword = ref(false);
 
-/**
- * Valida el formulario antes de enviar
- */
 const validateForm = (): boolean => {
     validationErrors.value = validateLoginCredentials(form.email, form.password);
     return Object.keys(validationErrors.value).length === 0;
 };
 
-/**
- * Maneja el envío del formulario de login
- */
 const handleLogin = async () => {
-    // Validación en cliente
     if (!validateForm()) {
         toast.error(t('validation.fixFormErrors'));
         return;

@@ -29,23 +29,16 @@
         </div>
       </div>
 
-      <!-- Tabla de tickets admin -->
       <AdminTicketTable :tickets="tickets" :loading="loading" @view="openViewModal" @chat="openChatModal"
         @delete="openDeleteModal" />
 
-      <!-- Modal de Chat de Ticket -->
       <Teleport to="body">
         <Transition name="modal">
           <div v-if="showChatModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <!-- Overlay -->
               <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeChatModal" />
-
-              <!-- Center modal -->
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-              <!-- Modal panel -->
               <div
                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -58,25 +51,18 @@
         </Transition>
       </Teleport>
 
-      <!-- Modal de Confirmación de Eliminación -->
       <BaseModal :show="showDeleteModal" :title="$t('adminTickets.modal.deleteTitle')"
         :message="$t('adminTickets.modal.deleteMessage', { asunto: ticketToDelete?.asunto ?? '' })" type="danger"
         :confirm-text="$t('common.delete')" :cancel-text="$t('common.cancel')" :loading="deleting"
         @confirm="handleDelete" @close="closeDeleteModal" />
 
-      <!-- Modal de Visualización de Ticket -->
       <Teleport to="body">
         <Transition name="modal">
           <div v-if="showViewModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <!-- Overlay -->
               <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeViewModal" />
-
-              <!-- Center modal -->
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-              <!-- Modal panel -->
               <div
                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -105,8 +91,6 @@
                         {{ viewingTicket.estado ? t(`tickets.estados.${viewingTicket.estado}`) : t('tickets.estados.pendiente') }}
                       </span>
                     </div>
-
-                    <!-- fecha removed: show created_at below -->
 
                     <div>
                       <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.createdAt') }}</p>
@@ -150,14 +134,12 @@ const { t } = useI18n();
 const { translateErrorMessage } = useTranslateError();
 const { formatDate } = useDateFormatter();
 
-// Estado
 const tickets = ref<AdminTicket[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
 const deleting = ref(false);
 const searchQuery = ref('');
 
-// Modales
 const showChatModal = ref(false);
 const showViewModal = ref(false);
 const showDeleteModal = ref(false);
@@ -165,7 +147,6 @@ const viewingTicket = ref<AdminTicket | null>(null);
 const chattingTicket = ref<AdminTicket | null>(null);
 const ticketToDelete = ref<AdminTicket | null>(null);
 
-// Cargar tickets
 const loadTickets = async () => {
   loading.value = true;
   try {
@@ -184,7 +165,6 @@ const loadTickets = async () => {
   }
 };
 
-// Búsqueda
 let searchTimeout: ReturnType<typeof setTimeout>;
 const handleSearch = () => {
   clearTimeout(searchTimeout);
@@ -216,7 +196,6 @@ const handleRefresh = async () => {
   await loadTickets();
 };
 
-// Modales - Ver
 const openViewModal = (ticket: AdminTicket) => {
   viewingTicket.value = ticket;
   showViewModal.value = true;
@@ -233,9 +212,7 @@ const switchToChat = () => {
   showChatModal.value = true;
 };
 
-// Modales - Chat
 const openChatModal = async (ticket: AdminTicket) => {
-  // Recargar el ticket para obtener los mensajes más recientes
   try {
     const id = (ticket.id ?? ticket.ticket_id) as number;
     if (!id) throw { message: 'tickets.errors.invalidId' };
@@ -252,7 +229,6 @@ const closeChatModal = () => {
   chattingTicket.value = null;
 };
 
-// Enviar mensaje
 const handleSendMessage = async (mensaje: string) => {
   if (!chattingTicket.value) return;
 
@@ -263,11 +239,11 @@ const handleSendMessage = async (mensaje: string) => {
     await adminTicketService.sendMessage(id, { mensaje });
     toast.success(t('adminTickets.toast.messageSent'));
     
-    // Recargar el ticket para obtener el mensaje recién enviado
+    // Reload the ticket to show the newly sent message
     const updatedTicket = await adminTicketService.getTicketById(id!);
     chattingTicket.value = updatedTicket;
     
-    // Recargar la lista de tickets
+    // Reload the ticket list
     await loadTickets();
   } catch (error: any) {
     toast.error(translateErrorMessage(error?.message, t('tickets.errors.save')));
@@ -276,7 +252,6 @@ const handleSendMessage = async (mensaje: string) => {
   }
 };
 
-// Modales - Eliminar
 const openDeleteModal = (ticket: AdminTicket) => {
   ticketToDelete.value = ticket;
   showDeleteModal.value = true;

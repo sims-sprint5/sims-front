@@ -18,18 +18,12 @@ function getStoredUserId(): number {
   return user.id;
 }
 
-/**
- * Normalitza un missatge del backend (camps en anglès) als tipus del frontend (camps en espanyol).
- * Suporta: { message, user_id, user: { name } } i { mensaje, usuario_id, usuario_nombre }
- */
+// Normalizes a message from the backend. Supports both English (message, user_id) and legacy Spanish (mensaje, usuario_id) field names.
 function normalizeMessage(msg: any): TicketMessage {
   return normalizeTicketMessage(msg) as TicketMessage;
 }
 
-/**
- * Normalitza un ticket del backend (camps en anglès) als tipus del frontend (camps en espanyol).
- * Suporta: { subject, description, status, user_id, messages } i { asunto, descripcion, estado, usuario_id, mensajes }
- */
+// Normalizes a ticket from the backend. Supports both English (subject, description, status, messages) and legacy Spanish field names.
 function normalizeTicket(raw: any): Ticket {
   const mensajes: TicketMessage[] | undefined = Array.isArray(raw.messages)
     ? raw.messages.map(normalizeMessage)
@@ -52,7 +46,7 @@ function normalizeTicket(raw: any): Ticket {
   };
 }
 
-/** Normalitza una resposta paginada o array del backend */
+// Normalizes a paginated or array response from the backend.
 function normalizeTicketsResponse(raw: any): TicketsResponse {
   if (Array.isArray(raw)) {
     return { data: raw.map(normalizeTicket) };
@@ -64,10 +58,6 @@ function normalizeTicketsResponse(raw: any): TicketsResponse {
 }
 
 export const ticketService = {
-  /**
-   * Obtener tickets del usuario autenticado
-   * Endpoint backend: GET /api/v1/tickets/user/{userId}
-   */
   async getUserTickets(page: number = 1, perPage: number = 10): Promise<TicketsResponse> {
     const userId = getStoredUserId();
     const query = buildQuery({ page, per_page: perPage });

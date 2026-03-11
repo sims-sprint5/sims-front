@@ -1,7 +1,4 @@
-/**
- * Construeix una query string a partir d'un objecte de paràmetres,
- * ometent valors undefined, null o buits.
- */
+/** Builds a query string from a params object, omitting undefined, null, or empty values. */
 export function buildQuery(params: Record<string, string | number | undefined>): string {
   const searchParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
