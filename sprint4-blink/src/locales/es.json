@@ -278,7 +278,9 @@
     },
     "status": {
       "pending": "Pendiente",
-      "confirmed": "Confirmada"
+      "active": "Confirmada",
+      "completed": "Completada",
+      "cancelled": "Cancelada"
     },
     "log": {
       "created": "Creada"

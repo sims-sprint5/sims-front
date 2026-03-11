@@ -1,6 +1,6 @@
 export type ReservationLogType = 'created';
 
-export type ReservationStatus = 'pending' | 'confirmed';
+export type ReservationStatus = 'pending' | 'active' | 'completed' | 'cancelled';
 
 export interface ReservationLog {
   id: number;

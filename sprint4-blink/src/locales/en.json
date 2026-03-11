@@ -279,7 +279,9 @@
     },
     "status": {
       "pending": "Pending",
-      "confirmed": "Confirmed"
+      "active": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
     },
     "log": {
       "created": "Created"

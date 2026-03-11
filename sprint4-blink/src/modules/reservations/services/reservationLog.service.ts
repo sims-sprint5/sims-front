@@ -9,7 +9,8 @@ function toNumber(value: unknown, fallback = 0): number {
 
 function normalizeStatus(value: unknown): ReservationStatus {
   const s = String(value).toLowerCase();
-  return s === 'pending' ? 'pending' : 'confirmed';
+  if (s === 'pending' || s === 'active' || s === 'completed' || s === 'cancelled') return s;
+  return 'pending';
 }
 
 function normalizeLog(raw: any): ReservationLog {
