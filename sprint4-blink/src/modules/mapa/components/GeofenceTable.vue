@@ -32,27 +32,34 @@
       </template>
 
       <template #cell-actions="{ item }">
-        <div class="flex gap-2">
+        <div class="flex gap-2 justify-end">
+          <button
+            @click="$emit('view', item)"
+            class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+            :title="$t('common.view')"
+          >
+            <EyeIcon class="w-5 h-5" />
+          </button>
           <button
             @click="$emit('view-logs', item)"
-            class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            class="p-2 bg-amber-600 text-white hover:bg-amber-700 rounded-lg transition-colors"
             :title="$t('mapa.viewLogs')"
           >
-            📋
+            <DocumentTextIcon class="w-5 h-5" />
           </button>
           <button
             @click="$emit('edit', item)"
-            class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
             :title="$t('common.edit')"
           >
-            ✏️
+            <PencilIcon class="w-5 h-5" />
           </button>
           <button
             @click="$emit('delete', item)"
-            class="text-red-600 hover:text-red-800 text-sm font-medium"
+            class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
             :title="$t('common.delete')"
           >
-            🗑️
+            <TrashIcon class="w-5 h-5" />
           </button>
         </div>
       </template>
@@ -63,6 +70,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { EyeIcon, PencilIcon, TrashIcon, DocumentTextIcon } from '@heroicons/vue/24/outline'
 import type { Geofence } from '../types/geofence.types'
 import { BaseTable, BaseButton } from '@/components/base'
 
@@ -77,6 +85,7 @@ defineProps<GeofenceTableProps>()
 
 defineEmits<{
   create: []
+  view: [geofence: Geofence]
   edit: [geofence: Geofence]
   delete: [geofence: Geofence]
   'view-logs': [geofence: Geofence]
@@ -87,7 +96,7 @@ const columns = computed(() => [
   { key: 'type', label: t('mapa.table.type') },
   { key: 'radius', label: t('mapa.table.radius') },
   { key: 'status', label: t('mapa.table.status') },
-  { key: 'actions', label: t('mapa.table.actions') }
+  { key: 'actions', label: t('mapa.table.actions'), align: 'right' }
 ])
 
 const getTypeColorClass = (type: string): string => {

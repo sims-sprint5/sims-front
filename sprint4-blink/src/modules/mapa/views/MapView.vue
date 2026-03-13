@@ -20,6 +20,7 @@
           :geofences="geofences"
           :loading="loading"
           @create="handleOpenCreateModal"
+          @view="handleGeofenceClick"
           @edit="handleEditGeofence"
           @delete="handleDeleteGeofence"
           @view-logs="handleViewLogs"
