@@ -5,19 +5,15 @@ import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
 import { userService } from '@/modules/users/services/user.service'
 import { useI18n } from 'vue-i18n'
+import { useTranslateError } from '@/shared/composables/useTranslateError'
 
 export function useSettings() {
   const router = useRouter()
   const toast = useToast()
-  const { t, te } = useI18n()
+  const { t } = useI18n()
+  const { translateErrorMessage } = useTranslateError()
   const { user, loadUser, updateAvatar, updateUser, avatarUrl } = useUser()
   const fileInput = ref<HTMLInputElement | null>(null)
-
-  const translateErrorMessage = (message: unknown, fallback: string) => {
-    const msg = typeof message === 'string' ? message : ''
-    if (msg && te(msg)) return t(msg)
-    return msg || fallback
-  }
 
   // Form fields
   const firstName = ref('')

@@ -8,3 +8,4 @@ export { default as BaseCard } from './BaseCard.vue';
 export { default as BaseToast } from './BaseToast.vue';
 export { default as BaseModal } from './BaseModal.vue';
 export { default as BaseTable } from './BaseTable.vue';
+export { default as BasePagination } from './BasePagination.vue';

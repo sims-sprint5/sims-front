@@ -45,10 +45,3 @@ export interface AdminTicketsResponse {
     total: number;
   };
 }
-
-export interface AdminTicketResponse {
-  data: AdminTicket;
-}
-
-export const ESTADOS_TICKET = ['pendiente', 'confirmado', 'cancelado', 'usado'] as const;
-export type EstadoTicket = typeof ESTADOS_TICKET[number];

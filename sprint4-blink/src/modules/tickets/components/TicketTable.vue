@@ -5,10 +5,6 @@
       <div class="text-sm font-medium text-gray-900">{{ value }}</div>
     </template>
 
-    <template #cell-descripcion="{ value }">
-      <div class="text-sm text-gray-700">{{ (value && value.length > 80) ? value.slice(0, 80) + '…' : value }}</div>
-    </template>
-
     <template #cell-estado="{ value }">
       <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full" :class="getEstadoClass(value)">
         {{ value ? t(`tickets.estados.${value}`) : t('tickets.estados.pendiente') }}
@@ -60,9 +56,7 @@ defineEmits<{
 }>();
 
 const columns = computed<TableColumn[]>(() => [
-  { key: 'id', label: 'ID', align: 'left' },
   { key: 'asunto', label: t('tickets.table.asunto'), align: 'left' },
-  { key: 'descripcion', label: t('tickets.table.descripcion'), align: 'left' },
   { key: 'estado', label: t('tickets.table.estado'), align: 'left' },
   { key: 'created_at', label: t('tickets.table.createdAt'), align: 'left' },
   { key: 'actions', label: t('tickets.table.actions'), align: 'right' },

@@ -126,7 +126,6 @@ import BaseButton from '@/components/base/BaseButton.vue';
 
 const {
   avatarUrl,
-  fileInput,
   firstName,
   lastName,
   email,
@@ -136,6 +135,4 @@ const {
   handlePersonalInfoSubmit,
   handleDeleteAccount,
 } = useSettings();
-
-void fileInput;
 </script>

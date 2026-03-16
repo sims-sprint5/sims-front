@@ -30,6 +30,11 @@ export default defineConfig({
           });
         },
       },
+      '/storage': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   resolve: {

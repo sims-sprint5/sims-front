@@ -55,7 +55,7 @@
 
               <!-- Modal panel -->
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
                     {{ editingUser ? $t('users.actions.editUser') : $t('users.actions.createNewUser') }}
@@ -139,7 +139,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { BaseButton, BaseInput, BaseModal } from '@/components/base';
+import { BaseButton, BaseInput } from '@/components/base';
+import BaseModal from '@/components/base/BaseModal.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserTable from '@/modules/users/components/UserTable.vue';
 import UserForm from '@/modules/users/components/UserForm.vue';
@@ -253,10 +254,10 @@ const closeViewModal = () => {
 
 // Cambiar a edición desde visualización
 const switchToEdit = () => {
-  if (viewingUser.value) {
-    closeViewModal();
-    openEditModal(viewingUser.value);
-  }
+  const user = viewingUser.value;
+  if (!user) return;
+  closeViewModal();
+  openEditModal(user);
 };
 
 // Cerrar modal de usuario

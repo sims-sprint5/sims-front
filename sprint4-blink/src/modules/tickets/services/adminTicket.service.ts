@@ -7,18 +7,11 @@ import type {
   TicketMessage,
   UpdateTicketData,
 } from '../types/adminTicket.types';
+import { normalizeTicketMessage } from '@/modules/tickets/utils/normalizers';
 
 // Normalizes a message from the backend. Supports both English (message, user_id) and legacy Spanish (mensaje, usuario_id) field names.
 function normalizeMessage(msg: any): TicketMessage {
-  return {
-    id: msg.id,
-    ticket_id: msg.ticket_id,
-    usuario_id: msg.user_id ?? msg.usuario_id ?? 0,
-    mensaje: msg.message ?? msg.mensaje ?? '',
-    is_admin: Boolean(msg.is_admin),
-    created_at: msg.created_at ?? '',
-    usuario_nombre: msg.usuario_nombre ?? msg.user?.name ?? msg.user_name ?? undefined,
-  };
+  return normalizeTicketMessage(msg) as TicketMessage;
 }
 
 // Normalizes an admin ticket from the backend. Supports both English (subject, description, status, messages) and legacy Spanish field names.
