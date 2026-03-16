@@ -1,22 +1,89 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
-    <BaseInput v-model="formData.name" :label="$t('tenants.form.name')" type="text"
-      :placeholder="$t('tenants.form.namePlaceholder')" required />
-    <BaseInput v-model="formData.domain" :label="$t('tenants.form.domain')" type="text"
-      :placeholder="$t('tenants.form.domainPlaceholder')" required />
-    <BaseInput v-model="formData.email" :label="$t('tenants.form.email')" type="email"
-      :placeholder="$t('tenants.form.emailPlaceholder')" />
+    <!-- CREATION MODE -->
+    <template v-if="!isEditing">
+      <div class="space-y-4 border-b pb-4 mb-4">
+        <p class="text-sm text-gray-600">{{ $t('tenants.form.creationInfo') }}</p>
+        
+        <BaseInput
+          v-model="formData.id"
+          :label="$t('tenants.form.id')"
+          type="text"
+          :placeholder="$t('tenants.form.idPlaceholder')"
+          required
+        />
+        
+        <BaseInput
+          v-model="formData.name"
+          :label="$t('tenants.form.name')"
+          type="text"
+          :placeholder="$t('tenants.form.namePlaceholder')"
+          required
+        />
+        
+        <BaseInput
+          v-model="formData.admin_email"
+          :label="$t('tenants.form.admin_email')"
+          type="email"
+          :placeholder="$t('tenants.form.admin_emailPlaceholder')"
+          required
+        />
+        
+        <BaseInput
+          v-model="formData.admin_password"
+          :label="$t('tenants.form.admin_password')"
+          type="password"
+          :placeholder="$t('tenants.form.admin_passwordPlaceholder')"
+          required
+        />
+      </div>
+    </template>
 
-    <div v-if="isEditing" class="space-y-2">
-      <label class="block text-sm font-medium text-gray-700">
-        {{ $t('tenants.form.status') }}
-      </label>
-      <select v-model="formData.status"
-        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <option value="active">{{ $t('tenants.status.active') }}</option>
-        <option value="inactive">{{ $t('tenants.status.inactive') }}</option>
-      </select>
-    </div>
+    <!-- EDIT MODE -->
+    <template v-else>
+      <div class="space-y-4">
+        <!-- Company ID (read-only) -->
+        <div class="bg-gray-50 px-3 py-2 border border-gray-300 rounded-lg">
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ $t('tenants.form.id') }}
+          </label>
+          <p class="text-gray-900 font-mono">{{ formData.id }}</p>
+        </div>
+
+        <!-- Name -->
+        <BaseInput
+          v-model="formData.name"
+          :label="$t('tenants.form.name')"
+          type="text"
+          :placeholder="$t('tenants.form.namePlaceholder')"
+          required
+        />
+
+        <!-- Admin Email -->
+        <BaseInput
+          v-model="formData.admin_email"
+          :label="$t('tenants.form.admin_email')"
+          type="email"
+          :placeholder="$t('tenants.form.admin_emailPlaceholder')"
+        />
+
+        <!-- Change Password (Optional) -->
+        <div class="pt-2 border-t">
+          <p class="text-sm font-medium text-gray-700 mb-3">
+            {{ $t('tenants.form.changePasswordLabel') }}
+          </p>
+          <BaseInput
+            v-model="formData.admin_password"
+            :label="$t('tenants.form.admin_password')"
+            type="password"
+            :placeholder="$t('tenants.form.changePasswordPlaceholder')"
+          />
+          <p class="text-xs text-gray-500 mt-2">
+            {{ $t('tenants.form.changePasswordHint') }}
+          </p>
+        </div>
+      </div>
+    </template>
 
     <div class="flex justify-end space-x-3 pt-4">
       <BaseButton type="button" variant="secondary" @click="$emit('cancel')">
@@ -49,21 +116,19 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-// Tipus intern del formulari: email sempre és string (no undefined)
-// perquè BaseInput requereix modelValue: string | number
 interface FormState {
+  id: string;
   name: string;
-  domain: string;
-  email: string;
-  status: 'active' | 'inactive';
+  admin_email: string;
+  admin_password: string;
 }
 
 const isEditing = ref(false);
 const formData = ref<FormState>({
+  id: '',
   name: '',
-  domain: '',
-  email: '',
-  status: 'active',
+  admin_email: '',
+  admin_password: '',
 });
 
 watch(
@@ -72,20 +137,41 @@ watch(
     if (newTenant) {
       isEditing.value = true;
       formData.value = {
+        id: newTenant.id,
         name: newTenant.name,
-        domain: newTenant.domain,
-        email: newTenant.email ?? '',
-        status: newTenant.status ?? 'active',
+        admin_email: newTenant.admin_email ?? '',
+        admin_password: '',
       };
     } else {
       isEditing.value = false;
-      formData.value = { name: '', domain: '', email: '', status: 'active' };
+      formData.value = {
+        id: '',
+        name: '',
+        admin_email: '',
+        admin_password: '',
+      };
     }
   },
   { immediate: true }
 );
 
 const handleSubmit = () => {
-  emit('submit', { ...formData.value });
+  if (isEditing.value) {
+    const payload: UpdateTenantData = {
+      id: formData.value.id,
+      name: formData.value.name,
+      admin_email: formData.value.admin_email,
+      admin_password: formData.value.admin_password || undefined, // undefined si está vacía
+    };
+    emit('submit', payload);
+  } else {
+    const payload: CreateTenantData = {
+      id: formData.value.id,
+      name: formData.value.name,
+      admin_email: formData.value.admin_email,
+      admin_password: formData.value.admin_password,
+    };
+    emit('submit', payload);
+  }
 };
 </script>

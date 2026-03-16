@@ -33,10 +33,11 @@ superadminHttp.interceptors.response.use(
 
 function normalizeTenant(raw: any): Tenant {
   return {
-    id: raw.id ?? 0,
+    id: String(raw.id),
     name: raw.name ?? '',
-    domain: raw.domain ?? '',
+    domain: raw.domains?. [0]?.domain ?? '',
     email: raw.email ?? undefined,
+    admin_email: raw.admin_email ?? undefined,
     status: raw.status ?? 'active',
     created_at: raw.created_at ?? '',
     updated_at: raw.updated_at ?? '',
@@ -59,7 +60,7 @@ export const superadminService = {
     return normalizeTenantsResponse(raw);
   },
 
-  async getTenantById(id: number): Promise<Tenant> {
+  async getTenantById(id: string): Promise<Tenant> {
     const raw = await superadminHttp.get<any>(`/v1/superadmin/tenants/${id}`);
     return normalizeTenant(raw?.data ?? raw);
   },
@@ -69,12 +70,12 @@ export const superadminService = {
     return normalizeTenant(raw?.data ?? raw);
   },
 
-  async updateTenant(id: number, data: UpdateTenantData): Promise<Tenant> {
-    const raw = await superadminHttp.put<any>(`/v1/superadmin/tenants/${id}`, data);
+  async updateTenant(data: UpdateTenantData): Promise<Tenant> {
+    const raw = await superadminHttp.put<any>(`/v1/superadmin/tenants/${data.id}`, data);
     return normalizeTenant(raw?.data ?? raw);
   },
 
-  async deleteTenant(id: number): Promise<void> {
+  async deleteTenant(id: string): Promise<void> {
     await superadminHttp.delete(`/v1/superadmin/tenants/${id}`);
   },
 };

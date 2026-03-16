@@ -67,7 +67,7 @@
                                 {{ $t('tenants.table.domain') }}
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {{ $t('tenants.table.email') }}
+                                {{ $t('tenants.table.admin_email') }}
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ $t('tenants.table.status') }}
@@ -99,7 +99,7 @@
                                 {{ tenant.domain }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                {{ tenant.email ?? '—' }}
+                                {{ tenant.admin_email ?? '—' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full" :class="tenant.status === 'active'
@@ -213,7 +213,7 @@ const filteredTenants = computed(() => {
         (t) =>
             t.name.toLowerCase().includes(q) ||
             t.domain.toLowerCase().includes(q) ||
-            (t.email ?? '').toLowerCase().includes(q)
+            (t.admin_email ?? '').toLowerCase().includes(q)
     );
 });
 
@@ -281,7 +281,7 @@ const handleSubmit = async (data: CreateTenantData | UpdateTenantData) => {
     submitting.value = true;
     try {
         if (editingTenant.value) {
-            await superadminService.updateTenant(editingTenant.value.id, data as UpdateTenantData);
+            await superadminService.updateTenant(data as UpdateTenantData);
             toast.success(t('tenants.toast.updated'));
         } else {
             await superadminService.createTenant(data as CreateTenantData);

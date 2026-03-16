@@ -347,18 +347,28 @@
     "table": {
       "name": "Name",
       "domain": "Domain",
-      "email": "Email",
+      "admin_email": "Admin Email",
       "status": "Status",
       "createdAt": "Created at",
       "actions": "Actions"
     },
     "form": {
+      "id": "Company ID",
+      "idPlaceholder": "e.g. uberddos",
       "name": "Name",
       "namePlaceholder": "Company name",
       "domain": "Domain",
       "domainPlaceholder": "e.g. company.blink.com",
       "email": "Contact email",
       "emailPlaceholder": "contact@company.com",
+      "admin_email": "Admin Email",
+      "admin_emailPlaceholder": "admin@company.com",
+      "admin_password": "Admin Password",
+      "admin_passwordPlaceholder": "••••••••",
+      "creationInfo": "Fill in all fields to create a new company",
+      "changePasswordLabel": "Change Admin Password (Optional)",
+      "changePasswordPlaceholder": "Leave empty to keep current password",
+      "changePasswordHint": "Leave this field empty if you don't want to change the password",
       "status": "Status"
     },
     "status": {

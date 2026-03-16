@@ -347,18 +347,28 @@
     "table": {
       "name": "Nombre",
       "domain": "Dominio",
-      "email": "Email",
+      "admin_email": "Email del Administrador",
       "status": "Estado",
       "createdAt": "Fecha de creación",
       "actions": "Acciones"
     },
     "form": {
+      "id": "ID de la Compañía",
+      "idPlaceholder": "ej: uberddos",
       "name": "Nombre",
       "namePlaceholder": "Nombre de la compañía",
       "domain": "Dominio",
       "domainPlaceholder": "ej: empresa.blink.com",
       "email": "Email de contacto",
       "emailPlaceholder": "contacto@empresa.com",
+      "admin_email": "Email del Administrador",
+      "admin_emailPlaceholder": "admin@empresa.com",
+      "admin_password": "Contraseña del Administrador",
+      "admin_passwordPlaceholder": "••••••••",
+      "creationInfo": "Completa todos los campos para crear una nueva compañía",
+      "changePasswordLabel": "Cambiar Contraseña del Administrador (Opcional)",
+      "changePasswordPlaceholder": "Dejar en blanco para mantener la contraseña actual",
+      "changePasswordHint": "Deja este campo vacío si no deseas cambiar la contraseña",
       "status": "Estado"
     },
     "status": {

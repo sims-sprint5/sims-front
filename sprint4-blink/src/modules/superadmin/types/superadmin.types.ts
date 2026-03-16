@@ -1,24 +1,26 @@
 export interface Tenant {
-    id: number;
+    id: string;
     name: string;
     domain: string;
     email?: string;
+    admin_email?: string;
     status?: 'active' | 'inactive';
     created_at: string;
     updated_at: string;
 }
 
 export interface CreateTenantData {
+    id: string;
     name: string;
-    domain: string;
-    email?: string;
+    admin_email: string;
+    admin_password: string;
 }
 
 export interface UpdateTenantData {
-    name?: string;
-    domain?: string;
-    email?: string;
-    status?: 'active' | 'inactive';
+    id: string;
+    name: string;
+    admin_email: string;
+    admin_password?: string | undefined;
 }
 
 export interface TenantsResponse {
