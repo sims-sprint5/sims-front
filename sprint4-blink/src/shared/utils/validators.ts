@@ -93,7 +93,7 @@ export function validateRole(role: string | undefined): string | null {
     return 'validation.role.required';
   }
   
-  const validRoles = ['user', 'admin'];
+  const validRoles = ['user', 'admin', 'superadmin'];
   if (!validRoles.includes(role)) {
     return 'validation.role.invalid';
   }

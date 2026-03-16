@@ -20,6 +20,15 @@ export function getCurrentTenant(): string {
   return 'localhost';
 }
 
+/**
+ * Determines if the current hostname is a superadmin host (localhost or 127.0.0.1).
+ * Used for routing to separate superadmin dashboard from tenant dashboards.
+ */
+export function isSuperadminHost(): boolean {
+  const hostname = window.location.hostname;
+  return hostname === 'localhost' || hostname === '127.0.0.1' || /^\d+\.\d+\.\d+\.\d+$/.test(hostname);
+}
+
 /** Returns the API port from the current URL, VITE_API_PORT env var, or the protocol default. */
 function getApiPort(): string {
   if (window.location.port) {
@@ -68,3 +77,15 @@ export function getTenantInfo() {
     apiBaseUrl: getTenantApiBaseUrl(),
   };
 }
+
+/**
+ * Returns the current application context based on the hostname.
+ * Used in router guards to determine whether to show superadmin or tenant routes.
+ */
+export function getCurrentContext(): { isSuperadmin: boolean; tenant: string } {
+  return {
+    isSuperadmin: isSuperadminHost(),
+    tenant: getCurrentTenant(),
+  };
+}
+

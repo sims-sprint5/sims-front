@@ -33,6 +33,7 @@
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
     "settings": "Configuració",
+    "superadmin": "Superadmin",
     "sections": {
       "client": "Client",
       "admin": "Admin"
@@ -333,5 +334,58 @@
     "requestFailed": "Error en la petició",
     "serverConnection": "Error de connexió amb el servidor",
     "notAuthenticated": "No estàs autenticat. Si us plau, inicia sessió."
+  },
+  "superadmin": {
+    "title": "Superadmin",
+    "description": "Gestiona les companyies i superadministradors del sistema"
+  },
+  "tenants": {
+    "title": "Gestió de Companyies",
+    "description": "Administra les companyies (tenants) del sistema",
+    "searchPlaceholder": "Cerca per nom o domini...",
+    "loading": "Carregant companyies...",
+    "empty": "No hi ha companyies per mostrar",
+    "table": {
+      "name": "Nom",
+      "domain": "Domini",
+      "email": "Email",
+      "status": "Estat",
+      "createdAt": "Data de creació",
+      "actions": "Accions"
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "Nom de la companyia",
+      "domain": "Domini",
+      "domainPlaceholder": "ex: empresa.blink.com",
+      "email": "Email de contacte",
+      "emailPlaceholder": "contacte@empresa.com",
+      "status": "Estat"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "actions": {
+      "new": "Nova companyia",
+      "create": "Crear companyia",
+      "update": "Actualitzar companyia"
+    },
+    "modal": {
+      "createTitle": "Nova companyia",
+      "editTitle": "Editar companyia",
+      "deleteTitle": "Eliminar companyia",
+      "deleteMessage": "Estàs segur que vols eliminar la companyia '{name}'? Aquesta acció no es pot desfer."
+    },
+    "toast": {
+      "created": "Companyia creada correctament",
+      "updated": "Companyia actualitzada correctament",
+      "deleted": "Companyia eliminada correctament"
+    },
+    "errors": {
+      "load": "Error en carregar les companyies",
+      "save": "Error en guardar la companyia",
+      "delete": "Error en eliminar la companyia"
+    }
   }
 }

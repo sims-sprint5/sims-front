@@ -4,7 +4,7 @@ export interface User {
   name: string;
   email: string;
   phone: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'superadmin';
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;
@@ -16,14 +16,14 @@ export interface CreateUserData {
   password: string;
   password_confirmation: string;
   phone: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'superadmin';
 }
 
 export interface UpdateUserData {
   name?: string;
   email?: string;
   phone?: string;
-  role?: 'user' | 'admin';
+  role?: 'user' | 'admin' | 'superadmin';
   password?: string;
   password_confirmation?: string;
 }

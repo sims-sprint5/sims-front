@@ -42,6 +42,8 @@ export function useUser() {
   return {
     user: computed(() => user.value),
     avatarUrl: computed(() => avatarUrl.value),
+    isSuperadmin: computed(() => user.value?.role === 'superadmin'),
+    isAdmin: computed(() => user.value?.role === 'admin' || user.value?.role === 'superadmin'),
     loadUser,
     updateAvatar,
     updateUser,

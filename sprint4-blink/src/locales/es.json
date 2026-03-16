@@ -33,6 +33,7 @@
     "vehicles": "Vehículos",
     "geofencing": "Geofencing",
     "settings": "Configuración",
+    "superadmin": "Superadmin",
     "sections": {
       "client": "Cliente",
       "admin": "Admin"
@@ -50,8 +51,7 @@
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "••••••••",
       "noAccount": "¿Aún no tienes cuenta?",
-      "goRegister": "Crear cuenta"
-      ,
+      "goRegister": "Crear cuenta",
       "forgotPassword": "¿Has olvidado tu contraseña?",
       "welcome": "¡Bienvenido/a {name}!",
       "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
@@ -333,5 +333,58 @@
     "requestFailed": "Error en la petición",
     "serverConnection": "Error de conexión con el servidor",
     "notAuthenticated": "No estás autenticado. Por favor, inicia sesión."
+  },
+  "superadmin": {
+    "title": "Superadmin",
+    "description": "Gestiona las compañías y superadministradores del sistema"
+  },
+  "tenants": {
+    "title": "Gestión de Compañías",
+    "description": "Administra las compañías (tenants) del sistema",
+    "searchPlaceholder": "Buscar por nombre o dominio...",
+    "loading": "Cargando compañías...",
+    "empty": "No hay compañías para mostrar",
+    "table": {
+      "name": "Nombre",
+      "domain": "Dominio",
+      "email": "Email",
+      "status": "Estado",
+      "createdAt": "Fecha de creación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Nombre de la compañía",
+      "domain": "Dominio",
+      "domainPlaceholder": "ej: empresa.blink.com",
+      "email": "Email de contacto",
+      "emailPlaceholder": "contacto@empresa.com",
+      "status": "Estado"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "actions": {
+      "new": "Nueva compañía",
+      "create": "Crear compañía",
+      "update": "Actualizar compañía"
+    },
+    "modal": {
+      "createTitle": "Nueva compañía",
+      "editTitle": "Editar compañía",
+      "deleteTitle": "Eliminar compañía",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar la compañía '{name}'? Esta acción no se puede deshacer."
+    },
+    "toast": {
+      "created": "Compañía creada correctamente",
+      "updated": "Compañía actualizada correctamente",
+      "deleted": "Compañía eliminada correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar las compañías",
+      "save": "Error al guardar la compañía",
+      "delete": "Error al eliminar la compañía"
+    }
   }
 }
