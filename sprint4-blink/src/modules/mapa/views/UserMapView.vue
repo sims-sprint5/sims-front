@@ -19,7 +19,8 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
-import type { Geofence, Vehicle } from '../types/geofence.types'
+import type { Geofence, Vehicle as MapVehicle } from '../types/geofence.types'
+import type { Vehicle as ServiceVehicle } from '@/modules/vehicles/types/vehicle.types'
 
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
@@ -59,7 +60,7 @@ const createGeofencePopup = (geofence: Geofence) => {
   return popupContent
 }
 
-const createVehiclePopup = (vehicle: Vehicle) => {
+const createVehiclePopup = (vehicle: MapVehicle) => {
   const popupContent = document.createElement('div')
   popupContent.className = 'p-2'
 
@@ -105,7 +106,7 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-const renderVehicles = (vehicles: Vehicle[]) => {
+const renderVehicles = (vehicles: MapVehicle[]) => {
   if (!map) return
 
   vehicles.forEach(vehicle => {
@@ -124,6 +125,14 @@ const renderVehicles = (vehicles: Vehicle[]) => {
     marker.addTo(map!)
   })
 }
+
+const toMapVehicle = (vehicle: ServiceVehicle): MapVehicle => ({
+  vehicle_id: vehicle.vehicle_id ?? vehicle.id,
+  license_plate: vehicle.license_plate,
+  current_latitude: vehicle.current_latitude,
+  current_longitude: vehicle.current_longitude,
+  last_location_update: vehicle.last_location_update
+})
 
 const showUserLocation = () => {
   if (!map || !navigator.geolocation) return
@@ -183,7 +192,7 @@ onMounted(async () => {
       vehicleService.getVehiclesList()
     ])
     renderGeofences(geofences)
-    renderVehicles(vehicles)
+    renderVehicles(vehicles.map(toMapVehicle))
   } catch (err) {
     console.warn('Failed to load data:', err)
   }

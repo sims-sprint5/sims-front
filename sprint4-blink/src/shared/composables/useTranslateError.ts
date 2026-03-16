@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 export function useTranslateError() {
   const { t, te } = useI18n();
 
-  const translateErrorMessage = (message: unknown, fallback: string): string => {
+  const translateErrorMessage = (message: unknown, fallback: string = ''): string => {
     const msg = typeof message === 'string' ? message : '';
     if (msg && te(msg)) return t(msg);
     return msg || fallback;

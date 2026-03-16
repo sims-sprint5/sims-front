@@ -91,7 +91,13 @@ defineEmits<{
   'view-logs': [geofence: Geofence]
 }>()
 
-const columns = computed(() => [
+type TableColumnShape = {
+  key: string
+  label: string
+  align?: 'left' | 'center' | 'right'
+}
+
+const columns = computed<TableColumnShape[]>(() => [
   { key: 'name', label: t('mapa.table.name') },
   { key: 'type', label: t('mapa.table.type') },
   { key: 'radius', label: t('mapa.table.radius') },
