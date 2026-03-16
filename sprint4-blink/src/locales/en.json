@@ -1,0 +1,618 @@
+{
+  "app": {
+    "name": "Blink"
+  },
+  "common": {
+    "loading": "Loading...",
+    "logoAlt": "Logo of {app}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "avatar": "Avatar",
+    "search": "Search",
+    "refresh": "Refresh",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "logout": "Sign out"
+  },
+  "language": {
+    "label": "Language",
+    "ca": "Catalan",
+    "es": "Spanish",
+    "en": "English"
+  },
+  "nav": {
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "map": "Map",
+    "tickets": "Tickets",
+    "bookings": "Bookings",
+    "reservationsAdmin": "Reservation log",
+    "users": "Users",
+    "vehicles": "Vehicles",
+    "geofencing": "Geofencing",
+    "settings": "Settings",
+    "sections": {
+      "client": "Client",
+      "admin": "Admin"
+    }
+  },
+  "auth": {
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "login": {
+      "title": "Sign in",
+      "header": "Sign in to {app}",
+      "cta": "Sign in",
+      "loading": "Loading...",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example.email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "noAccount": "Don’t have an account?",
+      "goRegister": "Create one"
+      ,
+      "forgotPassword": "Forgot password?",
+      "welcome": "Welcome {name}!",
+      "genericError": "Could not sign in. Please try again."
+    },
+    "register": {
+      "title": "Create your Blink account",
+      "cta": "Create account",
+      "loading": "Loading...",
+      "haveAccount": "Already have an account?",
+      "goLogin": "Sign in",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Your name",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "+34 600 000 000",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example.email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmationLabel": "Confirm password",
+      "success": "Account created! Welcome {name}",
+      "genericError": "Could not register. Please try again."
+    }
+  },
+  "roles": {
+    "user": "User",
+    "admin": "Admin"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to the Dashboard!",
+    "userInfo": "User information",
+    "user": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "personalInfo": "Personal information",
+    "personalInfoDesc": "Manage your personal info, password, and account settings.",
+    "userAvatarAlt": "User avatar",
+    "changeAvatar": "Change avatar",
+    "avatarHelp": "JPG, GIF or PNG. 1MB max.",
+    "toast": {
+      "avatarUpdated": "Avatar updated",
+      "personalInfoSaved": "Personal information saved successfully",
+      "deleteWarning": "This action cannot be undone"
+    },
+    "validation": {
+      "fileTooLarge": "The file is too large. Maximum 1MB.",
+      "invalidFileType": "Only JPG, GIF, or PNG files are allowed."
+    },
+    "errors": {
+      "userInfoUnavailable": "Could not retrieve user information",
+      "updateInfo": "Error updating information"
+    },
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "currentPassword": "Current password",
+    "saveChanges": "Save changes",
+    "deleteAccount": "Delete account",
+    "deleteAccountDesc": "No longer want to use our service? You can delete your account here. This action cannot be undone. All information related to this account will be permanently deleted.",
+    "deleteAccountCta": "Yes, delete my account"
+  },
+  "users": {
+    "title": "User management",
+    "description": "Manage system users",
+    "searchPlaceholder": "Search by name or email...",
+    "loading": "Loading users...",
+    "empty": "No users to display",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "createdAt": "Created at",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Full name",
+      "email": "Email",
+      "emailPlaceholder": "email.example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+34 600 000 000",
+      "role": "Role",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmation": "Confirm password",
+      "roleUser": "User",
+      "roleAdmin": "Admin"
+    },
+    "modal": {
+      "deleteTitle": "Delete user",
+      "deleteMessage": "Are you sure you want to delete user {name}? This action cannot be undone.",
+      "detailsTitle": "User details"
+    },
+    "actions": {
+      "newUser": "New user",
+      "createNewUser": "Create new user",
+      "editUser": "Edit user",
+      "createUser": "Create user",
+      "updateUser": "Update user"
+    },
+    "toast": {
+      "created": "User created successfully",
+      "updated": "User updated successfully",
+      "deleted": "User deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load users",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all users.",
+      "search": "Failed to search users",
+      "save": "Failed to save user",
+      "delete": "Failed to delete user",
+      "notFound": "User not found. It may have already been deleted."
+    }
+  },
+  "vehicles": {
+    "title": "Vehicle management",
+    "description": "Manage system vehicles",
+    "searchPlaceholder": "Search by license plate, brand, or model...",
+    "loading": "Loading vehicles...",
+    "empty": "No vehicles to display",
+    "table": {
+
+      "licensePlate": "License plate",
+      "brand": "Brand",
+      "model": "Model",
+      "color": "Color",
+      "year": "Year",
+      "status": "Status",
+      "lastLocationUpdate": "Last location update",
+      "actions": "Actions"
+    },
+    "form": {
+      "licensePlate": "License plate",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Brand",
+      "brandPlaceholder": "Brand",
+      "model": "Model",
+      "modelPlaceholder": "Model",
+      "year": "Year",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Status",
+      "statusPlaceholder": "Select status",
+      "currentLatitude": "Current latitude",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Current longitude",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Last location update",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Active",
+      "available": "Available",
+      "inactive": "Inactive",
+      "maintenance": "Under Maintenance",
+      "reserved": "Reserved",
+      "rented": "Rented",
+      "out_of_service": "Out of Service"
+    },
+    "modal": {
+      "deleteTitle": "Delete vehicle",
+      "deleteMessage": "Are you sure you want to delete vehicle {license_plate}? This action cannot be undone.",
+      "detailsTitle": "Vehicle details"
+    },
+    "actions": {
+      "newVehicle": "New vehicle",
+      "createNewVehicle": "Create new vehicle",
+      "editVehicle": "Edit vehicle",
+      "createVehicle": "Create vehicle",
+      "updateVehicle": "Update vehicle"
+    },
+    "toast": {
+      "created": "Vehicle created successfully",
+      "updated": "Vehicle updated successfully",
+      "deleted": "Vehicle deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load vehicles",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all vehicles.",
+      "search": "Failed to search vehicles",
+      "save": "Failed to save vehicle",
+      "delete": "Failed to delete vehicle",
+      "notFound": "Vehicle not found. It may have already been deleted.",
+      "invalidId": "Invalid vehicle ID."
+    }
+  },
+  "reservations": {
+    "title": "Reservations management",
+    "description": "Manage system reservations",
+    "searchPlaceholder": "Search by status, user, vehicle, or dates...",
+    "loading": "Loading reservations...",
+    "empty": "No reservations to display",
+    "createTitle": "Create reservation",
+    "createDescription": "Select the dates to register the new reservation.",
+    "selectDates": "Provide a start and end date to save the reservation.",
+    "table": {
+      "id": "ID",
+      "logType": "Log type",
+      "userId": "User (ID)",
+      "vehicleId": "Vehicle (ID)",
+      "status": "Status",
+      "startAt": "Start",
+      "endAt": "End",
+      "createdAt": "Created",
+      "actions": "Actions"
+    },
+    "form": {
+      "userId": "User ID",
+      "userIdPlaceholder": "1",
+      "vehicleId": "Vehicle ID",
+      "vehicleIdPlaceholder": "1",
+      "status": "Status",
+      "statusPlaceholder": "Select a status",
+      "startAt": "Start",
+      "startAtPlaceholder": "YYYY-MM-DD HH:mm:ss",
+      "endAt": "End",
+      "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "pending": "Pending",
+      "active": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "log": {
+      "created": "Created"
+    },
+    "modal": {
+      "deleteTitle": "Delete reservation",
+      "deleteMessage": "Are you sure you want to delete reservation {id}? This action cannot be undone.",
+      "detailsTitle": "Reservation details"
+    },
+    "actions": {
+      "newReservation": "New reservation",
+      "createNewReservation": "Create new reservation",
+      "editReservation": "Edit reservation",
+      "createReservation": "Create reservation",
+      "updateReservation": "Update reservation"
+    },
+    "toast": {
+      "created": "Reservation created successfully",
+      "updated": "Reservation updated successfully",
+      "deleted": "Reservation deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load reservations",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all reservations.",
+      "search": "Failed to search reservations",
+      "save": "Failed to save reservation",
+      "delete": "Failed to delete reservation",
+      "notFound": "Reservation not found. It may have already been deleted.",
+      "invalidId": "Invalid reservation ID",
+      "missingDates": "Provide start and end dates for the reservation.",
+      "invalidDates": "The end date must be later than the start date.",
+      "create": "Failed to create the reservation. Please try again."
+    }
+  },
+  "table": {
+    "previous": "Previous",
+    "next": "Next",
+    "paginationLabel": "Pagination",
+    "showing": "Showing {from} to {to} of {total} results",
+    "empty": "No data to display",
+    "loading": "Loading..."
+  },
+  "filters": {
+    "clear": "Clear filters"
+  },
+  "tickets": {
+    "title": "My Tickets",
+    "description": "Manage your event tickets",
+    "searchPlaceholder": "Search by subject or description...",
+    "loading": "Loading tickets...",
+    "empty": "No tickets to display",
+    "table": {
+      "evento": "Event",
+      "correo": "Email",
+      "asunto": "Subject",
+      "descripcion": "Description",
+      "precio": "Price",
+      "estado": "Status",
+      "usuario": "User",
+      "fechaUsuario": "Date",
+      "fechaCompra": "Purchase date",
+      "createdAt": "Creation date",
+      "actions": "Actions"
+    },
+    "form": {
+      "eventoId": "Event ID",
+      "eventoIdPlaceholder": "Enter event ID",
+      "precio": "Price",
+      "precioPlaceholder": "0.00",
+      "correo": "Email",
+      "correoPlaceholder": "you.example.com",
+      "asunto": "Subject",
+      "asuntoPlaceholder": "Short subject",
+      "fecha": "Date",
+      "fechaPlaceholder": "YYYY-MM-DD",
+      "descripcion": "Description",
+      "descripcionPlaceholder": "Describe the issue or problem",
+      "type": "Type",
+      "typeSelect": "Select type",
+      "typeTechnical": "Technical",
+      "typeBilling": "Billing",
+      "typeComplaint": "Complaint",
+      "typeInquiry": "Inquiry",
+      "priority": "Priority",
+      "prioritySelect": "Select priority",
+      "priorityLow": "Low",
+      "priorityMedium": "Medium",
+      "priorityHigh": "High",
+      "priorityUrgent": "Urgent"
+    },
+    "estados": {
+      "pendiente": "Pending",
+      "open": "Open",
+      "confirmado": "Confirmed",
+      "cancelado": "Cancelled",
+      "usado": "Used"
+    },
+    "modal": {
+      "detailsTitle": "Ticket details"
+    },
+    "actions": {
+      "newTicket": "New ticket",
+      "createNewTicket": "Create new ticket",
+      "createTicket": "Create ticket"
+    },
+    "chat": {
+      "noMessages": "No messages yet. Send your first message to start the conversation.",
+      "admin": "Admin",
+      "you": "You",
+      "messagePlaceholder": "Write your message...",
+      "send": "Send"
+    },
+    "toast": {
+      "created": "Ticket created successfully",
+      "messageSent": "Message sent successfully"
+    },
+    "errors": {
+      "load": "Error loading tickets",
+      "searchEndpointUnavailable": "Search endpoint unavailable. Reload to see all tickets.",
+      "search": "Error searching tickets",
+      "save": "Error saving ticket",
+      "delete": "Error deleting ticket",
+      "invalidId": "Invalid ticket ID."
+    }
+  },
+  "adminTickets": {
+    "title": "Ticket Management",
+    "description": "Manage all system tickets",
+    "searchPlaceholder": "Search by subject, description or user...",
+    "actions": {
+      "editTicket": "Edit ticket",
+      "reply": "Reply"
+    },
+    "modal": {
+      "detailsTitle": "Ticket details",
+      "deleteTitle": "Delete ticket",
+      "deleteMessage": "Are you sure you want to delete the ticket '{asunto}'? This action cannot be undone."
+    },
+    "chat": {
+      "title": "Ticket conversation",
+      "noMessages": "No messages yet",
+      "admin": "Admin",
+      "messagePlaceholder": "Write your reply...",
+      "replyAs": "Reply as",
+      "send": "Send"
+    },
+    "toast": {
+      "updated": "Ticket updated successfully",
+      "deleted": "Ticket deleted successfully",
+      "messageSent": "Message sent successfully"
+    }
+  },
+  "validation": {
+    "fixFormErrors": "Please fix the form errors.",
+    "name": {
+      "required": "Name is required.",
+      "min": "Name must be at least 2 characters.",
+      "max": "Name cannot exceed 100 characters."
+    },
+    "email": {
+      "required": "Email is required.",
+      "invalid": "Email is invalid.",
+      "max": "Email cannot exceed 255 characters."
+    },
+    "phone": {
+      "required": "Phone is required.",
+      "invalid": "Phone is invalid.",
+      "minDigits": "Phone must have at least 7 digits."
+    },
+    "password": {
+      "required": "Password is required.",
+      "min": "Password must be at least 8 characters.",
+      "max": "Password cannot exceed 255 characters."
+    },
+    "passwordConfirmation": {
+      "required": "Password confirmation is required."
+    },
+    "role": {
+      "required": "Role is required.",
+      "invalid": "Role is invalid."
+    },
+    "passwordMismatch": "Passwords do not match.",
+    "vehicle": {
+      "license_plate": {
+        "required": "License plate is required."
+      },
+      "brand": {
+        "required": "Brand is required."
+      },
+      "model": {
+        "required": "Model is required."
+      },
+      "year": {
+        "required": "Year is required.",
+        "invalid": "Year is invalid.",
+        "min": "Year must be greater than or equal to 1900.",
+        "max": "Year must be less than or equal to 2100."
+      },
+      "color": {
+        "required": "Color is required."
+      },
+      "status": {
+        "required": "Status is required."
+      },
+      "current_latitude": {
+        "invalid": "Latitude is invalid."
+      },
+      "current_longitude": {
+        "invalid": "Longitude is invalid."
+      },
+      "last_location_update": {
+        "invalid": "Last location update is invalid."
+      }
+    },
+    "ticket": {
+      "eventoRequired": "Event is required.",
+      "eventoInvalid": "Event ID is invalid.",
+      "precioRequired": "Price is required.",
+      "precioInvalid": "Price is invalid.",
+      "precioMax": "Price cannot exceed 999999.99.",
+      "estadoInvalid": "Status is invalid.",
+      "asuntoRequired": "Subject is required.",
+      "asuntoMax": "Subject cannot exceed 255 characters.",
+      "descripcionInvalid": "Description is invalid.",
+      "descripcionMax": "Description cannot exceed 1000 characters.",
+      "typeRequired": "Type is required.",
+      "priorityInvalid": "Priority is invalid.",
+      "priorityMax": "Priority cannot exceed 20 characters."
+    },
+    "reservation": {
+      "user_id": {
+        "required": "User is required.",
+        "invalid": "User ID is not valid."
+      },
+      "vehicle_id": {
+        "required": "Vehicle is required.",
+        "invalid": "Vehicle ID is not valid."
+      },
+      "status": {
+        "required": "Status is required."
+      },
+      "start_at": {
+        "required": "Start date is required."
+      },
+      "end_at": {
+        "required": "End date is required."
+      }
+    }
+  },
+  "mapa": {
+    "title": "Geofencing Map",
+    "userTitle": "Map",
+    "geofences": "Geofences",
+    "createZone": "New Zone",
+    "editZone": "Edit Zone",
+    "deleteZone": "Delete Zone",
+    "deleteConfirm": "Are you sure you want to delete the geofence '{name}'?",
+    "viewLogs": "View Logs",
+    "noGeofences": "No geofences created yet.",
+    "noLogs": "No logs for this geofence.",
+    "loadError": "Failed to load geofences",
+    "createError": "Failed to create geofence",
+    "createSuccess": "Geofence created successfully",
+    "updateError": "Failed to update geofence",
+    "updateSuccess": "Geofence updated successfully",
+    "deleteError": "Failed to delete geofence",
+    "deleteSuccess": "Geofence deleted successfully",
+    "logsError": "Failed to load logs",
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "radius": "Radius",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "types": {
+      "allowed": "Allowed",
+      "restricted": "Restricted",
+      "parking": "Parking",
+      "service_area": "Service Area"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "eventType": {
+      "entry": "Entry",
+      "exit": "Exit",
+      "violation": "Violation"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "e.g., Downtown Restricted Zone",
+      "description": "Description",
+      "descriptionPlaceholder": "e.g., No parking after 6pm",
+      "type": "Type",
+      "latitude": "Latitude",
+      "latitudePlaceholder": "41.3851",
+      "longitude": "Longitude",
+      "longitudePlaceholder": "2.1734",
+      "radius": "Radius (meters)",
+      "radiusPlaceholder": "e.g., 250",
+      "clickToSelect": "Click on the map to select the center of the zone",
+      "status": "Status"
+    },
+    "logs": {
+      "vehicle": "Vehicle",
+      "eventType": "Event Type",
+      "timestamp": "Timestamp",
+      "location": "Location"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMaxLength": "Name cannot exceed 100 characters",
+      "radiusRequired": "Radius is required",
+      "radiusMax": "Radius cannot exceed 999999 meters",
+      "latitudeRequired": "Latitude is required",
+      "latitudeInvalid": "Latitude must be between -90 and 90",
+      "longitudeRequired": "Longitude is required",
+      "longitudeInvalid": "Longitude must be between -180 and 180",
+      "typeRequired": "Type is required"
+    }
+  },
+  "actions": {
+    "edit": "Edit"
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred.",
+    "invalidLoginResponse": "Invalid login response: missing token.",
+    "requestFailed": "Request failed",
+    "serverConnection": "Server connection error",
+    "notAuthenticated": "You are not authenticated. Please sign in."
+  }
+}

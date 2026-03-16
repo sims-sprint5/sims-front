@@ -1,0 +1,617 @@
+{
+  "app": {
+    "name": "Blink"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "logoAlt": "Logo de {app}",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "avatar": "Avatar",
+    "search": "Buscar",
+    "refresh": "Actualizar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "logout": "Cerrar sesión"
+  },
+  "language": {
+    "label": "Idioma",
+    "ca": "Catalán",
+    "es": "Español",
+    "en": "Inglés"
+  },
+  "nav": {
+    "menu": "Menú",
+    "dashboard": "Dashboard",
+    "map": "Mapa",
+    "tickets": "Tickets",
+    "bookings": "Reservas",
+    "reservationsAdmin": "Log de reservas",
+    "users": "Usuarios",
+    "vehicles": "Vehículos",
+    "geofencing": "Geofencing",
+    "settings": "Configuración",
+    "sections": {
+      "client": "Cliente",
+      "admin": "Admin"
+    }
+  },
+  "auth": {
+    "sessionExpired": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+    "login": {
+      "title": "Iniciar sesión",
+      "header": "Inicia sesión en {app}",
+      "cta": "Acceder",
+      "loading": "Cargando...",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "ejemplo.correo.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "noAccount": "¿Aún no tienes cuenta?",
+      "goRegister": "Crear cuenta"
+      ,
+      "forgotPassword": "¿Has olvidado tu contraseña?",
+      "welcome": "¡Bienvenido/a {name}!",
+      "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
+    },
+    "register": {
+      "title": "Crea tu cuenta en Blink",
+      "cta": "Crear cuenta",
+      "loading": "Cargando...",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "goLogin": "Iniciar sesión",
+      "nameLabel": "Nombre completo",
+      "namePlaceholder": "Tu nombre",
+      "phoneLabel": "Teléfono",
+      "phonePlaceholder": "+34 600 000 000",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "ejemplo.correo.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmationLabel": "Confirmar contraseña",
+      "success": "¡Cuenta creada! Bienvenido/a {name}",
+      "genericError": "Error al registrarse. Por favor, inténtalo de nuevo."
+    }
+  },
+  "roles": {
+    "user": "Usuario",
+    "admin": "Administrador"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "¡Bienvenido/a al Dashboard!",
+    "userInfo": "Información del usuario",
+    "user": {
+      "name": "Nombre",
+      "email": "Email",
+      "phone": "Teléfono",
+      "role": "Rol"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "personalInfo": "Información personal",
+    "personalInfoDesc": "Gestiona tu información personal, contraseña y configuración de cuenta.",
+    "userAvatarAlt": "Avatar de usuario",
+    "changeAvatar": "Cambiar avatar",
+    "avatarHelp": "JPG, GIF o PNG. 1MB máx.",
+    "toast": {
+      "avatarUpdated": "Avatar actualizado",
+      "personalInfoSaved": "Información personal guardada correctamente",
+      "deleteWarning": "Esta acción no se puede deshacer"
+    },
+    "validation": {
+      "fileTooLarge": "El archivo es demasiado grande. Máximo 1MB.",
+      "invalidFileType": "Solo se permiten archivos JPG, GIF o PNG."
+    },
+    "errors": {
+      "userInfoUnavailable": "No se pudo obtener la información del usuario",
+      "updateInfo": "Error al actualizar la información"
+    },
+    "firstName": "Nombre",
+    "lastName": "Apellidos",
+    "email": "Correo electrónico",
+    "currentPassword": "Contraseña actual",
+    "saveChanges": "Guardar cambios",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteAccountDesc": "¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción no es reversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.",
+    "deleteAccountCta": "Sí, eliminar mi cuenta"
+  },
+  "users": {
+    "title": "Gestión de usuarios",
+    "description": "Administra los usuarios del sistema",
+    "searchPlaceholder": "Buscar por nombre o email...",
+    "loading": "Cargando usuarios...",
+    "empty": "No hay usuarios para mostrar",
+    "table": {
+      "name": "Nombre",
+      "email": "Email",
+      "createdAt": "Fecha de registro",
+      "actions": "Acciones"
+    },
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Nombre completo",
+      "email": "Email",
+      "emailPlaceholder": "correo.ejemplo.com",
+      "phone": "Teléfono",
+      "phonePlaceholder": "+34 600 000 000",
+      "role": "Rol",
+      "password": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "passwordConfirmation": "Confirmar contraseña",
+      "roleUser": "Usuario",
+      "roleAdmin": "Administrador"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar usuario",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar al usuario {name}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles del usuario"
+    },
+    "actions": {
+      "newUser": "Nuevo usuario",
+      "createNewUser": "Crear nuevo usuario",
+      "editUser": "Editar usuario",
+      "createUser": "Crear usuario",
+      "updateUser": "Actualizar usuario"
+    },
+    "toast": {
+      "created": "Usuario creado correctamente",
+      "updated": "Usuario actualizado correctamente",
+      "deleted": "Usuario eliminado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar usuarios",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los usuarios.",
+      "search": "Error al buscar usuarios",
+      "save": "Error al guardar usuario",
+      "delete": "Error al eliminar usuario",
+      "notFound": "Usuario no encontrado. Puede que ya haya sido eliminado."
+    }
+  },
+  "vehicles": {
+    "title": "Gestión de vehículos",
+    "description": "Administra los vehículos del sistema",
+    "searchPlaceholder": "Buscar por matrícula, marca o modelo...",
+    "loading": "Cargando vehículos...",
+    "empty": "No hay vehículos para mostrar",
+    "table": {
+      "licensePlate": "Matrícula",
+      "brand": "Marca",
+      "model": "Modelo",
+      "color": "Color",
+      "year": "Año",
+      "status": "Estado",
+      "lastLocationUpdate": "Última ubicación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Marca",
+      "model": "Modelo",
+      "modelPlaceholder": "Modelo",
+      "year": "Año",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Estado",
+      "statusPlaceholder": "Selecciona estado",
+      "currentLatitude": "Latitud actual",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Longitud actual",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Última actualización de ubicación",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Activo",
+      "available": "Disponible",
+      "inactive": "Inactivo",
+      "maintenance": "En mantenimiento",
+      "reserved": "Reservado",
+      "rented": "Alquilado",
+      "out_of_service": "Fuera de servicio"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar vehículo",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el vehículo {license_plate}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles del vehículo"
+    },
+    "actions": {
+      "newVehicle": "Nuevo vehículo",
+      "createNewVehicle": "Crear nuevo vehículo",
+      "editVehicle": "Editar vehículo",
+      "createVehicle": "Crear vehículo",
+      "updateVehicle": "Actualizar vehículo"
+    },
+    "toast": {
+      "created": "Vehículo creado correctamente",
+      "updated": "Vehículo actualizado correctamente",
+      "deleted": "Vehículo eliminado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar vehículos",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los vehículos.",
+      "search": "Error al buscar vehículos",
+      "save": "Error al guardar vehículo",
+      "delete": "Error al eliminar vehículo",
+      "notFound": "Vehículo no encontrado. Puede que ya haya sido eliminado.",
+      "invalidId": "ID de vehículo inválido."
+    }
+  },
+  "reservations": {
+    "title": "Gestión de reservas",
+    "description": "Administra las reservas del sistema",
+    "searchPlaceholder": "Buscar por estado, usuario, vehículo o fechas...",
+    "loading": "Cargando reservas...",
+    "empty": "No hay reservas para mostrar",
+    "createTitle": "Crear reserva",
+    "createDescription": "Selecciona las fechas para registrar la nueva reserva.",
+    "selectDates": "Indica una fecha de inicio y una de fin para guardar la reserva.",
+    "table": {
+      "id": "ID",
+      "logType": "Tipo de log",
+      "userId": "Usuario (ID)",
+      "vehicleId": "Vehículo (ID)",
+      "status": "Estado",
+      "startAt": "Inicio",
+      "endAt": "Fin",
+      "createdAt": "Creado",
+      "actions": "Acciones"
+    },
+    "form": {
+      "userId": "ID de usuario",
+      "userIdPlaceholder": "1",
+      "vehicleId": "ID de vehículo",
+      "vehicleIdPlaceholder": "1",
+      "status": "Estado",
+      "statusPlaceholder": "Selecciona un estado",
+      "startAt": "Inicio",
+      "startAtPlaceholder": "YYYY-MM-DD HH:mm:ss",
+      "endAt": "Fin",
+      "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "active": "Confirmada",
+      "completed": "Completada",
+      "cancelled": "Cancelada"
+    },
+    "log": {
+      "created": "Creada"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar reserva",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar la reserva {id}? Esta acción no se puede deshacer.",
+      "detailsTitle": "Detalles de la reserva"
+    },
+    "actions": {
+      "newReservation": "Nueva reserva",
+      "createNewReservation": "Crear nueva reserva",
+      "editReservation": "Editar reserva",
+      "createReservation": "Crear reserva",
+      "updateReservation": "Actualizar reserva"
+    },
+    "toast": {
+      "created": "Reserva creada correctamente",
+      "updated": "Reserva actualizada correctamente",
+      "deleted": "Reserva eliminada correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar reservas",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todas las reservas.",
+      "search": "Error al buscar reservas",
+      "save": "Error al guardar reserva",
+      "delete": "Error al eliminar reserva",
+      "notFound": "Reserva no encontrada. Puede que ya haya sido eliminada.",
+      "invalidId": "ID de reserva inválido",
+      "missingDates": "Indica fecha de inicio y fin para la reserva.",
+      "create": "Error al crear la reserva. Por favor, inténtalo de nuevo.",
+      "invalidDates": "La fecha de fin debe ser posterior a la de inicio."
+    }
+  },
+  "table": {
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "paginationLabel": "Paginación",
+    "showing": "Mostrando {from} a {to} de {total} resultados",
+    "empty": "No hay datos para mostrar",
+    "loading": "Cargando..."
+  },
+  "filters": {
+    "clear": "Eliminar filtros"
+  },
+  "tickets": {
+    "title": "Mis Tickets",
+    "description": "Gestiona tus tickets de eventos",
+    "searchPlaceholder": "Buscar por asunto o descripción...",
+    "loading": "Cargando tickets...",
+    "empty": "No hay tickets para mostrar",
+    "table": {
+      "evento": "Evento",
+      "correo": "Correo",
+      "asunto": "Asunto",
+      "descripcion": "Descripción",
+      "precio": "Precio",
+      "estado": "Estado",
+      "usuario": "Usuario",
+      "fechaUsuario": "Fecha",
+      "fechaCompra": "Fecha de compra",
+      "createdAt": "Fecha de creación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "eventoId": "ID de Evento",
+      "eventoIdPlaceholder": "Introduce el ID del evento",
+      "precio": "Precio",
+      "precioPlaceholder": "0.00",
+      "correo": "Correo",
+      "correoPlaceholder": "tu.correo.com",
+      "asunto": "Asunto",
+      "asuntoPlaceholder": "Breve asunto",
+      "fecha": "Fecha",
+      "fechaPlaceholder": "AAAA-MM-DD",
+      "descripcion": "Descripción",
+      "descripcionPlaceholder": "Describe el problema o incidencia",
+      "type": "Tipo",
+      "typeSelect": "Selecciona tipo",
+      "typeTechnical": "Técnico",
+      "typeBilling": "Facturación",
+      "typeComplaint": "Queja",
+      "typeInquiry": "Consulta",
+      "priority": "Prioridad",
+      "prioritySelect": "Selecciona prioridad",
+      "priorityLow": "Baja",
+      "priorityMedium": "Media",
+      "priorityHigh": "Alta",
+      "priorityUrgent": "Urgente"
+    },
+    "estados": {
+      "pendiente": "Pendiente",
+      "open": "Abierto",
+      "confirmado": "Confirmado",
+      "cancelado": "Cancelado",
+      "usado": "Usado"
+    },
+    "modal": {
+      "detailsTitle": "Detalles del ticket"
+    },
+    "actions": {
+      "newTicket": "Nuevo ticket",
+      "createNewTicket": "Crear nuevo ticket",
+      "createTicket": "Crear ticket"
+    },
+    "chat": {
+      "noMessages": "No hay mensajes aún. Envía tu primer mensaje para iniciar la conversación.",
+      "admin": "Administrador",
+      "you": "Tú",
+      "messagePlaceholder": "Escribe tu mensaje...",
+      "send": "Enviar"
+    },
+    "toast": {
+      "created": "Ticket creado correctamente",
+      "messageSent": "Mensaje enviado correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar tickets",
+      "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todos los tickets.",
+      "search": "Error al buscar tickets",
+      "save": "Error al guardar ticket",
+      "delete": "Error al eliminar ticket",
+      "invalidId": "ID de ticket inválido."
+    }
+  },
+  "adminTickets": {
+    "title": "Gestión de Tickets",
+    "description": "Administra todos los tickets del sistema",
+    "searchPlaceholder": "Buscar por asunto, descripción o usuario...",
+    "actions": {
+      "editTicket": "Editar ticket",
+      "reply": "Responder"
+    },
+    "modal": {
+      "detailsTitle": "Detalles del ticket",
+      "deleteTitle": "Eliminar ticket",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar el ticket '{asunto}'? Esta acción no se puede deshacer."
+    },
+    "chat": {
+      "title": "Conversación del ticket",
+      "noMessages": "No hay mensajes aún",
+      "admin": "Administrador",
+      "messagePlaceholder": "Escribe tu respuesta...",
+      "replyAs": "Responder como",
+      "send": "Enviar"
+    },
+    "toast": {
+      "updated": "Ticket actualizado correctamente",
+      "deleted": "Ticket eliminado correctamente",
+      "messageSent": "Mensaje enviado correctamente"
+    }
+  },
+  "validation": {
+    "fixFormErrors": "Por favor, corrige los errores en el formulario.",
+    "name": {
+      "required": "El nombre es requerido.",
+      "min": "El nombre debe tener al menos 2 caracteres.",
+      "max": "El nombre no puede exceder 100 caracteres."
+    },
+    "email": {
+      "required": "El email es requerido.",
+      "invalid": "El email no es válido.",
+      "max": "El email no puede exceder 255 caracteres."
+    },
+    "phone": {
+      "required": "El teléfono es requerido.",
+      "invalid": "El teléfono no es válido.",
+      "minDigits": "El teléfono debe tener al menos 7 dígitos."
+    },
+    "password": {
+      "required": "La contraseña es requerida.",
+      "min": "La contraseña debe tener al menos 8 caracteres.",
+      "max": "La contraseña no puede exceder 255 caracteres."
+    },
+    "passwordConfirmation": {
+      "required": "La confirmación de contraseña es requerida."
+    },
+    "role": {
+      "required": "El rol es requerido.",
+      "invalid": "El rol no es válido."
+    },
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "vehicle": {
+      "license_plate": {
+        "required": "La matrícula es requerida."
+      },
+      "brand": {
+        "required": "La marca es requerida."
+      },
+      "model": {
+        "required": "El modelo es requerido."
+      },
+      "year": {
+        "required": "El año es requerido.",
+        "invalid": "El año no es válido.",
+        "min": "El año debe ser mayor o igual a 1900.",
+        "max": "El año no puede ser mayor a 2100."
+      },
+      "color": {
+        "required": "El color es requerido."
+      },
+      "status": {
+        "required": "El estado es requerido."
+      },
+      "current_latitude": {
+        "invalid": "La latitud no es válida."
+      },
+      "current_longitude": {
+        "invalid": "La longitud no es válida."
+      },
+      "last_location_update": {
+        "invalid": "La fecha de última ubicación no es válida."
+      }
+    },
+    "ticket": {
+      "eventoRequired": "El evento es requerido.",
+      "eventoInvalid": "El ID del evento no es válido.",
+      "precioRequired": "El precio es requerido.",
+      "precioInvalid": "El precio no es válido.",
+      "precioMax": "El precio no puede exceder 999999.99.",
+      "estadoInvalid": "El estado no es válido.",
+      "asuntoRequired": "El asunto es requerido.",
+      "asuntoMax": "El asunto no puede exceder 255 caracteres.",
+      "descripcionInvalid": "La descripción no es válida.",
+      "descripcionMax": "La descripción no puede exceder 1000 caracteres.",
+      "typeRequired": "El tipo es requerido.",
+      "priorityInvalid": "La prioridad no es válida.",
+      "priorityMax": "La prioridad no puede exceder 20 caracteres."
+    },
+    "reservation": {
+      "user_id": {
+        "required": "El usuario es requerido.",
+        "invalid": "El ID de usuario no es válido."
+      },
+      "vehicle_id": {
+        "required": "El vehículo es requerido.",
+        "invalid": "El ID de vehículo no es válido."
+      },
+      "status": {
+        "required": "El estado es requerido."
+      },
+      "start_at": {
+        "required": "La fecha de inicio es requerida."
+      },
+      "end_at": {
+        "required": "La fecha de fin es requerida."
+      }
+    }
+  },
+  "mapa": {
+    "title": "Mapa de Geofencing",
+    "userTitle": "Mapa",
+    "geofences": "Geofences",
+    "createZone": "Nueva Zona",
+    "editZone": "Editar Zona",
+    "deleteZone": "Eliminar Zona",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar la geofence '{name}'?",
+    "viewLogs": "Ver Registros",
+    "noGeofences": "Sin geofences creadas aún.",
+    "noLogs": "Sin registros para esta geofence.",
+    "loadError": "Error al cargar geofences",
+    "createError": "Error al crear geofence",
+    "createSuccess": "Geofence creada exitosamente",
+    "updateError": "Error al actualizar geofence",
+    "updateSuccess": "Geofence actualizada exitosamente",
+    "deleteError": "Error al eliminar geofence",
+    "deleteSuccess": "Geofence eliminada exitosamente",
+    "logsError": "Error al cargar registros",
+    "table": {
+      "name": "Nombre",
+      "type": "Tipo",
+      "radius": "Radio",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "types": {
+      "allowed": "Permitida",
+      "restricted": "Restringida",
+      "parking": "Estacionamiento",
+      "service_area": "Área de Servicio"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "eventType": {
+      "entry": "Entrada",
+      "exit": "Salida",
+      "violation": "Violación"
+    },
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "p.ej., Downtown Zona Restringida",
+      "description": "Descripción",
+      "descriptionPlaceholder": "p.ej., Sin estacionamiento después de las 6pm",
+      "type": "Tipo",
+      "latitude": "Latitud",
+      "latitudePlaceholder": "41.3851",
+      "longitude": "Longitud",
+      "longitudePlaceholder": "2.1734",
+      "radius": "Radio (metros)",
+      "radiusPlaceholder": "p.ej., 250",
+      "clickToSelect": "Haz clic en el mapa para seleccionar el centro de la zona",
+      "status": "Estado"
+    },
+    "logs": {
+      "vehicle": "Vehículo",
+      "eventType": "Tipo de Evento",
+      "timestamp": "Marca de Tiempo",
+      "location": "Ubicación"
+    },
+    "validation": {
+      "nameRequired": "El nombre es requerido",
+      "nameMaxLength": "El nombre no puede exceder 100 caracteres",
+      "radiusRequired": "El radio es requerido",
+      "radiusMax": "El radio no puede exceder 999999 metros",
+      "latitudeRequired": "La latitud es requerida",
+      "latitudeInvalid": "La latitud debe estar entre -90 y 90",
+      "longitudeRequired": "La longitud es requerida",
+      "longitudeInvalid": "La longitud debe estar entre -180 y 180",
+      "typeRequired": "El tipo es requerido"
+    }
+  },
+  "actions": {
+    "edit": "Editar"
+  },
+  "errors": {
+    "unexpected": "Ha ocurrido un error inesperado.",
+    "invalidLoginResponse": "Respuesta de login inválida: falta token.",
+    "requestFailed": "Error en la petición",
+    "serverConnection": "Error de conexión con el servidor",
+    "notAuthenticated": "No estás autenticado. Por favor, inicia sesión."
+  }
+}
