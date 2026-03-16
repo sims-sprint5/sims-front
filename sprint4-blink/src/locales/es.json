@@ -365,6 +365,8 @@
       "admin_emailPlaceholder": "admin@empresa.com",
       "admin_password": "Contraseña del Administrador",
       "admin_passwordPlaceholder": "••••••••",
+      "admin_passwordConfirmation": "Confirmar contraseña",
+      "changePasswordConfirmationPlaceholder": "••••••••",
       "creationInfo": "Completa todos los campos para crear una nueva compañía",
       "changePasswordLabel": "Cambiar Contraseña del Administrador (Opcional)",
       "changePasswordPlaceholder": "Dejar en blanco para mantener la contraseña actual",

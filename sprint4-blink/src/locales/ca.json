@@ -366,6 +366,8 @@
       "admin_emailPlaceholder": "admin@empresa.com",
       "admin_password": "Contrasenya de l'Administrador",
       "admin_passwordPlaceholder": "••••••••",
+      "admin_passwordConfirmation": "Confirma la contrasenya",
+      "changePasswordConfirmationPlaceholder": "••••••••",
       "creationInfo": "Omple tots els camps per crear una nova companyia",
       "changePasswordLabel": "Canviar Contrasenya de l'Administrador (Opcional)",
       "changePasswordPlaceholder": "Deixa en blanc per mantindre la contrasenya actual",
