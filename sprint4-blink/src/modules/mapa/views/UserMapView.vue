@@ -64,7 +64,7 @@ const renderVehicles = (vehicles: Vehicle[]) => {
   if (!map) return
 
   vehicles.forEach(vehicle => {
-    if (!vehicle.current_latitude || !vehicle.current_longitude) return
+    if (vehicle.current_latitude == null || vehicle.current_longitude == null) return
 
     const marker = L.marker(
       [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
@@ -81,11 +81,13 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       }
     )
 
-    marker.bindPopup(`
-      <div class="p-2">
-        <b>${vehicle.license_plate}</b>
-      </div>
-    `)
+    const popupContent = document.createElement('div')
+    popupContent.className = 'p-2'
+    const boldElement = document.createElement('b')
+    boldElement.textContent = vehicle.license_plate ?? ''
+    popupContent.appendChild(boldElement)
+
+    marker.bindPopup(popupContent)
 
     marker.addTo(map!)
   })

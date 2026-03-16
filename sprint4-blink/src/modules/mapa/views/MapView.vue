@@ -103,7 +103,7 @@
     <BaseModal
       :show="showDeleteModal"
       :title="$t('mapa.deleteZone')"
-      message=""
+      :message="$t('mapa.deleteConfirm', { name: selectedGeofence?.name || '' })"
       type="danger"
       @close="handleCancelDelete"
       @confirm="handleConfirmDelete"
@@ -126,9 +126,11 @@ import CustomModal from '../components/CustomModal.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '../services/vehicle.service'
 import type { Geofence, VehicleGeofenceLog, Vehicle } from '../types/geofence.types'
+import { useTranslateError } from '@/shared/composables/useTranslateError'
 
 const { success, error } = useToast()
 const { t } = useI18n()
+const { translateErrorMessage } = useTranslateError()
 
 // State
 const geofences = ref<Geofence[]>([])
@@ -161,7 +163,8 @@ const loadGeofences = async () => {
   try {
     geofences.value = await geofenceService.getGeofences()
   } catch (errorMsg: any) {
-    error(errorMsg.message || t('mapa.loadError'))
+    const translatedMessage = translateErrorMessage(errorMsg?.message)
+    error(translatedMessage || t('mapa.loadError'))
   } finally {
     loading.value = false
   }
@@ -262,7 +265,7 @@ const handleCreateGeofence = async (payload: any) => {
 const handleUpdateGeofence = async (payload: any) => {
   if (!editingGeofence.value) return
 
-  submitting.value = false
+  submitting.value = true
   try {
     await geofenceService.updateGeofence(editingGeofence.value.geofence_id, payload)
     success(t('mapa.updateSuccess'))
