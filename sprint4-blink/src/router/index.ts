@@ -9,6 +9,7 @@ import { usersRoutes } from '../modules/users/routes';
 import { vehiclesRoutes } from '../modules/vehicles/routes';
 import { reservationsRoutes } from '../modules/reservations/routes';
 import { ticketsRoutes } from '../modules/tickets/routes';
+import mapaRoutes from '../modules/mapa/routes';
 import { i18n } from '@/i18n';
 
 const routes: RouteRecordRaw[] = [
@@ -23,6 +24,7 @@ const routes: RouteRecordRaw[] = [
   ...vehiclesRoutes,
   ...reservationsRoutes,
   ...ticketsRoutes,
+  ...mapaRoutes,
   {
     path: '/:pathMatch(.*)*',
     redirect: '/login',

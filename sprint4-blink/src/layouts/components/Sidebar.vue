@@ -188,7 +188,7 @@ const getItemClasses = (item: NavItem) => {
 
 const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.dashboard', href: '/dashboard', icon: HomeIcon },
-  { nameKey: 'nav.map', href: '#', icon: MapPinIcon },
+  { nameKey: 'nav.map', href: '/mapa', icon: MapPinIcon },
   { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
   { nameKey: 'nav.bookings', href: '/reservation', icon: ReservesIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
@@ -198,7 +198,7 @@ const adminNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.users', href: '/admin/users', icon: UsersIcon },
   { nameKey: 'nav.vehicles', href: '/admin/vehicles', icon: TruckIcon },
   { nameKey: 'nav.reservationsAdmin', href: '/admin/reservations', icon: ReservesIcon },
-  { nameKey: 'nav.geofencing', href: '#', icon: MapPinIcon },
+  { nameKey: 'nav.geofencing', href: '/geofencing', icon: MapPinIcon },
   { nameKey: 'nav.tickets', href: '/admin/tickets', icon: TicketIcon },
 ])
 </script>
