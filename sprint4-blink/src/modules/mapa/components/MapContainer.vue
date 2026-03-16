@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, nextTick } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch, nextTick } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import '@geoman-io/leaflet-geoman-free'
@@ -34,6 +34,12 @@ let map: L.Map | null = null
 const geofenceLayersMap = new Map<number, L.Circle>()
 const vehicleMarkersMap = new Map<number, L.Marker>()
 let userLocationMarker: L.CircleMarker | null = null
+
+const logMapWarning = (message: string, details?: unknown) => {
+  if (import.meta.env.DEV) {
+    console.warn(`[mapa] ${message}`, details)
+  }
+}
 
 const defaultMarkerIcon = L.icon({
   iconRetinaUrl: markerIcon2x,
@@ -143,7 +149,7 @@ const getUserLocation = () => {
   // Once HTTPS is configured (with lvh.me), this will work on all domains
   
   if (!navigator.geolocation) {
-    console.warn('Geolocation is not supported by this browser')
+    logMapWarning('Geolocation is not supported by this browser')
     return
   }
 
@@ -183,7 +189,7 @@ const getUserLocation = () => {
       }
     },
     (error) => {
-      console.warn('Error getting user location:', error.message)
+      logMapWarning('Error getting user location', error.message)
     },
     {
       enableHighAccuracy: true,
@@ -268,6 +274,17 @@ onMounted(() => {
   nextTick(() => {
     initMap()
   })
+})
+
+onBeforeUnmount(() => {
+  geofenceLayersMap.forEach(circle => circle.remove())
+  geofenceLayersMap.clear()
+  vehicleMarkersMap.forEach(marker => marker.remove())
+  vehicleMarkersMap.clear()
+  userLocationMarker?.remove()
+  userLocationMarker = null
+  map?.remove()
+  map = null
 })
 
 // Watch for changes in geofences and vehicles

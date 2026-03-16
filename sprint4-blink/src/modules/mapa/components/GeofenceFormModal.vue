@@ -56,10 +56,13 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 @blur="form.errors.type = form.validateType(form.formData.type)"
               >
-                <option value="allowed">{{ $t('mapa.types.allowed') }}</option>
-                <option value="restricted">{{ $t('mapa.types.restricted') }}</option>
-                <option value="parking">{{ $t('mapa.types.parking') }}</option>
-                <option value="service_area">{{ $t('mapa.types.service_area') }}</option>
+                  <option
+                    v-for="option in geofenceTypeOptions"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ $t(option.label) }}
+                  </option>
               </select>
               <p v-if="form.errors.type" class="text-red-500 text-sm mt-1">
                 {{ $t(form.errors.type) }}
@@ -139,6 +142,15 @@ import 'leaflet/dist/leaflet.css'
 import { BaseInput, BaseButton } from '@/components/base'
 import { useGeofenceForm } from '../composables/useGeofenceForm'
 import type { Geofence } from '../types/geofence.types'
+
+const DEFAULT_MAP_CENTER: [number, number] = [41.3851, 2.1734]
+
+const geofenceTypeOptions = [
+  { value: 'allowed', label: 'mapa.types.allowed' },
+  { value: 'restricted', label: 'mapa.types.restricted' },
+  { value: 'parking', label: 'mapa.types.parking' },
+  { value: 'service_area', label: 'mapa.types.service_area' }
+] as const
 
 interface GeofenceFormModalProps {
   open: boolean
@@ -231,7 +243,7 @@ const initMiniMap = async () => {
   destroyMiniMap()
 
   miniMap = L.map(miniMapEl.value, {
-    center: [41.3851, 2.1734],
+    center: DEFAULT_MAP_CENTER,
     zoom: 13,
     layers: [
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

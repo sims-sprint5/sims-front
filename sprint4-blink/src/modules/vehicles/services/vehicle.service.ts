@@ -54,10 +54,15 @@ function toNumberOrNull(value: unknown): number | null {
 
 export const vehicleService = {
 
-    async getVehicles(page: number = 1, perPage: number = 10): Promise<VehiclesResponse> {
+  async getVehicles(page: number = 1, perPage: number = 10): Promise<VehiclesResponse> {
     const query = buildQuery({ page, per_page: perPage });
     const raw = await apiClient.get<any>(`/v1/vehicles${query}`);
     return normalizeVehiclesResponse(raw);
+  },
+
+  async getVehiclesList(page: number = 1, perPage: number = 200): Promise<Vehicle[]> {
+    const response = await this.getVehicles(page, perPage);
+    return Array.isArray(response.data) ? response.data : [];
   },
 
   async getVehicleById(id: number): Promise<Vehicle> {
@@ -99,6 +104,15 @@ export const vehicleService = {
     return normalizeVehicle(raw?.data ?? raw);
   },
 
+  async updateVehicleLocation(id: number, latitude: number, longitude: number): Promise<Vehicle> {
+    const raw = await apiClient.patch<any>(`/v1/vehicles/${id}/location`, {
+      latitude,
+      longitude,
+    });
+
+    return normalizeVehicle(raw?.data ?? raw);
+  },
+
   async deleteVehicle(id: number): Promise<void> {
     await apiClient.delete<void>(`/v1/vehicles/${id}`);
   },
@@ -120,3 +134,5 @@ export const vehicleService = {
 } as const;
 
 export type VehicleService = typeof vehicleService;
+
+export { normalizeVehicle };

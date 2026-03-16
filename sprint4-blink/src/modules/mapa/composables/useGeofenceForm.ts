@@ -1,6 +1,12 @@
 import { ref, computed, reactive } from 'vue'
 import type { Geofence, CreateGeofenceData, UpdateGeofenceData } from '../types/geofence.types'
-import { useGeofenceValidation } from '../utils/geofenceValidation'
+import {
+  validateGeofenceLatitude,
+  validateGeofenceLongitude,
+  validateGeofenceName,
+  validateGeofenceRadius,
+  validateGeofenceType
+} from '../utils/geofenceValidation'
 
 export interface GeofenceFormData {
   name: string
@@ -13,8 +19,11 @@ export interface GeofenceFormData {
 }
 
 export const useGeofenceForm = (initialGeofence?: Geofence) => {
-  const { validateName, validateRadius, validateLatitude, validateLongitude, validateType } =
-    useGeofenceValidation()
+  const validateName = validateGeofenceName
+  const validateRadius = validateGeofenceRadius
+  const validateLatitude = validateGeofenceLatitude
+  const validateLongitude = validateGeofenceLongitude
+  const validateType = validateGeofenceType
 
   const formData = reactive<GeofenceFormData>({
     name: initialGeofence?.name || '',

@@ -124,7 +124,7 @@ import GeofenceFormModal from '../components/GeofenceFormModal.vue'
 import GeofenceLogsModal from '../components/GeofenceLogsModal.vue'
 import CustomModal from '../components/CustomModal.vue'
 import { geofenceService } from '../services/geofence.service'
-import { vehicleService } from '../services/vehicle.service'
+import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import type { Geofence, VehicleGeofenceLog, Vehicle } from '../types/geofence.types'
 import { useTranslateError } from '@/shared/composables/useTranslateError'
 
@@ -157,6 +157,22 @@ const mapClickData = ref<{ center_latitude: number; center_longitude: number; ra
 // Refs
 // const mapContainer = ref<InstanceType<typeof MapContainer> | null>(null)
 
+const closeAllModals = () => {
+  showCreateModal.value = false
+  showEditModal.value = false
+  showDetailsModal.value = false
+  showLogsModal.value = false
+  showDeleteModal.value = false
+}
+
+const getErrorMessage = (err: unknown, fallback: string) => {
+  const message = err && typeof err === 'object' && 'message' in err
+    ? String((err as { message?: string }).message ?? '')
+    : ''
+
+  return translateErrorMessage(message) || fallback
+}
+
 // Load geofences and vehicles
 const loadGeofences = async () => {
   loading.value = true
@@ -172,9 +188,9 @@ const loadGeofences = async () => {
 
 const loadVehicles = async () => {
   try {
-    vehicles.value = await vehicleService.getVehicles()
-  } catch (errors: any) {
-    console.warn('Failed to load vehicles:', errors)
+    vehicles.value = await vehicleService.getVehiclesList()
+  } catch (err) {
+    error(getErrorMessage(err, t('mapa.loadError')))
   }
 }
 
@@ -182,34 +198,38 @@ const loadVehicles = async () => {
 const handleGeofenceCreatedOnMap = async (data: { center_latitude: number; center_longitude: number; radius: number }): Promise<void> => {
   // Save the map click data and open modal with pre-filled coordinates
   mapClickData.value = data
+  closeAllModals()
   showCreateModal.value = true
 }
 
 const handleGeofenceClick = (geofence: Geofence) => {
+  closeAllModals()
   selectedGeofence.value = geofence
   showDetailsModal.value = true
 }
 
 const handleEditGeofence = (geofence: Geofence) => {
+  closeAllModals()
   editingGeofence.value = geofence
   selectedGeofence.value = undefined
-  showDetailsModal.value = false
   showEditModal.value = true
 }
 
 const handleDeleteGeofence = (geofence: Geofence) => {
+  closeAllModals()
   deletingGeofence.value = geofence
   showDeleteModal.value = true
 }
 
 const handleViewLogs = async (geofence: Geofence) => {
+  closeAllModals()
   logsGeofence.value = geofence
   loadingLogs.value = true
   try {
     geofenceLogs.value = await geofenceService.getGeofenceLogs(geofence.geofence_id)
     showLogsModal.value = true
-  } catch (errors: any) {
-    error(errors.message || t('mapa.logsError'))
+  } catch (err) {
+    error(getErrorMessage(err, t('mapa.logsError')))
   } finally {
     loadingLogs.value = false
   }
@@ -217,6 +237,7 @@ const handleViewLogs = async (geofence: Geofence) => {
 
 // Modal handlers
 const handleOpenCreateModal = () => {
+  closeAllModals()
   editingGeofence.value = undefined
   showCreateModal.value = true
 }
@@ -255,8 +276,8 @@ const handleCreateGeofence = async (payload: any) => {
     success(t('mapa.createSuccess'))
     handleCloseCreateModal()
     await loadGeofences()
-  } catch (errors: any) {
-    error(errors.message || t('mapa.createError'))
+  } catch (err) {
+    error(getErrorMessage(err, t('mapa.createError')))
   } finally {
     submitting.value = false
   }
@@ -271,8 +292,8 @@ const handleUpdateGeofence = async (payload: any) => {
     success(t('mapa.updateSuccess'))
     handleCloseEditModal()
     await loadGeofences()
-  } catch (errors: any) {
-    error(errors.message || t('mapa.updateError'))
+  } catch (err) {
+    error(getErrorMessage(err, t('mapa.updateError')))
   } finally {
     submitting.value = false
   }
@@ -287,8 +308,8 @@ const handleConfirmDelete = async () => {
     success(t('mapa.deleteSuccess'))
     handleCancelDelete()
     await loadGeofences()
-  } catch (errors: any) {
-    error(errors.message || t('mapa.deleteError'))
+  } catch (err) {
+    error(getErrorMessage(err, t('mapa.deleteError')))
   } finally {
     submitting.value = false
   }

@@ -13,14 +13,64 @@
 import { onMounted, ref, nextTick } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import markerIcon from 'leaflet/dist/images/marker-icon.png'
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
+import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { geofenceService } from '../services/geofence.service'
-import { vehicleService } from '../services/vehicle.service'
+import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import type { Geofence, Vehicle } from '../types/geofence.types'
 
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let userMarker: L.Marker | null = null
+
+const defaultMarkerIcon = L.icon({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
+
+const createPopupRow = (label: string, value: string) => {
+  const row = document.createElement('div')
+  row.textContent = `${label}: ${value}`
+  return row
+}
+
+const createGeofencePopup = (geofence: Geofence) => {
+  const popupContent = document.createElement('div')
+  popupContent.className = 'p-2'
+
+  const title = document.createElement('b')
+  title.textContent = geofence.name
+  popupContent.appendChild(title)
+  popupContent.appendChild(document.createElement('br'))
+
+  if (geofence.description) {
+    const description = document.createElement('div')
+    description.textContent = geofence.description
+    popupContent.appendChild(description)
+  }
+
+  return popupContent
+}
+
+const createVehiclePopup = (vehicle: Vehicle) => {
+  const popupContent = document.createElement('div')
+  popupContent.className = 'p-2'
+
+  const title = document.createElement('b')
+  title.textContent = vehicle.license_plate ?? ''
+  popupContent.appendChild(title)
+  popupContent.appendChild(document.createElement('br'))
+  popupContent.appendChild(createPopupRow('Última actualización', String(vehicle.last_location_update || 'N/A')))
+
+  return popupContent
+}
 
 const getColorByType = (type: string): string => {
   const colors: Record<string, string> = {
@@ -49,12 +99,7 @@ const renderGeofences = (geofences: Geofence[]) => {
       }
     )
 
-    circle.bindPopup(`
-      <div class="p-2">
-        <b>${geofence.name}</b><br/>
-        ${geofence.description || ''}
-      </div>
-    `)
+    circle.bindPopup(createGeofencePopup(geofence))
 
     circle.addTo(map!)
   })
@@ -70,24 +115,11 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
       {
         title: vehicle.license_plate,
-        icon: L.icon({
-          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41]
-        })
+          icon: defaultMarkerIcon
       }
     )
 
-    const popupContent = document.createElement('div')
-    popupContent.className = 'p-2'
-    const boldElement = document.createElement('b')
-    boldElement.textContent = vehicle.license_plate ?? ''
-    popupContent.appendChild(boldElement)
-
-    marker.bindPopup(popupContent)
+    marker.bindPopup(createVehiclePopup(vehicle))
 
     marker.addTo(map!)
   })
@@ -148,7 +180,7 @@ onMounted(async () => {
   try {
     const [geofences, vehicles] = await Promise.all([
       geofenceService.getGeofences(),
-      vehicleService.getVehicles()
+      vehicleService.getVehiclesList()
     ])
     renderGeofences(geofences)
     renderVehicles(vehicles)
