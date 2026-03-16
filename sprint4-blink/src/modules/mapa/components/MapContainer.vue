@@ -10,6 +10,9 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
+import markerIcon from 'leaflet/dist/images/marker-icon.png'
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
+import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import type { Geofence, Vehicle } from '../types/geofence.types'
 
 interface MapEmits {
@@ -30,7 +33,56 @@ const mapContainer = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 const geofenceLayersMap = new Map<number, L.Circle>()
 const vehicleMarkersMap = new Map<number, L.Marker>()
-let userLocationMarker: L.Marker | null = null
+let userLocationMarker: L.CircleMarker | null = null
+
+const defaultMarkerIcon = L.icon({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
+
+const createPopupRow = (label: string, value: string) => {
+  const row = document.createElement('div')
+  row.textContent = `${label}: ${value}`
+  return row
+}
+
+const createGeofencePopup = (geofence: Geofence) => {
+  const container = document.createElement('div')
+  container.className = 'p-2'
+
+  const title = document.createElement('b')
+  title.textContent = geofence.name
+  container.appendChild(title)
+  container.appendChild(document.createElement('br'))
+
+  container.appendChild(createPopupRow('Type', String(geofence.type)))
+  container.appendChild(createPopupRow('Radius', `${geofence.radius}m`))
+  container.appendChild(createPopupRow('Status', String(geofence.status)))
+
+  return container
+}
+
+const createVehiclePopup = (vehicle: Vehicle) => {
+  const container = document.createElement('div')
+  container.className = 'p-2'
+
+  const title = document.createElement('b')
+  title.textContent = 'Vehículo'
+  container.appendChild(title)
+  container.appendChild(document.createElement('br'))
+
+  container.appendChild(createPopupRow('Placa', String(vehicle.license_plate)))
+  container.appendChild(
+    createPopupRow('Última actualización', String(vehicle.last_location_update || 'N/A'))
+  )
+
+  return container
+}
 
 const initMap = () => {
   if (!mapContainer.value) return
@@ -105,27 +157,25 @@ const getUserLocation = () => {
           userLocationMarker.remove()
         }
 
-        // Create a new marker for user location
-        userLocationMarker = L.marker([latitude, longitude], {
-          icon: L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-          }),
-          title: 'Mi ubicación'
+        // Create a new circle marker for user location
+        userLocationMarker = L.circleMarker([latitude, longitude], {
+          radius: 8,
+          color: '#dc2626',
+          fillColor: '#ef4444',
+          fillOpacity: 0.9,
+          weight: 2
         })
 
-        const popupContent = `
-          <div class="p-2">
-            <b>Tu ubicación</b><br/>
-            Lat: ${latitude.toFixed(4)}<br/>
-            Lon: ${longitude.toFixed(4)}
-          </div>
-        `
-        userLocationMarker.bindPopup(popupContent)
+        const popupContainer = document.createElement('div')
+        popupContainer.className = 'p-2'
+        const title = document.createElement('b')
+        title.textContent = 'Tu ubicación'
+        popupContainer.appendChild(title)
+        popupContainer.appendChild(document.createElement('br'))
+        popupContainer.appendChild(createPopupRow('Lat', latitude.toFixed(4)))
+        popupContainer.appendChild(createPopupRow('Lon', longitude.toFixed(4)))
+
+        userLocationMarker.bindPopup(popupContainer)
         userLocationMarker.addTo(map)
 
         // Center map on user location (optional, uncomment if desired)
@@ -173,16 +223,7 @@ const renderGeofences = () => {
       }
     )
 
-    // Add popup with geofence info
-    const popupContent = `
-      <div class="p-2">
-        <b>${geofence.name}</b><br/>
-        Type: ${geofence.type}<br/>
-        Radius: ${geofence.radius}m<br/>
-        Status: ${geofence.status}
-      </div>
-    `
-    circle.bindPopup(popupContent)
+    circle.bindPopup(createGeofencePopup(geofence))
 
     // Click event to select geofence
     circle.on('click', () => {
@@ -207,30 +248,16 @@ const renderVehicles = () => {
   vehicleMarkersMap.clear()
 
   props.vehicles.forEach(vehicle => {
-    if (vehicle.current_latitude && vehicle.current_longitude) {
+    if (vehicle.current_latitude != null && vehicle.current_longitude != null) {
       const marker = L.marker(
         [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
         {
           title: vehicle.license_plate,
-          icon: L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-          })
+          icon: defaultMarkerIcon
         }
       )
 
-      const popupContent = `
-        <div class="p-2">
-          <b>Vehículo</b><br/>
-          Placa: ${vehicle.license_plate}<br/>
-          Última actualización: ${vehicle.last_location_update || 'N/A'}
-        </div>
-      `
-      marker.bindPopup(popupContent)
+      marker.bindPopup(createVehiclePopup(vehicle))
       marker.addTo(map!)
       vehicleMarkersMap.set(vehicle.vehicle_id, marker)
     }

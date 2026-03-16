@@ -35,7 +35,7 @@
               :label="$t('mapa.form.name')"
               :placeholder="$t('mapa.form.namePlaceholder')"
               :error="form.errors.name ? $t(form.errors.name) : undefined"
-              @blur="form.validateName(form.formData.name)"
+              @blur="form.errors.name = form.validateName(form.formData.name)"
             />
 
             <!-- Description -->
@@ -54,7 +54,7 @@
               <select
                 v-model="form.formData.type"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                @blur="form.validateType(form.formData.type)"
+                @blur="form.errors.type = form.validateType(form.formData.type)"
               >
                 <option value="allowed">{{ $t('mapa.types.allowed') }}</option>
                 <option value="restricted">{{ $t('mapa.types.restricted') }}</option>
@@ -74,7 +74,7 @@
               step="0.0001"
               :placeholder="$t('mapa.form.latitudePlaceholder')"
               :error="form.errors.center_latitude ? $t(form.errors.center_latitude) : undefined"
-              @blur="form.validateLatitude(form.formData.center_latitude)"
+              @blur="form.errors.center_latitude = form.validateLatitude(form.formData.center_latitude)"
             />
 
             <!-- Center Longitude -->
@@ -85,7 +85,7 @@
               step="0.0001"
               :placeholder="$t('mapa.form.longitudePlaceholder')"
               :error="form.errors.center_longitude ? $t(form.errors.center_longitude) : undefined"
-              @blur="form.validateLongitude(form.formData.center_longitude)"
+              @blur="form.errors.center_longitude = form.validateLongitude(form.formData.center_longitude)"
             />
 
             <!-- Radius -->
@@ -95,7 +95,7 @@
               :label="$t('mapa.form.radius')"
               :placeholder="$t('mapa.form.radiusPlaceholder')"
               :error="form.errors.radius ? $t(form.errors.radius) : undefined"
-              @blur="form.validateRadius(form.formData.radius)"
+              @blur="form.errors.radius = form.validateRadius(form.formData.radius)"
             />
 
             <!-- Status -->
@@ -119,7 +119,7 @@
               </BaseButton>
               <BaseButton
                 variant="primary"
-                :loading="isLoading"
+                :loading="props.loading"
                 @click="handleSubmit"
               >
                 {{ $t('common.save') }}
@@ -161,7 +161,6 @@ const emit = defineEmits<{
 }>()
 
 const form = useGeofenceForm(props.editingGeofence)
-const isLoading = ref(false)
 const miniMapEl = ref<HTMLElement | null>(null)
 const isEditMode = computed(() => !!props.editingGeofence)
 
@@ -194,7 +193,7 @@ const updatePreview = () => {
   const lng = Number(form.formData.center_longitude)
   const radius = Number(form.formData.radius)
 
-  if (!lat || !lng) return
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return
 
   const latlng = L.latLng(lat, lng)
 
@@ -265,13 +264,7 @@ const onClose = () => {
 
 const handleSubmit = () => {
   if (!form.validateAll()) return
-
-  isLoading.value = true
-  try {
-    emit('submit', form.getPayload())
-  } finally {
-    isLoading.value = false
-  }
+  emit('submit', form.getPayload())
 }
 
 // Watch radius changes to update circle preview on mini map
