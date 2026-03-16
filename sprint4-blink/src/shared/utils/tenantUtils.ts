@@ -1,35 +1,29 @@
-/**
- * Extracts the tenant slug from the current hostname.
- * - uberddos.lvh.me → 'uberddos'
- * - localhost / 127.0.0.1 → 'localhost'
- */
+// Regex pattern to detect local IP addresses (e.g., 192.168.1.1)
+const LOCAL_IP_PATTERN = /^\d+\.\d+\.\d+\.\d+$/;
+
+
+function isLocalHost(hostname: string): boolean {
+  return hostname === 'localhost' || hostname === '127.0.0.1' || LOCAL_IP_PATTERN.test(hostname);
+}
+
 export function getCurrentTenant(): string {
   const hostname = window.location.hostname;
 
-  // Localhost o IP local
-  if (hostname === 'localhost' || hostname === '127.0.0.1' || /^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+  if (isLocalHost(hostname)) {
     return 'localhost';
   }
 
-  // Extreu el primer part del hostname com a tenant
   if (hostname.includes('.')) {
-    const parts = hostname.split('.');
-    return parts[0] || 'localhost';
+    return hostname.split('.')[0] || 'localhost';
   }
 
   return 'localhost';
 }
 
-/**
- * Determines if the current hostname is a superadmin host (localhost or 127.0.0.1).
- * Used for routing to separate superadmin dashboard from tenant dashboards.
- */
 export function isSuperadminHost(): boolean {
-  const hostname = window.location.hostname;
-  return hostname === 'localhost' || hostname === '127.0.0.1' || /^\d+\.\d+\.\d+\.\d+$/.test(hostname);
+  return isLocalHost(window.location.hostname);
 }
 
-/** Returns the API port from the current URL, VITE_API_PORT env var, or the protocol default. */
 function getApiPort(): string {
   if (window.location.port) {
     return `:${window.location.port}`;
@@ -43,17 +37,12 @@ function getApiPort(): string {
   return window.location.protocol === 'https:' ? ':443' : ':8000';
 }
 
-/**
- * Builds the API base URL for the current tenant.
- * - uberddos.lvh.me:5173 → http://uberddos.lvh.me:5173/api  (proxied by Vite in dev)
- * - localhost:5173        → http://localhost:5173/api
- */
+
 export function getTenantApiBaseUrl(): string {
-  const tenant = getCurrentTenant();
   const protocol = window.location.protocol;
   const port = getApiPort();
 
-  if (tenant === 'localhost' || /^\d+\.\d+\.\d+\.\d+$/.test(tenant)) {
+  if (isSuperadminHost()) {
     return `${protocol}//localhost${port}/api`;
   }
 
@@ -75,17 +64,6 @@ export function getTenantInfo() {
     port: window.location.port,
     protocol: window.location.protocol,
     apiBaseUrl: getTenantApiBaseUrl(),
-  };
-}
-
-/**
- * Returns the current application context based on the hostname.
- * Used in router guards to determine whether to show superadmin or tenant routes.
- */
-export function getCurrentContext(): { isSuperadmin: boolean; tenant: string } {
-  return {
-    isSuperadmin: isSuperadminHost(),
-    tenant: getCurrentTenant(),
   };
 }
 

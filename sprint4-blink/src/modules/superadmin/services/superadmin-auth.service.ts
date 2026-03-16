@@ -1,15 +1,9 @@
 import axios from 'axios';
 import type { User } from '@/modules/auth/types/auth.types';
 
-/**
- * Client HTTP per al superadmin.
- *
- * IMPORTANT: Usem el proxy de Vite (/api → http://localhost:8000) per evitar CORS.
- * NO fem servir el apiClient normal perquè aquell afegeix la capçalera X-Tenant
- * basada en el subdomini, cosa que el superadmin no necessita.
- */
+
 const superadminAxios = axios.create({
-    baseURL: '/api',   // Proxy de Vite: /api → http://localhost:8000/api
+    baseURL: '/api',
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -32,7 +26,6 @@ export const superadminAuthService = {
     async login(credentials: { email: string; password: string }): Promise<{ token: string; user: User }> {
         const { data } = await superadminAxios.post('/v1/superadmin/auth/login', credentials);
 
-        // The backend returns either "user", "superadmin", or wrapped in "data"
         const token: string =
             data?.token ?? data?.access_token ?? data?.data?.token ?? data?.data?.access_token;
         const user: User =
@@ -47,10 +40,8 @@ export const superadminAuthService = {
         localStorage.setItem(SUPERADMIN_TOKEN_KEY, token);
         localStorage.setItem(SUPERADMIN_USER_KEY, JSON.stringify(superadminUser));
 
-        // Reutilitzem els mateixos camps que authService perquè el guard i useUser funcionin
         localStorage.setItem('auth_token', token);
         localStorage.setItem('auth_user', JSON.stringify(superadminUser));
-        // Sense tenant (el guard el saltarà per requiresRole: 'superadmin')
         localStorage.removeItem('auth_tenant');
 
         return { token, user: superadminUser as User };

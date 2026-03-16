@@ -6,11 +6,6 @@ import type {
   TenantsResponse,
 } from '../types/superadmin.types';
 
-/**
- * Client HTTP per al superadmin.
- * Usa el proxy de Vite (/api) però SENSE la capçalera X-Tenant,
- * ja que els endpoints de superadmin no necessiten tenant.
- */
 const superadminHttp = axios.create({
   baseURL: '/api',
   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
