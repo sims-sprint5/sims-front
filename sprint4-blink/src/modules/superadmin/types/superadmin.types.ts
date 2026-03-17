@@ -21,6 +21,7 @@ export interface UpdateTenantData {
     name: string;
     admin_email: string;
     admin_password?: string | undefined;
+    admin_password_confirmation?: string | undefined;
 }
 
 export interface TenantsResponse {

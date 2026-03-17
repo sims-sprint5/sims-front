@@ -71,7 +71,17 @@ export const superadminService = {
   },
 
   async updateTenant(data: UpdateTenantData): Promise<Tenant> {
-    const raw = await superadminHttp.put<any>(`/v1/superadmin/tenants/${data.id}`, data);
+    const payload: any = {
+      name: data.name,
+      admin_email: data.admin_email,
+    };
+    
+    if (data.admin_password !== undefined) {
+      payload.admin_password = data.admin_password;
+      payload.admin_password_confirmation = data.admin_password_confirmation;
+    }
+    
+    const raw = await superadminHttp.put<any>(`/v1/superadmin/tenants/${data.id}`, payload);
     return normalizeTenant(raw?.data ?? raw);
   },
 

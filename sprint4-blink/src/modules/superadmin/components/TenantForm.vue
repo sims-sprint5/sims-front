@@ -34,6 +34,8 @@
           :label="$t('tenants.form.admin_password')"
           :type="showPassword ? 'text' : 'password'"
           :placeholder="$t('tenants.form.admin_passwordPlaceholder')"
+          :showPasswordToggle="true"
+          @togglePassword="toggleShowPassword"
           required
         />
 
@@ -43,6 +45,8 @@
           :label="$t('tenants.form.admin_passwordConfirmation')"
           :type="showPasswordConfirmation ? 'text' : 'password'"
           :placeholder="$t('tenants.form.changePasswordConfirmationPlaceholder')"
+            :showPasswordToggle="true"
+            @togglePassword="toggleShowPasswordConfirmation"
           :error="passwordMismatchError"
           required
         />
@@ -89,6 +93,8 @@
             :label="$t('tenants.form.admin_password')"
             :type="showPassword ? 'text' : 'password'"
             :placeholder="$t('tenants.form.changePasswordPlaceholder')"
+            :showPasswordToggle="true"
+            @togglePassword="toggleShowPassword"
           />
 
           <!-- Password Confirmation -->
@@ -97,6 +103,8 @@
             :label="$t('tenants.form.admin_passwordConfirmation')"
             :type="showPasswordConfirmation ? 'text' : 'password'"
             :placeholder="$t('tenants.form.changePasswordConfirmationPlaceholder')"
+            :showPasswordToggle="true"
+            @togglePassword="toggleShowPasswordConfirmation"
             :error="passwordMismatchError"
             class="mt-3"
           />
@@ -152,8 +160,7 @@ const isEditing = ref(false);
 const showPassword = ref(false);
 const showPasswordConfirmation = ref(false);
 
-// Toggling password method
-const toggleShowpassword = () => {
+const toggleShowPassword = () => {
   showPassword.value = !showPassword.value;
 };
 
@@ -218,8 +225,13 @@ const handleSubmit = () => {
       id: formData.value.id,
       name: formData.value.name,
       admin_email: formData.value.admin_email,
-      admin_password: formData.value.admin_password || undefined,
     };
+    
+    if (formData.value.admin_password) {
+      payload.admin_password = formData.value.admin_password;
+      payload.admin_password_confirmation = formData.value.admin_password_confirmation;
+    }
+    
     emit('submit', payload);
   } else {
     const payload: CreateTenantData = {
