@@ -8,7 +8,7 @@ on:
 
 env:
   SSH_PORT: 22
-  HEALTHCHECK_URL: http://178.62.229.151/login
+  HEALTHCHECK_URL: https://simsgrup2.app/login
   FRONTEND_DIR: sprint4-blink
 
 jobs:

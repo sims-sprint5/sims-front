@@ -40,15 +40,19 @@ function getApiPort(): string {
  * - localhost:5173        → http://localhost:5173/api
  */
 export function getTenantApiBaseUrl(): string {
-  const tenant = getCurrentTenant();
+  const hostname = window.location.hostname;
   const protocol = window.location.protocol;
-  const port = getApiPort();
+  const isLocalLike =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    /^\d+\.\d+\.\d+\.\d+$/.test(hostname);
 
-  if (tenant === 'localhost' || /^\d+\.\d+\.\d+\.\d+$/.test(tenant)) {
+  if (isLocalLike) {
+    const port = getApiPort();
     return `${protocol}//localhost${port}/api`;
   }
 
-  return `${protocol}//${window.location.hostname}${port}/api`;
+  return `${protocol}//${hostname}/api`;
 }
 
 /** Builds the full API URL for a given endpoint path. */
