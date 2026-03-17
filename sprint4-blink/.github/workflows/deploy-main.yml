@@ -1,0 +1,106 @@
+name: Deploy Frontend Main to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  SSH_PORT: 22
+  HEALTHCHECK_URL: http://178.62.229.151/login
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Build Frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    name: Deploy to DigitalOcean
+    timeout-minutes: 20
+    if: success()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Setup SSH key
+        env:
+          SSH_KEY_B64: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY_B64" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "${SSH_PORT}" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          cat >> ~/.ssh/config << EOF
+          Host deploy
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking no
+            Port ${SSH_PORT}
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Upload dist to droplet
+        env:
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          rsync -az --delete \
+            -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p ${SSH_PORT}" \
+            dist/ \
+            "$SSH_USER@$SSH_HOST:/tmp/sims-front-dist/"
+
+      - name: Publish on Nginx and reload
+        env:
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p "${SSH_PORT}" "$SSH_USER@$SSH_HOST" << 'EOF'
+            set -e
+            rm -rf /usr/share/nginx/html/*
+            cp -r /tmp/sims-front-dist/* /usr/share/nginx/html/
+            chown -R www-data:www-data /usr/share/nginx/html
+            chmod -R 755 /usr/share/nginx/html
+            rm -rf /tmp/sims-front-dist
+            nginx -t
+            systemctl reload nginx
+          EOF
+
+      - name: Healthcheck frontend
+        run: |
+          curl -fSsL "${HEALTHCHECK_URL}" > /dev/null
+          echo "Frontend deployed and reachable: ${HEALTHCHECK_URL}"
