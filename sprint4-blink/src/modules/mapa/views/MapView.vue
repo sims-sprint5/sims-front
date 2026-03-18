@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="h-[calc(100vh-64px)] flex flex-col gap-4 p-4 overflow-hidden">
+    <div class="h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] flex flex-col gap-4 p-3 sm:p-4 overflow-hidden">
       <!-- Map Section (80%) -->
       <div class="flex-1 min-h-0">
         <MapContainer
@@ -15,7 +15,7 @@
       </div>
 
       <!-- Table Section (20%) -->
-      <div class="h-1/5 overflow-y-auto">
+      <div class="h-56 md:h-1/5 overflow-y-auto">
         <GeofenceTable
           :geofences="geofences"
           :loading="loading"
@@ -53,7 +53,7 @@
       @close="handleCloseDetailsModal"
     >
       <div class="space-y-4" v-if="selectedGeofence">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <p class="text-sm text-gray-600">{{ $t('mapa.form.type') }}</p>
             <p class="font-semibold">{{ $t(`mapa.types.${selectedGeofence.type}`) }}</p>

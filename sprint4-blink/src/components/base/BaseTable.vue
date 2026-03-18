@@ -29,7 +29,7 @@
           <td
             v-for="column in columns"
             :key="column.key"
-            class="px-6 py-4 whitespace-nowrap text-sm"
+            class="px-4 py-4 text-sm break-words align-top sm:px-6"
             :class="column.align === 'right' ? 'text-right' : column.align === 'center' ? 'text-center' : 'text-left'"
           >
             <slot :name="`cell-${column.key}`" :item="item" :value="getNestedValue(item, column.key)">

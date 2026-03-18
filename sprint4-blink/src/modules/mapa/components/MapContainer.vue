@@ -288,13 +288,25 @@ onBeforeUnmount(() => {
 })
 
 // Watch for changes in geofences and vehicles
-watch(() => props.geofences, () => {
+watch(() => props.geofences.map((g) => [
+  g.geofence_id,
+  g.center_latitude,
+  g.center_longitude,
+  g.radius,
+  g.status,
+  g.type,
+]), () => {
   renderGeofences()
-}, { deep: true })
+})
 
-watch(() => props.vehicles, () => {
+watch(() => (props.vehicles ?? []).map((v) => [
+  v.vehicle_id,
+  v.current_latitude,
+  v.current_longitude,
+  v.last_location_update,
+]), () => {
   renderVehicles()
-}, { deep: true })
+})
 
 const fitBounds = () => {
   if (!map || geofenceLayersMap.size === 0) return

@@ -47,10 +47,10 @@ const userInitials = computed(() => {
 </script>
 
 <template>
-    <nav class="sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200 px-4 py-3 sm:px-6">
-        <div class="flex items-center justify-between">
+    <nav class="sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200 px-3 py-3 sm:px-6">
+        <div class="flex items-center justify-between gap-3">
             <!-- Menu button & Title -->
-            <div class="flex items-center gap-4">
+            <div class="flex min-w-0 items-center gap-2 sm:gap-4">
                 <button v-if="showMenuButton" @click="handleMenuClick"
                     class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
                     :aria-label="t('nav.menu')">
@@ -60,14 +60,14 @@ const userInitials = computed(() => {
                     </svg>
                 </button>
 
-                <h1 class="text-xl font-medium text-gray-900">
+                <h1 class="truncate text-base font-medium text-gray-900 sm:text-xl">
                     {{ title }}
                 </h1>
             </div>
 
             <!-- User name and Logout button -->
-            <div class="flex items-center gap-6">
-                <div v-if="user?.name" class="flex items-center gap-3 pr-4 border-r border-gray-200">
+            <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
+                <div v-if="user?.name" class="hidden md:flex items-center gap-3 pr-4 border-r border-gray-200">
                     <!-- Avatar con gradiente o imagen -->
                     <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
                         <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
@@ -85,7 +85,7 @@ const userInitials = computed(() => {
 
                 <LanguageSelector />
 
-                <BaseButton v-if="showLogoutButton" @click="handleLogoutClick" variant="tertiary" size="sm">
+                <BaseButton v-if="showLogoutButton" @click="handleLogoutClick" variant="tertiary" size="sm" class="whitespace-nowrap">
                     {{ t('common.logout') }}
                 </BaseButton>
             </div>

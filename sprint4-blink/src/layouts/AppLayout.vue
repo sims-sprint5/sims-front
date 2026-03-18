@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-indigo-50/30 flex">
-    <aside class="shrink-0 h-screen sticky top-0">
+    <aside class="hidden lg:block shrink-0 h-screen sticky top-0">
       <Sidebar :is-collapsed="isCollapsed" class="h-full" />
     </aside>
 
@@ -16,12 +16,27 @@
         <slot />
       </main>
     </div>
+
+    <Teleport to="body">
+      <div
+        v-if="isMobileSidebarOpen"
+        class="fixed inset-0 z-40 bg-black/40 lg:hidden"
+        @click="closeMobileSidebar"
+      />
+
+      <aside
+        class="fixed left-0 top-0 bottom-0 z-50 w-72 bg-gray-900 transition-transform duration-200 ease-in-out lg:hidden"
+        :class="isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+      >
+        <Sidebar :is-collapsed="false" class="h-full" />
+      </aside>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { authService } from '@/modules/auth/services/auth.service';
 import { useUser } from '@/modules/auth/composables/useUser';
 import Navbar from './components/Navbar.vue';
@@ -36,12 +51,27 @@ withDefaults(defineProps<Props>(), {
 });
 
 const router = useRouter();
+const route = useRoute();
 const isCollapsed = ref(true);
+const isMobileSidebarOpen = ref(false);
 const { loadUser, clearAvatar } = useUser();
 
 const toggleSidebar = () => {
+  if (window.innerWidth < 1024) {
+    isMobileSidebarOpen.value = !isMobileSidebarOpen.value;
+    return;
+  }
+
   isCollapsed.value = !isCollapsed.value;
 };
+
+const closeMobileSidebar = () => {
+  isMobileSidebarOpen.value = false;
+};
+
+watch(() => route.fullPath, () => {
+  closeMobileSidebar();
+});
 
 onMounted(async () => {
   try {

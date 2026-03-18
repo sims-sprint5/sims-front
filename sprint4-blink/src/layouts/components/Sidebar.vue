@@ -179,9 +179,9 @@ const navLinkClasses = computed(() => [
 const getItemClasses = (item: NavItem) => {
   const classes = [...navLinkClasses.value]
   if (route.path === item.href) {
-    classes.push('!bg-transparent', '!text-gray-400')
-  } else {
     classes.push('!bg-white/10', '!text-white')
+  } else {
+    classes.push('!bg-transparent', '!text-gray-400')
   }
   return classes.join(' ')
 }

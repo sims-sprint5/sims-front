@@ -11,7 +11,7 @@
       :columns="columns"
       :data="geofences"
       :loading="loading"
-      :empty-message="$t('mapa.noGeofences')"
+      :emptyText="$t('mapa.noGeofences')"
     >
       <template #cell-type="{ item }">
         <span

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-[560px]">
+  <div class="flex flex-col h-[min(70vh,560px)] sm:h-[560px]">
     <!-- Header del ticket -->
     <div class="border-b pb-4 mb-4">
       <div class="flex items-start justify-between gap-3">
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Bombolla missatge -->
-        <div :class="['max-w-[72%] flex flex-col', isAdminMessage(message) ? 'items-end' : 'items-start']">
+        <div :class="['max-w-[85%] sm:max-w-[72%] flex flex-col', isAdminMessage(message) ? 'items-end' : 'items-start']">
           <span class="text-xs font-medium mb-1 px-1" :class="isAdminMessage(message) ? 'text-purple-700' : 'text-gray-600'">
             {{ isAdminMessage(message) ? $t('adminTickets.chat.admin') : (message.usuario_nombre || ticket.usuario_nombre || $t('tickets.table.usuario')) }}
           </span>

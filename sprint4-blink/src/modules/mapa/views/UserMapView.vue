@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="h-[calc(100vh-64px)] flex flex-col p-4 overflow-hidden">
+    <div class="h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] flex flex-col p-3 sm:p-4 overflow-hidden">
       <!-- Map takes full height -->
       <div class="flex-1 min-h-0 rounded-lg overflow-hidden shadow-lg">
         <div ref="mapEl" class="w-full h-full"></div>

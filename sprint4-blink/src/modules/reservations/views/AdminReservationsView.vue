@@ -8,7 +8,7 @@
       </div>
 
       <div class="mb-6 rounded-lg bg-white p-4 shadow">
-        <div class="flex gap-4">
+        <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
             <BaseInput
               v-model="searchQuery"
@@ -18,7 +18,7 @@
             />
           </div>
 
-          <BaseButton variant="secondary" @click="handleRefresh">
+          <BaseButton variant="secondary" class="w-full sm:w-auto" @click="handleRefresh">
             {{ $t('filters.clear') }}
           </BaseButton>
         </div>
@@ -39,15 +39,15 @@ import ReservationLogTable from '@/modules/reservations/components/ReservationLo
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types';
 import { useToast } from '@/shared/composables/useToast';
+import { useDebouncedSearch } from '@/shared/composables/useDebouncedSearch';
 
 const { t } = useI18n();
 const toast = useToast();
+const { run: runDebouncedSearch } = useDebouncedSearch(200);
 
 const logs = ref<ReservationLog[]>([]);
 const loading = ref(false);
 const searchQuery = ref('');
-
-let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
 async function loadLogs() {
   loading.value = true;
@@ -62,11 +62,7 @@ async function loadLogs() {
 }
 
 function handleSearch() {
-  if (searchTimeout) {
-    clearTimeout(searchTimeout);
-  }
-
-  searchTimeout = setTimeout(async () => {
+  runDebouncedSearch(async () => {
     loading.value = true;
 
     try {
@@ -76,7 +72,7 @@ function handleSearch() {
     } finally {
       loading.value = false;
     }
-  }, 200);
+  });
 }
 
 function handleRefresh() {

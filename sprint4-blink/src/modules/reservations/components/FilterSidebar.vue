@@ -41,7 +41,7 @@ function onReset() {
 </script>
 
 <template>
-  <div class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 p-5 max-h-[calc(100vh-8.5rem)] overflow-auto">
+  <div class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 p-5 max-h-none lg:max-h-[calc(100vh-8.5rem)] overflow-visible lg:overflow-auto">
     <div class="flex items-center justify-between mb-5">
       <h2 class="text-base font-bold text-gray-900">Filtros</h2>
       <BaseButton size="sm" variant="secondary" :disabled="disabled" @click="onReset">
@@ -90,7 +90,7 @@ function onReset() {
 
       <section>
         <h3 class="text-sm font-semibold text-gray-900 mb-2">Año</h3>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <BaseInput
             :model-value="modelValue.yearFrom ?? ''"
             type="number"
