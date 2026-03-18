@@ -42,7 +42,6 @@ function normalizeTenant(raw: any): Tenant {
     domain: raw.domains?. [0]?.domain ?? '',
     email: raw.email ?? undefined,
     admin_email: raw.admin_email ?? undefined,
-    status: raw.status ?? 'active',
     created_at: raw.created_at ?? '',
     updated_at: raw.updated_at ?? '',
   };

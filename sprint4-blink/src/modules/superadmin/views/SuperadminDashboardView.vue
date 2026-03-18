@@ -3,18 +3,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $t('nav.dashboard') }}</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500">
                     <h4 class="text-gray-500 text-sm font-medium uppercase">{{ $t('tenants.title') }}</h4>
                     <p class="text-3xl font-bold text-indigo-600 mt-2">{{ totalTenants }}</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
-                    <h4 class="text-gray-500 text-sm font-medium uppercase">{{ $t('tenants.status.active') }}</h4>
-                    <p class="text-3xl font-bold text-green-600 mt-2">{{ activeTenants }}</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-500">
-                    <h4 class="text-gray-500 text-sm font-medium uppercase">{{ $t('tenants.status.inactive') }}</h4>
-                    <p class="text-3xl font-bold text-red-600 mt-2">{{ inactiveTenants }}</p>
                 </div>
             </div>
 
@@ -67,8 +59,6 @@ const tenants = ref<Tenant[]>([]);
 const loading = ref(false);
 
 const totalTenants = computed(() => tenants.value.length);
-const activeTenants = computed(() => tenants.value.filter(t => t.status === 'active').length);
-const inactiveTenants = computed(() => tenants.value.filter(t => t.status !== 'active').length);
 
 const chartData = computed(() => {
     if (tenants.value.length === 0) return [];

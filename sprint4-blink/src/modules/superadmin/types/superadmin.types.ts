@@ -4,7 +4,6 @@ export interface Tenant {
     domain: string;
     email?: string;
     admin_email?: string;
-    status?: 'active' | 'inactive';
     created_at: string;
     updated_at: string;
 }
