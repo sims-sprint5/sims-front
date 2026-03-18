@@ -4,6 +4,10 @@ import type {
   CreateTenantData,
   UpdateTenantData,
   TenantsResponse,
+  Superadmin,
+  CreateSuperadminData,
+  UpdateSuperadminData,
+  SuperadminsResponse,
 } from '../types/superadmin.types';
 
 const superadminHttp = axios.create({
@@ -87,5 +91,34 @@ export const superadminService = {
 
   async deleteTenant(id: string): Promise<void> {
     await superadminHttp.delete(`/v1/superadmin/tenants/${id}`);
+  },
+
+  async getAdmins(): Promise<SuperadminsResponse> {
+    const raw = await superadminHttp.get<any>('/v1/superadmin/admins');
+    return raw; // Assuming consistent response structure or add normalization if needed
+  },
+
+  async createAdmin(data: CreateSuperadminData): Promise<Superadmin> {
+    const raw = await superadminHttp.post<any>('/v1/superadmin/admins', data);
+    return raw.data ?? raw;
+  },
+
+  async updateAdmin(data: UpdateSuperadminData): Promise<Superadmin> {
+    const payload: any = {
+      name: data.name,
+      email: data.email,
+    };
+    
+    if (data.password !== undefined && data.password !== '') {
+      payload.password = data.password;
+      payload.password_confirmation = data.password_confirmation;
+    }
+    
+    const raw = await superadminHttp.put<any>(`/v1/superadmin/admins/${data.id}`, payload);
+    return raw.data ?? raw;
+  },
+
+  async deleteAdmin(id: string): Promise<void> {
+    await superadminHttp.delete(`/v1/superadmin/admins/${id}`);
   },
 };

@@ -47,7 +47,6 @@ const handleLogin = async () => {
         <BaseCard>
             <AuthLogo />
 
-            <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
                     Superadmin

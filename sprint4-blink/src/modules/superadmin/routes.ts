@@ -20,4 +20,24 @@ export const superadminRoutes: RouteRecordRaw[] = [
             titleKey: 'superadmin.title',
         },
     },
+    {
+        path: '/superadmin/tenants',
+        name: 'SuperadminTenants',
+        component: () => import('./views/TenantsView.vue'),
+        meta: {
+            requiresAuth: true,
+            requiresRole: 'superadmin',
+            titleKey: 'tenants.title',
+        },
+    },
+    {
+        path: '/superadmin/admins',
+        name: 'SuperadminAdmins',
+        component: () => import('./views/SuperadminsView.vue'),
+        meta: {
+            requiresAuth: true,
+            requiresRole: 'superadmin',
+            titleKey: 'superadmin.admins.title',
+        },
+    },
 ];

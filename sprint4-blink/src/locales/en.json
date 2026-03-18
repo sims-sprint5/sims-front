@@ -336,7 +336,40 @@
   },
   "superadmin": {
     "title": "Superadmin",
-    "description": "Manage system companies and superadministrators"
+    "description": "Manage system companies and superadministrators",
+    "admins": {
+      "title": "Superadmins",
+      "description": "Manage other superadministrators",
+      "empty": "No superadmins found",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "createdAt": "Created At"
+      },
+      "actions": {
+        "new": "New Superadmin"
+      },
+      "modal": {
+        "createTitle": "Create Superadmin",
+        "deleteTitle": "Delete Superadmin",
+        "deleteMessage": "Are you sure you want to delete {name}?"
+      },
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirmation": "Confirm Password"
+      },
+      "toast": {
+        "created": "Superadmin created successfully",
+        "deleted": "Superadmin deleted successfully"
+      },
+      "errors": {
+        "load": "Failed to load superadmins",
+        "create": "Failed to create superadmin",
+        "delete": "Failed to delete superadmin"
+      }
+    }
   },
   "tenants": {
     "title": "Company Management",

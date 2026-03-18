@@ -337,7 +337,40 @@
   },
   "superadmin": {
     "title": "Superadmin",
-    "description": "Gestiona les companyies i superadministradors del sistema"
+    "description": "Gestiona les companyies i superadministradors del sistema",
+    "admins": {
+      "title": "Gestió de Superadministradors",
+      "description": "Gestiona altres superadministradors",
+      "empty": "No s'han trobat superadministradors",
+      "table": {
+        "name": "Nom",
+        "email": "Correu electrònic",
+        "createdAt": "Data de creació"
+      },
+      "actions": {
+        "new": "Nou Superadministrador"
+      },
+      "modal": {
+        "createTitle": "Crear Superadministrador",
+        "deleteTitle": "Eliminar Superadministrador",
+        "deleteMessage": "Estàs segur que vols eliminar {name}? Aquesta acció no es pot desfer."
+      },
+      "form": {
+        "name": "Nom",
+        "email": "Correu electrònic",
+        "password": "Contrasenya",
+        "passwordConfirmation": "Confirmar contrasenya"
+      },
+      "toast": {
+        "created": "Superadministrador creat correctament",
+        "deleted": "Superadministrador eliminat correctament"
+      },
+      "errors": {
+        "load": "Error al carregar superadministradors",
+        "create": "Error al crear superadministrador",
+        "delete": "Error al eliminar superadministrador"
+      }
+    }
   },
   "tenants": {
     "title": "Gestió de Companyies",

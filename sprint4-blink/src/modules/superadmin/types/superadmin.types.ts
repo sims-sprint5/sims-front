@@ -35,3 +35,30 @@ export interface TenantsResponse {
         total: number;
     };
 }
+
+export interface Superadmin {
+    id: string;
+    name: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface CreateSuperadminData {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+}
+
+export interface UpdateSuperadminData {
+    id: string;
+    name: string;
+    email: string;
+    password?: string;
+    password_confirmation?: string;
+}
+
+export interface SuperadminsResponse {
+    data: Superadmin[];
+}

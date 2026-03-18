@@ -336,7 +336,40 @@
   },
   "superadmin": {
     "title": "Superadmin",
-    "description": "Gestiona las compañías y superadministradores del sistema"
+    "description": "Gestiona las compañías y superadministradores del sistema",
+    "admins": {
+      "title": "Gestión de Superadministradores",
+      "description": "Gestiona otros superadministradores",
+      "empty": "No se encontraron superadministradores",
+      "table": {
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "createdAt": "Fecha de creación"
+      },
+      "actions": {
+        "new": "Nuevo Superadministrador"
+      },
+      "modal": {
+        "createTitle": "Crear Superadministrador",
+        "deleteTitle": "Eliminar Superadministrador",
+        "deleteMessage": "¿Estás seguro de que quieres eliminar a {name}? Esta acción no se puede deshacer."
+      },
+      "form": {
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "passwordConfirmation": "Confirmar contraseña"
+      },
+      "toast": {
+        "created": "Superadministrador creado correctamente",
+        "deleted": "Superadministrador eliminado correctamente"
+      },
+      "errors": {
+        "load": "Error al cargar superadministradores",
+        "create": "Error al crear superadministrador",
+        "delete": "Error al eliminar superadministrador"
+      }
+    }
   },
   "tenants": {
     "title": "Gestión de Compañías",
