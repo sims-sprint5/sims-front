@@ -387,8 +387,8 @@
       "actions": "Actions"
     },
     "form": {
-      "id": "Company ID",
-      "idPlaceholder": "e.g. uberddos",
+      "id": "Domain",
+      "idPlaceholder": "e.g. mydomain",
       "name": "Name",
       "namePlaceholder": "Company name",
       "domain": "Domain",

@@ -388,8 +388,8 @@
       "actions": "Accions"
     },
     "form": {
-      "id": "Domini de la companyia",
-      "idPlaceholder": "ex: dominicompanyia",
+      "id": "Domini (domain)",
+      "idPlaceholder": "ex: elmeudomini",
       "name": "Nom",
       "namePlaceholder": "Nom de la companyia",
       "domain": "Domini",
