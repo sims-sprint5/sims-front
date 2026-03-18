@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-import { buildTenantApiUrl, getCurrentTenant } from '../utils/tenantUtils';
+import { buildTenantApiUrl, getCurrentTenant, hasTenantSubdomain } from '../utils/tenantUtils';
 import type { ApiError } from '../types/api.types';
 
 const axiosInstance = axios.create({
@@ -19,8 +19,13 @@ axiosInstance.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // Always send X-Tenant so the backend can validate the request origin
-  config.headers['X-Tenant'] = tenant;
+  // Only send X-Tenant for real tenant subdomains.
+  // On base domain (simsgrup2.app) backend should resolve central context without tenant header.
+  if (hasTenantSubdomain()) {
+    config.headers['X-Tenant'] = tenant;
+  } else if ('X-Tenant' in config.headers) {
+    delete (config.headers as Record<string, unknown>)['X-Tenant'];
+  }
   
   return config;
 });
