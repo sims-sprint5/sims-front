@@ -11,6 +11,12 @@ const AUTH_TOKEN_KEY = 'auth_token';
 const AUTH_USER_KEY = 'auth_user';
 const AUTH_TENANT_KEY = 'auth_tenant';
 
+function getAuthBasePath(): string {
+  return getCurrentTenant() === 'central'
+    ? '/v1/superadmin/auth'
+    : '/v1/auth';
+}
+
 function extractToken(payload: any): string | undefined {
   if (!payload || typeof payload !== 'object') return undefined;
   return payload.token || payload.access_token || payload.data?.token || payload.data?.access_token;
@@ -31,7 +37,7 @@ function extractUser(payload: any): User | undefined {
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const payload = await apiClient.post<any>('/v1/auth/login', credentials);
+    const payload = await apiClient.post<any>(`${getAuthBasePath()}/login`, credentials);
 
     const token = extractToken(payload);
     const user = extractUser(payload);
@@ -83,7 +89,7 @@ export const authService = {
 
   async logout(): Promise<void> {
     try {
-      await apiClient.post<void>('/v1/auth/logout');
+      await apiClient.post<void>(`${getAuthBasePath()}/logout`);
     } finally {
       this.clearAuth();
     }
@@ -91,14 +97,14 @@ export const authService = {
 
   async logoutAll(): Promise<void> {
     try {
-      await apiClient.post<void>('/v1/auth/logout-all');
+      await apiClient.post<void>(`${getAuthBasePath()}/logout-all`);
     } finally {
       this.clearAuth();
     }
   },
 
   async getCurrentUser(): Promise<User> {
-    const payload = await apiClient.get<any>('/v1/auth/me');
+    const payload = await apiClient.get<any>(`${getAuthBasePath()}/me`);
 
     // extractUser handles { user }, { data: { user } }, { data } wrappers; falls back to raw payload
     let raw = extractUser(payload) ?? payload;
@@ -123,7 +129,7 @@ export const authService = {
     password: string;
     password_confirmation: string;
   }): Promise<void> {
-    await apiClient.post<void>('/v1/auth/change-password', data);
+    await apiClient.post<void>(`${getAuthBasePath()}/change-password`, data);
   },
 
   setToken(token: string): void {

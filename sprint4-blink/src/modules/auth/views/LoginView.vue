@@ -12,6 +12,7 @@ import AuthLogo from '@/modules/auth/components/AuthLogo.vue';
 import { useToast } from '@/shared/composables/useToast';
 import { useI18n } from 'vue-i18n';
 import { useFormatError } from '@/shared/composables/useFormatError';
+import { getCurrentTenant } from '@/shared/utils/tenantUtils';
 
 const router = useRouter();
 const toast = useToast();
@@ -27,6 +28,7 @@ const loading = ref(false);
 const fieldErrors = ref<Record<string, string[]>>({});
 const validationErrors = ref<ValidationErrors>({});
 const showPassword = ref(false);
+const isCentralLogin = getCurrentTenant() === 'central';
 
 const validateForm = (): boolean => {
     validationErrors.value = validateLoginCredentials(form.email, form.password);
@@ -84,7 +86,7 @@ const getFieldError = (field: string): string => {
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
                     {{ $t('auth.login.header', { app: $t('app.name') }) }}
                 </h1>
-                <p class="text-gray-600">
+                <p v-if="!isCentralLogin" class="text-gray-600">
                     {{ $t('auth.login.noAccount') }}
                     <router-link to="/register" class="text-green-600 hover:text-green-700 font-medium">
                         {{ $t('auth.login.goRegister') }}
