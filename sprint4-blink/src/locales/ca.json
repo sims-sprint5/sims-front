@@ -19,7 +19,7 @@
   },
   "language": {
     "label": "Idioma",
-    "ca": "proba",
+    "ca": "Català",
     "es": "Espanyol",
     "en": "Anglés"
   },
@@ -54,7 +54,7 @@
       "goRegister": "Crear compte"
       ,
       "forgotPassword": "Has oblidat la contrasenya?",
-      "welcome": "Benvingut/da {name}!",
+      "welcome": "holaaaaaa/da {name}!",
       "genericError": "Error en iniciar sessió. Torna-ho a intentar."
     },
     "register": {
