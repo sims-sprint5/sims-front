@@ -336,6 +336,15 @@
     "notAuthenticated": "No estás autenticado. Por favor, inicia sesión."
   },
   "superadmin": {
+    "dashboard": {
+      "newThisMonth": "Nuevas (Este mes)",
+      "companySignups": "Altas de Compañías (Últimos 6 meses)",
+      "companies": "{count} empresas",
+      "noData": "Sin datos disponibles.",
+      "recentCompanies": "Compañías Recientes",
+      "new": "Nueva",
+      "noCompaniesToShow": "No hay empresas para mostrar."
+    },
     "title": "Superadmin",
     "description": "Gestiona las compañías y superadministradores del sistema",
     "admins": {

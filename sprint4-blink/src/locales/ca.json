@@ -337,6 +337,15 @@
     "notAuthenticated": "No estàs autenticat. Si us plau, inicia sessió."
   },
   "superadmin": {
+    "dashboard": {
+      "newThisMonth": "Noves (Aquest mes)",
+      "companySignups": "Altes de Companyies (Darrers 6 mesos)",
+      "companies": "{count} empreses",
+      "noData": "Sense dades disponibles.",
+      "recentCompanies": "Companyies Recents",
+      "new": "Nova",
+      "noCompaniesToShow": "No hi ha empreses per mostrar."
+    },
     "title": "Superadmin",
     "description": "Gestiona les companyies i superadministradors del sistema",
     "admins": {

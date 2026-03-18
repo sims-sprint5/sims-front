@@ -29,7 +29,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h4 class="text-gray-500 text-sm font-medium uppercase">Noves (Aquest mes)</h4>
+                            <h4 class="text-gray-500 text-sm font-medium uppercase">{{ $t('superadmin.dashboard.newThisMonth') }}</h4>
                             <p class="text-3xl font-bold text-emerald-600 mt-1">{{ newTenantsThisMonth }}</p>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Graphic: Line Chart -->
                 <div class="bg-white p-6 rounded-lg shadow lg:col-span-2 flex flex-col">
-                    <h3 class="text-lg font-medium text-gray-900 mb-6 font-semibold">Altes de Companyies (Darrers 6 mesos)</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-6 font-semibold">{{ $t('superadmin.dashboard.companySignups') }}</h3>
                     
                     <div v-if="loading" class="flex-grow flex items-center justify-center py-12">
                          <svg class="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
@@ -91,7 +91,7 @@
                              :style="{ left: point.x + '%', top: point.y + '%' }">
                             
                             <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
-                                {{ chartData[idx]?.count ?? 0 }} empreses
+                                {{ $t('superadmin.dashboard.companies', { count: chartData[idx]?.count ?? 0 }) }}
                             </div>
                         </div>
 
@@ -106,13 +106,13 @@
                     </div>
                     
                     <div v-else-if="!loading" class="flex-grow flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg mt-4">
-                        Sense dades disponibles.
+                        {{ $t('superadmin.dashboard.noData') }}
                     </div>
                 </div>
 
                 <!-- Latest Companies List -->
                 <div class="bg-white p-6 rounded-lg shadow lg:col-span-1">
-                    <h3 class="text-lg font-medium text-gray-900 mb-6 font-semibold border-b pb-2">Companyies Recents</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-6 font-semibold border-b pb-2">{{ $t('superadmin.dashboard.recentCompanies') }}</h3>
                     
                     <div v-if="loading" class="flex justify-center py-6">
                          <svg class="animate-spin h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24">
@@ -133,13 +133,13 @@
                                         <span class="text-xs text-gray-500">{{ formatDate(company.created_at) }}</span>
                                     </div>
                                 </div>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-100 text-emerald-800">Nova</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-100 text-emerald-800">{{ $t('superadmin.dashboard.new') }}</span>
                             </div>
                         </li>
                     </ul>
                     
                     <div v-else-if="!loading" class="text-sm text-gray-500 italic text-center py-8">
-                        No hi ha empreses per mostrar.
+                        {{ $t('superadmin.dashboard.noCompaniesToShow') }}
                     </div>
                 </div>
             </div>

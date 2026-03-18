@@ -336,6 +336,15 @@
     "notAuthenticated": "You are not authenticated. Please sign in."
   },
   "superadmin": {
+    "dashboard": {
+      "newThisMonth": "New (This month)",
+      "companySignups": "Company Signups (Last 6 months)",
+      "companies": "{count} companies",
+      "noData": "No data available.",
+      "recentCompanies": "Recent Companies",
+      "new": "New",
+      "noCompaniesToShow": "No companies to show."
+    },
     "title": "Superadmin",
     "description": "Manage system companies and superadministrators",
     "admins": {
