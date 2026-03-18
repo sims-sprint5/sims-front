@@ -58,7 +58,7 @@
           </ul>
         </li>
 
-        <li class="w-full">
+        <li v-if="isAdmin" class="w-full">
           <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
             {{ t('nav.sections.admin') }}
           </div>
@@ -118,6 +118,8 @@
 import { computed, defineComponent, h, type Component } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useUser } from '@/modules/auth/composables/useUser'
+import { isAdminRole } from '@/shared/utils/roleUtils'
 import {
   Cog6ToothIcon,
   HomeIcon,
@@ -158,6 +160,9 @@ const props = defineProps<{
 
 const route = useRoute()
 const { t } = useI18n()
+const { user } = useUser()
+
+const isAdmin = computed(() => isAdminRole(user.value?.role))
 
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',

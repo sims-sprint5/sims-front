@@ -19,10 +19,10 @@
       <div class="flex gap-2 justify-end">
         <button
           @click="$emit('view', item)"
-          class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+          class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
           :title="$t('common.view')"
         >
-          <EyeIcon class="w-5 h-5" />
+          <ChatBubbleLeftRightIcon class="w-5 h-5" />
         </button>
       </div>
     </template>
@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { BaseTable } from '@/components/base';
-import { EyeIcon } from '@heroicons/vue/24/outline';
+import { ChatBubbleLeftRightIcon } from '@heroicons/vue/24/outline';
 import type { Ticket } from '@/modules/tickets/types/ticket.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import { computed } from 'vue';

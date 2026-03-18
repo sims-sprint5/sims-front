@@ -80,6 +80,12 @@
     "user": "Usuario",
     "admin": "Administrador"
   },
+  "unauthorized": {
+    "title": "Acceso no autorizado",
+    "message": "No tienes permisos para acceder a esta sección.",
+    "backDashboard": "Volver al dashboard",
+    "goLogin": "Ir a iniciar sesión"
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "¡Bienvenido/a al Dashboard!",
@@ -101,20 +107,28 @@
     "toast": {
       "avatarUpdated": "Avatar actualizado",
       "personalInfoSaved": "Información personal guardada correctamente",
+      "passwordUpdated": "Contraseña actualizada correctamente",
       "deleteWarning": "Esta acción no se puede deshacer"
     },
     "validation": {
       "fileTooLarge": "El archivo es demasiado grande. Máximo 1MB.",
-      "invalidFileType": "Solo se permiten archivos JPG, GIF o PNG."
+      "invalidFileType": "Solo se permiten archivos JPG, GIF o PNG.",
+      "currentPasswordRequired": "Introduce tu contraseña actual.",
+      "newPasswordRequired": "Introduce una nueva contraseña.",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden."
     },
     "errors": {
       "userInfoUnavailable": "No se pudo obtener la información del usuario",
-      "updateInfo": "Error al actualizar la información"
+      "updateInfo": "Error al actualizar la información",
+      "profileUpdateForbidden": "No tienes permisos para actualizar tu perfil.",
+      "profileUpdateNotSupported": "El servidor no permite cambiar tu perfil. Contacta con un administrador."
     },
     "firstName": "Nombre",
     "lastName": "Apellidos",
     "email": "Correo electrónico",
     "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "passwordConfirmation": "Confirmar nueva contraseña",
     "saveChanges": "Guardar cambios",
     "deleteAccount": "Eliminar cuenta",
     "deleteAccountDesc": "¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción no es reversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.",

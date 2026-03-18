@@ -8,6 +8,7 @@ export const vehiclesRoutes: RouteRecordRaw[] = [
     meta: {
       requiresAuth: true,
       requiresAdmin: true,
+      allowedRoles: ['admin', 'superadmin'],
       titleKey: 'vehicles.title',
     },
   },

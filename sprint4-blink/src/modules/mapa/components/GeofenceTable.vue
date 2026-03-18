@@ -73,6 +73,7 @@ import { useI18n } from 'vue-i18n'
 import { EyeIcon, PencilIcon, TrashIcon, DocumentTextIcon } from '@heroicons/vue/24/outline'
 import type { Geofence } from '../types/geofence.types'
 import { BaseTable, BaseButton } from '@/components/base'
+import type { TableColumn } from '@/components/base/BaseTable.vue'
 
 const { t } = useI18n()
 
@@ -91,7 +92,7 @@ defineEmits<{
   'view-logs': [geofence: Geofence]
 }>()
 
-const columns = computed(() => [
+const columns = computed<TableColumn[]>(() => [
   { key: 'name', label: t('mapa.table.name') },
   { key: 'type', label: t('mapa.table.type') },
   { key: 'radius', label: t('mapa.table.radius') },

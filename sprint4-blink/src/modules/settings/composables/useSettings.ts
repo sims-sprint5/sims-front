@@ -3,9 +3,9 @@ import { useRouter } from 'vue-router'
 import { authService } from '@/modules/auth/services/auth.service'
 import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
-import { userService } from '@/modules/users/services/user.service'
 import { useI18n } from 'vue-i18n'
 import { useTranslateError } from '@/shared/composables/useTranslateError'
+import { isAdminRole } from '@/shared/utils/roleUtils'
 
 export function useSettings() {
   const router = useRouter()
@@ -19,7 +19,6 @@ export function useSettings() {
   const firstName = ref('')
   const lastName = ref('')
   const email = ref('')
-  const currentPassword = ref('')
 
   onMounted(async () => {
     try {
@@ -69,40 +68,38 @@ export function useSettings() {
 
   const handlePersonalInfoSubmit = async () => {
     try {
-      // Intentar obtenir l'id de l'usuari: primer del reactive, després del localStorage
-      const userId = user.value?.id ?? authService.getUser()?.id
-      const userPhone = user.value?.phone ?? authService.getUser()?.phone ?? ''
-
-      if (!userId) {
+      // Ensure we are updating the currently authenticated user (avoid stale localStorage).
+      const me = user.value ?? await loadUser()
+      if (!me?.id) {
         toast.error(t('settings.errors.userInfoUnavailable'))
         return
       }
 
       // Build the full name
       const fullName = `${firstName.value} ${lastName.value}`.trim()
-      
-      // Prepare the data to update
-      const updateData: any = {
-        name: fullName,
-        email: email.value,
-        phone: userPhone,
+
+      // Update self profile through the auth endpoint (commonly allowed for role "user").
+      // Avoid hitting /v1/users/:id which is frequently admin-protected.
+      const updates: { name?: string; email?: string; phone?: string } = {}
+      if (fullName) updates.name = fullName
+
+      // Be conservative for normal users: many backends restrict self-updates to name/avatar only.
+      if (isAdminRole(me.role)) {
+        if (email.value && email.value !== me.email) updates.email = email.value
+        if (me.phone) updates.phone = me.phone
       }
 
-      // Only include password if provided
-      if (currentPassword.value) {
-        updateData.password = currentPassword.value
-        updateData.password_confirmation = currentPassword.value
-      }
-
-      // Call user service to update user
-      const updatedUserData = await userService.updateUser(userId, updateData)
+      const updatedUserData = await authService.updateCurrentUser(updates)
       
       // Update local user data
       updateUser(updatedUserData)
 
       toast.success(t('settings.toast.personalInfoSaved'))
-      currentPassword.value = '' // Clear password field
     } catch (error: any) {
+      if (error?.status === 403) {
+        toast.error(t('settings.errors.profileUpdateForbidden'))
+        return
+      }
       toast.error(translateErrorMessage(error?.message, t('settings.errors.updateInfo')))
     }
   }
@@ -117,7 +114,6 @@ export function useSettings() {
     firstName,
     lastName,
     email,
-    currentPassword,
     handleAvatarClick,
     handleAvatarChange,
     handlePersonalInfoSubmit,

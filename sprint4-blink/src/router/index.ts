@@ -11,6 +11,7 @@ import { reservationsRoutes } from '../modules/reservations/routes';
 import { ticketsRoutes } from '../modules/tickets/routes';
 import mapaRoutes from '../modules/mapa/routes';
 import { i18n } from '@/i18n';
+import { hasAllowedRole } from '@/shared/utils/roleUtils';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -18,6 +19,15 @@ const routes: RouteRecordRaw[] = [
     redirect: '/login',
   },
   ...authRoutes,
+  {
+    path: '/unauthorized',
+    name: 'Unauthorized',
+    component: () => import('@/shared/views/UnauthorizedView.vue'),
+    meta: {
+      requiresAuth: false,
+      titleKey: 'unauthorized.title',
+    },
+  },
   ...dashboardRoutes,
   ...settingsRoutes,
   ...usersRoutes,
@@ -49,6 +59,7 @@ router.beforeEach((to, _from, next) => {
   const requiresAuth = to.meta.requiresAuth;
   const currentTenant = getCurrentTenant();
   const storedTenant = authService.getTenant();
+  const user = authService.getUser();
 
   // Actualizar título de la página
   const titleKey = to.meta.titleKey as string | undefined;
@@ -65,6 +76,19 @@ router.beforeEach((to, _from, next) => {
   if (requiresAuth && !isAuthenticated) {
     next({ name: 'Login' });
     return;
+  }
+
+  // Role-based access control.
+  // Supports both `meta.allowedRoles` (preferred) and legacy `meta.requiresAdmin`.
+  const allowedRoles = (to.meta.allowedRoles as string[] | undefined) ??
+    ((to.meta.requiresAdmin as boolean | undefined) ? ['admin', 'superadmin'] : undefined);
+
+  if (allowedRoles?.length) {
+    // At this point, unauthenticated users were already redirected above.
+    if (!user || !hasAllowedRole(user.role, allowedRoles)) {
+      next({ name: 'Unauthorized' });
+      return;
+    }
   }
 
   if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {

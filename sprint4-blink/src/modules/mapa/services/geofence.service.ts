@@ -33,6 +33,22 @@ export const geofenceService = {
     return list.map(normalizeGeofence)
   },
 
+  async getGeofencesForUserMap(): Promise<Geofence[]> {
+    try {
+      return await this.getGeofences()
+    } catch (err: any) {
+      const status = err && typeof err === 'object' && 'status' in err ? Number(err.status) : null
+
+      // If backend protects /geofences by role (403), silently return empty array for normal users.
+      if (status === 403) {
+        return []
+      }
+
+      // For other errors, re-throw (network, 500, etc.)
+      throw err
+    }
+  },
+
   async getGeofenceById(id: number): Promise<GeofenceWithLogs> {
     const raw = await apiClient.get<any>(`${BASE_URL}/${id}`)
     const entity = raw?.data ?? raw

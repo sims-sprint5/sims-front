@@ -10,13 +10,14 @@ export const ticketsRoutes: RouteRecordRaw[] = [
       titleKey: 'tickets.title',
     },
   },
-      {
+  {
     path: '/admin/tickets',
     name: 'AdminTickets',
     component: () => import('./views/AdminTicketsView.vue'),
     meta: {
       requiresAuth: true,
       requiresAdmin: true,
+      allowedRoles: ['admin', 'superadmin'],
       titleKey: 'adminTickets.title',
     },
   },

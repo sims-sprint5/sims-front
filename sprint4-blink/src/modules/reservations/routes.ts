@@ -17,6 +17,7 @@ export const reservationsRoutes: RouteRecordRaw[] = [
     meta: {
       requiresAuth: true,
       requiresAdmin: true,
+      allowedRoles: ['admin', 'superadmin'],
       titleKey: 'reservations.title',
     },
   },

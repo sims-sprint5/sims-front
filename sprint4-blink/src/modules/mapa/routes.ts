@@ -9,6 +9,8 @@ const routes: RouteRecordRaw[] = [
     component: MapView,
     meta: {
       requiresAuth: true,
+      requiresAdmin: true,
+      allowedRoles: ['admin', 'superadmin'],
       titleKey: 'mapa.title'
     }
   },
