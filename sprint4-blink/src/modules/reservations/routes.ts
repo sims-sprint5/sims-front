@@ -11,6 +11,15 @@ export const reservationsRoutes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/confirmar-reserva',
+    name: 'ReservationConfirm',
+    component: () => import('./views/ReservationConfirmPage.vue'),
+    meta: {
+      requiresAuth: true,
+      titleKey: 'nav.bookings',
+    },
+  },
+  {
     path: '/admin/reservations',
     name: 'AdminReservations',
     component: () => import('./views/AdminReservationsView.vue'),

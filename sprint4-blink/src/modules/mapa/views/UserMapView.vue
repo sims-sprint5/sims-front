@@ -6,6 +6,12 @@
         <div ref="mapEl" class="w-full h-full"></div>
       </div>
     </div>
+
+    <VehicleDetailsModal
+      :open="isModalOpen"
+      :car="selectedCar"
+      @close="closeVehicleModal"
+      />
   </AppLayout>
 </template>
 
@@ -23,6 +29,7 @@ import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
+import VehicleDetailsModal from '../components/VehicleDetailsModal.vue'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -36,6 +43,14 @@ const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let userMarker: L.Marker | null = null
 
+const selectedCar = ref<Vehicle | null>(null)
+const isModalOpen = ref(false)
+
+const closeVehicleModal = () => {
+  isModalOpen.value = false
+  selectedCar.value = null
+}
+
 const defaultMarkerIcon = L.icon({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
@@ -45,12 +60,6 @@ const defaultMarkerIcon = L.icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 })
-
-const createPopupRow = (label: string, value: string) => {
-  const row = document.createElement('div')
-  row.textContent = `${label}: ${value}`
-  return row
-}
 
 const createGeofencePopup = (geofence: Geofence) => {
   const popupContent = document.createElement('div')
@@ -66,19 +75,6 @@ const createGeofencePopup = (geofence: Geofence) => {
     description.textContent = geofence.description
     popupContent.appendChild(description)
   }
-
-  return popupContent
-}
-
-const createVehiclePopup = (vehicle: Vehicle) => {
-  const popupContent = document.createElement('div')
-  popupContent.className = 'p-2'
-
-  const title = document.createElement('b')
-  title.textContent = vehicle.license_plate ?? ''
-  popupContent.appendChild(title)
-  popupContent.appendChild(document.createElement('br'))
-  popupContent.appendChild(createPopupRow('Última actualización', String(vehicle.last_location_update || 'N/A')))
 
   return popupContent
 }
@@ -141,7 +137,10 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       }
     )
 
-    marker.bindPopup(createVehiclePopup(vehicle))
+    marker.on('click', () => {
+      selectedCar.value = vehicle
+      isModalOpen.value = true
+    })
 
     marker.addTo(map!)
   })

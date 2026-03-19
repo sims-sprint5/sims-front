@@ -11,6 +11,7 @@ export interface Vehicle {
   year: number | null;
   color: string;
   status: string;
+  available?: boolean;
   current_latitude: number | null;
   current_longitude: number | null;
   last_location_update: string | null;
