@@ -6,6 +6,8 @@ import { authRoutes } from '../modules/auth/routes';
 import { dashboardRoutes } from '../modules/dashboard/routes';
 import { settingsRoutes } from '../modules/settings/routes';
 import { usersRoutes } from '../modules/users/routes';
+import { vehiclesRoutes } from '../modules/vehicles/routes';
+import { reservationsRoutes } from '../modules/reservations/routes';
 import { ticketsRoutes } from '../modules/tickets/routes';
 import { superadminRoutes } from '../modules/superadmin/routes';
 import { i18n } from '@/i18n';
@@ -19,6 +21,8 @@ const routes: RouteRecordRaw[] = [
   ...dashboardRoutes,
   ...settingsRoutes,
   ...usersRoutes,
+  ...vehiclesRoutes,
+  ...reservationsRoutes,
   ...ticketsRoutes,
   ...superadminRoutes,
   {

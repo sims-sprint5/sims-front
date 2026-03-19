@@ -1,35 +1,84 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="space-y-4">
-    <BaseInput v-model="formData.name" :label="$t('users.form.name')" type="text" :placeholder="$t('users.form.namePlaceholder')"
-      :error="formatError((errors as any).name)" required />
+  <form @submit.prevent="handleSubmit" class="space-y-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <BaseInput
+          v-model="formData.name"
+          :label="$t('users.form.name')"
+          type="text"
+          :placeholder="$t('users.form.namePlaceholder')"
+          :error="formatError((errors as any).name)"
+          required
+        />
+      </div>
 
-    <BaseInput v-model="formData.email" :label="$t('users.form.email')" type="email" :placeholder="$t('users.form.emailPlaceholder')"
-      :error="formatError((errors as any).email)" required />
+      <div>
+        <BaseInput
+          v-model="formData.email"
+          :label="$t('users.form.email')"
+          type="email"
+          :placeholder="$t('users.form.emailPlaceholder')"
+          :error="formatError((errors as any).email)"
+          required
+        />
+      </div>
 
-    <BaseInput v-model="formData.phone" :label="$t('users.form.phone')" type="tel" :placeholder="$t('users.form.phonePlaceholder')"
-      :error="formatError((errors as any).phone)" @keydown="onPhoneKeydown" @paste="onPhonePaste" required />
-    <div class="space-y-2">
-      <label class="block text-sm font-medium text-gray-700">
-        {{ $t('users.form.role') }}
-      </label>
-      <select v-model="formData.role"
-        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        required>
-        <option value="user">{{ $t('roles.user') }}</option>
-        <option value="admin">{{ $t('roles.admin') }}</option>
-      </select>
-      <p v-if="(errors as any).role" class="text-sm text-red-600">{{ formatError((errors as any).role) }}</p>
+      <div>
+        <BaseInput
+          v-model="formData.phone"
+          :label="$t('users.form.phone')"
+          type="tel"
+          :placeholder="$t('users.form.phonePlaceholder')"
+          :error="formatError((errors as any).phone)"
+          @keydown="onPhoneKeydown"
+          @paste="onPhonePaste"
+          required
+        />
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">
+          {{ $t('users.form.role') }}
+        </label>
+        <select
+          v-model="formData.role"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          required
+        >
+          <option value="user">{{ $t('roles.user') }}</option>
+          <option value="admin">{{ $t('roles.admin') }}</option>
+        </select>
+        <p v-if="(errors as any).role" class="text-sm text-red-600">{{ formatError((errors as any).role) }}</p>
+      </div>
+
+      <div>
+        <BaseInput
+          v-model="formData.password"
+          :label="$t('users.form.password')"
+          :placeholder="$t('users.form.passwordPlaceholder')"
+          :error="formatError((errors as any).password)"
+          :required="!isEditing"
+          :type="showPassword ? 'text' : 'password'"
+          :showPasswordToggle="true"
+          @togglePassword="toggleShowPassword"
+        />
+      </div>
+
+      <div>
+        <BaseInput
+          v-model="formData.password_confirmation"
+          :label="$t('users.form.passwordConfirmation')"
+          :placeholder="$t('users.form.passwordPlaceholder')"
+          :error="formatError((errors as any).password_confirmation || passwordMismatchError)"
+          :required="!isEditing && !!formData.password"
+          :type="showPasswordConfirmation ? 'text' : 'password'"
+          :showPasswordToggle="true"
+          @togglePassword="toggleShowPasswordConfirmation"
+        />
+      </div>
     </div>
 
-    <BaseInput v-model="formData.password" :label="$t('users.form.password')" :placeholder="$t('users.form.passwordPlaceholder')"
-      :error="formatError((errors as any).password)" :required="!isEditing"
-      :type="showPassword ? 'text' : 'password'" :showPasswordToggle="true" @togglePassword="toggleShowPassword" />
-
-    <BaseInput v-model="formData.password_confirmation" :label="$t('users.form.passwordConfirmation')"
-      :placeholder="$t('users.form.passwordPlaceholder')" :error="formatError((errors as any).password_confirmation || passwordMismatchError)"
-      :required="!isEditing && !!formData.password" :type="showPasswordConfirmation ? 'text' : 'password'" :showPasswordToggle="true" @togglePassword="toggleShowPasswordConfirmation" />
-
-    <div class="flex justify-end space-x-3 pt-4">
+    <div class="flex justify-end space-x-3 pt-2">
       <BaseButton type="button" variant="secondary" @click="$emit('cancel')">
         {{ $t('common.cancel') }}
       </BaseButton>

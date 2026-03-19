@@ -5,10 +5,6 @@
       <div class="text-sm font-medium text-gray-900">{{ value }}</div>
     </template>
 
-    <template #cell-descripcion="{ value }">
-      <div class="text-sm text-gray-700">{{ (value && value.length > 60) ? value.slice(0, 60) + '…' : value }}</div>
-    </template>
-
     <template #cell-usuario="{ item }">
       <div class="text-sm text-gray-900">
         <div class="font-medium">{{ item.usuario_nombre }}</div>
@@ -83,9 +79,7 @@ defineEmits<{
 }>();
 
 const columns = computed<TableColumn[]>(() => [
-  { key: 'id', label: 'ID', align: 'left' },
   { key: 'asunto', label: t('tickets.table.asunto'), align: 'left' },
-  { key: 'descripcion', label: t('tickets.table.descripcion'), align: 'left' },
   { key: 'usuario', label: t('tickets.table.usuario'), align: 'left' },
   { key: 'estado', label: t('tickets.table.estado'), align: 'left' },
   { key: 'created_at', label: t('tickets.table.createdAt'), align: 'left' },

@@ -30,6 +30,7 @@
     "map": "Mapa",
     "tickets": "Tickets",
     "bookings": "Reserves",
+    "reservationsAdmin": "Log de reserves",
     "users": "Usuaris",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
@@ -173,6 +174,149 @@
       "notFound": "Usuari no trobat. Potser ja ha sigut eliminat."
     }
   },
+  "vehicles": {
+    "title": "Gestió de vehicles",
+    "description": "Administra els vehicles del sistema",
+    "searchPlaceholder": "Buscar per matrícula, marca o model...",
+    "loading": "Carregant vehicles...",
+    "empty": "No hi ha vehicles per mostrar",
+    "table": {
+      "licensePlate": "Matrícula",
+      "brand": "Marca",
+      "model": "Model",
+      "color": "Color",
+      "year": "Any",
+      "status": "Estat",
+      "lastLocationUpdate": "Última ubicació",
+      "actions": "Accions"
+    },
+    "form": {
+      "licensePlate": "Matrícula",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Marca",
+      "brandPlaceholder": "Marca",
+      "model": "Model",
+      "modelPlaceholder": "Model",
+      "year": "Any",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Estat",
+      "statusPlaceholder": "Selecciona estat",
+      "currentLatitude": "Latitud actual",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Longitud actual",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Última actualització d'ubicació",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Actiu",
+      "available": "Disponible",
+      "inactive": "Inactiu",
+      "maintenance": "En manteniment",
+      "reserved": "Reservat",
+      "rented": "Llogat",
+      "out_of_service": "Fora de servei"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar vehicle",
+      "deleteMessage": "Estàs segur que vols eliminar el vehicle {license_plate}? Aquesta acció no es pot desfer.",
+      "detailsTitle": "Detalls del vehicle"
+    },
+    "actions": {
+      "newVehicle": "Nou vehicle",
+      "createNewVehicle": "Crear nou vehicle",
+      "editVehicle": "Editar vehicle",
+      "createVehicle": "Crear vehicle",
+      "updateVehicle": "Actualitzar vehicle"
+    },
+    "toast": {
+      "created": "Vehicle creat correctament",
+      "updated": "Vehicle actualitzat correctament",
+      "deleted": "Vehicle eliminat correctament"
+    },
+    "errors": {
+      "load": "Error en carregar vehicles",
+      "searchEndpointUnavailable": "L’endpoint de cerca no està disponible. Recarrega per veure tots els vehicles.",
+      "search": "Error en buscar vehicles",
+      "save": "Error en guardar el vehicle",
+      "delete": "Error en eliminar el vehicle",
+      "notFound": "Vehicle no trobat. Potser ja ha sigut eliminat.",
+      "invalidId": "ID de vehicle no vàlid."
+    }
+  },
+  "reservations": {
+    "title": "Gestió de reserves",
+    "description": "Administra les reserves del sistema",
+    "searchPlaceholder": "Buscar per estat, usuari, vehicle o dates...",
+    "loading": "Carregant reserves...",
+    "empty": "No hi ha reserves per mostrar",
+    "createTitle": "Crear reserva",
+    "createDescription": "Selecciona les dates per registrar la nova reserva.",
+    "selectDates": "Indica una data d'inici i una de fi per guardar la reserva.",
+    "table": {
+      "id": "ID",
+      "logType": "Tipus de log",
+      "userId": "Usuari (ID)",
+      "vehicleId": "Vehicle (ID)",
+      "status": "Estat",
+      "startAt": "Inici",
+      "endAt": "Fi",
+      "createdAt": "Creat",
+      "actions": "Accions"
+    },
+    "form": {
+      "userId": "ID d’usuari",
+      "userIdPlaceholder": "1",
+      "vehicleId": "ID de vehicle",
+      "vehicleIdPlaceholder": "1",
+      "status": "Estat",
+      "statusPlaceholder": "Selecciona un estat",
+      "startAt": "Inici",
+      "startAtPlaceholder": "YYYY-MM-DD HH:mm:ss",
+      "endAt": "Fi",
+      "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "pending": "Pendent",
+      "active": "Confirmada",
+      "completed": "Completada",
+      "cancelled": "Cancel·lada"
+    },
+    "log": {
+      "created": "Creada"
+    },
+    "modal": {
+      "deleteTitle": "Eliminar reserva",
+      "deleteMessage": "Estàs segur que vols eliminar la reserva {id}? Aquesta acció no es pot desfer.",
+      "detailsTitle": "Detalls de la reserva"
+    },
+    "actions": {
+      "newReservation": "Nova reserva",
+      "createNewReservation": "Crear nova reserva",
+      "editReservation": "Editar reserva",
+      "createReservation": "Crear reserva",
+      "updateReservation": "Actualitzar reserva"
+    },
+    "toast": {
+      "created": "Reserva creada correctament",
+      "updated": "Reserva actualitzada correctament",
+      "deleted": "Reserva eliminada correctament"
+    },
+    "errors": {
+      "load": "Error en carregar reserves",
+      "searchEndpointUnavailable": "L’endpoint de cerca no està disponible. Recarrega per veure totes les reserves.",
+      "search": "Error en buscar reserves",
+      "save": "Error en guardar la reserva",
+      "delete": "Error en eliminar la reserva",
+      "notFound": "Reserva no trobada. Potser ja ha sigut eliminada.",
+      "invalidId": "ID de reserva invàlid",
+      "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
+      "create": "Error en crear la reserva. Torna-ho a intentar.",
+      "invalidDates": "La data de fi ha de ser posterior a la d'inici."
+    }
+  },
   "table": {
     "previous": "Anterior",
     "next": "Següent",
@@ -218,10 +362,10 @@
       "descripcionPlaceholder": "Descriu el problema o incidència",
       "type": "Tipus",
       "typeSelect": "Selecciona tipus",
-      "typeSupport": "Suport",
-      "typeBilling": "Facturació",
       "typeTechnical": "Tècnic",
-      "typeOther": "Altre",
+      "typeBilling": "Facturació",
+      "typeComplaint": "Queixa",
+      "typeInquiry": "Consulta",
       "priority": "Prioritat",
       "prioritySelect": "Selecciona prioritat",
       "priorityLow": "Baixa",
@@ -231,6 +375,7 @@
     },
     "estados": {
       "pendiente": "Pendent",
+      "open": "Obert",
       "confirmado": "Confirmat",
       "cancelado": "Cancel·lat",
       "usado": "Usat"
@@ -320,16 +465,149 @@
       "invalid": "El rol no és vàlid."
     },
     "passwordMismatch": "Les contrasenyes no coincideixen.",
+    "vehicle": {
+      "license_plate": {
+        "required": "La matrícula és obligatòria."
+      },
+      "brand": {
+        "required": "La marca és obligatòria."
+      },
+      "model": {
+        "required": "El model és obligatori."
+      },
+      "year": {
+        "required": "L’any és obligatori.",
+        "invalid": "L’any no és vàlid.",
+        "min": "L’any ha de ser major o igual a 1900.",
+        "max": "L’any no pot ser major a 2100."
+      },
+      "color": {
+        "required": "El color és obligatori."
+      },
+      "status": {
+        "required": "L’estat és obligatori."
+      },
+      "current_latitude": {
+        "invalid": "La latitud no és vàlida."
+      },
+      "current_longitude": {
+        "invalid": "La longitud no és vàlida."
+      },
+      "last_location_update": {
+        "invalid": "La data de l’última ubicació no és vàlida."
+      }
+    },
     "ticket": {
       "eventoRequired": "L'esdeveniment és obligatori.",
       "eventoInvalid": "L'ID de l'esdeveniment no és vàlid.",
       "precioRequired": "El preu és obligatori.",
       "precioInvalid": "El preu no és vàlid.",
       "precioMax": "El preu no pot superar 999999.99.",
-      "estadoInvalid": "L'estat no és vàlid."
+      "estadoInvalid": "L'estat no és vàlid.",
+      "asuntoRequired": "L'assumpte és obligatori.",
+      "asuntoMax": "L'assumpte no pot superar 255 caràcters.",
+      "descripcionInvalid": "La descripció no és vàlida.",
+      "descripcionMax": "La descripció no pot superar 1000 caràcters.",
+      "typeRequired": "El tipus és obligatori.",
+      "priorityInvalid": "La prioritat no és vàlida.",
+      "priorityMax": "La prioritat no pot superar 20 caràcters."
+    },
+    "reservation": {
+      "user_id": {
+        "required": "L'usuari és obligatori.",
+        "invalid": "L'ID d'usuari no és vàlid."
+      },
+      "vehicle_id": {
+        "required": "El vehicle és obligatori.",
+        "invalid": "L'ID de vehicle no és vàlid."
+      },
+      "status": {
+        "required": "L'estat és obligatori."
+      },
+      "start_at": {
+        "required": "La data d'inici és obligatòria."
+      },
+      "end_at": {
+        "required": "La data de fi és obligatòria."
+      }
+    }
+  },  "mapa": {
+    "title": "Mapa de Geofencing",
+    "userTitle": "Mapa",
+    "geofences": "Geofences",
+    "createZone": "Nova Zona",
+    "editZone": "Editar Zona",
+    "deleteZone": "Eliminar Zona",
+    "deleteConfirm": "Estàs segur que vols eliminar la geofence '{name}'?",
+    "viewLogs": "Veure Registres",
+    "noGeofences": "Sense geofences creades encara.",
+    "noLogs": "Sense registres per a aquesta geofence.",
+    "loadError": "Error al carregat geofences",
+    "createError": "Error al crear geofence",
+    "createSuccess": "Geofence creada correctament",
+    "updateError": "Error al actualitzar geofence",
+    "updateSuccess": "Geofence actualitzada correctament",
+    "deleteError": "Error al eliminar geofence",
+    "deleteSuccess": "Geofence eliminada correctament",
+    "logsError": "Error al carregat registres",
+    "table": {
+      "name": "Nom",
+      "type": "Tipus",
+      "radius": "Radi",
+      "status": "Estat",
+      "actions": "Accions"
+    },
+    "types": {
+      "allowed": "Permesa",
+      "restricted": "Restringida",
+      "parking": "Estacionament",
+      "service_area": "Àrea de Servei"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "eventType": {
+      "entry": "Entrada",
+      "exit": "Sortida",
+      "violation": "Violació"
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "p.ex., Downtown Zona Restringida",
+      "description": "Descripció",
+      "descriptionPlaceholder": "p.ex., Sense estacionament després de les 6pm",
+      "type": "Tipus",
+      "latitude": "Latitud",
+      "latitudePlaceholder": "41.3851",
+      "longitude": "Longitud",
+      "longitudePlaceholder": "2.1734",
+      "radius": "Radi (metres)",
+      "radiusPlaceholder": "p.ex., 250",
+      "clickToSelect": "Feu clic al mapa per seleccionar el centre de la zona",
+      "status": "Estat"
+    },
+    "logs": {
+      "vehicle": "Vehicle",
+      "eventType": "Tipus d'Esdeveniment",
+      "timestamp": "Marca de Temps",
+      "location": "Ubicació"
+    },
+    "validation": {
+      "nameRequired": "El nom és obligatori",
+      "nameMaxLength": "El nom no pot superar 100 caràcters",
+      "radiusRequired": "El radi és obligatori",
+      "radiusMax": "El radi no pot superar 999999 metres",
+      "latitudeRequired": "La latitud és obligatòria",
+      "latitudeInvalid": "La latitud ha d'estar entre -90 i 90",
+      "longitudeRequired": "La longitud és obligatòria",
+      "longitudeInvalid": "La longitud ha d'estar entre -180 i 180",
+      "typeRequired": "El tipus és obligatori"
     }
   },
-  "errors": {
+  "actions": {
+    "edit": "Editar"
+  },  "errors": {
     "unexpected": "S’ha produït un error inesperat.",
     "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
     "requestFailed": "Error en la petició",

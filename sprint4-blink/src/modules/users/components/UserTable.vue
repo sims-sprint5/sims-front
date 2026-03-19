@@ -72,7 +72,6 @@ defineEmits<{
 }>();
 
 const columns = computed<TableColumn[]>(() => [
-  { key: 'id', label: 'ID', align: 'left' },
   { key: 'name', label: t('users.table.name'), align: 'left' },
   { key: 'email', label: t('users.table.email'), align: 'left' },
   { key: 'phone', label: t('dashboard.user.phone'), align: 'left' },

@@ -30,6 +30,7 @@
     "map": "Map",
     "tickets": "Tickets",
     "bookings": "Bookings",
+    "reservationsAdmin": "Reservation log",
     "users": "Users",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
@@ -172,6 +173,150 @@
       "notFound": "User not found. It may have already been deleted."
     }
   },
+  "vehicles": {
+    "title": "Vehicle management",
+    "description": "Manage system vehicles",
+    "searchPlaceholder": "Search by license plate, brand, or model...",
+    "loading": "Loading vehicles...",
+    "empty": "No vehicles to display",
+    "table": {
+
+      "licensePlate": "License plate",
+      "brand": "Brand",
+      "model": "Model",
+      "color": "Color",
+      "year": "Year",
+      "status": "Status",
+      "lastLocationUpdate": "Last location update",
+      "actions": "Actions"
+    },
+    "form": {
+      "licensePlate": "License plate",
+      "licensePlatePlaceholder": "ABC-1234",
+      "brand": "Brand",
+      "brandPlaceholder": "Brand",
+      "model": "Model",
+      "modelPlaceholder": "Model",
+      "year": "Year",
+      "yearPlaceholder": "2024",
+      "color": "Color",
+      "colorPlaceholder": "Color",
+      "status": "Status",
+      "statusPlaceholder": "Select status",
+      "currentLatitude": "Current latitude",
+      "currentLatitudePlaceholder": "0.00000000",
+      "currentLongitude": "Current longitude",
+      "currentLongitudePlaceholder": "0.00000000",
+      "lastLocationUpdate": "Last location update",
+      "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "active": "Active",
+      "available": "Available",
+      "inactive": "Inactive",
+      "maintenance": "Under Maintenance",
+      "reserved": "Reserved",
+      "rented": "Rented",
+      "out_of_service": "Out of Service"
+    },
+    "modal": {
+      "deleteTitle": "Delete vehicle",
+      "deleteMessage": "Are you sure you want to delete vehicle {license_plate}? This action cannot be undone.",
+      "detailsTitle": "Vehicle details"
+    },
+    "actions": {
+      "newVehicle": "New vehicle",
+      "createNewVehicle": "Create new vehicle",
+      "editVehicle": "Edit vehicle",
+      "createVehicle": "Create vehicle",
+      "updateVehicle": "Update vehicle"
+    },
+    "toast": {
+      "created": "Vehicle created successfully",
+      "updated": "Vehicle updated successfully",
+      "deleted": "Vehicle deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load vehicles",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all vehicles.",
+      "search": "Failed to search vehicles",
+      "save": "Failed to save vehicle",
+      "delete": "Failed to delete vehicle",
+      "notFound": "Vehicle not found. It may have already been deleted.",
+      "invalidId": "Invalid vehicle ID."
+    }
+  },
+  "reservations": {
+    "title": "Reservations management",
+    "description": "Manage system reservations",
+    "searchPlaceholder": "Search by status, user, vehicle, or dates...",
+    "loading": "Loading reservations...",
+    "empty": "No reservations to display",
+    "createTitle": "Create reservation",
+    "createDescription": "Select the dates to register the new reservation.",
+    "selectDates": "Provide a start and end date to save the reservation.",
+    "table": {
+      "id": "ID",
+      "logType": "Log type",
+      "userId": "User (ID)",
+      "vehicleId": "Vehicle (ID)",
+      "status": "Status",
+      "startAt": "Start",
+      "endAt": "End",
+      "createdAt": "Created",
+      "actions": "Actions"
+    },
+    "form": {
+      "userId": "User ID",
+      "userIdPlaceholder": "1",
+      "vehicleId": "Vehicle ID",
+      "vehicleIdPlaceholder": "1",
+      "status": "Status",
+      "statusPlaceholder": "Select a status",
+      "startAt": "Start",
+      "startAtPlaceholder": "YYYY-MM-DD HH:mm:ss",
+      "endAt": "End",
+      "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
+    },
+    "status": {
+      "pending": "Pending",
+      "active": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "log": {
+      "created": "Created"
+    },
+    "modal": {
+      "deleteTitle": "Delete reservation",
+      "deleteMessage": "Are you sure you want to delete reservation {id}? This action cannot be undone.",
+      "detailsTitle": "Reservation details"
+    },
+    "actions": {
+      "newReservation": "New reservation",
+      "createNewReservation": "Create new reservation",
+      "editReservation": "Edit reservation",
+      "createReservation": "Create reservation",
+      "updateReservation": "Update reservation"
+    },
+    "toast": {
+      "created": "Reservation created successfully",
+      "updated": "Reservation updated successfully",
+      "deleted": "Reservation deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load reservations",
+      "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all reservations.",
+      "search": "Failed to search reservations",
+      "save": "Failed to save reservation",
+      "delete": "Failed to delete reservation",
+      "notFound": "Reservation not found. It may have already been deleted.",
+      "invalidId": "Invalid reservation ID",
+      "missingDates": "Provide start and end dates for the reservation.",
+      "invalidDates": "The end date must be later than the start date.",
+      "create": "Failed to create the reservation. Please try again."
+    }
+  },
   "table": {
     "previous": "Previous",
     "next": "Next",
@@ -217,10 +362,10 @@
       "descripcionPlaceholder": "Describe the issue or problem",
       "type": "Type",
       "typeSelect": "Select type",
-      "typeSupport": "Support",
-      "typeBilling": "Billing",
       "typeTechnical": "Technical",
-      "typeOther": "Other",
+      "typeBilling": "Billing",
+      "typeComplaint": "Complaint",
+      "typeInquiry": "Inquiry",
       "priority": "Priority",
       "prioritySelect": "Select priority",
       "priorityLow": "Low",
@@ -230,6 +375,7 @@
     },
     "estados": {
       "pendiente": "Pending",
+      "open": "Open",
       "confirmado": "Confirmed",
       "cancelado": "Cancelled",
       "usado": "Used"
@@ -319,14 +465,149 @@
       "invalid": "Role is invalid."
     },
     "passwordMismatch": "Passwords do not match.",
+    "vehicle": {
+      "license_plate": {
+        "required": "License plate is required."
+      },
+      "brand": {
+        "required": "Brand is required."
+      },
+      "model": {
+        "required": "Model is required."
+      },
+      "year": {
+        "required": "Year is required.",
+        "invalid": "Year is invalid.",
+        "min": "Year must be greater than or equal to 1900.",
+        "max": "Year must be less than or equal to 2100."
+      },
+      "color": {
+        "required": "Color is required."
+      },
+      "status": {
+        "required": "Status is required."
+      },
+      "current_latitude": {
+        "invalid": "Latitude is invalid."
+      },
+      "current_longitude": {
+        "invalid": "Longitude is invalid."
+      },
+      "last_location_update": {
+        "invalid": "Last location update is invalid."
+      }
+    },
     "ticket": {
       "eventoRequired": "Event is required.",
       "eventoInvalid": "Event ID is invalid.",
       "precioRequired": "Price is required.",
       "precioInvalid": "Price is invalid.",
       "precioMax": "Price cannot exceed 999999.99.",
-      "estadoInvalid": "Status is invalid."
+      "estadoInvalid": "Status is invalid.",
+      "asuntoRequired": "Subject is required.",
+      "asuntoMax": "Subject cannot exceed 255 characters.",
+      "descripcionInvalid": "Description is invalid.",
+      "descripcionMax": "Description cannot exceed 1000 characters.",
+      "typeRequired": "Type is required.",
+      "priorityInvalid": "Priority is invalid.",
+      "priorityMax": "Priority cannot exceed 20 characters."
+    },
+    "reservation": {
+      "user_id": {
+        "required": "User is required.",
+        "invalid": "User ID is not valid."
+      },
+      "vehicle_id": {
+        "required": "Vehicle is required.",
+        "invalid": "Vehicle ID is not valid."
+      },
+      "status": {
+        "required": "Status is required."
+      },
+      "start_at": {
+        "required": "Start date is required."
+      },
+      "end_at": {
+        "required": "End date is required."
+      }
     }
+  },
+  "mapa": {
+    "title": "Geofencing Map",
+    "userTitle": "Map",
+    "geofences": "Geofences",
+    "createZone": "New Zone",
+    "editZone": "Edit Zone",
+    "deleteZone": "Delete Zone",
+    "deleteConfirm": "Are you sure you want to delete the geofence '{name}'?",
+    "viewLogs": "View Logs",
+    "noGeofences": "No geofences created yet.",
+    "noLogs": "No logs for this geofence.",
+    "loadError": "Failed to load geofences",
+    "createError": "Failed to create geofence",
+    "createSuccess": "Geofence created successfully",
+    "updateError": "Failed to update geofence",
+    "updateSuccess": "Geofence updated successfully",
+    "deleteError": "Failed to delete geofence",
+    "deleteSuccess": "Geofence deleted successfully",
+    "logsError": "Failed to load logs",
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "radius": "Radius",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "types": {
+      "allowed": "Allowed",
+      "restricted": "Restricted",
+      "parking": "Parking",
+      "service_area": "Service Area"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "eventType": {
+      "entry": "Entry",
+      "exit": "Exit",
+      "violation": "Violation"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "e.g., Downtown Restricted Zone",
+      "description": "Description",
+      "descriptionPlaceholder": "e.g., No parking after 6pm",
+      "type": "Type",
+      "latitude": "Latitude",
+      "latitudePlaceholder": "41.3851",
+      "longitude": "Longitude",
+      "longitudePlaceholder": "2.1734",
+      "radius": "Radius (meters)",
+      "radiusPlaceholder": "e.g., 250",
+      "clickToSelect": "Click on the map to select the center of the zone",
+      "status": "Status"
+    },
+    "logs": {
+      "vehicle": "Vehicle",
+      "eventType": "Event Type",
+      "timestamp": "Timestamp",
+      "location": "Location"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMaxLength": "Name cannot exceed 100 characters",
+      "radiusRequired": "Radius is required",
+      "radiusMax": "Radius cannot exceed 999999 meters",
+      "latitudeRequired": "Latitude is required",
+      "latitudeInvalid": "Latitude must be between -90 and 90",
+      "longitudeRequired": "Longitude is required",
+      "longitudeInvalid": "Longitude must be between -180 and 180",
+      "typeRequired": "Type is required"
+    }
+  },
+  "actions": {
+    "edit": "Edit"
   },
   "errors": {
     "unexpected": "An unexpected error occurred.",
