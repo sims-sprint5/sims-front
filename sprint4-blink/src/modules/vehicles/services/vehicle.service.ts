@@ -60,9 +60,25 @@ export const vehicleService = {
     return normalizeVehiclesResponse(raw);
   },
 
-  async getVehiclesList(page: number = 1, perPage: number = 200): Promise<Vehicle[]> {
-    const response = await this.getVehicles(page, perPage);
-    return Array.isArray(response.data) ? response.data : [];
+  async getVehiclesList(perPage: number = 200): Promise<Vehicle[]> {
+    const allVehicles: Vehicle[] = [];
+    let page = 1;
+
+    while (true) {
+      const response = await this.getVehicles(page, perPage);
+      const currentPageData = Array.isArray(response.data) ? response.data : [];
+      allVehicles.push(...currentPageData);
+
+      if (response.meta?.last_page) {
+        if (page >= response.meta.last_page) break;
+      } else {
+        if (currentPageData.length < perPage) break;
+      }
+
+      page += 1;
+    }
+
+    return allVehicles;
   },
 
   async getVehicleById(id: number): Promise<Vehicle> {

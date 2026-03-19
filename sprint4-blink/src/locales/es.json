@@ -15,6 +15,7 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "view": "Ver",
+    "actions": "Acciones",
     "logout": "Cerrar sesión"
   },
   "language": {
@@ -34,6 +35,7 @@
     "vehicles": "Vehículos",
     "geofencing": "Geofencing",
     "settings": "Configuración",
+    "superadmin": "Superadmin",
     "sections": {
       "client": "Cliente",
       "admin": "Admin"
@@ -51,8 +53,7 @@
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "••••••••",
       "noAccount": "¿Aún no tienes cuenta?",
-      "goRegister": "Crear cuenta"
-      ,
+      "goRegister": "Crear cuenta",
       "forgotPassword": "¿Has olvidado tu contraseña?",
       "welcome": "¡Bienvenido/a {name}!",
       "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
@@ -627,5 +628,112 @@
     "requestFailed": "Error en la petición",
     "serverConnection": "Error de conexión con el servidor",
     "notAuthenticated": "No estás autenticado. Por favor, inicia sesión."
+  },
+  "superadmin": {
+    "dashboard": {
+      "newThisMonth": "Nuevas (Este mes)",
+      "companySignups": "Altas de Compañías (Últimos 6 meses)",
+      "companies": "{count} empresas",
+      "noData": "Sin datos disponibles.",
+      "recentCompanies": "Compañías Recientes",
+      "new": "Nueva",
+      "noCompaniesToShow": "No hay empresas para mostrar."
+    },
+    "title": "Superadmin",
+    "description": "Gestiona las compañías y superadministradores del sistema",
+    "admins": {
+      "title": "Gestión de Superadministradores",
+      "description": "Gestiona otros superadministradores",
+      "empty": "No se encontraron superadministradores",
+      "table": {
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "createdAt": "Fecha de creación"
+      },
+      "actions": {
+        "new": "Nuevo Superadministrador"
+      },
+      "modal": {
+        "createTitle": "Crear Superadministrador",
+        "deleteTitle": "Eliminar Superadministrador",
+        "deleteMessage": "¿Estás seguro de que quieres eliminar a {name}? Esta acción no se puede deshacer."
+      },
+      "form": {
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "passwordConfirmation": "Confirmar contraseña"
+      },
+      "toast": {
+        "created": "Superadministrador creado correctamente",
+        "deleted": "Superadministrador eliminado correctamente"
+      },
+      "errors": {
+        "load": "Error al cargar superadministradores",
+        "create": "Error al crear superadministrador",
+        "delete": "Error al eliminar superadministrador"
+      }
+    }
+  },
+  "tenants": {
+    "title": "Gestión de Compañías",
+    "description": "Administra las compañías (tenants) del sistema",
+    "searchPlaceholder": "Buscar por nombre o dominio...",
+    "loading": "Cargando compañías...",
+    "empty": "No hay compañías para mostrar",
+    "table": {
+      "name": "Nombre",
+      "domain": "Dominio",
+      "admin_email": "Email del Administrador",
+      "status": "Estado",
+      "createdAt": "Fecha de creación",
+      "actions": "Acciones"
+    },
+    "form": {
+      "id": "Dominio (domain)",
+      "idPlaceholder": "ej: midominio",
+      "name": "Nombre",
+      "namePlaceholder": "Nombre de la compañía",
+      "domain": "Dominio",
+      "domainPlaceholder": "ej: empresa.blink.com",
+      "email": "Email de contacto",
+      "emailPlaceholder": "contacto@empresa.com",
+      "admin_email": "Email del Administrador",
+      "admin_emailPlaceholder": "admin@empresa.com",
+      "admin_password": "Contraseña del Administrador",
+      "admin_passwordPlaceholder": "••••••••",
+      "admin_passwordConfirmation": "Confirmar contraseña",
+      "changePasswordConfirmationPlaceholder": "••••••••",
+      "creationInfo": "Completa todos los campos para crear una nueva compañía",
+      "changePasswordLabel": "Cambiar Contraseña del Administrador (Opcional)",
+      "changePasswordPlaceholder": "Dejar en blanco para mantener la contraseña actual",
+      "changePasswordHint": "Deja este campo vacío si no deseas cambiar la contraseña",
+      "status": "Estado"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "actions": {
+      "new": "Nueva compañía",
+      "create": "Crear compañía",
+      "update": "Actualizar compañía"
+    },
+    "modal": {
+      "createTitle": "Nueva compañía",
+      "editTitle": "Editar compañía",
+      "deleteTitle": "Eliminar compañía",
+      "deleteMessage": "¿Estás seguro de que deseas eliminar la compañía '{name}'? Esta acción no se puede deshacer."
+    },
+    "toast": {
+      "created": "Compañía creada correctamente",
+      "updated": "Compañía actualizada correctamente",
+      "deleted": "Compañía eliminada correctamente"
+    },
+    "errors": {
+      "load": "Error al cargar las compañías",
+      "save": "Error al guardar la compañía",
+      "delete": "Error al eliminar la compañía"
+    }
   }
 }

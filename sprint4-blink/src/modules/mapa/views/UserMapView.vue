@@ -60,7 +60,7 @@ const createGeofencePopup = (geofence: Geofence) => {
   return popupContent
 }
 
-const createVehiclePopup = (vehicle: Vehicle) => {
+const createVehiclePopup = (vehicle: MapVehicle) => {
   const popupContent = document.createElement('div')
   popupContent.className = 'p-2'
 
@@ -83,20 +83,29 @@ const getColorByType = (type: string): string => {
   return colors[type] || '#6366f1'
 }
 
+const parseCoordinate = (value: string | number | null | undefined): number | null => {
+  if (value === null || value === undefined || value === '') return null
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
 const renderGeofences = (geofences: Geofence[]) => {
   if (!map) return
 
   geofences.forEach(geofence => {
-    if (geofence.status !== 'active') return
+    const lat = parseCoordinate(geofence.center_latitude)
+    const lng = parseCoordinate(geofence.center_longitude)
+    if (lat == null || lng == null) return
 
     const circle = L.circle(
-      [Number(geofence.center_latitude), Number(geofence.center_longitude)],
+      [lat, lng],
       {
         radius: geofence.radius,
         color: getColorByType(geofence.type),
         fillColor: getColorByType(geofence.type),
         fillOpacity: 0.2,
-        weight: 2
+        weight: 2,
+        dashArray: geofence.status === 'inactive' ? '5, 5' : undefined
       }
     )
 
@@ -106,14 +115,16 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-const renderVehicles = (vehicles: Vehicle[]) => {
+const renderVehicles = (vehicles: MapVehicle[]) => {
   if (!map) return
 
   vehicles.forEach(vehicle => {
-    if (vehicle.current_latitude == null || vehicle.current_longitude == null) return
+    const lat = parseCoordinate(vehicle.current_latitude)
+    const lng = parseCoordinate(vehicle.current_longitude)
+    if (lat == null || lng == null) return
 
     const marker = L.marker(
-      [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
+      [lat, lng],
       {
         title: vehicle.license_plate,
           icon: defaultMarkerIcon
@@ -125,6 +136,14 @@ const renderVehicles = (vehicles: Vehicle[]) => {
     marker.addTo(map!)
   })
 }
+
+const toMapVehicle = (vehicle: ServiceVehicle): MapVehicle => ({
+  vehicle_id: vehicle.vehicle_id ?? vehicle.id,
+  license_plate: vehicle.license_plate,
+  current_latitude: vehicle.current_latitude,
+  current_longitude: vehicle.current_longitude,
+  last_location_update: vehicle.last_location_update
+})
 
 const showUserLocation = () => {
   if (!map || !navigator.geolocation) return

@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/services/api.service'
+import { buildQuery } from '@/shared/utils/queryBuilder'
 import type {
   Geofence,
   CheckVehicleResponse,
@@ -9,6 +10,28 @@ import type {
 } from '../types/geofence.types'
 
 const BASE_URL = '/v1/geofences'
+
+interface PaginationMeta {
+  current_page?: number
+  last_page?: number
+}
+
+const normalizeListResponse = (raw: any): { data: any[]; meta?: PaginationMeta } => {
+  if (Array.isArray(raw)) return { data: raw }
+
+  if (Array.isArray(raw?.data)) {
+    return { data: raw.data, meta: raw?.meta }
+  }
+
+  if (Array.isArray(raw?.data?.data)) {
+    return {
+      data: raw.data.data,
+      meta: raw.data.meta ?? { current_page: raw.data.current_page, last_page: raw.data.last_page }
+    }
+  }
+
+  return { data: [] }
+}
 
 const normalizeGeofence = (data: any): Geofence => {
   return {
@@ -27,10 +50,27 @@ const normalizeGeofence = (data: any): Geofence => {
 }
 
 export const geofenceService = {
-  async getGeofences(): Promise<Geofence[]> {
-    const raw = await apiClient.get<any>(BASE_URL)
-    const list = Array.isArray(raw) ? raw : (raw?.data ?? [])
-    return list.map(normalizeGeofence)
+  async getGeofences(perPage: number = 200): Promise<Geofence[]> {
+    const all: Geofence[] = []
+    let page = 1
+
+    while (true) {
+      const query = buildQuery({ page, per_page: perPage })
+      const raw = await apiClient.get<any>(`${BASE_URL}${query}`)
+      const { data, meta } = normalizeListResponse(raw)
+
+      all.push(...data.map(normalizeGeofence))
+
+      if (meta?.last_page) {
+        if (page >= meta.last_page) break
+      } else {
+        if (data.length < perPage) break
+      }
+
+      page += 1
+    }
+
+    return all
   },
 
   async getGeofencesForUserMap(): Promise<Geofence[]> {

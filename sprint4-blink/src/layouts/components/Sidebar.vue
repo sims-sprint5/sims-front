@@ -7,52 +7,19 @@
     <nav class="relative flex flex-1 flex-col">
       <ul role="list" class="flex flex-1 flex-col gap-y-7 items-center">
 
-        <li class="w-full">
+        <!-- Superadmin Navigation -->
+        <li v-if="isSuperadmin" class="w-full">
           <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
-            {{ t('nav.sections.client') }}
+            {{ t('superadmin.title') }}
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
-            <li v-for="item in clienteNavigation" :key="item.nameKey" class="w-full flex justify-center">
-              <button
-                v-if="item.href === '#'"
-                :disabled="true"
-                :title="isCollapsed ? t(item.nameKey) : undefined"
-                :class="getItemClasses(item)"
-              >
+            <li v-for="item in superadminNavigation" :key="item.nameKey" class="w-full flex justify-center">
+              <RouterLink :to="item.href" :title="isCollapsed ? t(item.nameKey) : undefined"
+                :class="getItemClasses(item)">
                 <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-
                 <span v-if="!isCollapsed" class="truncate">
                   {{ t(item.nameKey) }}
                 </span>
-
-                <span v-if="!isCollapsed && item.count"
-                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                  {{ item.count }}
-                </span>
-
-                <span v-if="isCollapsed && item.count"
-                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-              </button>
-              
-              <RouterLink
-                v-else
-                :to="item.href"
-                :title="isCollapsed ? t(item.nameKey) : undefined"
-                :class="getItemClasses(item)"
-              >
-                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-
-                <span v-if="!isCollapsed" class="truncate">
-                  {{ t(item.nameKey) }}
-                </span>
-
-                <span v-if="!isCollapsed && item.count"
-                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                  {{ item.count }}
-                </span>
-
-                <span v-if="isCollapsed && item.count"
-                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
               </RouterLink>
             </li>
           </ul>
@@ -111,6 +78,7 @@
 
       </ul>
     </nav>
+
   </div>
 </template>
 
@@ -127,9 +95,10 @@ import {
   TicketIcon,
   TruckIcon,
   UsersIcon,
+  BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline'
 import blinkLogo from '@/assets/blink-logo.png'
-import reservesImg from '@/assets/reserves.png'
+import { useUser } from '@/modules/auth/composables/useUser'
 
 type NavItem = {
   nameKey: string
@@ -205,5 +174,11 @@ const adminNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.reservationsAdmin', href: '/admin/reservations', icon: ReservesIcon },
   { nameKey: 'nav.geofencing', href: '/geofencing', icon: MapPinIcon },
   { nameKey: 'nav.tickets', href: '/admin/tickets', icon: TicketIcon },
+])
+
+const superadminNavigation = computed<NavItem[]>(() => [
+  { nameKey: 'nav.dashboard', href: '/superadmin/dashboard', icon: HomeIcon },
+  { nameKey: 'tenants.title', href: '/superadmin/tenants', icon: BuildingOffice2Icon },
+  { nameKey: 'superadmin.admins.title', href: '/superadmin/admins', icon: UsersIcon },
 ])
 </script>
