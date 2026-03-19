@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
@@ -60,7 +60,7 @@ function closeReservationModal() {
   reservationForm.endAt = '';
 }
 
-const hasAppliedRoutePrefill = ref(false);
+const lastAppliedPrefillKey = ref<string | null>(null);
 
 const queryFirstString = (value: unknown): string | undefined => {
   if (typeof value === 'string') return value || undefined;
@@ -88,17 +88,20 @@ const reservationPrefill = computed(() => {
 
 watch(
   [() => reservationPrefill.value, () => loading.value],
-  ([prefill, isLoading]) => {
+  async ([prefill, isLoading]) => {
     if (!prefill) {
-      hasAppliedRoutePrefill.value = false;
+      lastAppliedPrefillKey.value = null;
       return;
     }
 
-    if (hasAppliedRoutePrefill.value) return;
     if (isLoading) return;
+
+    const prefillKey = [prefill.vehicleId, prefill.startAt ?? '', prefill.endAt ?? ''].join('|');
+    if (lastAppliedPrefillKey.value === prefillKey) return;
 
     // Asegura que el coche se encuentre aunque el usuario tuviese filtros activos.
     resetFilters();
+    await nextTick();
 
     const cards = vehicleCards.value;
     const idNum = Number(prefill.vehicleId);
@@ -122,7 +125,7 @@ watch(
     };
 
     openReservationModalPrefilled(vehicle, prefill.startAt, prefill.endAt);
-    hasAppliedRoutePrefill.value = true;
+    lastAppliedPrefillKey.value = prefillKey;
   },
   { immediate: true }
 );
