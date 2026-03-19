@@ -19,8 +19,8 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
-import type { Geofence, Vehicle as MapVehicle } from '../types/geofence.types'
-import type { Vehicle as ServiceVehicle } from '@/modules/vehicles/types/vehicle.types'
+import type { Geofence } from '../types/geofence.types'
+import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
 
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
@@ -197,15 +197,19 @@ onMounted(async () => {
   await nextTick()
   initMap()
 
+  let vehicles: Vehicle[] = []
   try {
-    const [geofences, vehicles] = await Promise.all([
-      geofenceService.getGeofences(),
-      vehicleService.getVehiclesList()
-    ])
-    renderGeofences(geofences)
-    renderVehicles(vehicles.map(toMapVehicle))
+    vehicles = await vehicleService.getVehiclesList()
+    renderVehicles(vehicles)
   } catch (err) {
-    console.warn('Failed to load data:', err)
+    console.warn('Failed to load vehicles:', err)
+  }
+
+  try {
+    const geofences: Geofence[] = await geofenceService.getGeofencesForUserMap()
+    renderGeofences(geofences)
+  } catch (err) {
+    console.warn('Failed to load geofences:', err)
   }
 
   showUserLocation()

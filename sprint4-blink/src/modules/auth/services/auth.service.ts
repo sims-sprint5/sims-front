@@ -1,4 +1,4 @@
-import { apiClient } from '@/shared/services/api.service';
+import { apiClient, initializeSanctum } from '@/shared/services/api.service';
 import { getCurrentTenant } from '@/shared/utils/tenantUtils';
 import type {
   AuthResponse,
@@ -31,6 +31,13 @@ function extractUser(payload: any): User | undefined {
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    // Best-effort: enables Laravel Sanctum CSRF protection when available.
+    try {
+      await initializeSanctum();
+    } catch {
+      // Ignore — some backends may not expose Sanctum.
+    }
+
     const payload = await apiClient.post<any>('/v1/auth/login', credentials);
 
     const token = extractToken(payload);
@@ -53,6 +60,13 @@ export const authService = {
   },
 
   async register(data: RegisterData): Promise<AuthResponse> {
+    // Best-effort: enables Laravel Sanctum CSRF protection when available.
+    try {
+      await initializeSanctum();
+    } catch {
+      // Ignore — some backends may not expose Sanctum.
+    }
+
     const payload = await apiClient.post<any>('/v1/auth/register', {
       name: data.name,
       email: data.email,
@@ -112,6 +126,50 @@ export const authService = {
       throw {
         message: 'errors.notAuthenticated',
         errors: {},
+      };
+    }
+
+    return raw as User;
+  },
+
+  /** Updates the currently authenticated user (self profile). */
+  async updateCurrentUser(data: Partial<Pick<User, 'name' | 'email' | 'phone'>>): Promise<User> {
+    let payload: any;
+    try {
+      payload = await apiClient.patch<any>('/v1/auth/me', data);
+    } catch (err: any) {
+      // Some backends expose only PUT for profile update.
+      // Don't rely on server error message formatting; just fallback to PUT.
+      if (err?.status === 405) {
+        try {
+          payload = await apiClient.put<any>('/v1/auth/me', data);
+        } catch (putErr: any) {
+          if (putErr?.status === 405) {
+            throw {
+              message: 'settings.errors.profileUpdateNotSupported',
+              errors: {},
+              status: 405,
+            };
+          }
+          throw putErr;
+        }
+      } else {
+        throw err;
+      }
+    }
+
+    let raw = extractUser(payload) ?? payload;
+
+    if (raw && typeof raw === 'object' && !raw.id && (raw as any).user_id) {
+      raw = { ...(raw as any), id: (raw as any).user_id };
+    }
+
+    if (!raw || typeof raw !== 'object' || !(raw as any).id) {
+      throw {
+        message: 'errors.requestFailed',
+        errors: {
+          user: ['Invalid server response'],
+        },
       };
     }
 

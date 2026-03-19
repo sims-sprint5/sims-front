@@ -25,94 +25,56 @@
           </ul>
         </li>
 
-        <!-- Normal User Navigation -->
-        <template v-else>
-          <li class="w-full">
-            <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
-              {{ t('nav.sections.client') }}
-            </div>
-            <ul role="list" class="space-y-1 flex flex-col items-center">
-              <li v-for="item in clienteNavigation" :key="item.nameKey" class="w-full flex justify-center">
-                <button v-if="item.href === '#'" :disabled="true" :title="isCollapsed ? t(item.nameKey) : undefined"
-                  :class="getItemClasses(item)">
-                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+        <li v-if="isAdmin" class="w-full">
+          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
+            {{ t('nav.sections.admin') }}
+          </div>
+          <ul role="list" class="space-y-1 flex flex-col items-center">
+            <li v-for="item in adminNavigation" :key="item.nameKey" class="w-full flex justify-center">
+              <button
+                v-if="item.href === '#'"
+                :disabled="true"
+                :title="isCollapsed ? t(item.nameKey) : undefined"
+                :class="getItemClasses(item)"
+              >
+                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
-                  <span v-if="!isCollapsed" class="truncate">
-                    {{ t(item.nameKey) }}
-                  </span>
+                <span v-if="!isCollapsed" class="truncate">
+                  {{ t(item.nameKey) }}
+                </span>
 
-                  <span v-if="!isCollapsed && item.count"
-                    class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                    {{ item.count }}
-                  </span>
+                <span v-if="!isCollapsed && item.count"
+                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
+                  {{ item.count }}
+                </span>
 
-                  <span v-if="isCollapsed && item.count"
-                    class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-                </button>
+                <span v-if="isCollapsed && item.count"
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+              </button>
+              
+              <RouterLink
+                v-else
+                :to="item.href"
+                :title="isCollapsed ? t(item.nameKey) : undefined"
+                :class="getItemClasses(item)"
+              >
+                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
-                <RouterLink v-else :to="item.href" :title="isCollapsed ? t(item.nameKey) : undefined"
-                  :class="getItemClasses(item)">
-                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                <span v-if="!isCollapsed" class="truncate">
+                  {{ t(item.nameKey) }}
+                </span>
 
-                  <span v-if="!isCollapsed" class="truncate">
-                    {{ t(item.nameKey) }}
-                  </span>
+                <span v-if="!isCollapsed && item.count"
+                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
+                  {{ item.count }}
+                </span>
 
-                  <span v-if="!isCollapsed && item.count"
-                    class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                    {{ item.count }}
-                  </span>
-
-                  <span v-if="isCollapsed && item.count"
-                    class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-                </RouterLink>
-              </li>
-            </ul>
-          </li>
-
-          <li class="w-full">
-            <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
-              {{ t('nav.sections.admin') }}
-            </div>
-            <ul role="list" class="space-y-1 flex flex-col items-center">
-              <li v-for="item in adminNavigation" :key="item.nameKey" class="w-full flex justify-center">
-                <button v-if="item.href === '#'" :disabled="true" :title="isCollapsed ? t(item.nameKey) : undefined"
-                  :class="getItemClasses(item)">
-                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-
-                  <span v-if="!isCollapsed" class="truncate">
-                    {{ t(item.nameKey) }}
-                  </span>
-
-                  <span v-if="!isCollapsed && item.count"
-                    class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                    {{ item.count }}
-                  </span>
-
-                  <span v-if="isCollapsed && item.count"
-                    class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-                </button>
-
-                <RouterLink v-else :to="item.href" :title="isCollapsed ? t(item.nameKey) : undefined"
-                  :class="getItemClasses(item)">
-                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-
-                  <span v-if="!isCollapsed" class="truncate">
-                    {{ t(item.nameKey) }}
-                  </span>
-
-                  <span v-if="!isCollapsed && item.count"
-                    class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                    {{ item.count }}
-                  </span>
-
-                  <span v-if="isCollapsed && item.count"
-                    class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-                </RouterLink>
-              </li>
-            </ul>
-          </li>
-        </template>
+                <span v-if="isCollapsed && item.count"
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+              </RouterLink>
+            </li>
+          </ul>
+        </li>
 
       </ul>
     </nav>
@@ -124,6 +86,8 @@
 import { computed, defineComponent, h, type Component } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useUser } from '@/modules/auth/composables/useUser'
+import { isAdminRole } from '@/shared/utils/roleUtils'
 import {
   Cog6ToothIcon,
   HomeIcon,
@@ -165,7 +129,9 @@ const props = defineProps<{
 
 const route = useRoute()
 const { t } = useI18n()
-const { isSuperadmin } = useUser()
+const { user } = useUser()
+
+const isAdmin = computed(() => isAdminRole(user.value?.role))
 
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',

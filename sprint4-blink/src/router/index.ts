@@ -11,6 +11,7 @@ import { reservationsRoutes } from '../modules/reservations/routes';
 import { ticketsRoutes } from '../modules/tickets/routes';
 import { superadminRoutes } from '../modules/superadmin/routes';
 import { i18n } from '@/i18n';
+import { hasAllowedRole } from '@/shared/utils/roleUtils';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -18,6 +19,15 @@ const routes: RouteRecordRaw[] = [
     redirect: () => (isSuperadminHost() ? '/superadmin/login' : '/login'),
   },
   ...authRoutes,
+  {
+    path: '/unauthorized',
+    name: 'Unauthorized',
+    component: () => import('@/shared/views/UnauthorizedView.vue'),
+    meta: {
+      requiresAuth: false,
+      titleKey: 'unauthorized.title',
+    },
+  },
   ...dashboardRoutes,
   ...settingsRoutes,
   ...usersRoutes,
@@ -45,7 +55,9 @@ router.beforeEach((to, _from, next) => {
   const storedUser = authService.getUser();
   const isSuperadminRoute = to.path.startsWith('/superadmin');
   const requiresAuth = to.meta.requiresAuth;
-  const isAccessingFromSuperadminHost = isSuperadminHost();
+  const currentTenant = getCurrentTenant();
+  const storedTenant = authService.getTenant();
+  const user = authService.getUser();
 
   // Update page title
   const titleKey = to.meta.titleKey as string | undefined;
@@ -120,8 +132,20 @@ router.beforeEach((to, _from, next) => {
     return;
   }
 
-  // If already authenticated on login/register, redirect to dashboard
-  if (isTenantAuthRoute && isAuthenticated) {
+  // Role-based access control.
+  // Supports both `meta.allowedRoles` (preferred) and legacy `meta.requiresAdmin`.
+  const allowedRoles = (to.meta.allowedRoles as string[] | undefined) ??
+    ((to.meta.requiresAdmin as boolean | undefined) ? ['admin', 'superadmin'] : undefined);
+
+  if (allowedRoles?.length) {
+    // At this point, unauthenticated users were already redirected above.
+    if (!user || !hasAllowedRole(user.role, allowedRoles)) {
+      next({ name: 'Unauthorized' });
+      return;
+    }
+  }
+
+  if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
     next({ name: 'Dashboard' });
     return;
   }

@@ -81,6 +81,12 @@
     "user": "User",
     "admin": "Admin"
   },
+  "unauthorized": {
+    "title": "Unauthorized",
+    "message": "You don’t have permission to access this section.",
+    "backDashboard": "Back to dashboard",
+    "goLogin": "Go to sign in"
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome to the Dashboard!",
@@ -102,20 +108,28 @@
     "toast": {
       "avatarUpdated": "Avatar updated",
       "personalInfoSaved": "Personal information saved successfully",
+      "passwordUpdated": "Password updated successfully",
       "deleteWarning": "This action cannot be undone"
     },
     "validation": {
       "fileTooLarge": "The file is too large. Maximum 1MB.",
-      "invalidFileType": "Only JPG, GIF, or PNG files are allowed."
+      "invalidFileType": "Only JPG, GIF, or PNG files are allowed.",
+      "currentPasswordRequired": "Please enter your current password.",
+      "newPasswordRequired": "Please enter a new password.",
+      "passwordsDoNotMatch": "Passwords do not match."
     },
     "errors": {
       "userInfoUnavailable": "Could not retrieve user information",
-      "updateInfo": "Error updating information"
+      "updateInfo": "Error updating information",
+      "profileUpdateForbidden": "You don’t have permission to update your profile.",
+      "profileUpdateNotSupported": "The server does not allow updating your profile. Please contact an administrator."
     },
     "firstName": "First name",
     "lastName": "Last name",
     "email": "Email",
     "currentPassword": "Current password",
+    "newPassword": "New password",
+    "passwordConfirmation": "Confirm new password",
     "saveChanges": "Save changes",
     "deleteAccount": "Delete account",
     "deleteAccountDesc": "No longer want to use our service? You can delete your account here. This action cannot be undone. All information related to this account will be permanently deleted.",

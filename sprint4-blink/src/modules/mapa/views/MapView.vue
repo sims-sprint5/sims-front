@@ -170,7 +170,7 @@ const getErrorMessage = (err: unknown, fallback: string) => {
     ? String((err as { message?: string }).message ?? '')
     : ''
 
-  return translateErrorMessage(message) || fallback
+  return translateErrorMessage(message, fallback)
 }
 
 // Load geofences and vehicles
@@ -179,8 +179,7 @@ const loadGeofences = async () => {
   try {
     geofences.value = await geofenceService.getGeofences()
   } catch (errorMsg: any) {
-    const translatedMessage = translateErrorMessage(errorMsg?.message)
-    error(translatedMessage || t('mapa.loadError'))
+    error(translateErrorMessage(errorMsg?.message, t('mapa.loadError')))
   } finally {
     loading.value = false
   }
@@ -188,7 +187,14 @@ const loadGeofences = async () => {
 
 const loadVehicles = async () => {
   try {
-    vehicles.value = await vehicleService.getVehiclesList()
+    const rawVehicles = await vehicleService.getVehiclesList()
+    vehicles.value = rawVehicles.map((v) => ({
+      vehicle_id: Number(v.vehicle_id ?? v.id),
+      license_plate: v.license_plate,
+      current_latitude: v.current_latitude,
+      current_longitude: v.current_longitude,
+      last_location_update: v.last_location_update,
+    }))
   } catch (err) {
     error(getErrorMessage(err, t('mapa.loadError')))
   }

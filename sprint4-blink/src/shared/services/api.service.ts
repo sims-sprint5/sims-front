@@ -7,7 +7,29 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
+  // Required for Laravel Sanctum CSRF cookie and session-based auth.
+  withCredentials: true,
 });
+
+let sanctumInitPromise: Promise<void> | null = null;
+
+/**
+ * Initializes Laravel Sanctum CSRF cookie.
+ * Safe to call multiple times; it will be deduplicated.
+ */
+export async function initializeSanctum(): Promise<void> {
+  if (!sanctumInitPromise) {
+    sanctumInitPromise = axiosInstance
+      .get('/sanctum/csrf-cookie')
+      .then(() => undefined)
+      .catch((err) => {
+        sanctumInitPromise = null;
+        throw err;
+      });
+  }
+
+  await sanctumInitPromise;
+}
 
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
@@ -36,8 +58,8 @@ axiosInstance.interceptors.response.use(
         window.location.href = '/login';
       }
 
-      // Debug logging in dev: log 4xx and 5xx
-      if (import.meta.env.DEV && error.response.status >= 400) {
+      // Debug logging in dev: log 4xx and 5xx (except 403 which is often expected/handled)
+      if (import.meta.env.DEV && error.response.status >= 400 && error.response.status !== 403) {
         const method = String(error.config?.method || 'GET').toUpperCase();
         const url = String(error.config?.url || '');
         const payload = {
