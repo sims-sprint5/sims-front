@@ -133,6 +133,33 @@ Optimized build in `dist/` directory.
 npm run preview
 ```
 
+## 🐳 Docker
+
+### Development (runs `npm run dev`)
+
+```bash
+docker compose up --build frontend-dev
+```
+
+App available at `http://localhost:5173`
+
+### Production image (runs `npm run build` during image build)
+
+Build and run:
+
+```bash
+docker compose --profile prod up --build frontend-prod
+```
+
+App available at `http://localhost:8080`
+
+Optional commands:
+
+```bash
+docker compose build frontend-prod
+docker compose up frontend-dev
+```
+
 ---
 
 ## 🎯 Features
