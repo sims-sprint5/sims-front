@@ -1,0 +1,69 @@
+import axios from 'axios';
+import type { User } from '@/modules/auth/types/auth.types';
+
+
+const superadminAxios = axios.create({
+    baseURL: '/api',
+    headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+    },
+});
+
+superadminAxios.interceptors.request.use((config) => {
+    const token = localStorage.getItem('superadmin_token');
+    if (token) {
+        config.headers = config.headers ?? {};
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+const SUPERADMIN_TOKEN_KEY = 'superadmin_token';
+const SUPERADMIN_USER_KEY = 'superadmin_user';
+
+export const superadminAuthService = {
+    async login(credentials: { email: string; password: string }): Promise<{ token: string; user: User }> {
+        const { data } = await superadminAxios.post('/v1/superadmin/auth/login', credentials);
+
+        const token: string =
+            data?.token ?? data?.access_token ?? data?.data?.token ?? data?.data?.access_token;
+        const user: User =
+            data?.user ?? data?.superadmin ?? data?.data?.user ?? data?.data?.superadmin ?? data?.data;
+
+        if (!token || !user) {
+            throw { message: 'errors.requestFailed', errors: {} };
+        }
+
+        const superadminUser = { ...user, role: 'superadmin' };
+
+        localStorage.setItem(SUPERADMIN_TOKEN_KEY, token);
+        localStorage.setItem(SUPERADMIN_USER_KEY, JSON.stringify(superadminUser));
+
+        localStorage.setItem('auth_token', token);
+        localStorage.setItem('auth_user', JSON.stringify(superadminUser));
+        localStorage.removeItem('auth_tenant');
+
+        return { token, user: superadminUser as User };
+    },
+
+    async logout(): Promise<void> {
+        try {
+            await superadminAxios.post('/v1/superadmin/auth/logout');
+        } finally {
+            this.clearAuth();
+        }
+    },
+
+    clearAuth(): void {
+        localStorage.removeItem(SUPERADMIN_TOKEN_KEY);
+        localStorage.removeItem(SUPERADMIN_USER_KEY);
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        localStorage.removeItem('auth_tenant');
+    },
+
+    isAuthenticated(): boolean {
+        return !!localStorage.getItem(SUPERADMIN_TOKEN_KEY);
+    },
+};

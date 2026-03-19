@@ -15,6 +15,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "view": "View",
+    "actions": "Actions",
     "logout": "Sign out"
   },
   "language": {
@@ -34,6 +35,7 @@
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
     "settings": "Settings",
+    "superadmin": "Superadmin",
     "sections": {
       "client": "Client",
       "admin": "Admin"
@@ -51,8 +53,7 @@
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "noAccount": "Don’t have an account?",
-      "goRegister": "Create one"
-      ,
+      "goRegister": "Create one",
       "forgotPassword": "Forgot password?",
       "welcome": "Welcome {name}!",
       "genericError": "Could not sign in. Please try again."
@@ -614,5 +615,112 @@
     "requestFailed": "Request failed",
     "serverConnection": "Server connection error",
     "notAuthenticated": "You are not authenticated. Please sign in."
+  },
+  "superadmin": {
+    "dashboard": {
+      "newThisMonth": "New (This month)",
+      "companySignups": "Company Signups (Last 6 months)",
+      "companies": "{count} companies",
+      "noData": "No data available.",
+      "recentCompanies": "Recent Companies",
+      "new": "New",
+      "noCompaniesToShow": "No companies to show."
+    },
+    "title": "Superadmin",
+    "description": "Manage system companies and superadministrators",
+    "admins": {
+      "title": "Superadmins",
+      "description": "Manage other superadministrators",
+      "empty": "No superadmins found",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "createdAt": "Created At"
+      },
+      "actions": {
+        "new": "New Superadmin"
+      },
+      "modal": {
+        "createTitle": "Create Superadmin",
+        "deleteTitle": "Delete Superadmin",
+        "deleteMessage": "Are you sure you want to delete {name}?"
+      },
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirmation": "Confirm Password"
+      },
+      "toast": {
+        "created": "Superadmin created successfully",
+        "deleted": "Superadmin deleted successfully"
+      },
+      "errors": {
+        "load": "Failed to load superadmins",
+        "create": "Failed to create superadmin",
+        "delete": "Failed to delete superadmin"
+      }
+    }
+  },
+  "tenants": {
+    "title": "Company Management",
+    "description": "Manage the system companies (tenants)",
+    "searchPlaceholder": "Search by name or domain...",
+    "loading": "Loading companies...",
+    "empty": "No companies to display",
+    "table": {
+      "name": "Name",
+      "domain": "Domain",
+      "admin_email": "Admin Email",
+      "status": "Status",
+      "createdAt": "Created at",
+      "actions": "Actions"
+    },
+    "form": {
+      "id": "Domain",
+      "idPlaceholder": "e.g. mydomain",
+      "name": "Name",
+      "namePlaceholder": "Company name",
+      "domain": "Domain",
+      "domainPlaceholder": "e.g. company.blink.com",
+      "email": "Contact email",
+      "emailPlaceholder": "contact@company.com",
+      "admin_email": "Admin Email",
+      "admin_emailPlaceholder": "admin@company.com",
+      "admin_password": "Admin Password",
+      "admin_passwordPlaceholder": "••••••••",
+      "admin_passwordConfirmation": "Confirm password",
+      "changePasswordConfirmationPlaceholder": "••••••••",
+      "creationInfo": "Fill in all fields to create a new company",
+      "changePasswordLabel": "Change Admin Password (Optional)",
+      "changePasswordPlaceholder": "Leave empty to keep current password",
+      "changePasswordHint": "Leave this field empty if you don't want to change the password",
+      "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "new": "New company",
+      "create": "Create company",
+      "update": "Update company"
+    },
+    "modal": {
+      "createTitle": "New company",
+      "editTitle": "Edit company",
+      "deleteTitle": "Delete company",
+      "deleteMessage": "Are you sure you want to delete the company '{name}'? This action cannot be undone."
+    },
+    "toast": {
+      "created": "Company created successfully",
+      "updated": "Company updated successfully",
+      "deleted": "Company deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load companies",
+      "save": "Failed to save company",
+      "delete": "Failed to delete company"
+    }
   }
 }

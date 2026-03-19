@@ -6,11 +6,7 @@
 
     <div class="flex min-w-0 flex-1 flex-col">
 
-        <Navbar 
-        :title="title" 
-        @toggle-menu="toggleSidebar"
-        @logout="handleLogout"
-      />
+      <Navbar :title="title" @toggle-menu="toggleSidebar" @logout="handleLogout" />
 
       <main class="flex-1 overflow-y-auto bg-transparent">
         <slot />
@@ -23,6 +19,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '@/modules/auth/services/auth.service';
+import { superadminAuthService } from '@/modules/superadmin/services/superadmin-auth.service';
 import { useUser } from '@/modules/auth/composables/useUser';
 import Navbar from './components/Navbar.vue';
 import Sidebar from './components/Sidebar.vue';
@@ -44,16 +41,29 @@ const toggleSidebar = () => {
 };
 
 onMounted(async () => {
+  // Els superadmins usen un endpoint d'auth diferenciat (/v1/superadmin/auth/me).
+  // Cridar /v1/auth/me amb el token de superadmin retornaria 401 i l'interceptor
+  // d'axios faria un redirect forçat a /login, ignorant el try/catch.
+  // Per als superadmins, les dades ja estan al localStorage des del login, és suficient.
+  const storedUser = authService.getUser();
+  if (storedUser?.role === 'superadmin') return;
+
   try {
     await loadUser();
   } catch (_err) {
-      // Ignore error — user will see toast messages if needed
+    // Ignore error — user will see toast messages if needed
   }
 });
 
 const handleLogout = async () => {
   clearAvatar();
-  await authService.logout();
-  router.push('/login');
+  const storedUser = authService.getUser();
+  if (storedUser?.role === 'superadmin') {
+    await superadminAuthService.logout();
+    router.push('/superadmin/login');
+  } else {
+    await authService.logout();
+    router.push('/login');
+  }
 };
 </script>
