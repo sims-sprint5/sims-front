@@ -12,7 +12,7 @@ const { t } = useI18n();
 
 const isAuthenticated = computed(() => authService.isAuthenticated());
 
-const goDashboard = () => router.push({ name: 'Dashboard' });
+const goDashboard = () => router.push({ name: 'UserMapView' });
 const goLogin = () => router.push({ name: 'Login' });
 </script>
 

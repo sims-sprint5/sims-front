@@ -48,7 +48,7 @@ const handleLogin = async () => {
 
         toast.success(t('auth.login.welcome', { name: response.user.name }));
 
-        router.push('/dashboard');
+        router.push('/mapa');
     } catch (err: any) {
         if (err.errors) {
             fieldErrors.value = err.errors;

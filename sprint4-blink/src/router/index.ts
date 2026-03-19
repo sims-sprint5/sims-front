@@ -3,13 +3,13 @@ import type { RouteRecordRaw } from 'vue-router';
 import { authService } from '../modules/auth/services/auth.service';
 import { getCurrentTenant, isSuperadminHost } from '../shared/utils/tenantUtils';
 import { authRoutes } from '../modules/auth/routes';
-import { dashboardRoutes } from '../modules/dashboard/routes';
 import { settingsRoutes } from '../modules/settings/routes';
 import { usersRoutes } from '../modules/users/routes';
 import { vehiclesRoutes } from '../modules/vehicles/routes';
 import { reservationsRoutes } from '../modules/reservations/routes';
 import { ticketsRoutes } from '../modules/tickets/routes';
 import { superadminRoutes } from '../modules/superadmin/routes';
+import mapaRoutes from '../modules/mapa/routes';
 import { i18n } from '@/i18n';
 import { hasAllowedRole } from '@/shared/utils/roleUtils';
 
@@ -28,12 +28,12 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'unauthorized.title',
     },
   },
-  ...dashboardRoutes,
   ...settingsRoutes,
   ...usersRoutes,
   ...vehiclesRoutes,
   ...reservationsRoutes,
   ...ticketsRoutes,
+  ...mapaRoutes,
   ...superadminRoutes,
   {
     path: '/:pathMatch(.*)*',
@@ -52,12 +52,12 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
   const isAuthenticated = authService.isAuthenticated();
-  const storedUser = authService.getUser();
+  const user = authService.getUser();
   const isSuperadminRoute = to.path.startsWith('/superadmin');
+  const isAccessingFromSuperadminHost = isSuperadminHost();
   const requiresAuth = to.meta.requiresAuth;
   const currentTenant = getCurrentTenant();
   const storedTenant = authService.getTenant();
-  const user = authService.getUser();
 
   // Update page title
   const titleKey = to.meta.titleKey as string | undefined;
@@ -86,7 +86,7 @@ router.beforeEach((to, _from, next) => {
     }
 
     // If authenticated but not as superadmin, invalid state - clear and redirect
-    if (storedUser?.role !== 'superadmin') {
+    if (user?.role !== 'superadmin') {
       authService.clearAuth();
       next({ name: 'SuperadminLogin' });
       return;
@@ -102,10 +102,6 @@ router.beforeEach((to, _from, next) => {
     return;
   }
 
-  // Tenant context ({tenant}.lvh.me)
-  const currentTenant = getCurrentTenant();
-  const storedTenant = authService.getTenant();
-
   // If subdomain changed, clear session
   if (isAuthenticated && storedTenant && currentTenant !== storedTenant) {
     authService.clearAuth();
@@ -114,7 +110,7 @@ router.beforeEach((to, _from, next) => {
   }
 
   // If superadmin somehow on tenant host, clear and redirect
-  if (isAuthenticated && storedUser?.role === 'superadmin') {
+  if (isAuthenticated && user?.role === 'superadmin') {
     authService.clearAuth();
     next({ name: 'Login' });
     return;
@@ -122,7 +118,7 @@ router.beforeEach((to, _from, next) => {
 
   // If trying to access superadmin routes, redirect appropriately
   if (isSuperadminRoute) {
-    next({ name: isAuthenticated ? 'Dashboard' : 'Login' });
+    next({ name: isAuthenticated ? 'UserMapView' : 'Login' });
     return;
   }
 
@@ -146,7 +142,7 @@ router.beforeEach((to, _from, next) => {
   }
 
   if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
-    next({ name: 'Dashboard' });
+    next({ name: 'UserMapView' });
     return;
   }
 

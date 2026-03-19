@@ -25,6 +25,23 @@
           </ul>
         </li>
 
+        <li v-if="isRegularUser || isAdmin" class="w-full">
+          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
+            {{ t('nav.sections.client') }}
+          </div>
+          <ul role="list" class="space-y-1 flex flex-col items-center">
+            <li v-for="item in clienteNavigation" :key="item.nameKey" class="w-full flex justify-center">
+              <RouterLink :to="item.href" :title="isCollapsed ? t(item.nameKey) : undefined"
+                :class="getItemClasses(item)">
+                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                <span v-if="!isCollapsed" class="truncate">
+                  {{ t(item.nameKey) }}
+                </span>
+              </RouterLink>
+            </li>
+          </ul>
+        </li>
+
         <li v-if="isAdmin" class="w-full">
           <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
             {{ t('nav.sections.admin') }}
@@ -98,7 +115,6 @@ import {
   BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline'
 import blinkLogo from '@/assets/blink-logo.png'
-import { useUser } from '@/modules/auth/composables/useUser'
 
 type NavItem = {
   nameKey: string
@@ -111,15 +127,17 @@ const ReservesIcon = defineComponent({
   name: 'ReservesIcon',
   setup(_, { attrs }) {
     return () =>
-      h('img', {
+      h('svg', {
         ...attrs,
-        src: reservesImg,
-        alt: '',
-        class: [
-          (attrs as any).class,
-          'brightness-0 invert',
-        ],
-      })
+        class: [(attrs as any).class],
+        xmlns: 'http://www.w3.org/2000/svg',
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        'stroke-width': '2',
+      }, [
+        h('path', { d: 'M6 9h12M6 9a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3M6 9v7a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9M9 13h6' })
+      ])
   },
 })
 
@@ -131,7 +149,9 @@ const route = useRoute()
 const { t } = useI18n()
 const { user } = useUser()
 
-const isAdmin = computed(() => isAdminRole(user.value?.role))
+const isAdmin = computed(() => isAdminRole(user.value?.role) && user.value?.role !== 'superadmin')
+const isSuperadmin = computed(() => user.value?.role === 'superadmin')
+const isRegularUser = computed(() => user.value?.role === 'user')
 
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
@@ -161,7 +181,6 @@ const getItemClasses = (item: NavItem) => {
 }
 
 const clienteNavigation = computed<NavItem[]>(() => [
-  { nameKey: 'nav.dashboard', href: '/dashboard', icon: HomeIcon },
   { nameKey: 'nav.map', href: '/mapa', icon: MapPinIcon },
   { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
   { nameKey: 'nav.bookings', href: '/reservation', icon: ReservesIcon },

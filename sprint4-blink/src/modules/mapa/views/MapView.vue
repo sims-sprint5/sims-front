@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout :title="pageTitle">
     <div class="h-[calc(100vh-64px)] flex flex-col gap-4 p-4 overflow-hidden">
       <!-- Map Section (80%) -->
       <div class="flex-1 min-h-0">
@@ -113,7 +113,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useToast } from '@/shared/composables/useToast'
 import { useI18n } from 'vue-i18n'
 import AppLayout from '@/layouts/AppLayout.vue'
@@ -128,9 +129,15 @@ import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import type { Geofence, VehicleGeofenceLog, Vehicle } from '../types/geofence.types'
 import { useTranslateError } from '@/shared/composables/useTranslateError'
 
+const route = useRoute()
 const { success, error } = useToast()
 const { t } = useI18n()
 const { translateErrorMessage } = useTranslateError()
+
+const pageTitle = computed(() => {
+  const titleKey = route.meta.titleKey as string | undefined
+  return titleKey ? t(titleKey) : ''
+})
 
 // State
 const geofences = ref<Geofence[]>([])

@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout :title="pageTitle">
     <div class="h-[calc(100vh-64px)] flex flex-col p-4 overflow-hidden">
       <!-- Map takes full height -->
       <div class="flex-1 min-h-0 rounded-lg overflow-hidden shadow-lg">
@@ -10,7 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import markerIcon from 'leaflet/dist/images/marker-icon.png'
@@ -21,6 +23,14 @@ import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
+
+const route = useRoute()
+const { t } = useI18n()
+
+const pageTitle = computed(() => {
+  const titleKey = route.meta.titleKey as string | undefined
+  return titleKey ? t(titleKey) : ''
+})
 
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
@@ -60,7 +70,7 @@ const createGeofencePopup = (geofence: Geofence) => {
   return popupContent
 }
 
-const createVehiclePopup = (vehicle: MapVehicle) => {
+const createVehiclePopup = (vehicle: Vehicle) => {
   const popupContent = document.createElement('div')
   popupContent.className = 'p-2'
 
@@ -115,7 +125,7 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-const renderVehicles = (vehicles: MapVehicle[]) => {
+const renderVehicles = (vehicles: Vehicle[]) => {
   if (!map) return
 
   vehicles.forEach(vehicle => {
@@ -136,14 +146,6 @@ const renderVehicles = (vehicles: MapVehicle[]) => {
     marker.addTo(map!)
   })
 }
-
-const toMapVehicle = (vehicle: ServiceVehicle): MapVehicle => ({
-  vehicle_id: vehicle.vehicle_id ?? vehicle.id,
-  license_plate: vehicle.license_plate,
-  current_latitude: vehicle.current_latitude,
-  current_longitude: vehicle.current_longitude,
-  last_location_update: vehicle.last_location_update
-})
 
 const showUserLocation = () => {
   if (!map || !navigator.geolocation) return
