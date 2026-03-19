@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { BaseButton } from '@/components/base';
+import { useToast } from '@/shared/composables/useToast';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
 import {
   IdentificationIcon,
@@ -25,6 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
+const toast = useToast();
 
 function statusLabel(raw: string | undefined): string {
   if (!raw) return '—';
@@ -49,12 +51,18 @@ const statusStyle = computed(() => {
 });
 
 const isAvailable = computed(() => {
+  if (props.vehicle?.available === true) return true;
+  if (props.vehicle?.available === false) return false;
   const key = (props.vehicle?.category ?? '').trim().toLowerCase();
   return key === 'available' || key === 'active';
 });
 
 function handleReserve() {
-  if (!props.vehicle || !isAvailable.value) return;
+  if (!props.vehicle) return;
+  if (!isAvailable.value) {
+    toast.error('Este coche no está disponible');
+    return;
+  }
   emit('reserve', props.vehicle);
 }
 </script>
@@ -134,7 +142,6 @@ function handleReserve() {
             <BaseButton
               :variant="isAvailable ? 'primary' : 'secondary'"
               full-width
-              :disabled="!isAvailable"
               @click="handleReserve"
             >
               <CalendarIcon class="h-4 w-4 mr-1.5" />
