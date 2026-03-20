@@ -118,14 +118,17 @@ jobs:
             cd "${REMOTE_DIR}"
 
             if docker compose version >/dev/null 2>&1; then
-              COMPOSE_PROFILES=prod docker compose up -d --build frontend-prod
+              COMPOSE_CMD='docker compose'
             elif command -v docker-compose >/dev/null 2>&1; then
-              docker-compose up -d --build frontend-prod
+              COMPOSE_CMD='docker-compose'
             else
-              docker build --target production -t sprint4-blink-frontend-prod .
-              docker rm -f sprint4-blink-prod >/dev/null 2>&1 || true
-              docker run -d --name sprint4-blink-prod --restart unless-stopped -p 8080:80 sprint4-blink-frontend-prod
+              echo 'Neither docker compose plugin nor docker-compose is installed on server.'
+              exit 1
             fi
+
+            docker rm -f sprint4-blink-prod >/dev/null 2>&1 || true
+            sh -c "$COMPOSE_CMD up -d --build --force-recreate --remove-orphans frontend-prod"
+            docker ps --filter "name=sprint4-blink-prod"
 
             docker image prune -f
           EOF
@@ -134,5 +137,7 @@ jobs:
         run: |
           curl -fSsL "${HEALTHCHECK_URL}?v=${GITHUB_SHA}" > /dev/null
           echo "Build metadata from server:"
-          curl -fSsL "https://simsgrup2.app/build.txt?v=${GITHUB_SHA}" | cat
+          BUILD_META="$(curl -fSsL "https://simsgrup2.app/build.txt?v=${GITHUB_SHA}")"
+          echo "$BUILD_META"
+          echo "$BUILD_META" | grep -q "commit=${GITHUB_SHA}"
           echo "Frontend deployed and reachable: ${HEALTHCHECK_URL}"

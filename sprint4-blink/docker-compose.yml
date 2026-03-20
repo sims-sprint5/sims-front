@@ -22,7 +22,11 @@ services:
       context: .
       target: production
     container_name: sprint4-blink-prod
+    restart: unless-stopped
     ports:
       - "8080:80"
-    profiles:
-      - prod
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
