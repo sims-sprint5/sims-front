@@ -10,18 +10,19 @@ env:
   SSH_PORT: 22
   HEALTHCHECK_URL: https://simsgrup2.app/login
   FRONTEND_DIR: sprint4-blink
+  REMOTE_DIR: /opt/sims-front-2/sprint4-blink
 
 jobs:
   # ---------------------------------------------
   # TEST JOB
   # - Instala dependencias
   # - Ejecuta tests obligatorios (si fallan, se detiene el pipeline)
-  # - Compila frontend una sola vez
-  # - Publica dist como artifact para deploy
+  # - Compila frontend
+  # - Valida build Docker de producción
   # ---------------------------------------------
   test:
     runs-on: ubuntu-latest
-    name: Test and Build Frontend
+    name: Test and Validate Docker Build
 
     steps:
       - name: Checkout code
@@ -46,25 +47,15 @@ jobs:
         working-directory: ${{ env.FRONTEND_DIR }}
         run: npm run build
 
-      - name: Embed build metadata
-        run: |
-          printf 'commit=%s\nbuild_date=%s\n' "${GITHUB_SHA}" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "${FRONTEND_DIR}/dist/build.txt"
-
-      - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          # Se conserva la carpeta dist generada por el build
-          path: ${{ env.FRONTEND_DIR }}/dist
-          if-no-files-found: error
+      - name: Validate Docker production image build
+        run: docker build --target production -t sims-front:ci "${FRONTEND_DIR}"
 
   # ---------------------------------------------
   # DEPLOY JOB
   # - Depende de test: si test/build falla, no despliega
-  # - Descarga artifact dist en la raíz del runner (./dist)
-  # - Publica archivos en servidor por rsync
-  # - Publica de forma más segura usando carpeta temporal + swap
-  # - Recarga Nginx (sin reconfigurarlo)
+  # - Sincroniza código al servidor
+  # - Construye y levanta frontend-prod con docker compose
+  # - Limpia imágenes huérfanas
   # - Ejecuta healthcheck final
   # ---------------------------------------------
   deploy:
@@ -75,12 +66,12 @@ jobs:
     if: success()
 
     steps:
-      - name: Download dist artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist
-          # Ruta simplificada: dist/ en la raíz del job
-          path: dist
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Embed build metadata
+        run: |
+          printf 'commit=%s\nbuild_date=%s\n' "${GITHUB_SHA}" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "${FRONTEND_DIR}/public/build.txt"
 
       - name: Setup SSH key
         env:
@@ -102,45 +93,30 @@ jobs:
           EOF
           chmod 600 ~/.ssh/config
 
-      - name: Upload dist to droplet
+      - name: Upload frontend source to droplet
         env:
           SSH_USER: ${{ secrets.DEPLOY_USER }}
           SSH_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
-          # Enviamos directamente ./dist descargado del artifact
           rsync -az --delete \
             -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p ${SSH_PORT}" \
-            "dist/" \
-            "$SSH_USER@$SSH_HOST:/tmp/sims-front-dist/"
+            --exclude '.git' \
+            --exclude 'node_modules' \
+            --exclude 'dist' \
+            "${FRONTEND_DIR}/" \
+            "$SSH_USER@$SSH_HOST:${REMOTE_DIR}/"
 
-      - name: Publish on Nginx and reload
+      - name: Build and run frontend Docker container
         env:
           SSH_USER: ${{ secrets.DEPLOY_USER }}
           SSH_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p "${SSH_PORT}" "$SSH_USER@$SSH_HOST" << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p "${SSH_PORT}" "$SSH_USER@$SSH_HOST" "REMOTE_DIR='${REMOTE_DIR}' bash -s" << 'EOF'
             set -e
+            cd "${REMOTE_DIR}"
 
-            # Despliegue seguro: preparamos release en carpeta temporal
-            # y luego hacemos swap para evitar dejar html vacío ante fallos.
-            RELEASE_DIR="/tmp/sims-front-release-$(date +%s)"
-            mkdir -p "$RELEASE_DIR"
-            cp -r /tmp/sims-front-dist/. "$RELEASE_DIR/"
-
-            # Ajustar permisos antes del swap
-            chown -R www-data:www-data "$RELEASE_DIR"
-            chmod -R 755 "$RELEASE_DIR"
-
-            # Backup rápido del release actual y swap atómico por rename
-            rm -rf /usr/share/nginx/html.prev
-            if [ -d /usr/share/nginx/html ]; then
-              mv /usr/share/nginx/html /usr/share/nginx/html.prev
-            fi
-            mv "$RELEASE_DIR" /usr/share/nginx/html
-
-            rm -rf /tmp/sims-front-dist
-            rm -rf /usr/share/nginx/html.prev
-            systemctl reload nginx
+            docker compose --profile prod up -d --build frontend-prod
+            docker image prune -f
           EOF
 
       - name: Healthcheck frontend
