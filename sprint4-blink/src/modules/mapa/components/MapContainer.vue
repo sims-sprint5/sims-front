@@ -1,6 +1,12 @@
 <template>
   <div class="w-full h-full rounded-lg overflow-hidden shadow-lg">
     <div ref="mapContainer" class="w-full h-full"></div>
+
+    <VehicleDetailsModal
+      :open="isModalOpen"
+      :car="selectedCar"
+      @close="closeVehicleModal"
+    />
   </div>
 </template>
 
@@ -13,7 +19,9 @@ import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 import markerIcon from 'leaflet/dist/images/marker-icon.png'
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
 import markerShadow from 'leaflet/dist/images/marker-shadow.png'
-import type { Geofence, Vehicle } from '../types/geofence.types'
+import type { Geofence } from '../types/geofence.types'
+import type { Vehicle as Car } from '@/modules/vehicles/types/vehicle.types'
+import VehicleDetailsModal from './VehicleDetailsModal.vue'
 
 interface MapEmits {
   (e: 'geofence-created', data: { center_latitude: number; center_longitude: number; radius: number }): void
@@ -23,7 +31,7 @@ interface MapEmits {
 
 const props = defineProps<{
   geofences: Geofence[]
-  vehicles?: Vehicle[]
+  vehicles?: Car[]
   loading?: boolean
 }>()
 
@@ -34,6 +42,14 @@ let map: L.Map | null = null
 const geofenceLayersMap = new Map<number, L.Circle>()
 const vehicleMarkersMap = new Map<number, L.Marker>()
 let userLocationMarker: L.CircleMarker | null = null
+
+const selectedCar = ref<Car | null>(null)
+const isModalOpen = ref(false)
+
+const closeVehicleModal = () => {
+  isModalOpen.value = false
+  selectedCar.value = null
+}
 
 const logMapWarning = (message: string, details?: unknown) => {
   if (import.meta.env.DEV) {
@@ -69,23 +85,6 @@ const createGeofencePopup = (geofence: Geofence) => {
   container.appendChild(createPopupRow('Type', String(geofence.type)))
   container.appendChild(createPopupRow('Radius', `${geofence.radius}m`))
   container.appendChild(createPopupRow('Status', String(geofence.status)))
-
-  return container
-}
-
-const createVehiclePopup = (vehicle: Vehicle) => {
-  const container = document.createElement('div')
-  container.className = 'p-2'
-
-  const title = document.createElement('b')
-  title.textContent = 'Vehículo'
-  container.appendChild(title)
-  container.appendChild(document.createElement('br'))
-
-  container.appendChild(createPopupRow('Placa', String(vehicle.license_plate)))
-  container.appendChild(
-    createPopupRow('Última actualización', String(vehicle.last_location_update || 'N/A'))
-  )
 
   return container
 }
@@ -255,6 +254,9 @@ const renderVehicles = () => {
 
   props.vehicles.forEach(vehicle => {
     if (vehicle.current_latitude != null && vehicle.current_longitude != null) {
+      const vehicleId = Number(vehicle.vehicle_id ?? vehicle.id)
+      if (!Number.isFinite(vehicleId)) return
+
       const marker = L.marker(
         [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
         {
@@ -263,9 +265,13 @@ const renderVehicles = () => {
         }
       )
 
-      marker.bindPopup(createVehiclePopup(vehicle))
+      marker.on('click', () => {
+        selectedCar.value = vehicle
+        isModalOpen.value = true
+      })
+
       marker.addTo(map!)
-      vehicleMarkersMap.set(vehicle.vehicle_id, marker)
+      vehicleMarkersMap.set(vehicleId, marker)
     }
   })
 }

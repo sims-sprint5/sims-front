@@ -126,7 +126,8 @@ import GeofenceLogsModal from '../components/GeofenceLogsModal.vue'
 import CustomModal from '../components/CustomModal.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
-import type { Geofence, VehicleGeofenceLog, Vehicle } from '../types/geofence.types'
+import type { Geofence, VehicleGeofenceLog } from '../types/geofence.types'
+import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
 import { useTranslateError } from '@/shared/composables/useTranslateError'
 
 const route = useRoute()
@@ -194,14 +195,7 @@ const loadGeofences = async () => {
 
 const loadVehicles = async () => {
   try {
-    const rawVehicles = await vehicleService.getVehiclesList()
-    vehicles.value = rawVehicles.map((v) => ({
-      vehicle_id: Number(v.vehicle_id ?? v.id),
-      license_plate: v.license_plate,
-      current_latitude: v.current_latitude,
-      current_longitude: v.current_longitude,
-      last_location_update: v.last_location_update,
-    }))
+    vehicles.value = await vehicleService.getVehiclesList()
   } catch (err) {
     error(getErrorMessage(err, t('mapa.loadError')))
   }

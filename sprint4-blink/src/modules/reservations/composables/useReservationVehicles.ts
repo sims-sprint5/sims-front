@@ -13,6 +13,10 @@ function toCardModel(v: Vehicle): ReservationVehicleCardModel {
   const name = [v.brand, v.model].filter(Boolean).join(' ').trim() || v.license_plate || '—';
   const category = v.status || '—';
 
+  const statusKey = (v.status ?? '').trim().toLowerCase();
+  const availableDerived = statusKey === 'available' || statusKey === 'active';
+  const available = v.available ?? availableDerived;
+
   const yearLabel = v.year ? String(v.year) : '—';
   const description = [v.color ? `Color: ${v.color}` : null, v.year ? `Año: ${yearLabel}` : null]
     .filter(Boolean)
@@ -25,6 +29,7 @@ function toCardModel(v: Vehicle): ReservationVehicleCardModel {
     licensePlate: v.license_plate,
     brand: v.brand,
     model: v.model,
+    available,
     description,
     specs: {
       seatsLabel: v.license_plate ? `Matrícula: ${v.license_plate}` : undefined,

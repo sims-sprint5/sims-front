@@ -18,6 +18,11 @@ function normalizeVehicle(raw: any): Vehicle {
   const current_latitude = latRaw === null || latRaw === undefined || latRaw === '' ? null : Number(latRaw);
   const current_longitude = lngRaw === null || lngRaw === undefined || lngRaw === '' ? null : Number(lngRaw);
 
+  const availableRaw = raw.available ?? raw.is_available;
+  const statusKey = String(raw.status ?? '').trim().toLowerCase();
+  const availableDerived = statusKey === 'available' || statusKey === 'active';
+  const available = typeof availableRaw === 'boolean' ? availableRaw : availableDerived;
+
   return {
     id: raw.id ?? raw.vehicle_id ?? 0,
     vehicle_id: raw.vehicle_id ?? raw.id,
@@ -27,6 +32,7 @@ function normalizeVehicle(raw: any): Vehicle {
     year: Number.isFinite(year) ? year : null,
     color: raw.color ?? '',
     status: raw.status ?? '',
+    available,
     current_latitude: Number.isFinite(current_latitude) ? current_latitude : null,
     current_longitude: Number.isFinite(current_longitude) ? current_longitude : null,
     last_location_update: raw.last_location_update ?? raw.lastLocationUpdate ?? null,
