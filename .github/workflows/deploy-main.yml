@@ -117,7 +117,16 @@ jobs:
             set -e
             cd "${REMOTE_DIR}"
 
-            docker compose --profile prod up -d --build frontend-prod
+            if docker compose version >/dev/null 2>&1; then
+              COMPOSE_PROFILES=prod docker compose up -d --build frontend-prod
+            elif command -v docker-compose >/dev/null 2>&1; then
+              docker-compose up -d --build frontend-prod
+            else
+              docker build --target production -t sprint4-blink-frontend-prod .
+              docker rm -f sprint4-blink-prod >/dev/null 2>&1 || true
+              docker run -d --name sprint4-blink-prod --restart unless-stopped -p 8080:80 sprint4-blink-frontend-prod
+            fi
+
             docker image prune -f
           EOF
 
