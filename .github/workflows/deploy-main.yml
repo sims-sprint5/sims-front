@@ -133,11 +133,17 @@ jobs:
             docker image prune -f
           EOF
 
+      - name: Verify deployed commit on container
+        env:
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p "${SSH_PORT}" "$SSH_USER@$SSH_HOST" "curl -fSsL 'http://localhost:8080/build.txt?v=${GITHUB_SHA}'" > build_meta.txt
+          echo "Build metadata from container:"
+          cat build_meta.txt
+          grep -q "commit=${GITHUB_SHA}" build_meta.txt
+
       - name: Healthcheck frontend
         run: |
           curl -fSsL "${HEALTHCHECK_URL}?v=${GITHUB_SHA}" > /dev/null
-          echo "Build metadata from server:"
-          BUILD_META="$(curl -fSsL "https://simsgrup2.app/build.txt?v=${GITHUB_SHA}")"
-          echo "$BUILD_META"
-          echo "$BUILD_META" | grep -q "commit=${GITHUB_SHA}"
           echo "Frontend deployed and reachable: ${HEALTHCHECK_URL}"
