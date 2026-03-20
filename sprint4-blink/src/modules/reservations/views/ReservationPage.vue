@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
 import { BaseButton } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -14,8 +15,9 @@ import { useToast } from '@/shared/composables/useToast';
 
 const { vehicleCards, loading, filters, facets, resetFilters, error } = useReservationVehicles();
 const { t } = useI18n();
-const { user } = useUser();
+const route = useRoute();
 const toast = useToast();
+const { user } = useUser();
 
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
@@ -25,10 +27,29 @@ const reservationForm = reactive({
   endAt: '',
 });
 
+function toDateTimeLocalInput(value: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`;
+}
+
+const defaultStartAt = computed(() => toDateTimeLocalInput(new Date()));
+const defaultEndAt = computed(() => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return toDateTimeLocalInput(d);
+});
+
 function openReservationModal(vehicle: ReservationVehicleCardModel) {
   selectedVehicle.value = vehicle;
   reservationForm.startAt = '';
   reservationForm.endAt = '';
+  showReservationModal.value = true;
+}
+
+function openReservationModalPrefilled(vehicle: ReservationVehicleCardModel, startAt?: string, endAt?: string) {
+  selectedVehicle.value = vehicle;
+  reservationForm.startAt = startAt || defaultStartAt.value;
+  reservationForm.endAt = endAt || defaultEndAt.value;
   showReservationModal.value = true;
 }
 
@@ -39,6 +60,76 @@ function closeReservationModal() {
   reservationForm.endAt = '';
 }
 
+const lastAppliedPrefillKey = ref<string | null>(null);
+
+const queryFirstString = (value: unknown): string | undefined => {
+  if (typeof value === 'string') return value || undefined;
+  if (Array.isArray(value)) {
+    const first = value[0];
+    return typeof first === 'string' ? (first || undefined) : undefined;
+  }
+  return undefined;
+};
+
+const reservationPrefill = computed(() => {
+  const q = route.query;
+  const vehicleId = queryFirstString(q.vehicleId);
+  const brand = queryFirstString(q.brand);
+  const model = queryFirstString(q.model);
+  const licensePlate = queryFirstString(q.licensePlate);
+  const startAt = queryFirstString(q.startAt);
+  const endAt = queryFirstString(q.endAt);
+  const lat = queryFirstString(q.lat);
+  const lng = queryFirstString(q.lng);
+
+  if (!vehicleId) return null;
+  return { vehicleId, brand, model, licensePlate, startAt, endAt, lat, lng };
+});
+
+watch(
+  [() => reservationPrefill.value, () => loading.value],
+  async ([prefill, isLoading]) => {
+    if (!prefill) {
+      lastAppliedPrefillKey.value = null;
+      return;
+    }
+
+    if (isLoading) return;
+
+    const prefillKey = [prefill.vehicleId, prefill.startAt ?? '', prefill.endAt ?? ''].join('|');
+    if (lastAppliedPrefillKey.value === prefillKey) return;
+
+    // Asegura que el coche se encuentre aunque el usuario tuviese filtros activos.
+    resetFilters();
+    await nextTick();
+
+    const cards = vehicleCards.value;
+    const idNum = Number(prefill.vehicleId);
+
+    const found = cards.find(
+      (c) =>
+        String(c.id) === prefill.vehicleId ||
+        (Number.isFinite(idNum) && Number(c.id) === idNum) ||
+        c.pricing?.total === prefill.vehicleId,
+    );
+
+    const fallbackName = [prefill.brand, prefill.model].filter(Boolean).join(' ').trim() || prefill.licensePlate || '—';
+    const vehicle: ReservationVehicleCardModel = found ?? {
+      id: prefill.vehicleId,
+      name: fallbackName,
+      category: '—',
+      brand: prefill.brand,
+      model: prefill.model,
+      licensePlate: prefill.licensePlate,
+      available: true,
+    };
+
+    openReservationModalPrefilled(vehicle, prefill.startAt, prefill.endAt);
+    lastAppliedPrefillKey.value = prefillKey;
+  },
+  { immediate: true }
+);
+
 function normalizeDateTime(value: string): string {
   const parsed = new Date(value);
   return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
@@ -46,6 +137,11 @@ function normalizeDateTime(value: string): string {
 
 async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
+
+  if (selectedVehicle.value.available !== true) {
+    toast.error('Este coche no está disponible');
+    return;
+  }
 
   if (!reservationForm.startAt || !reservationForm.endAt) {
     toast.error(t('reservations.errors.missingDates'));
@@ -75,8 +171,6 @@ async function createReservation() {
 
     toast.success(t('reservations.toast.created'));
     closeReservationModal();
-  } catch {
-    toast.error(t('reservations.errors.create'));
   } finally {
     submitting.value = false;
   }

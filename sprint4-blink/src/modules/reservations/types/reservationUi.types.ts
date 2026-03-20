@@ -21,6 +21,7 @@ export interface ReservationVehicleCardModel {
   licensePlate?: string;
   brand?: string;
   model?: string;
+  available?: boolean;
   description?: string;
   specs?: ReservationVehicleCardSpecs;
   features?: string[];

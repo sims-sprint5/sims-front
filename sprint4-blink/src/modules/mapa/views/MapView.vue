@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout :title="pageTitle">
     <div class="h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] flex flex-col gap-4 p-3 sm:p-4 overflow-hidden">
       <!-- Map Section (80%) -->
       <div class="flex-1 min-h-0">
@@ -113,7 +113,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useToast } from '@/shared/composables/useToast'
 import { useI18n } from 'vue-i18n'
 import AppLayout from '@/layouts/AppLayout.vue'
@@ -129,9 +130,15 @@ import type { Geofence, VehicleGeofenceLog, Vehicle as MapVehicle } from '../typ
 import type { Vehicle as ServiceVehicle } from '@/modules/vehicles/types/vehicle.types'
 import { useTranslateError } from '@/shared/composables/useTranslateError'
 
+const route = useRoute()
 const { success, error } = useToast()
 const { t } = useI18n()
 const { translateErrorMessage } = useTranslateError()
+
+const pageTitle = computed(() => {
+  const titleKey = route.meta.titleKey as string | undefined
+  return titleKey ? t(titleKey) : ''
+})
 
 // State
 const geofences = ref<Geofence[]>([])
@@ -171,7 +178,7 @@ const getErrorMessage = (err: unknown, fallback: string) => {
     ? String((err as { message?: string }).message ?? '')
     : ''
 
-  return translateErrorMessage(message) || fallback
+  return translateErrorMessage(message, fallback)
 }
 
 const toMapVehicle = (vehicle: ServiceVehicle): MapVehicle => ({
@@ -188,8 +195,7 @@ const loadGeofences = async () => {
   try {
     geofences.value = await geofenceService.getGeofences()
   } catch (errorMsg: any) {
-    const translatedMessage = translateErrorMessage(errorMsg?.message)
-    error(translatedMessage || t('mapa.loadError'))
+    error(translateErrorMessage(errorMsg?.message, t('mapa.loadError')))
   } finally {
     loading.value = false
   }

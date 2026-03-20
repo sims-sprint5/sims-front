@@ -94,6 +94,7 @@
           type="number"
           :placeholder="$t('vehicles.form.currentLatitudePlaceholder')"
           :error="formatError((errors as any).current_latitude)"
+          :required="!isEditing"
         />
       </div>
 
@@ -104,6 +105,7 @@
           type="number"
           :placeholder="$t('vehicles.form.currentLongitudePlaceholder')"
           :error="formatError((errors as any).current_longitude)"
+          :required="!isEditing"
         />
       </div>
     </div>
@@ -126,7 +128,7 @@ import type { Vehicle, CreateVehicleData, UpdateVehicleData } from '@/modules/ve
 import type { ValidationErrors } from '@/modules/vehicles/utils/vehicleValidation';
 import { useFormatError } from '@/shared/composables/useFormatError';
 import { useI18n } from 'vue-i18n';
-import { getVehicleStatusLabel } from '@/modules/vehicles/utils/vehicleStatus';
+import { getVehicleStatusLabel, VEHICLE_STATUS_OPTIONS } from '@/modules/vehicles/utils/vehicleStatus';
 
 interface Props {
   vehicle?: Vehicle | null;
@@ -139,7 +141,7 @@ const props = withDefaults(defineProps<Props>(), {
   vehicle: null,
   loading: false,
   errors: () => ({}),
-  statusOptions: () => ['active', 'inactive', 'maintenance'],
+  statusOptions: () => [...VEHICLE_STATUS_OPTIONS],
 });
 
 const emit = defineEmits<{

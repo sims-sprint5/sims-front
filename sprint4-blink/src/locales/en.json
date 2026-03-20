@@ -12,10 +12,13 @@
     "search": "Search",
     "refresh": "Refresh",
     "confirm": "Confirm",
+    "create": "Create",
     "delete": "Delete",
     "edit": "Edit",
     "view": "View",
-    "logout": "Sign out"
+    "actions": "Actions",
+    "logout": "Sign out",
+    "passwordMismatch": "Passwords do not match."
   },
   "language": {
     "label": "Language",
@@ -33,7 +36,9 @@
     "users": "Users",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
+    "iot": "IoT",
     "settings": "Settings",
+    "superadmin": "Superadmin",
     "sections": {
       "client": "Client",
       "admin": "Admin"
@@ -51,8 +56,7 @@
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "noAccount": "Don’t have an account?",
-      "goRegister": "Create one"
-      ,
+      "goRegister": "Create one",
       "forgotPassword": "Forgot password?",
       "welcome": "Welcome {name}!",
       "genericError": "Could not sign in. Please try again."
@@ -80,6 +84,12 @@
     "user": "User",
     "admin": "Admin"
   },
+  "unauthorized": {
+    "title": "Unauthorized",
+    "message": "You don’t have permission to access this section.",
+    "backDashboard": "Back to dashboard",
+    "goLogin": "Go to sign in"
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome to the Dashboard!",
@@ -101,20 +111,28 @@
     "toast": {
       "avatarUpdated": "Avatar updated",
       "personalInfoSaved": "Personal information saved successfully",
+      "passwordUpdated": "Password updated successfully",
       "deleteWarning": "This action cannot be undone"
     },
     "validation": {
       "fileTooLarge": "The file is too large. Maximum 1MB.",
-      "invalidFileType": "Only JPG, GIF, or PNG files are allowed."
+      "invalidFileType": "Only JPG, GIF, or PNG files are allowed.",
+      "currentPasswordRequired": "Please enter your current password.",
+      "newPasswordRequired": "Please enter a new password.",
+      "passwordsDoNotMatch": "Passwords do not match."
     },
     "errors": {
       "userInfoUnavailable": "Could not retrieve user information",
-      "updateInfo": "Error updating information"
+      "updateInfo": "Error updating information",
+      "profileUpdateForbidden": "You don’t have permission to update your profile.",
+      "profileUpdateNotSupported": "The server does not allow updating your profile. Please contact an administrator."
     },
     "firstName": "First name",
     "lastName": "Last name",
     "email": "Email",
     "currentPassword": "Current password",
+    "newPassword": "New password",
+    "passwordConfirmation": "Confirm new password",
     "saveChanges": "Save changes",
     "deleteAccount": "Delete account",
     "deleteAccountDesc": "No longer want to use our service? You can delete your account here. This action cannot be undone. All information related to this account will be permanently deleted.",
@@ -169,7 +187,8 @@
       "search": "Failed to search users",
       "save": "Failed to save user",
       "delete": "Failed to delete user",
-      "notFound": "User not found. It may have already been deleted."
+      "notFound": "User not found. It may have already been deleted.",
+      "invalidId": "Invalid user ID."
     }
   },
   "vehicles": {
@@ -314,6 +333,18 @@
       "missingDates": "Provide start and end dates for the reservation.",
       "invalidDates": "The end date must be later than the start date.",
       "create": "Failed to create the reservation. Please try again."
+    },
+    "filters": {
+      "title": "Filters",
+      "reset": "Reset",
+      "searchLabel": "Search",
+      "searchPlaceholder": "License plate, brand or model",
+      "statusLabel": "Status",
+      "brandLabel": "Brand",
+      "yearLabel": "Year",
+      "from": "From",
+      "to": "To",
+      "all": "All"
     }
   },
   "table": {
@@ -374,10 +405,17 @@
     },
     "estados": {
       "pendiente": "Pending",
+      "pending": "Pending",
       "open": "Open",
+      "in_progress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed",
       "confirmado": "Confirmed",
+      "confirmed": "Confirmed",
       "cancelado": "Cancelled",
-      "usado": "Used"
+      "cancelled": "Cancelled",
+      "usado": "Used",
+      "used": "Used"
     },
     "modal": {
       "detailsTitle": "Ticket details"
@@ -487,9 +525,11 @@
         "required": "Status is required."
       },
       "current_latitude": {
+        "required": "Latitude is required.",
         "invalid": "Latitude is invalid."
       },
       "current_longitude": {
+        "required": "Longitude is required.",
         "invalid": "Longitude is invalid."
       },
       "last_location_update": {
@@ -614,5 +654,115 @@
     "requestFailed": "Request failed",
     "serverConnection": "Server connection error",
     "notAuthenticated": "You are not authenticated. Please sign in."
+  },
+  "superadmin": {
+    "dashboard": {
+      "newThisMonth": "New (This month)",
+      "companySignups": "Company Signups (Last 6 months)",
+      "companies": "{count} companies",
+      "noData": "No data available.",
+      "recentCompanies": "Recent Companies",
+      "new": "New",
+      "noCompaniesToShow": "No companies to show."
+    },
+    "title": "Superadmin",
+    "description": "Manage system companies and superadministrators",
+    "admins": {
+      "title": "Superadmins",
+      "description": "Manage other superadministrators",
+      "empty": "No superadmins found",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "createdAt": "Created At"
+      },
+      "actions": {
+        "new": "New Superadmin"
+      },
+      "modal": {
+        "editTitle": "Edit Superadmin",
+        "createTitle": "Create Superadmin",
+        "deleteTitle": "Delete Superadmin",
+        "deleteMessage": "Are you sure you want to delete {name}?"
+      },
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirmation": "Confirm Password",
+        "changePasswordHint": "Leave password empty if you do not want to change it."
+      },
+      "toast": {
+        "created": "Superadmin created successfully",
+        "deleted": "Superadmin deleted successfully",
+        "updated": "Superadmin updated successfully"
+      },
+      "errors": {
+        "load": "Failed to load superadmins",
+        "create": "Failed to create superadmin",
+        "delete": "Failed to delete superadmin"
+      }
+    }
+  },
+  "tenants": {
+    "title": "Company Management",
+    "description": "Manage the system companies (tenants)",
+    "searchPlaceholder": "Search by name or domain...",
+    "loading": "Loading companies...",
+    "empty": "No companies to display",
+    "table": {
+      "name": "Name",
+      "domain": "Domain",
+      "admin_email": "Admin Email",
+      "status": "Status",
+      "createdAt": "Created at",
+      "actions": "Actions"
+    },
+    "form": {
+      "id": "Domain",
+      "idPlaceholder": "e.g. mydomain",
+      "name": "Name",
+      "namePlaceholder": "Company name",
+      "domain": "Domain",
+      "domainPlaceholder": "e.g. company.blink.com",
+      "email": "Contact email",
+      "emailPlaceholder": "contact@company.com",
+      "admin_email": "Admin Email",
+      "admin_emailPlaceholder": "admin@company.com",
+      "admin_password": "Admin Password",
+      "admin_passwordPlaceholder": "••••••••",
+      "admin_passwordConfirmation": "Confirm password",
+      "changePasswordConfirmationPlaceholder": "••••••••",
+      "creationInfo": "Fill in all fields to create a new company",
+      "changePasswordLabel": "Change Admin Password (Optional)",
+      "changePasswordPlaceholder": "Leave empty to keep current password",
+      "changePasswordHint": "Leave this field empty if you don't want to change the password",
+      "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "new": "New company",
+      "create": "Create company",
+      "update": "Update company"
+    },
+    "modal": {
+      "createTitle": "New company",
+      "editTitle": "Edit company",
+      "deleteTitle": "Delete company",
+      "deleteMessage": "Are you sure you want to delete the company '{name}'? This action cannot be undone."
+    },
+    "toast": {
+      "created": "Company created successfully",
+      "updated": "Company updated successfully",
+      "deleted": "Company deleted successfully"
+    },
+    "errors": {
+      "load": "Failed to load companies",
+      "save": "Failed to save company",
+      "delete": "Failed to delete company"
+    }
   }
 }

@@ -12,10 +12,13 @@
     "search": "Buscar",
     "refresh": "Actualitzar",
     "confirm": "Confirmar",
+    "create": "Crear",
     "delete": "Eliminar",
     "edit": "Editar",
     "view": "Veure",
-    "logout": "Tancar sessió"
+    "actions": "Accions",
+    "logout": "Tancar sessió",
+    "passwordMismatch": "Les contrasenyes no coincideixen."
   },
   "language": {
     "label": "Idioma",
@@ -33,7 +36,9 @@
     "users": "Usuaris",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
+    "iot": "IoT",
     "settings": "Configuració",
+    "superadmin": "Superadmin",
     "sections": {
       "client": "Client",
       "admin": "Admin"
@@ -80,6 +85,12 @@
     "user": "Usuari",
     "admin": "Administrador"
   },
+  "unauthorized": {
+    "title": "Accés no autoritzat",
+    "message": "No tens permisos per accedir a aquesta secció.",
+    "backDashboard": "Tornar al tauler",
+    "goLogin": "Anar a iniciar sessió"
+  },
   "dashboard": {
     "title": "Tauler",
     "welcome": "Benvingut/da al Tauler!",
@@ -101,20 +112,28 @@
     "toast": {
       "avatarUpdated": "Avatar actualitzat",
       "personalInfoSaved": "Informació personal guardada correctament",
+      "passwordUpdated": "Contrasenya actualitzada correctament",
       "deleteWarning": "Aquesta acció no es pot desfer"
     },
     "validation": {
       "fileTooLarge": "El fitxer és massa gran. Màxim 1MB.",
-      "invalidFileType": "Només es permeten fitxers JPG, GIF o PNG."
+      "invalidFileType": "Només es permeten fitxers JPG, GIF o PNG.",
+      "currentPasswordRequired": "Introdueix la teua contrasenya actual.",
+      "newPasswordRequired": "Introdueix una contrasenya nova.",
+      "passwordsDoNotMatch": "Les contrasenyes no coincideixen."
     },
     "errors": {
       "userInfoUnavailable": "No s’ha pogut obtindre la informació de l’usuari",
-      "updateInfo": "Error en actualitzar la informació"
+      "updateInfo": "Error en actualitzar la informació",
+      "profileUpdateForbidden": "No tens permisos per actualitzar el teu perfil.",
+      "profileUpdateNotSupported": "El servidor no permet canviar el teu perfil. Contacta amb un administrador."
     },
     "firstName": "Nom",
     "lastName": "Cognoms",
     "email": "Correu electrònic",
     "currentPassword": "Contrasenya actual",
+    "newPassword": "Contrasenya nova",
+    "passwordConfirmation": "Confirmar contrasenya nova",
     "saveChanges": "Guardar canvis",
     "deleteAccount": "Eliminar compte",
     "deleteAccountDesc": "Ja no vols utilitzar el nostre servei? Pots eliminar el teu compte ací. Aquesta acció no és reversible. Tota la informació relacionada amb aquest compte s’eliminarà permanentment.",
@@ -169,7 +188,8 @@
       "search": "Error en buscar usuaris",
       "save": "Error en guardar l’usuari",
       "delete": "Error en eliminar l’usuari",
-      "notFound": "Usuari no trobat. Potser ja ha sigut eliminat."
+      "notFound": "Usuari no trobat. Potser ja ha sigut eliminat.",
+      "invalidId": "ID d'usuari no vàlid."
     }
   },
   "vehicles": {
@@ -313,6 +333,18 @@
       "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
       "create": "Error en crear la reserva. Torna-ho a intentar.",
       "invalidDates": "La data de fi ha de ser posterior a la d'inici."
+    },
+    "filters": {
+      "title": "Filtres",
+      "reset": "Restablir",
+      "searchLabel": "Buscar",
+      "searchPlaceholder": "Matrícula, marca o model",
+      "statusLabel": "Estat",
+      "brandLabel": "Marca",
+      "yearLabel": "Any",
+      "from": "Des de",
+      "to": "Fins a",
+      "all": "Tots"
     }
   },
   "table": {
@@ -373,10 +405,17 @@
     },
     "estados": {
       "pendiente": "Pendent",
+      "pending": "Pendent",
       "open": "Obert",
+      "in_progress": "En progrés",
+      "resolved": "Resolt",
+      "closed": "Tancat",
       "confirmado": "Confirmat",
+      "confirmed": "Confirmat",
       "cancelado": "Cancel·lat",
-      "usado": "Usat"
+      "cancelled": "Cancel·lat",
+      "usado": "Usat",
+      "used": "Usat"
     },
     "modal": {
       "detailsTitle": "Detalls del ticket"
@@ -486,9 +525,11 @@
         "required": "L’estat és obligatori."
       },
       "current_latitude": {
+        "required": "La latitud és obligatòria.",
         "invalid": "La latitud no és vàlida."
       },
       "current_longitude": {
+        "required": "La longitud és obligatòria.",
         "invalid": "La longitud no és vàlida."
       },
       "last_location_update": {
@@ -611,5 +652,115 @@
     "requestFailed": "Error en la petició",
     "serverConnection": "Error de connexió amb el servidor",
     "notAuthenticated": "No estàs autenticat. Si us plau, inicia sessió."
+  },
+  "superadmin": {
+    "dashboard": {
+      "newThisMonth": "Noves (Aquest mes)",
+      "companySignups": "Altes de Companyies (Darrers 6 mesos)",
+      "companies": "{count} empreses",
+      "noData": "Sense dades disponibles.",
+      "recentCompanies": "Companyies Recents",
+      "new": "Nova",
+      "noCompaniesToShow": "No hi ha empreses per mostrar."
+    },
+    "title": "Superadmin",
+    "description": "Gestiona les companyies i superadministradors del sistema",
+    "admins": {
+      "title": "Gestió de Superadministradors",
+      "description": "Gestiona altres superadministradors",
+      "empty": "No s'han trobat superadministradors",
+      "table": {
+        "name": "Nom",
+        "email": "Correu electrònic",
+        "createdAt": "Data de creació"
+      },
+      "actions": {
+        "new": "Nou Superadministrador"
+      },
+      "modal": {
+        "editTitle": "Editar Superadministrador",
+        "createTitle": "Crear Superadministrador",
+        "deleteTitle": "Eliminar Superadministrador",
+        "deleteMessage": "Estàs segur que vols eliminar {name}? Aquesta acció no es pot desfer."
+      },
+      "form": {
+        "name": "Nom",
+        "email": "Correu electrònic",
+        "password": "Contrasenya",
+        "passwordConfirmation": "Confirmar contrasenya",
+        "changePasswordHint": "Deixa la contrasenya buida si no la vols canviar."
+      },
+      "toast": {
+        "created": "Superadministrador creat correctament",
+        "deleted": "Superadministrador eliminat correctament",
+        "updated": "Superadministrador actualitzat correctament"
+      },
+      "errors": {
+        "load": "Error al carregar superadministradors",
+        "create": "Error al crear superadministrador",
+        "delete": "Error al eliminar superadministrador"
+      }
+    }
+  },
+  "tenants": {
+    "title": "Gestió de Companyies",
+    "description": "Administra les companyies (tenants) del sistema",
+    "searchPlaceholder": "Cerca per nom o domini...",
+    "loading": "Carregant companyies...",
+    "empty": "No hi ha companyies per mostrar",
+    "table": {
+      "name": "Nom",
+      "domain": "Domini",
+      "admin_email": "Email de l'Administrador",
+      "status": "Estat",
+      "createdAt": "Data de creació",
+      "actions": "Accions"
+    },
+    "form": {
+      "id": "Domini (domain)",
+      "idPlaceholder": "ex: elmeudomini",
+      "name": "Nom",
+      "namePlaceholder": "Nom de la companyia",
+      "domain": "Domini",
+      "domainPlaceholder": "ex: empresa.blink.com",
+      "email": "Email de contacte",
+      "emailPlaceholder": "contacte@empresa.com",
+      "admin_email": "Email de l'Administrador",
+      "admin_emailPlaceholder": "admin@empresa.com",
+      "admin_password": "Contrasenya de l'Administrador",
+      "admin_passwordPlaceholder": "••••••••",
+      "admin_passwordConfirmation": "Confirma la contrasenya",
+      "changePasswordConfirmationPlaceholder": "••••••••",
+      "creationInfo": "Omple tots els camps per crear una nova companyia",
+      "changePasswordLabel": "Canviar Contrasenya de l'Administrador (Opcional)",
+      "changePasswordPlaceholder": "Deixa en blanc per mantindre la contrasenya actual",
+      "changePasswordHint": "Deixa aquest camp en blanc si no vols canviar la contrasenya",
+      "status": "Estat"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "actions": {
+      "new": "Nova companyia",
+      "create": "Crear companyia",
+      "update": "Actualitzar companyia"
+    },
+    "modal": {
+      "createTitle": "Nova companyia",
+      "editTitle": "Editar companyia",
+      "deleteTitle": "Eliminar companyia",
+      "deleteMessage": "Estàs segur que vols eliminar la companyia '{name}'? Aquesta acció no es pot desfer."
+    },
+    "toast": {
+      "created": "Companyia creada correctament",
+      "updated": "Companyia actualitzada correctament",
+      "deleted": "Companyia eliminada correctament"
+    },
+    "errors": {
+      "load": "Error en carregar les companyies",
+      "save": "Error en guardar la companyia",
+      "delete": "Error en eliminar la companyia"
+    }
   }
 }

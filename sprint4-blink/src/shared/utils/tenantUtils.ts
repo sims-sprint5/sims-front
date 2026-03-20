@@ -1,3 +1,11 @@
+// Regex pattern to detect local IP addresses (e.g., 192.168.1.1)
+const LOCAL_IP_PATTERN = /^\d+\.\d+\.\d+\.\d+$/;
+
+
+function isLocalHost(hostname: string): boolean {
+  return hostname === 'localhost' || hostname === '127.0.0.1' || LOCAL_IP_PATTERN.test(hostname);
+}
+
 /**
  * Extracts the tenant slug from the current hostname.
  * - uberddos.lvh.me → 'uberddos'
@@ -37,8 +45,7 @@ export function hasTenantSubdomain(hostname = window.location.hostname): boolean
 export function getCurrentTenant(): string {
   const hostname = window.location.hostname;
 
-  // Localhost o IP local
-  if (isLocalLikeHost(hostname)) {
+  if (isLocalHost(hostname)) {
     return 'localhost';
   }
 
@@ -55,7 +62,10 @@ export function getCurrentTenant(): string {
   return 'central';
 }
 
-/** Returns the API port from the current URL, VITE_API_PORT env var, or the protocol default. */
+export function isSuperadminHost(): boolean {
+  return isLocalHost(window.location.hostname);
+}
+
 function getApiPort(): string {
   if (window.location.port) {
     return `:${window.location.port}`;
@@ -69,14 +79,13 @@ function getApiPort(): string {
   return window.location.protocol === 'https:' ? ':443' : ':8000';
 }
 
-/**
- * Builds the API base URL for the current tenant.
- * - uberddos.lvh.me:5173 → http://uberddos.lvh.me:5173/api  (proxied by Vite in dev)
- * - localhost:5173        → http://localhost:5173/api
- */
+
 export function getTenantApiBaseUrl(): string {
   const hostname = window.location.hostname;
   const protocol = window.location.protocol;
+  const port = getApiPort();
+
+  if (isSuperadminHost()) {
   const isLocalLike = isLocalLikeHost(hostname);
 
   if (isLocalLike) {
@@ -104,3 +113,4 @@ export function getTenantInfo() {
     apiBaseUrl: getTenantApiBaseUrl(),
   };
 }
+

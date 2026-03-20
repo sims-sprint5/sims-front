@@ -7,6 +7,8 @@ export const usersRoutes: RouteRecordRaw[] = [
     component: () => import('./views/UsersView.vue'),
     meta: {
       requiresAuth: true,
+      requiresAdmin: true,
+      allowedRoles: ['admin', 'superadmin'],
       titleKey: 'users.title',
     },
   },

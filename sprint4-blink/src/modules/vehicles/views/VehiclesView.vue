@@ -229,12 +229,18 @@ const viewingVehicle = ref<Vehicle | null>(null);
 const vehicleToDelete = ref<Vehicle | null>(null);
 
 const statusOptions = computed<string[]>(() => {
-  const raw = vehicles.value
-    .map((v) => v.status)
-    .filter((s): s is string => typeof s === 'string' && s.trim().length > 0);
+  const base = [...VEHICLE_STATUS_OPTIONS];
+  const baseLower = new Set(base.map((s) => s.toLowerCase()));
 
-  const unique = Array.from(new Set(raw));
-  return unique.length ? unique : ['active', 'inactive', 'maintenance'];
+  // Si el backend devolviese algún estado nuevo, lo mostramos también
+  // sin romper el formulario.
+  const extras = vehicles.value
+    .map((v) => String(v.status ?? '').trim())
+    .filter((s) => s.length > 0)
+    .filter((s) => !baseLower.has(s.toLowerCase()));
+
+  const extraUnique = Array.from(new Set(extras));
+  return [...base, ...extraUnique];
 });
 
 // Errores del formulario

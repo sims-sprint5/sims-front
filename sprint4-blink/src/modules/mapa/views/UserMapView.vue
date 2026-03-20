@@ -1,16 +1,24 @@
 <template>
-  <AppLayout>
+  <AppLayout :title="pageTitle">
     <div class="h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] flex flex-col p-3 sm:p-4 overflow-hidden">
       <!-- Map takes full height -->
       <div class="flex-1 min-h-0 rounded-lg overflow-hidden shadow-lg">
         <div ref="mapEl" class="w-full h-full"></div>
       </div>
     </div>
+
+    <VehicleDetailsModal
+      :open="isModalOpen"
+      :car="selectedCar"
+      @close="closeVehicleModal"
+      />
   </AppLayout>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import markerIcon from 'leaflet/dist/images/marker-icon.png'
@@ -21,10 +29,27 @@ import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import type { Geofence, Vehicle as MapVehicle } from '../types/geofence.types'
 import type { Vehicle as ServiceVehicle } from '@/modules/vehicles/types/vehicle.types'
+import VehicleDetailsModal from '../components/VehicleDetailsModal.vue'
+
+const route = useRoute()
+const { t } = useI18n()
+
+const pageTitle = computed(() => {
+  const titleKey = route.meta.titleKey as string | undefined
+  return titleKey ? t(titleKey) : ''
+})
 
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let userMarker: L.Marker | null = null
+
+const selectedCar = ref<Vehicle | null>(null)
+const isModalOpen = ref(false)
+
+const closeVehicleModal = () => {
+  isModalOpen.value = false
+  selectedCar.value = null
+}
 
 const defaultMarkerIcon = L.icon({
   iconRetinaUrl: markerIcon2x,
@@ -35,12 +60,6 @@ const defaultMarkerIcon = L.icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 })
-
-const createPopupRow = (label: string, value: string) => {
-  const row = document.createElement('div')
-  row.textContent = `${label}: ${value}`
-  return row
-}
 
 const createGeofencePopup = (geofence: Geofence) => {
   const popupContent = document.createElement('div')
@@ -83,20 +102,29 @@ const getColorByType = (type: string): string => {
   return colors[type] || '#6366f1'
 }
 
+const parseCoordinate = (value: string | number | null | undefined): number | null => {
+  if (value === null || value === undefined || value === '') return null
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
 const renderGeofences = (geofences: Geofence[]) => {
   if (!map) return
 
   geofences.forEach(geofence => {
-    if (geofence.status !== 'active') return
+    const lat = parseCoordinate(geofence.center_latitude)
+    const lng = parseCoordinate(geofence.center_longitude)
+    if (lat == null || lng == null) return
 
     const circle = L.circle(
-      [Number(geofence.center_latitude), Number(geofence.center_longitude)],
+      [lat, lng],
       {
         radius: geofence.radius,
         color: getColorByType(geofence.type),
         fillColor: getColorByType(geofence.type),
         fillOpacity: 0.2,
-        weight: 2
+        weight: 2,
+        dashArray: geofence.status === 'inactive' ? '5, 5' : undefined
       }
     )
 
@@ -110,17 +138,22 @@ const renderVehicles = (vehicles: MapVehicle[]) => {
   if (!map) return
 
   vehicles.forEach(vehicle => {
-    if (vehicle.current_latitude == null || vehicle.current_longitude == null) return
+    const lat = parseCoordinate(vehicle.current_latitude)
+    const lng = parseCoordinate(vehicle.current_longitude)
+    if (lat == null || lng == null) return
 
     const marker = L.marker(
-      [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
+      [lat, lng],
       {
         title: vehicle.license_plate,
           icon: defaultMarkerIcon
       }
     )
 
-    marker.bindPopup(createVehiclePopup(vehicle))
+    marker.on('click', () => {
+      selectedCar.value = vehicle
+      isModalOpen.value = true
+    })
 
     marker.addTo(map!)
   })
@@ -186,7 +219,10 @@ onMounted(async () => {
   await nextTick()
   initMap()
 
+  let vehicles: Vehicle[] = []
   try {
+    vehicles = await vehicleService.getVehiclesList()
+    renderVehicles(vehicles)
     const [geofences, vehicles] = await Promise.all([
       geofenceService.getGeofences(),
       vehicleService.getVehiclesList()
@@ -194,7 +230,14 @@ onMounted(async () => {
     renderGeofences(geofences)
     renderVehicles(vehicles.map(toMapVehicle))
   } catch (err) {
-    console.warn('Failed to load data:', err)
+    console.warn('Failed to load vehicles:', err)
+  }
+
+  try {
+    const geofences: Geofence[] = await geofenceService.getGeofencesForUserMap()
+    renderGeofences(geofences)
+  } catch (err) {
+    console.warn('Failed to load geofences:', err)
   }
 
   showUserLocation()
