@@ -73,7 +73,6 @@ import { useI18n } from 'vue-i18n'
 import { EyeIcon, PencilIcon, TrashIcon, DocumentTextIcon } from '@heroicons/vue/24/outline'
 import type { Geofence } from '../types/geofence.types'
 import { BaseTable, BaseButton } from '@/components/base'
-import type { TableColumn } from '@/components/base/BaseTable.vue'
 
 const { t } = useI18n()
 

@@ -27,8 +27,8 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
-import type { Geofence, Vehicle as MapVehicle } from '../types/geofence.types'
-import type { Vehicle as ServiceVehicle } from '@/modules/vehicles/types/vehicle.types'
+import type { Geofence } from '../types/geofence.types'
+import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
 import VehicleDetailsModal from '../components/VehicleDetailsModal.vue'
 
 const route = useRoute()
@@ -79,17 +79,10 @@ const createGeofencePopup = (geofence: Geofence) => {
   return popupContent
 }
 
-const createVehiclePopup = (vehicle: MapVehicle) => {
-  const popupContent = document.createElement('div')
-  popupContent.className = 'p-2'
-
-  const title = document.createElement('b')
-  title.textContent = vehicle.license_plate ?? ''
-  popupContent.appendChild(title)
-  popupContent.appendChild(document.createElement('br'))
-  popupContent.appendChild(createPopupRow('Última actualización', String(vehicle.last_location_update || 'N/A')))
-
-  return popupContent
+const createPopupRow = (label: string, value: string) => {
+  const row = document.createElement('div')
+  row.textContent = `${label}: ${value}`
+  return row
 }
 
 const getColorByType = (type: string): string => {
@@ -134,7 +127,7 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-const renderVehicles = (vehicles: MapVehicle[]) => {
+const renderVehicles = (vehicles: Vehicle[]) => {
   if (!map) return
 
   vehicles.forEach(vehicle => {
@@ -150,6 +143,15 @@ const renderVehicles = (vehicles: MapVehicle[]) => {
       }
     )
 
+    const popupContent = document.createElement('div')
+    popupContent.className = 'p-2'
+    const title = document.createElement('b')
+    title.textContent = vehicle.license_plate ?? ''
+    popupContent.appendChild(title)
+    popupContent.appendChild(document.createElement('br'))
+    popupContent.appendChild(createPopupRow('Última actualización', String(vehicle.last_location_update || 'N/A')))
+    marker.bindPopup(popupContent)
+
     marker.on('click', () => {
       selectedCar.value = vehicle
       isModalOpen.value = true
@@ -158,14 +160,6 @@ const renderVehicles = (vehicles: MapVehicle[]) => {
     marker.addTo(map!)
   })
 }
-
-const toMapVehicle = (vehicle: ServiceVehicle): MapVehicle => ({
-  vehicle_id: vehicle.vehicle_id ?? vehicle.id,
-  license_plate: vehicle.license_plate,
-  current_latitude: vehicle.current_latitude,
-  current_longitude: vehicle.current_longitude,
-  last_location_update: vehicle.last_location_update
-})
 
 const showUserLocation = () => {
   if (!map || !navigator.geolocation) return
@@ -219,25 +213,16 @@ onMounted(async () => {
   await nextTick()
   initMap()
 
-  let vehicles: Vehicle[] = []
   try {
-    vehicles = await vehicleService.getVehiclesList()
-    renderVehicles(vehicles)
     const [geofences, vehicles] = await Promise.all([
       geofenceService.getGeofences(),
       vehicleService.getVehiclesList()
     ])
-    renderGeofences(geofences)
-    renderVehicles(vehicles.map(toMapVehicle))
-  } catch (err) {
-    console.warn('Failed to load vehicles:', err)
-  }
 
-  try {
-    const geofences: Geofence[] = await geofenceService.getGeofencesForUserMap()
     renderGeofences(geofences)
+    renderVehicles(vehicles)
   } catch (err) {
-    console.warn('Failed to load geofences:', err)
+    console.warn('Failed to load map data:', err)
   }
 
   showUserLocation()

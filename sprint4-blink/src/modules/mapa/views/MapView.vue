@@ -126,8 +126,8 @@ import GeofenceLogsModal from '../components/GeofenceLogsModal.vue'
 import CustomModal from '../components/CustomModal.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
-import type { Geofence, VehicleGeofenceLog, Vehicle as MapVehicle } from '../types/geofence.types'
-import type { Vehicle as ServiceVehicle } from '@/modules/vehicles/types/vehicle.types'
+import type { Geofence, VehicleGeofenceLog } from '../types/geofence.types'
+import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
 import { useTranslateError } from '@/shared/composables/useTranslateError'
 
 const route = useRoute()
@@ -142,7 +142,7 @@ const pageTitle = computed(() => {
 
 // State
 const geofences = ref<Geofence[]>([])
-const vehicles = ref<MapVehicle[]>([])
+const vehicles = ref<Vehicle[]>([])
 const loading = ref(false)
 const submitting = ref(false)
 const loadingLogs = ref(false)
@@ -181,14 +181,6 @@ const getErrorMessage = (err: unknown, fallback: string) => {
   return translateErrorMessage(message, fallback)
 }
 
-const toMapVehicle = (vehicle: ServiceVehicle): MapVehicle => ({
-  vehicle_id: vehicle.vehicle_id ?? vehicle.id,
-  license_plate: vehicle.license_plate,
-  current_latitude: vehicle.current_latitude,
-  current_longitude: vehicle.current_longitude,
-  last_location_update: vehicle.last_location_update
-})
-
 // Load geofences and vehicles
 const loadGeofences = async () => {
   loading.value = true
@@ -203,8 +195,7 @@ const loadGeofences = async () => {
 
 const loadVehicles = async () => {
   try {
-    const fetchedVehicles = await vehicleService.getVehiclesList()
-    vehicles.value = fetchedVehicles.map(toMapVehicle)
+    vehicles.value = await vehicleService.getVehiclesList()
   } catch (err) {
     error(getErrorMessage(err, t('mapa.loadError')))
   }

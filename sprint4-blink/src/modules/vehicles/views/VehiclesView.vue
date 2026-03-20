@@ -201,7 +201,7 @@ import { useToast } from '@/shared/composables/useToast';
 import { validateVehicleForm, type ValidationErrors } from '@/modules/vehicles/utils/vehicleValidation';
 import { useI18n } from 'vue-i18n';
 import { useTranslateError } from '@/shared/composables/useTranslateError';
-import { getVehicleStatusLabel } from '@/modules/vehicles/utils/vehicleStatus';
+import { getVehicleStatusLabel, VEHICLE_STATUS_OPTIONS } from '@/modules/vehicles/utils/vehicleStatus';
 import { useDebouncedSearch } from '@/shared/composables/useDebouncedSearch';
 
 const toast = useToast();
