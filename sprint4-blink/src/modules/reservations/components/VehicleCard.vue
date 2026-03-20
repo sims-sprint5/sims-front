@@ -11,6 +11,8 @@ import {
   CalendarIcon,
 } from '@heroicons/vue/24/outline';
 
+type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'warning' | 'info' | 'muted';
+
 interface Props {
   vehicle?: ReservationVehicleCardModel;
   skeleton?: boolean;
@@ -36,12 +38,12 @@ function statusLabel(raw: string | undefined): string {
 }
 
 const STATUS_STYLES: Record<string, { badge: string; bar: string }> = {
-  available:      { badge: 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-300',  bar: 'bg-emerald-400' },
+  available:      { badge: 'bg-blue-100 text-blue-700 ring-1 ring-blue-300',  bar: 'bg-blue-400' },
   active:         { badge: 'bg-blue-100   text-blue-700   ring-1 ring-blue-300',       bar: 'bg-blue-400'    },
-  maintenance:    { badge: 'bg-amber-100  text-amber-700  ring-1 ring-amber-300',      bar: 'bg-amber-400'   },
-  reserved:       { badge: 'bg-violet-100 text-violet-700 ring-1 ring-violet-300',     bar: 'bg-violet-400'  },
+  maintenance:    { badge: 'bg-yellow-100 text-yellow-800 ring-1 ring-yellow-300',     bar: 'bg-yellow-400'  },
+  reserved:       { badge: 'bg-red-100    text-red-800    ring-1 ring-red-300',        bar: 'bg-red-400'     },
   rented:         { badge: 'bg-indigo-100 text-indigo-700 ring-1 ring-indigo-300',     bar: 'bg-indigo-400'  },
-  inactive:       { badge: 'bg-gray-100   text-gray-500   ring-1 ring-gray-300',       bar: 'bg-gray-300'    },
+  inactive:       { badge: 'bg-gray-100   text-gray-800   ring-1 ring-gray-300',       bar: 'bg-gray-400'    },
   out_of_service: { badge: 'bg-red-100    text-red-700    ring-1 ring-red-300',        bar: 'bg-red-400'     },
 };
 
@@ -50,11 +52,25 @@ const statusStyle = computed(() => {
   return STATUS_STYLES[key] ?? { badge: 'bg-gray-100 text-gray-500 ring-1 ring-gray-300', bar: 'bg-gray-300' };
 });
 
+const statusKey = computed(() => (props.vehicle?.category ?? '').trim().toLowerCase());
+
 const isAvailable = computed(() => {
+  const key = statusKey.value;
+  if (['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(key)) return false;
+  if (key === 'available' || key === 'active') return true;
   if (props.vehicle?.available === true) return true;
   if (props.vehicle?.available === false) return false;
-  const key = (props.vehicle?.category ?? '').trim().toLowerCase();
-  return key === 'available' || key === 'active';
+  return false;
+});
+
+const actionButtonVariant = computed<ButtonVariant>(() => {
+  if (isAvailable.value) return 'primary';
+  const key = statusKey.value;
+  if (key === 'reserved') return 'tertiary';
+  if (key === 'maintenance') return 'warning';
+  if (key === 'inactive') return 'muted';
+  if (key === 'out_of_service') return 'tertiary';
+  return 'primary';
 });
 
 function handleReserve() {
@@ -140,7 +156,7 @@ function handleReserve() {
             </div>
 
             <BaseButton
-              :variant="isAvailable ? 'primary' : 'secondary'"
+              :variant="actionButtonVariant"
               full-width
               @click="handleReserve"
             >
