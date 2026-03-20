@@ -13,7 +13,7 @@
     <template #cell-status="{ value }">
       <span
         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-        :class="String(value).toLowerCase() === 'available' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+        :class="statusClass(value)"
       >
         {{ statusLabel(value) }}
       </span>
@@ -54,7 +54,7 @@ import type { Vehicle } from '@/modules/vehicles/types/vehicle.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { getVehicleStatusLabel } from '@/modules/vehicles/utils/vehicleStatus';
+import { getVehicleStatusClass, getVehicleStatusLabel } from '@/modules/vehicles/utils/vehicleStatus';
 
 interface Props {
   vehicles?: Vehicle[];
@@ -70,6 +70,10 @@ const { t } = useI18n();
 
 const statusLabel = (status: unknown) => {
   return getVehicleStatusLabel(t, status);
+};
+
+const statusClass = (status: unknown) => {
+  return getVehicleStatusClass(status);
 };
 
 defineEmits<{
