@@ -6,12 +6,15 @@ services:
     container_name: sprint4-blink-dev
     ports:
       - "5173:5173"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - .:/app
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+      - VITE_DEV_PROXY_TARGET=http://host.docker.internal:8000
     command: npm run dev -- --host 0.0.0.0 --port 5173
 
   frontend-prod:
