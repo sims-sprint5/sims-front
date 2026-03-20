@@ -525,9 +525,11 @@
         "required": "Status is required."
       },
       "current_latitude": {
+        "required": "Latitude is required.",
         "invalid": "Latitude is invalid."
       },
       "current_longitude": {
+        "required": "Longitude is required.",
         "invalid": "Longitude is invalid."
       },
       "last_location_update": {

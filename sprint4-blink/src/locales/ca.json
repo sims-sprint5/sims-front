@@ -525,9 +525,11 @@
         "required": "L’estat és obligatori."
       },
       "current_latitude": {
+        "required": "La latitud és obligatòria.",
         "invalid": "La latitud no és vàlida."
       },
       "current_longitude": {
+        "required": "La longitud és obligatòria.",
         "invalid": "La longitud no és vàlida."
       },
       "last_location_update": {

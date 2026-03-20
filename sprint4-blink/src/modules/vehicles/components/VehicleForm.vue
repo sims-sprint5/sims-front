@@ -94,6 +94,7 @@
           type="number"
           :placeholder="$t('vehicles.form.currentLatitudePlaceholder')"
           :error="formatError((errors as any).current_latitude)"
+          :required="!isEditing"
         />
       </div>
 
@@ -104,6 +105,7 @@
           type="number"
           :placeholder="$t('vehicles.form.currentLongitudePlaceholder')"
           :error="formatError((errors as any).current_longitude)"
+          :required="!isEditing"
         />
       </div>
     </div>

@@ -25,9 +25,16 @@ function validateDecimalOrEmpty(value: unknown, key: 'current_latitude' | 'curre
   return null;
 }
 
+function validateDecimalRequired(value: unknown, key: 'current_latitude' | 'current_longitude'): string | null {
+  if (value === null || value === undefined || value === '') return `validation.vehicle.${key}.required`;
+  const n = Number(value);
+  if (!Number.isFinite(n)) return `validation.vehicle.${key}.invalid`;
+  return null;
+}
+
 export function validateVehicleForm(
   formData: CreateVehicleData | UpdateVehicleData,
-  _isEditing: boolean = false,
+  isEditing: boolean = false,
 ): ValidationErrors {
   const errors: ValidationErrors = {};
 
@@ -49,10 +56,14 @@ export function validateVehicleForm(
   const statusError = validateRequiredText((formData as any).status, 'status');
   if (statusError) (errors as any).status = statusError;
 
-  const latError = validateDecimalOrEmpty((formData as any).current_latitude, 'current_latitude');
+  const latError = isEditing
+    ? validateDecimalOrEmpty((formData as any).current_latitude, 'current_latitude')
+    : validateDecimalRequired((formData as any).current_latitude, 'current_latitude');
   if (latError) (errors as any).current_latitude = latError;
 
-  const lngError = validateDecimalOrEmpty((formData as any).current_longitude, 'current_longitude');
+  const lngError = isEditing
+    ? validateDecimalOrEmpty((formData as any).current_longitude, 'current_longitude')
+    : validateDecimalRequired((formData as any).current_longitude, 'current_longitude');
   if (lngError) (errors as any).current_longitude = lngError;
 
   return errors;

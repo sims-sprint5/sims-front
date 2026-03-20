@@ -524,9 +524,11 @@
         "required": "El estado es requerido."
       },
       "current_latitude": {
+        "required": "La latitud es requerida.",
         "invalid": "La latitud no es válida."
       },
       "current_longitude": {
+        "required": "La longitud es requerida.",
         "invalid": "La longitud no es válida."
       },
       "last_location_update": {
