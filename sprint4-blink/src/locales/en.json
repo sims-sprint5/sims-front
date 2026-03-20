@@ -12,11 +12,13 @@
     "search": "Search",
     "refresh": "Refresh",
     "confirm": "Confirm",
+    "create": "Create",
     "delete": "Delete",
     "edit": "Edit",
     "view": "View",
     "actions": "Actions",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "passwordMismatch": "Passwords do not match."
   },
   "language": {
     "label": "Language",
@@ -34,6 +36,7 @@
     "users": "Users",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
+    "iot": "IoT",
     "settings": "Settings",
     "superadmin": "Superadmin",
     "sections": {
@@ -184,7 +187,8 @@
       "search": "Failed to search users",
       "save": "Failed to save user",
       "delete": "Failed to delete user",
-      "notFound": "User not found. It may have already been deleted."
+      "notFound": "User not found. It may have already been deleted.",
+      "invalidId": "Invalid user ID."
     }
   },
   "vehicles": {
@@ -329,6 +333,18 @@
       "missingDates": "Provide start and end dates for the reservation.",
       "invalidDates": "The end date must be later than the start date.",
       "create": "Failed to create the reservation. Please try again."
+    },
+    "filters": {
+      "title": "Filters",
+      "reset": "Reset",
+      "searchLabel": "Search",
+      "searchPlaceholder": "License plate, brand or model",
+      "statusLabel": "Status",
+      "brandLabel": "Brand",
+      "yearLabel": "Year",
+      "from": "From",
+      "to": "To",
+      "all": "All"
     }
   },
   "table": {
@@ -389,10 +405,17 @@
     },
     "estados": {
       "pendiente": "Pending",
+      "pending": "Pending",
       "open": "Open",
+      "in_progress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed",
       "confirmado": "Confirmed",
+      "confirmed": "Confirmed",
       "cancelado": "Cancelled",
-      "usado": "Used"
+      "cancelled": "Cancelled",
+      "usado": "Used",
+      "used": "Used"
     },
     "modal": {
       "detailsTitle": "Ticket details"
@@ -655,6 +678,7 @@
         "new": "New Superadmin"
       },
       "modal": {
+        "editTitle": "Edit Superadmin",
         "createTitle": "Create Superadmin",
         "deleteTitle": "Delete Superadmin",
         "deleteMessage": "Are you sure you want to delete {name}?"
@@ -663,11 +687,13 @@
         "name": "Name",
         "email": "Email",
         "password": "Password",
-        "passwordConfirmation": "Confirm Password"
+        "passwordConfirmation": "Confirm Password",
+        "changePasswordHint": "Leave password empty if you do not want to change it."
       },
       "toast": {
         "created": "Superadmin created successfully",
-        "deleted": "Superadmin deleted successfully"
+        "deleted": "Superadmin deleted successfully",
+        "updated": "Superadmin updated successfully"
       },
       "errors": {
         "load": "Failed to load superadmins",

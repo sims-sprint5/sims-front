@@ -12,11 +12,13 @@
     "search": "Buscar",
     "refresh": "Actualitzar",
     "confirm": "Confirmar",
+    "create": "Crear",
     "delete": "Eliminar",
     "edit": "Editar",
     "view": "Veure",
     "actions": "Accions",
-    "logout": "Tancar sessió"
+    "logout": "Tancar sessió",
+    "passwordMismatch": "Les contrasenyes no coincideixen."
   },
   "language": {
     "label": "Idioma",
@@ -34,6 +36,7 @@
     "users": "Usuaris",
     "vehicles": "Vehicles",
     "geofencing": "Geofencing",
+    "iot": "IoT",
     "settings": "Configuració",
     "superadmin": "Superadmin",
     "sections": {
@@ -185,7 +188,8 @@
       "search": "Error en buscar usuaris",
       "save": "Error en guardar l’usuari",
       "delete": "Error en eliminar l’usuari",
-      "notFound": "Usuari no trobat. Potser ja ha sigut eliminat."
+      "notFound": "Usuari no trobat. Potser ja ha sigut eliminat.",
+      "invalidId": "ID d'usuari no vàlid."
     }
   },
   "vehicles": {
@@ -329,6 +333,18 @@
       "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
       "create": "Error en crear la reserva. Torna-ho a intentar.",
       "invalidDates": "La data de fi ha de ser posterior a la d'inici."
+    },
+    "filters": {
+      "title": "Filtres",
+      "reset": "Restablir",
+      "searchLabel": "Buscar",
+      "searchPlaceholder": "Matrícula, marca o model",
+      "statusLabel": "Estat",
+      "brandLabel": "Marca",
+      "yearLabel": "Any",
+      "from": "Des de",
+      "to": "Fins a",
+      "all": "Tots"
     }
   },
   "table": {
@@ -389,10 +405,17 @@
     },
     "estados": {
       "pendiente": "Pendent",
+      "pending": "Pendent",
       "open": "Obert",
+      "in_progress": "En progrés",
+      "resolved": "Resolt",
+      "closed": "Tancat",
       "confirmado": "Confirmat",
+      "confirmed": "Confirmat",
       "cancelado": "Cancel·lat",
-      "usado": "Usat"
+      "cancelled": "Cancel·lat",
+      "usado": "Usat",
+      "used": "Usat"
     },
     "modal": {
       "detailsTitle": "Detalls del ticket"
@@ -653,6 +676,7 @@
         "new": "Nou Superadministrador"
       },
       "modal": {
+        "editTitle": "Editar Superadministrador",
         "createTitle": "Crear Superadministrador",
         "deleteTitle": "Eliminar Superadministrador",
         "deleteMessage": "Estàs segur que vols eliminar {name}? Aquesta acció no es pot desfer."
@@ -661,11 +685,13 @@
         "name": "Nom",
         "email": "Correu electrònic",
         "password": "Contrasenya",
-        "passwordConfirmation": "Confirmar contrasenya"
+        "passwordConfirmation": "Confirmar contrasenya",
+        "changePasswordHint": "Deixa la contrasenya buida si no la vols canviar."
       },
       "toast": {
         "created": "Superadministrador creat correctament",
-        "deleted": "Superadministrador eliminat correctament"
+        "deleted": "Superadministrador eliminat correctament",
+        "updated": "Superadministrador actualitzat correctament"
       },
       "errors": {
         "load": "Error al carregar superadministradors",
