@@ -201,7 +201,7 @@ import { useToast } from '@/shared/composables/useToast';
 import { validateVehicleForm, type ValidationErrors } from '@/modules/vehicles/utils/vehicleValidation';
 import { useI18n } from 'vue-i18n';
 import { useTranslateError } from '@/shared/composables/useTranslateError';
-import { getVehicleStatusLabel } from '@/modules/vehicles/utils/vehicleStatus';
+import { getVehicleStatusLabel, VEHICLE_STATUS_OPTIONS } from '@/modules/vehicles/utils/vehicleStatus';
 
 const toast = useToast();
 const { t } = useI18n();
@@ -227,12 +227,18 @@ const viewingVehicle = ref<Vehicle | null>(null);
 const vehicleToDelete = ref<Vehicle | null>(null);
 
 const statusOptions = computed<string[]>(() => {
-  const raw = vehicles.value
-    .map((v) => v.status)
-    .filter((s): s is string => typeof s === 'string' && s.trim().length > 0);
+  const base = [...VEHICLE_STATUS_OPTIONS];
+  const baseLower = new Set(base.map((s) => s.toLowerCase()));
 
-  const unique = Array.from(new Set(raw));
-  return unique.length ? unique : ['active', 'inactive', 'maintenance'];
+  // Si el backend devolviese algún estado nuevo, lo mostramos también
+  // sin romper el formulario.
+  const extras = vehicles.value
+    .map((v) => String(v.status ?? '').trim())
+    .filter((s) => s.length > 0)
+    .filter((s) => !baseLower.has(s.toLowerCase()));
+
+  const extraUnique = Array.from(new Set(extras));
+  return [...base, ...extraUnique];
 });
 
 // Errores del formulario

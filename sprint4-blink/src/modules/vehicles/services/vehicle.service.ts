@@ -20,7 +20,7 @@ function normalizeVehicle(raw: any): Vehicle {
 
   const availableRaw = raw.available ?? raw.is_available;
   const statusKey = String(raw.status ?? '').trim().toLowerCase();
-  const availableDerived = statusKey === 'available' || statusKey === 'active';
+  const availableDerived = statusKey === 'available';
   const available = typeof availableRaw === 'boolean' ? availableRaw : availableDerived;
 
   return {
