@@ -48,7 +48,7 @@
     "sessionExpired": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
     "login": {
       "title": "Iniciar sesión",
-      "header": "Inicia sesión en {app}",
+      "header": "Inicia proba en {app}",
       "cta": "Acceder",
       "loading": "Cargando...",
       "emailLabel": "Correo electrónico",
