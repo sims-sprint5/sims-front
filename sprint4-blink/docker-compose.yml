@@ -21,6 +21,13 @@ services:
     build:
       context: .
       target: production
+      args:
+        VITE_CENTRAL_API_URL: ${VITE_CENTRAL_API_URL}
+        VITE_TENANT_BASE_URL: ${VITE_TENANT_BASE_URL}
+        VITE_TENANT_DOMAIN_SUFFIX: ${VITE_TENANT_DOMAIN_SUFFIX}
+        VITE_API_PORT: ${VITE_API_PORT}
+        VITE_APP_BASE_DOMAIN: ${VITE_APP_BASE_DOMAIN}
+        VITE_CENTRAL_BLADE_URL: ${VITE_CENTRAL_BLADE_URL}
     container_name: sprint4-blink-prod
     restart: unless-stopped
     ports:

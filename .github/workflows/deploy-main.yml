@@ -103,6 +103,7 @@ jobs:
           rsync -az --delete \
             -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p ${SSH_PORT}" \
             --exclude '.git' \
+            --exclude '.env' \
             --exclude 'node_modules' \
             --exclude 'dist' \
             "${FRONTEND_DIR}/" \
@@ -127,6 +128,8 @@ jobs:
             fi
 
             docker rm -f sprint4-blink-prod >/dev/null 2>&1 || true
+            sh -c "$COMPOSE_CMD down --remove-orphans" || true
+            docker network create sprint4-blink_default >/dev/null 2>&1 || true
             sh -c "$COMPOSE_CMD up -d --build --force-recreate --remove-orphans frontend-prod"
             docker ps --filter "name=sprint4-blink-prod"
 
