@@ -13,20 +13,14 @@ import mapaRoutes from '../modules/mapa/routes';
 import { i18n } from '@/i18n';
 import { hasAllowedRole } from '@/shared/utils/roleUtils';
 
-function resolveRootRedirect(): string {
-  const bladeUrl = (import.meta.env.VITE_CENTRAL_BLADE_URL as string | undefined)?.trim();
-
-  if (getCurrentTenant() === 'central' && bladeUrl) {
-    window.location.assign(bladeUrl);
-  }
-
-  return isSuperadminHost() ? '/superadmin/login' : '/login';
+function getCentralBladeUrl(): string {
+  return (import.meta.env.VITE_CENTRAL_BLADE_URL as string | undefined)?.trim() || '';
 }
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: () => resolveRootRedirect(),
+    redirect: () => (isSuperadminHost() ? '/superadmin/login' : '/login'),
   },
   ...authRoutes,
   {
@@ -67,7 +61,15 @@ router.beforeEach((to, _from, next) => {
   const isAccessingFromSuperadminHost = isSuperadminHost();
   const requiresAuth = to.meta.requiresAuth;
   const currentTenant = getCurrentTenant();
+  const isCentralTenant = currentTenant === 'central';
   const storedTenant = authService.getTenant();
+  const bladeUrl = getCentralBladeUrl();
+
+  if (to.path === '/' && isCentralTenant && bladeUrl) {
+    window.location.replace(bladeUrl);
+    next(false);
+    return;
+  }
 
   // Update page title
   const titleKey = to.meta.titleKey as string | undefined;
@@ -120,14 +122,14 @@ router.beforeEach((to, _from, next) => {
   }
 
   // If superadmin somehow on tenant host, clear and redirect
-  if (isAuthenticated && user?.role === 'superadmin') {
+  if (isAuthenticated && user?.role === 'superadmin' && !isCentralTenant) {
     authService.clearAuth();
     next({ name: 'Login' });
     return;
   }
 
   // If trying to access superadmin routes, redirect appropriately
-  if (isSuperadminRoute) {
+  if (isSuperadminRoute && !isCentralTenant) {
     next({ name: isAuthenticated ? 'UserMapView' : 'Login' });
     return;
   }
@@ -139,8 +141,9 @@ router.beforeEach((to, _from, next) => {
   }
 
   // Role-based access control.
-  // Supports both `meta.allowedRoles` (preferred) and legacy `meta.requiresAdmin`.
+  // Supports `meta.allowedRoles` (preferred), `meta.requiresRole` and legacy `meta.requiresAdmin`.
   const allowedRoles = (to.meta.allowedRoles as string[] | undefined) ??
+    ((to.meta.requiresRole as string | undefined) ? [to.meta.requiresRole as string] : undefined) ??
     ((to.meta.requiresAdmin as boolean | undefined) ? ['admin', 'superadmin'] : undefined);
 
   if (allowedRoles?.length) {
@@ -152,7 +155,7 @@ router.beforeEach((to, _from, next) => {
   }
 
   if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
-    next({ name: 'UserMapView' });
+    next({ name: user?.role === 'superadmin' ? 'SuperadminDashboard' : 'UserMapView' });
     return;
   }
 

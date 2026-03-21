@@ -71,7 +71,8 @@ const handleLogin = async (event?: Event) => {
 
         toast.success(t('auth.login.welcome', { name: response.user.name }));
 
-        router.push('/mapa');
+        const isSuperadmin = response.user.role === 'superadmin';
+        router.push(isSuperadmin ? '/superadmin/dashboard' : '/mapa');
     } catch (err: any) {
         if (err.errors) {
             fieldErrors.value = err.errors;
