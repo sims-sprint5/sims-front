@@ -653,7 +653,8 @@
     "invalidLoginResponse": "Invalid login response: missing token.",
     "requestFailed": "Request failed",
     "serverConnection": "Server connection error",
-    "notAuthenticated": "You are not authenticated. Please sign in."
+    "notAuthenticated": "You are not authenticated. Please sign in.",
+    "siteAccessDenied": "You don't have permission to access from this site."
   },
   "superadmin": {
     "dashboard": {

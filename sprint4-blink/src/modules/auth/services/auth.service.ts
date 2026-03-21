@@ -1,5 +1,6 @@
 import { apiClient, initializeSanctum } from '@/shared/services/api.service';
 import { getCurrentTenant } from '@/shared/utils/tenantUtils';
+import { isSuperAdminRole } from '@/shared/utils/roleUtils';
 import type {
   AuthResponse,
   LoginCredentials,
@@ -35,6 +36,17 @@ function extractUser(payload: any): User | undefined {
   return undefined;
 }
 
+function canAccessCurrentSite(userRole: unknown): boolean {
+  const isCentralTenant = getCurrentTenant() === 'central';
+  const isSuperadmin = isSuperAdminRole(userRole);
+
+  if (isCentralTenant) {
+    return isSuperadmin;
+  }
+
+  return !isSuperadmin;
+}
+
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     // Best-effort: enables Laravel Sanctum CSRF protection when available.
@@ -58,6 +70,17 @@ export const authService = {
         errors: {
           auth: ['Invalid server response'],
         },
+      };
+    }
+
+    if (!canAccessCurrentSite(user.role)) {
+      this.clearAuth();
+      throw {
+        message: 'errors.siteAccessDenied',
+        errors: {
+          auth: ['User role has no access to current site'],
+        },
+        status: 403,
       };
     }
 

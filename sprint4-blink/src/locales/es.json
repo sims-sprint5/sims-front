@@ -652,7 +652,8 @@
     "invalidLoginResponse": "Respuesta de login inválida: falta token.",
     "requestFailed": "Error en la petición",
     "serverConnection": "Error de conexión con el servidor",
-    "notAuthenticated": "No estás autenticado. Por favor, inicia sesión."
+    "notAuthenticated": "No estás autenticado. Por favor, inicia sesión.",
+    "siteAccessDenied": "No tienes permisos para acceder desde este sitio."
   },
   "superadmin": {
     "dashboard": {

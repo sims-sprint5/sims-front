@@ -651,7 +651,8 @@
     "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
     "requestFailed": "Error en la petició",
     "serverConnection": "Error de connexió amb el servidor",
-    "notAuthenticated": "No estàs autenticat. Si us plau, inicia sessió."
+    "notAuthenticated": "No estàs autenticat. Si us plau, inicia sessió.",
+    "siteAccessDenied": "No tens permisos per accedir des d'aquest lloc."
   },
   "superadmin": {
     "dashboard": {
