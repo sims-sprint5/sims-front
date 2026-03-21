@@ -104,8 +104,11 @@ VITE_TENANT_BASE_URL=http://{tenant}.lvh.me:8000/api/v1
 VITE_TENANT_DOMAIN_SUFFIX=.lvh.me:8000
 VITE_PORT=5173
 VITE_API_PORT=8000
+VITE_CENTRAL_BLADE_URL=
 
 ```
+
+`VITE_CENTRAL_BLADE_URL` is optional. When set, visiting `/` on the base domain (e.g. `simsgrup2.app`) performs a hard redirect to that Laravel Blade URL.
 
 ---
 

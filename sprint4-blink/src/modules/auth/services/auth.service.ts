@@ -44,7 +44,10 @@ export const authService = {
       // Ignore — some backends may not expose Sanctum.
     }
 
-    const payload = await apiClient.post<any>(`${getAuthBasePath()}/login`, credentials);
+    const payload = await apiClient.post<any>(`${getAuthBasePath()}/login`, {
+      ...credentials,
+      email: credentials.email.trim(),
+    });
 
     const token = extractToken(payload);
     const user = extractUser(payload);

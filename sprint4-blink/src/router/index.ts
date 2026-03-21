@@ -13,10 +13,20 @@ import mapaRoutes from '../modules/mapa/routes';
 import { i18n } from '@/i18n';
 import { hasAllowedRole } from '@/shared/utils/roleUtils';
 
+function resolveRootRedirect(): string {
+  const bladeUrl = (import.meta.env.VITE_CENTRAL_BLADE_URL as string | undefined)?.trim();
+
+  if (getCurrentTenant() === 'central' && bladeUrl) {
+    window.location.assign(bladeUrl);
+  }
+
+  return isSuperadminHost() ? '/superadmin/login' : '/login';
+}
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: () => (isSuperadminHost() ? '/superadmin/login' : '/login'),
+    redirect: () => resolveRootRedirect(),
   },
   ...authRoutes,
   {

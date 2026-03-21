@@ -35,7 +35,28 @@ const validateForm = (): boolean => {
     return Object.keys(validationErrors.value).length === 0;
 };
 
-const handleLogin = async () => {
+const syncFormFromSubmitEvent = (event?: Event) => {
+    const formElement = event?.target instanceof HTMLFormElement ? event.target : null;
+    if (!formElement) return;
+
+    const formData = new FormData(formElement);
+    const email = formData.get('email');
+    const password = formData.get('password');
+
+    if (typeof email === 'string') {
+        form.email = email;
+    }
+
+    if (typeof password === 'string') {
+        form.password = password;
+    }
+};
+
+const handleLogin = async (event?: Event) => {
+    syncFormFromSubmitEvent(event);
+
+    form.email = form.email.trim();
+
     if (!validateForm()) {
         toast.error(t('validation.fixFormErrors'));
         return;
@@ -96,10 +117,10 @@ const getFieldError = (field: string): string => {
 
             <form @submit.prevent="handleLogin" class="space-y-5">
 
-                <BaseInput v-model="form.email" type="email" :label="$t('auth.login.emailLabel')" :placeholder="$t('auth.login.emailPlaceholder')"
+                <BaseInput v-model="form.email" name="email" type="email" :label="$t('auth.login.emailLabel')" :placeholder="$t('auth.login.emailPlaceholder')"
                     icon="email" :required="true" :disabled="loading" :error="formatError(getFieldError('email'))" />
 
-                <BaseInput v-model="form.password" :type="showPassword ? 'text' : 'password'" :label="$t('auth.login.passwordLabel')"
+                <BaseInput v-model="form.password" name="password" :type="showPassword ? 'text' : 'password'" :label="$t('auth.login.passwordLabel')"
                     :placeholder="$t('auth.login.passwordPlaceholder')" icon="password" :required="true" :disabled="loading"
                     :error="formatError(getFieldError('password'))" :show-password-toggle="true"
                     @toggle-password="togglePasswordVisibility" />

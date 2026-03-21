@@ -12,11 +12,15 @@ export type { ValidationErrors } from '@/shared/utils/validators';
 export function validateLoginCredentials(email: string, password: string): ValidationErrors {
   const errors: ValidationErrors = {};
 
-  const emailError = validateEmail(email);
+  const normalizedEmail = email?.trim() ?? '';
+  const emailError = validateEmail(normalizedEmail);
   if (emailError) errors.email = emailError;
 
-  const passwordError = validatePassword(password, false);
-  if (passwordError) errors.password = passwordError;
+  if (!password || !password.trim()) {
+    errors.password = 'validation.password.required';
+  } else if (password.length > 255) {
+    errors.password = 'validation.password.max';
+  }
 
   return errors;
 }

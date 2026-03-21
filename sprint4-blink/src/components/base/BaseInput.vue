@@ -87,7 +87,7 @@ const updateValue = (event: Event) => {
 
       <!-- Input -->
       <input :id="inputId" :type="type" :value="modelValue" :placeholder="placeholder" :required="required"
-        :disabled="disabled" :class="inputClasses" @input="updateValue" v-on="$attrs" />
+        :disabled="disabled" :class="inputClasses" @input="updateValue" @change="updateValue" v-on="$attrs" />
 
       <!-- Toggle password visibility -->
       <button v-if="showPasswordToggle" type="button" @click="emit('togglePassword')"
