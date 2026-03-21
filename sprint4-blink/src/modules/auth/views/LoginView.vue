@@ -71,8 +71,9 @@ const handleLogin = async (event?: Event) => {
 
         toast.success(t('auth.login.welcome', { name: response.user.name }));
 
+        const isCentralTenant = getCurrentTenant() === 'central';
         const isSuperadmin = response.user.role === 'superadmin';
-        router.push(isSuperadmin ? '/superadmin/dashboard' : '/mapa');
+        router.push(isCentralTenant || isSuperadmin ? '/superadmin/tenants' : '/mapa');
     } catch (err: any) {
         if (err.errors) {
             fieldErrors.value = err.errors;

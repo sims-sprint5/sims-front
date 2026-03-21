@@ -106,7 +106,7 @@ router.beforeEach((to, _from, next) => {
 
     // If trying to access tenant routes, redirect to superadmin dashboard
     if (!isSuperadminRoute && requiresAuth) {
-      next({ name: 'SuperadminDashboard' });
+      next({ name: 'SuperadminTenants' });
       return;
     }
 
@@ -134,6 +134,11 @@ router.beforeEach((to, _from, next) => {
     return;
   }
 
+  if (isAuthenticated && isCentralTenant && !isSuperadminRoute && requiresAuth) {
+    next({ name: 'SuperadminTenants' });
+    return;
+  }
+
   // If not authenticated and route requires it, redirect to login
   if (requiresAuth && !isAuthenticated) {
     next({ name: 'Login' });
@@ -155,7 +160,7 @@ router.beforeEach((to, _from, next) => {
   }
 
   if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
-    next({ name: user?.role === 'superadmin' ? 'SuperadminDashboard' : 'UserMapView' });
+    next({ name: user?.role === 'superadmin' ? 'SuperadminTenants' : 'UserMapView' });
     return;
   }
 
