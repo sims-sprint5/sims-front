@@ -72,6 +72,9 @@ export const superadminService = {
     const payload = {
       id: data.id,
       name: data.name,
+      admin_email: data.admin_email,
+      admin_password: data.admin_password,
+      admin_password_confirmation: data.admin_password_confirmation,
     };
     const raw = await superadminHttp.post<any>('/v1/superadmin/tenants', payload);
     return normalizeTenant(raw?.data ?? raw);

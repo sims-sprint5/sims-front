@@ -11,6 +11,9 @@ export interface Tenant {
 export interface CreateTenantData {
     id: string;
     name: string;
+    admin_email: string;
+    admin_password: string;
+    admin_password_confirmation: string;
 }
 
 export interface UpdateTenantData {

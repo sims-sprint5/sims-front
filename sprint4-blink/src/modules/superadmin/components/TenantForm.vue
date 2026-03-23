@@ -21,6 +21,38 @@
           required
         />
 
+        <!-- Admin Email -->
+        <BaseInput
+          v-model="formData.admin_email"
+          :label="$t('tenants.form.admin_email')"
+          type="email"
+          :placeholder="$t('tenants.form.admin_emailPlaceholder')"
+          required
+        />
+
+        <!-- Admin Password -->
+        <BaseInput
+          v-model="formData.admin_password"
+          :label="$t('tenants.form.admin_password')"
+          :type="showPassword ? 'text' : 'password'"
+          :placeholder="$t('tenants.form.passwordPlaceholder')"
+          :showPasswordToggle="true"
+          @togglePassword="toggleShowPassword"
+          required
+        />
+
+        <!-- Admin Password Confirmation -->
+        <BaseInput
+          v-model="formData.admin_password_confirmation"
+          :label="$t('tenants.form.admin_passwordConfirmation')"
+          :type="showPasswordConfirmation ? 'text' : 'password'"
+          :placeholder="$t('tenants.form.changePasswordConfirmationPlaceholder')"
+          :showPasswordToggle="true"
+          @togglePassword="toggleShowPasswordConfirmation"
+          :error="passwordMismatchError"
+          required
+        />
+
         <p class="text-xs text-gray-500 bg-blue-50 px-3 py-2 rounded">
           {{ $t('tenants.form.creationNote') }}
         </p>
@@ -210,6 +242,9 @@ const handleSubmit = () => {
     const payload: CreateTenantData = {
       id: formData.value.id,
       name: formData.value.name,
+      admin_email: formData.value.admin_email,
+      admin_password: formData.value.admin_password,
+      admin_password_confirmation: formData.value.admin_password_confirmation,
     };
     emit('submit', payload);
   }
