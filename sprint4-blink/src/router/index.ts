@@ -14,13 +14,20 @@ import { i18n } from '@/i18n';
 import { hasAllowedRole } from '@/shared/utils/roleUtils';
 
 function getCentralBladeUrl(): string {
-  return (import.meta.env.VITE_CENTRAL_BLADE_URL as string | undefined)?.trim() || '';
+  return (import.meta.env.VITE_CENTRAL_BLADE_URL as string | undefined)?.trim() || '/welcome';
 }
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: () => (isSuperadminHost() ? '/superadmin/login' : '/login'),
+    redirect: () => {
+      if (getCurrentTenant() === 'central') {
+        window.location.replace(getCentralBladeUrl());
+        return '/superadmin/login';
+      }
+
+      return '/login';
+    },
   },
   ...authRoutes,
   {
@@ -41,7 +48,7 @@ const routes: RouteRecordRaw[] = [
   ...superadminRoutes,
   {
     path: '/:pathMatch(.*)*',
-    redirect: () => (isSuperadminHost() ? '/superadmin/login' : '/login'),
+    redirect: () => (getCurrentTenant() === 'central' ? '/superadmin/login' : '/login'),
   },
 ];
 
@@ -63,10 +70,8 @@ router.beforeEach((to, _from, next) => {
   const currentTenant = getCurrentTenant();
   const isCentralTenant = currentTenant === 'central';
   const storedTenant = authService.getTenant();
-  const bladeUrl = getCentralBladeUrl();
-
-  if (to.path === '/' && isCentralTenant && bladeUrl) {
-    window.location.replace(bladeUrl);
+  if (to.path === '/' && isCentralTenant) {
+    window.location.replace(getCentralBladeUrl());
     next(false);
     return;
   }

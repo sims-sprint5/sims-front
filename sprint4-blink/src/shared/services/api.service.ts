@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-import { buildTenantApiUrl, getCurrentTenant, hasTenantSubdomain } from '../utils/tenantUtils';
+import { buildTenantApiUrl, getCurrentTenant, hasTenantSubdomain, isSuperadminHost } from '../utils/tenantUtils';
 import type { ApiError } from '../types/api.types';
 
 const axiosInstance = axios.create({
@@ -60,7 +60,7 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem('auth_token');
         localStorage.removeItem('auth_user');
         localStorage.removeItem('auth_tenant');
-        window.location.href = '/login';
+        window.location.href = isSuperadminHost() ? '/superadmin/login' : '/login';
       }
 
       // Debug logging in dev: log 4xx and 5xx (except 403 which is often expected/handled)

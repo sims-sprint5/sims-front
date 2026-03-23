@@ -11,11 +11,49 @@ import type {
 const AUTH_TOKEN_KEY = 'auth_token';
 const AUTH_USER_KEY = 'auth_user';
 const AUTH_TENANT_KEY = 'auth_tenant';
+const AUTH_TENANT_BASE_PATH_KEY = 'auth_tenant_base_path';
+
+function normalizeBasePath(path: string | null | undefined): string | null {
+  if (!path) return null;
+  const trimmed = path.trim();
+  if (!trimmed) return null;
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+}
+
+function uniquePaths(paths: Array<string | null | undefined>): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const value of paths) {
+    const normalized = normalizeBasePath(value);
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(normalized);
+  }
+
+  return result;
+}
+
+function getCentralAuthBasePath(): string {
+  return normalizeBasePath(import.meta.env.VITE_CENTRAL_AUTH_BASE_PATH as string | undefined) ?? '/v1/superadmin/auth';
+}
+
+function getTenantAuthBasePaths(): string[] {
+  const storedPath = localStorage.getItem(AUTH_TENANT_BASE_PATH_KEY);
+  const envPath = import.meta.env.VITE_TENANT_AUTH_BASE_PATH as string | undefined;
+
+  return uniquePaths([
+    storedPath,
+    envPath,
+    '/v1/auth',
+    '/v1/tenant/auth',
+  ]);
+}
 
 function getAuthBasePath(): string {
   return getCurrentTenant() === 'central'
-    ? '/v1/superadmin/auth'
-    : '/v1/auth';
+    ? getCentralAuthBasePath()
+    : (getTenantAuthBasePaths()[0] ?? '/v1/auth');
 }
 
 function extractToken(payload: any): string | undefined {
@@ -56,10 +94,40 @@ export const authService = {
       // Ignore — some backends may not expose Sanctum.
     }
 
-    const payload = await apiClient.post<any>(`${getAuthBasePath()}/login`, {
+    const loginPayload = {
       ...credentials,
       email: credentials.email.trim(),
-    });
+    };
+
+    let payload: any;
+    const currentTenant = getCurrentTenant();
+
+    if (currentTenant === 'central') {
+      payload = await apiClient.post<any>(`${getAuthBasePath()}/login`, loginPayload);
+    } else {
+      let last404Error: unknown;
+
+      for (const authBasePath of getTenantAuthBasePaths()) {
+        try {
+          payload = await apiClient.post<any>(`${authBasePath}/login`, loginPayload);
+          localStorage.setItem(AUTH_TENANT_BASE_PATH_KEY, authBasePath);
+          break;
+        } catch (error: any) {
+          if (error?.status === 404) {
+            last404Error = error;
+            continue;
+          }
+          throw error;
+        }
+      }
+
+      if (!payload) {
+        throw last404Error ?? {
+          message: 'errors.requestFailed',
+          errors: {},
+        };
+      }
+    }
 
     const token = extractToken(payload);
     const user = extractUser(payload);
@@ -245,6 +313,7 @@ export const authService = {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
     localStorage.removeItem(AUTH_TENANT_KEY);
+    localStorage.removeItem(AUTH_TENANT_BASE_PATH_KEY);
   },
 
   isAuthenticated(): boolean {

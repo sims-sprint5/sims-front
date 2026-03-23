@@ -57,7 +57,8 @@ export function getCurrentTenant(): string {
 }
 
 export function isSuperadminHost(): boolean {
-  return isLocalLikeHost(window.location.hostname);
+  const hostname = window.location.hostname;
+  return isLocalLikeHost(hostname) || isBaseDomainHost(hostname);
 }
 
 function getApiPort(): string {
