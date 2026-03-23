@@ -11,8 +11,6 @@ export interface Tenant {
 export interface CreateTenantData {
     id: string;
     name: string;
-    admin_email: string;
-    admin_password: string;
 }
 
 export interface UpdateTenantData {

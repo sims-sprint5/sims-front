@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-4">
-    <!-- CREATION MODE -->
+  <!-- CREATION MODE -->
     <template v-if="!isEditing">
       <div class="space-y-4 border-b pb-4 mb-4">
         <p class="text-sm text-gray-600">{{ $t('tenants.form.creationInfo') }}</p>
@@ -20,37 +20,10 @@
           :placeholder="$t('tenants.form.namePlaceholder')"
           required
         />
-        
-        <BaseInput
-          v-model="formData.admin_email"
-          :label="$t('tenants.form.admin_email')"
-          type="email"
-          :placeholder="$t('tenants.form.admin_emailPlaceholder')"
-          required
-        />
-        
-        <BaseInput
-          v-model="formData.admin_password"
-          :label="$t('tenants.form.admin_password')"
-          :type="showPassword ? 'text' : 'password'"
-          :placeholder="$t('tenants.form.admin_passwordPlaceholder')"
-          :showPasswordToggle="true"
-          @togglePassword="toggleShowPassword"
-          required
-        />
 
-        <!-- Password Cofirmation -->
-        <BaseInput
-          v-model="formData.admin_password_confirmation"
-          :label="$t('tenants.form.admin_passwordConfirmation')"
-          :type="showPasswordConfirmation ? 'text' : 'password'"
-          :placeholder="$t('tenants.form.changePasswordConfirmationPlaceholder')"
-            :showPasswordToggle="true"
-            @togglePassword="toggleShowPasswordConfirmation"
-          :error="passwordMismatchError"
-          required
-        />
-
+        <p class="text-xs text-gray-500 bg-blue-50 px-3 py-2 rounded">
+          {{ $t('tenants.form.creationNote') }}
+        </p>
       </div>
     </template>
 
@@ -237,8 +210,6 @@ const handleSubmit = () => {
     const payload: CreateTenantData = {
       id: formData.value.id,
       name: formData.value.name,
-      admin_email: formData.value.admin_email,
-      admin_password: formData.value.admin_password,
     };
     emit('submit', payload);
   }

@@ -734,6 +734,7 @@
       "admin_passwordConfirmation": "Confirmar contraseña",
       "changePasswordConfirmationPlaceholder": "••••••••",
       "creationInfo": "Completa todos los campos para crear una nueva compañía",
+      "creationNote": "El administrador será creado automáticamente por el backend.",
       "changePasswordLabel": "Cambiar Contraseña del Administrador (Opcional)",
       "changePasswordPlaceholder": "Dejar en blanco para mantener la contraseña actual",
       "changePasswordHint": "Deja este campo vacío si no deseas cambiar la contraseña",

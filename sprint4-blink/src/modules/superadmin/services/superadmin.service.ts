@@ -69,7 +69,11 @@ export const superadminService = {
   },
 
   async createTenant(data: CreateTenantData): Promise<Tenant> {
-    const raw = await superadminHttp.post<any>('/v1/superadmin/tenants', data);
+    const payload = {
+      id: data.id,
+      name: data.name,
+    };
+    const raw = await superadminHttp.post<any>('/v1/superadmin/tenants', payload);
     return normalizeTenant(raw?.data ?? raw);
   },
 

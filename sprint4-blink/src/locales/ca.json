@@ -733,6 +733,7 @@
       "admin_passwordConfirmation": "Confirma la contrasenya",
       "changePasswordConfirmationPlaceholder": "••••••••",
       "creationInfo": "Omple tots els camps per crear una nova companyia",
+      "creationNote": "L'administrador serà creat automàticament pel backend.",
       "changePasswordLabel": "Canviar Contrasenya de l'Administrador (Opcional)",
       "changePasswordPlaceholder": "Deixa en blanc per mantindre la contrasenya actual",
       "changePasswordHint": "Deixa aquest camp en blanc si no vols canviar la contrasenya",

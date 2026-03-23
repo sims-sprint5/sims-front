@@ -735,6 +735,7 @@
       "admin_passwordConfirmation": "Confirm password",
       "changePasswordConfirmationPlaceholder": "••••••••",
       "creationInfo": "Fill in all fields to create a new company",
+      "creationNote": "Admin user will be created automatically by the backend.",
       "changePasswordLabel": "Change Admin Password (Optional)",
       "changePasswordPlaceholder": "Leave empty to keep current password",
       "changePasswordHint": "Leave this field empty if you don't want to change the password",
