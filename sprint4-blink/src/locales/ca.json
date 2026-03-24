@@ -59,7 +59,7 @@
       "goRegister": "Crear compte"
       ,
       "forgotPassword": "Has oblidat la contrasenya?",
-      "welcome": "holaaaaaaaaaaaaaaa/da {name}!",
+      "welcome": "Benvingut/da {name}!",
       "genericError": "Error en iniciar sessió. Torna-ho a intentar."
     },
     "register": {
@@ -344,7 +344,15 @@
       "yearLabel": "Any",
       "from": "Des de",
       "to": "Fins a",
-      "all": "Tots"
+      "all": "Tots",
+      "modelLabel": "Model",
+      "matrixLabel": "Matrícula",
+      "colorsLabel": "Color"
+    },
+    "buttons": {
+      "reserveButton": "Reservar",
+      "cancelButton": "Cancelar reserva",
+      "confirmButton": "Confirmar reserva"
     }
   },
   "table": {

@@ -344,7 +344,15 @@
       "yearLabel": "Year",
       "from": "From",
       "to": "To",
-      "all": "All"
+      "all": "All",
+      "modelLabel": "Model",
+      "matrixLabel": "License Plate",
+      "colorsLabel": "Colour"
+    },
+    "buttons": {
+      "reserveButton": "Reserve",
+      "cancelButton": "Cancel reservation",
+      "confirmButton": "Confirm reservation"
     }
   },
   "table": {

@@ -10,7 +10,9 @@
       >
         <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
           <div class="p-6 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
-            <h2 class="text-lg font-semibold">Detalles del coche</h2>
+            <h2 class="text-lg font-semibold">
+            {{ $t('vehicles.modal.detailsTitle') }}
+            </h2>
             <button
               type="button"
               class="text-gray-400 hover:text-gray-600"
@@ -24,27 +26,27 @@
           <div class="p-6" v-if="car">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-sm text-gray-600">Marca</p>
+                <p class="text-sm text-gray-600">{{ $t('reservations.filters.brandLabel') }}</p>
                 <p class="font-semibold">{{ car.brand || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Modelo</p>
+                <p class="text-sm text-gray-600">{{ $t('reservations.filters.modelLabel') }}</p>
                 <p class="font-semibold">{{ car.model || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Matrícula</p>
+                <p class="text-sm text-gray-600">{{ $t('reservations.filters.matrixLabel') }}</p>
                 <p class="font-semibold">{{ car.license_plate || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Estado</p>
+                <p class="text-sm text-gray-600">{{ $t('reservations.filters.statusLabel') }}</p>
                 <p class="font-semibold">{{ car.status || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Color</p>
+                <p class="text-sm text-gray-600">{{ $t('reservations.filters.colorsLabel') }}</p>
                 <p class="font-semibold">{{ car.color || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Año</p>
+                <p class="text-sm text-gray-600">{{ $t('reservations.filters.yearLabel') }}</p>
                 <p class="font-semibold">{{ car.year ?? '—' }}</p>
               </div>
             </div>
@@ -56,7 +58,7 @@
                 :full-width="true"
                 @click="goToReservation(car)"
               >
-                Reservar ahora
+                {{ $t('reservations.buttons.reserveButton') }}
               </BaseButton>
 
               <BaseButton
@@ -65,7 +67,7 @@
                 :full-width="true"
                 @click="emit('close')"
               >
-                Cerrar
+                {{ $t('reservations.buttons.cancelButton') }}
               </BaseButton>
             </div>
           </div>

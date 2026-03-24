@@ -58,7 +58,7 @@
       "noAccount": "¿Aún no tienes cuenta?",
       "goRegister": "Crear cuenta",
       "forgotPassword": "¿Has olvidado tu contraseña?",
-      "welcome": "¡bon diaaaaaa/a {name}!",
+      "welcome": "¡Bienvenido/a {name}!",
       "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
     },
     "register": {
@@ -343,7 +343,15 @@
       "yearLabel": "Año",
       "from": "Desde",
       "to": "Hasta",
-      "all": "Todos"
+      "all": "Todos",
+      "modelLabel": "Modelo",
+      "matrixLabel": "Matrícula",
+      "colorsLabel": "Color"
+    },
+    "buttons": {
+      "reserveButton": "Reservar",
+      "cancelButton": "Cancelar reserva",
+      "confirmButton": "Confirmar reserva"
     }
   },
   "table": {
