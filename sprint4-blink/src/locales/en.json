@@ -237,6 +237,16 @@
       "rented": "Rented",
       "out_of_service": "Out of Service"
     },
+    "colors": {
+      "black": "Black",
+      "white": "White",
+      "blue": "Blue",
+      "red": "Red",
+      "gray": "Gray",
+      "grey": "Grey",
+      "silver": "Silver",
+      "green": "Green"
+    },
     "modal": {
       "deleteTitle": "Delete vehicle",
       "deleteMessage": "Are you sure you want to delete vehicle {license_plate}? This action cannot be undone.",
@@ -261,7 +271,8 @@
       "save": "Failed to save vehicle",
       "delete": "Failed to delete vehicle",
       "notFound": "Vehicle not found. It may have already been deleted.",
-      "invalidId": "Invalid vehicle ID."
+      "invalidId": "Invalid vehicle ID.",
+      "notAvailable": "This vehicle is not available"
     }
   },
   "reservations": {
@@ -300,7 +311,13 @@
       "pending": "Pending",
       "active": "Confirmed",
       "completed": "Completed",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "available": "Available",
+      "reserved": "Reserved",
+      "maintenance": "Under Maintenance",
+      "inactive": "Inactive",
+      "rented": "Rented",
+      "out_of_service": "Out of Service"
     },
     "log": {
       "created": "Created"

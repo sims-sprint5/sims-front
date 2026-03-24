@@ -237,6 +237,16 @@
       "rented": "Llogat",
       "out_of_service": "Fora de servei"
     },
+    "colors": {
+      "black": "Negre",
+      "white": "Blanc",
+      "blue": "Blau",
+      "red": "Vermell",
+      "gray": "Gris",
+      "grey": "Gris",
+      "silver": "Plata",
+      "green": "Verd"
+    },
     "modal": {
       "deleteTitle": "Eliminar vehicle",
       "deleteMessage": "Estàs segur que vols eliminar el vehicle {license_plate}? Aquesta acció no es pot desfer.",
@@ -261,7 +271,8 @@
       "save": "Error en guardar el vehicle",
       "delete": "Error en eliminar el vehicle",
       "notFound": "Vehicle no trobat. Potser ja ha sigut eliminat.",
-      "invalidId": "ID de vehicle no vàlid."
+      "invalidId": "ID de vehicle no vàlid.",
+      "notAvailable": "Aquest vehicle no està disponible"
     }
   },
   "reservations": {
@@ -300,7 +311,13 @@
       "pending": "Pendent",
       "active": "Confirmada",
       "completed": "Completada",
-      "cancelled": "Cancel·lada"
+      "cancelled": "Cancel·lada",
+      "available": "Disponible",
+      "reserved": "Reservat",
+      "maintenance": "En manteniment",
+      "inactive": "Inactiu",
+      "rented": "Llogat",
+      "out_of_service": "Fora de servei"
     },
     "log": {
       "created": "Creada"

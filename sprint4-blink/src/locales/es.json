@@ -236,6 +236,16 @@
       "rented": "Alquilado",
       "out_of_service": "Fuera de servicio"
     },
+    "colors": {
+      "black": "Negro",
+      "white": "Blanco",
+      "blue": "Azul",
+      "red": "Rojo",
+      "gray": "Gris",
+      "grey": "Gris",
+      "silver": "Plateado",
+      "green": "Verde"
+    },
     "modal": {
       "deleteTitle": "Eliminar vehículo",
       "deleteMessage": "¿Estás seguro de que deseas eliminar el vehículo {license_plate}? Esta acción no se puede deshacer.",
@@ -260,7 +270,8 @@
       "save": "Error al guardar vehículo",
       "delete": "Error al eliminar vehículo",
       "notFound": "Vehículo no encontrado. Puede que ya haya sido eliminado.",
-      "invalidId": "ID de vehículo inválido."
+      "invalidId": "ID de vehículo inválido.",
+      "notAvailable": "Este vehículo no está disponible"
     }
   },
   "reservations": {
@@ -299,7 +310,13 @@
       "pending": "Pendiente",
       "active": "Confirmada",
       "completed": "Completada",
-      "cancelled": "Cancelada"
+      "cancelled": "Cancelada",
+      "available": "Disponible",
+      "reserved": "Reservado",
+      "maintenance": "En mantenimiento",
+      "inactive": "Inactivo",
+      "rented": "Alquilado",
+      "out_of_service": "Fuera de servicio"
     },
     "log": {
       "created": "Creada"

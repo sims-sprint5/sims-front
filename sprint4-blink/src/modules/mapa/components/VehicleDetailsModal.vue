@@ -37,13 +37,13 @@
                 <p class="text-sm text-gray-600">{{ $t('reservations.filters.matrixLabel') }}</p>
                 <p class="font-semibold">{{ car.license_plate || '—' }}</p>
               </div>
-              <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.statusLabel') }}</p>
-                <p class="font-semibold">{{ car.status || '—' }}</p>
-              </div>
+                          <div>
+                            <p class="text-sm text-gray-600">{{ $t('reservations.filters.statusLabel') }}</p>
+                            <p class="font-semibold">{{ statusLabel(car.status) }}</p>
+                          </div>
               <div>
                 <p class="text-sm text-gray-600">{{ $t('reservations.filters.colorsLabel') }}</p>
-                <p class="font-semibold">{{ car.color || '—' }}</p>
+                            <p class="font-semibold">{{ colorLabel(car.color) }}</p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">{{ $t('reservations.filters.yearLabel') }}</p>
@@ -82,6 +82,7 @@ import { BaseButton } from '@/components/base'
 import type { Vehicle as Car } from '@/modules/vehicles/types/vehicle.types'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/shared/composables/useToast'
+import { useI18n } from 'vue-i18n'
 
 defineProps<{
   open: boolean
@@ -94,6 +95,37 @@ const emit = defineEmits<{
 
 const router = useRouter()
 const toast = useToast()
+const { t } = useI18n()
+
+function statusLabel(raw: string | undefined): string {
+  if (!raw) return '—'
+  const base = String(raw).trim().toLowerCase()
+  const vehicleKey = `vehicles.status.${base}`
+  const reservationKey = `reservations.status.${base}`
+
+  const translatedVehicle = t(vehicleKey)
+  if (translatedVehicle !== vehicleKey) return translatedVehicle
+
+  const translatedReservation = t(reservationKey)
+  if (translatedReservation !== reservationKey) return translatedReservation
+
+  return raw
+}
+
+function colorLabel(raw: string | undefined): string {
+  if (!raw) return '—'
+  const base = String(raw).trim().toLowerCase()
+  const vehicleKey = `vehicles.colors.${base}`
+  const reservationKey = `reservations.colors.${base}`
+
+  const translatedVehicle = t(vehicleKey)
+  if (translatedVehicle !== vehicleKey) return translatedVehicle
+
+  const translatedReservation = t(reservationKey)
+  if (translatedReservation !== reservationKey) return translatedReservation
+
+  return raw
+}
 
 function toDateTimeLocalInput(value: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0')
@@ -109,7 +141,7 @@ function isCarAvailable(car: Car): boolean {
 
 async function goToReservation(car: Car) {
   if (!isCarAvailable(car)) {
-    toast.error('Este coche no está disponible')
+    toast.error(t('vehicles.errors.notAvailable'))
     return
   }
 
