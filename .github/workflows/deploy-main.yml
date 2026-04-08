@@ -109,6 +109,30 @@ jobs:
             "${FRONTEND_DIR}/" \
             "$SSH_USER@$SSH_HOST:${REMOTE_DIR}/"
 
+      - name: Create .env file on server
+        env:
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          VITE_CENTRAL_API_URL: ${{ secrets.VITE_CENTRAL_API_URL }}
+          VITE_TENANT_BASE_URL: ${{ secrets.VITE_TENANT_BASE_URL }}
+          VITE_TENANT_DOMAIN_SUFFIX: ${{ secrets.VITE_TENANT_DOMAIN_SUFFIX }}
+          VITE_API_PORT: ${{ secrets.VITE_API_PORT }}
+          VITE_APP_BASE_DOMAIN: ${{ secrets.VITE_APP_BASE_DOMAIN }}
+          VITE_CENTRAL_BLADE_URL: ${{ secrets.VITE_CENTRAL_BLADE_URL }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p "${SSH_PORT}" "$SSH_USER@$SSH_HOST" "REMOTE_DIR='${REMOTE_DIR}' bash -s" << 'ENV_EOF'
+            cat > "${REMOTE_DIR}/.env" << 'DOTENV_EOF'
+            VITE_CENTRAL_API_URL=${{ secrets.VITE_CENTRAL_API_URL }}
+            VITE_TENANT_BASE_URL=${{ secrets.VITE_TENANT_BASE_URL }}
+            VITE_TENANT_DOMAIN_SUFFIX=${{ secrets.VITE_TENANT_DOMAIN_SUFFIX }}
+            VITE_API_PORT=${{ secrets.VITE_API_PORT }}
+            VITE_APP_BASE_DOMAIN=${{ secrets.VITE_APP_BASE_DOMAIN }}
+            VITE_CENTRAL_BLADE_URL=${{ secrets.VITE_CENTRAL_BLADE_URL }}
+            DOTENV_EOF
+            chmod 600 "${REMOTE_DIR}/.env"
+            echo "✓ .env file created on server"
+          ENV_EOF
+
       - name: Build and run frontend Docker container
         env:
           SSH_USER: ${{ secrets.DEPLOY_USER }}
