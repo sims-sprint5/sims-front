@@ -101,7 +101,13 @@ export function useReservationVehicles() {
 
   const facets = computed(() => getReservationFacets(vehicles.value));
 
-  const filteredVehicles = computed(() => applyReservationFilters(vehicles.value, filters.value));
+  const filteredVehicles = computed(() => {
+    const statusFiltered = vehicles.value.filter((v) => {
+      const statusKey = (v.status ?? '').trim().toLowerCase();
+      return statusKey === 'available' || statusKey === 'reserved';
+    });
+    return applyReservationFilters(statusFiltered, filters.value);
+  });
 
   const vehicleCards = computed<ReservationVehicleCardModel[]>(() => filteredVehicles.value.map(toCardModel));
 
