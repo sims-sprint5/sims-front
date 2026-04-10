@@ -182,8 +182,9 @@ const getItemClasses = (item: NavItem) => {
 
 const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.map', href: '/mapa', icon: MapPinIcon },
-  { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
   { nameKey: 'nav.bookings', href: '/reservation', icon: ReservesIcon },
+  { nameKey: 'nav.myReservations', href: '/mis-reservas', icon: ReservesIcon },
+  { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])
 

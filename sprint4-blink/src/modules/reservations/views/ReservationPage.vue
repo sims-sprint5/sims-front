@@ -138,11 +138,6 @@ function normalizeDateTime(value: string): string {
 async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
 
-  if (selectedVehicle.value.available !== true) {
-    toast.error('Este coche no está disponible');
-    return;
-  }
-
   if (!reservationForm.startAt || !reservationForm.endAt) {
     toast.error(t('reservations.errors.missingDates'));
     return;
@@ -158,6 +153,25 @@ async function createReservation() {
   submitting.value = true;
 
   try {
+    // Validar disponibilidad ANTES de crear la reserva
+    const availability = await reservationLogService.checkAvailability(
+      Number(selectedVehicle.value.id) || 0,
+      normalizeDateTime(reservationForm.startAt),
+      normalizeDateTime(reservationForm.endAt),
+    );
+
+    if (!availability.available) {
+      let errorMsg = availability.message || t('reservations.errors.notAvailable');
+      if (availability.available_at) {
+        const availDate = new Date(availability.available_at);
+        const formatted = availDate.toLocaleString();
+        errorMsg = t('reservations.errors.availableFrom', { date: formatted });
+      }
+      toast.error(errorMsg);
+      return;
+    }
+
+    // Si está disponible, proceder a crear la reserva
     await reservationLogService.createLog({
       user_id: user.value?.id ?? null,
       user_name: user.value?.name ?? 'N/A',

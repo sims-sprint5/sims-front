@@ -2,6 +2,12 @@
  * Tipos relacionados con vehículos
  */
 
+export interface NextReservation {
+  start_date: string;
+  end_date: string;
+  user_name: string;
+}
+
 export interface Vehicle {
   id: number;
   vehicle_id?: number; // Alias del backend (PK real)
@@ -17,6 +23,7 @@ export interface Vehicle {
   last_location_update: string | null;
   created_at: string;
   updated_at: string;
+  next_reservation?: NextReservation | null;
 }
 
 export interface CreateVehicleData {
@@ -50,6 +57,16 @@ export interface VehiclesResponse {
     per_page: number;
     to: number;
     total: number;
+  };
+}
+
+export interface AvailabilityCheckResponse {
+  available: boolean;
+  message?: string;
+  available_at?: string;
+  conflicting_reservation?: {
+    start_date: string;
+    end_date: string;
   };
 }
 
