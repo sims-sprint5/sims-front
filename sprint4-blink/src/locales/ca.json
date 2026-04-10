@@ -389,29 +389,6 @@
     },
     "myReservations": {
       "title": "Les Meves Reserves",
-      "description": "Veja, editi i gestioni les vostres reserves de vehicles",
-      "empty": "Sense reserves encara",
-      "emptyDesc": "No teniu cap reserva. Reserveu un vehicle per a començar.",
-      "bookNow": "Reservar Ara",
-      "vehicle": "Vehicle",
-      "licensePlate": "Matrícula",
-      "startDate": "Data d'Inici",
-      "endDate": "Data de Fi",
-      "pickupLocation": "Ubicació de Recollida",
-      "dropoffLocation": "Ubicació de Devolució",
-      "status": "Estat",
-      "notice": "Avís",
-      "vehicleDetails": "Detalls del Vehicle",
-      "editReservation": "Editar Reserva",
-      "edit": "Editar",
-      "cancel": "Cancel·lar",
-      "extend": "Estendre",
-      "confirmCancel": "Esteu segur que voleu cancel·lar aquesta reserva?",
-      "checkingAvailability": "Comprovant disponibilitat...",
-      "reservationUpdated": "Reserva actualitzada correctament"
-    },
-    "myReservations": {
-      "title": "Les Meves Reserves",
       "description": "Visualitza, edita i gestiona les teves reserves de vehicles",
       "empty": "Cap reserva sense fer",
       "emptyDesc": "No tens cap reserva. Reserva un vehicle per començar.",
@@ -427,8 +404,10 @@
       "vehicleDetails": "Detalls del Vehicle",
       "editReservation": "Editar Reserva",
       "edit": "Editar",
-      "cancel": "Cancelar",
+      "cancel": "Cancel·lar",
       "extend": "Ampliar",
+      "vehicleColumn": "Vehicle",
+      "viewVehicleDetails": "Veure detalls del vehicle",
       "confirmCancel": "Estàs segur que vols cancel·lar aquesta reserva?",
       "checkingAvailability": "Comprovant disponibilitat...",
       "reservationUpdated": "Reserva actualitzada correctament"
@@ -450,8 +429,12 @@
     },
     "buttons": {
       "reserveButton": "Reservar",
+      "preReserveButton": "Prereservar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
+    },
+    "preReservation": {
+      "busySlots": "Franja(es) ja reservada(es)"
     }
   },
   "table": {

@@ -8,6 +8,13 @@ export interface NextReservation {
   user_name: string;
 }
 
+export interface CalendarReservation {
+  start_date: string;
+  end_date: string;
+  user_name?: string;
+  status?: string;
+}
+
 export interface Vehicle {
   id: number;
   vehicle_id?: number; // Alias del backend (PK real)
@@ -24,6 +31,8 @@ export interface Vehicle {
   created_at: string;
   updated_at: string;
   next_reservation?: NextReservation | null;
+  next_available_at?: string | null;
+  calendar_reservations?: CalendarReservation[];
 }
 
 export interface CreateVehicleData {

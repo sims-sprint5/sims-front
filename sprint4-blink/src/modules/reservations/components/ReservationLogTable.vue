@@ -61,13 +61,8 @@
       <div v-if="item.is_expired" class="text-xs font-semibold text-red-600">
         {{ $t('reservations.table.expired') }}
       </div>
-      <div v-else-if="value !== undefined && value >= 0" class="text-xs">
-        <span v-if="value >= 60" class="font-semibold text-blue-600">
-          {{ Math.floor(value / 60) }}h {{ value % 60 }}m
-        </span>
-        <span v-else class="font-semibold text-orange-600">
-          {{ value }}m
-        </span>
+      <div v-else-if="value !== undefined && value >= 0" class="text-xs font-semibold text-blue-600">
+        {{ formatTimeRemaining(value) }}
       </div>
       <div v-else class="text-xs text-gray-500">—</div>
     </template>
@@ -135,6 +130,17 @@ defineEmits<{
 
 const { t } = useI18n();
 const { formatDate } = useDateFormatter();
+
+// Format time remaining as "Xh Ym" (horas y minutos, sin decimales ni segundos)
+const formatTimeRemaining = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const mins = Math.floor(minutes % 60);
+  
+  if (hours > 0) {
+    return `${hours}h ${mins}m`;
+  }
+  return `${mins}m`;
+};
 
 const columns = computed<TableColumn[]>(() => [
   { key: 'log_type', label: t('reservations.table.logType'), align: 'left' },

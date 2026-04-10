@@ -405,6 +405,8 @@
       "edit": "Editar",
       "cancel": "Cancelar",
       "extend": "Extender",
+      "vehicleColumn": "Vehículo",
+      "viewVehicleDetails": "Ver detalles del vehículo",
       "confirmCancel": "¿Estás seguro de que deseas cancelar esta reserva?",
       "checkingAvailability": "Comprobando disponibilidad...",
       "reservationUpdated": "Reserva actualizada correctamente"
@@ -426,8 +428,12 @@
     },
     "buttons": {
       "reserveButton": "Reservar",
+      "preReserveButton": "Prereservar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
+    },
+    "preReservation": {
+      "busySlots": "Franja(s) ya reservada(s)"
     }
   },
   "table": {

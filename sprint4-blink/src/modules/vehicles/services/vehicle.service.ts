@@ -1,6 +1,7 @@
 import { apiClient } from '@/shared/services/api.service';
 import { buildQuery } from '@/shared/utils/queryBuilder';
 import type {
+  CalendarReservation,
   CreateVehicleData,
   UpdateVehicleData,
   Vehicle,
@@ -23,6 +24,19 @@ function normalizeVehicle(raw: any): Vehicle {
   const availableDerived = statusKey === 'available';
   const available = typeof availableRaw === 'boolean' ? availableRaw : availableDerived;
 
+  const calendarReservationsRaw = Array.isArray(raw.calendar_reservations)
+    ? raw.calendar_reservations
+    : [];
+
+  const calendar_reservations: CalendarReservation[] = calendarReservationsRaw
+    .map((reservation: any) => ({
+      start_date: String(reservation?.start_date ?? ''),
+      end_date: String(reservation?.end_date ?? ''),
+      user_name: reservation?.user_name ? String(reservation.user_name) : undefined,
+      status: reservation?.status ? String(reservation.status) : undefined,
+    }))
+    .filter((reservation: CalendarReservation) => reservation.start_date && reservation.end_date);
+
   return {
     id: raw.id ?? raw.vehicle_id ?? 0,
     vehicle_id: raw.vehicle_id ?? raw.id,
@@ -38,6 +52,15 @@ function normalizeVehicle(raw: any): Vehicle {
     last_location_update: raw.last_location_update ?? raw.lastLocationUpdate ?? null,
     created_at: raw.created_at ?? '',
     updated_at: raw.updated_at ?? '',
+    next_available_at: raw.next_available_at ?? null,
+    calendar_reservations,
+    next_reservation: raw.next_reservation
+      ? {
+          start_date: String(raw.next_reservation.start_date ?? ''),
+          end_date: String(raw.next_reservation.end_date ?? ''),
+          user_name: String(raw.next_reservation.user_name ?? ''),
+        }
+      : null,
   };
 }
 
@@ -85,6 +108,12 @@ export const vehicleService = {
     }
 
     return allVehicles;
+  },
+
+  async getVehiclesCalendar(page: number = 1, perPage: number = 200): Promise<VehiclesResponse> {
+    const query = buildQuery({ page, per_page: perPage });
+    const raw = await apiClient.get<any>(`/v1/vehicles-calendar${query}`);
+    return normalizeVehiclesResponse(raw);
   },
 
   async getVehicleById(id: number): Promise<Vehicle> {

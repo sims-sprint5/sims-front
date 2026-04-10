@@ -28,11 +28,13 @@
 
       <!-- Table -->
       <div v-if="!loading && reservations.length > 0" class="space-y-4">
-        <ReservationLogTable
-          :logs="reservations"
+        <MyReservationsTable
+          :reservations="reservations"
           :loading="loading"
+          @view-vehicle="openVehicleDetail"
+          @edit="openEditModal"
+          @delete="openDeleteModal"
           @renew="handleRenew"
-          @select-row="openVehicleDetail"
         />
       </div>
 
@@ -48,7 +50,7 @@
       v-if="selectedReservation"
       :show="showVehicleModal"
       :reservation="selectedReservation"
-      @close="showVehicleModal = false"
+      @close="closeVehicleModal"
       @edit="openEditModal"
       @cancel="handleCancel"
     />
@@ -69,7 +71,7 @@ import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import AppLayout from '@/layouts/AppLayout.vue';
-import ReservationLogTable from '@/modules/reservations/components/ReservationLogTable.vue';
+import MyReservationsTable from '@/modules/reservations/components/MyReservationsTable.vue';
 import VehicleDetailModal from '@/modules/reservations/components/VehicleDetailModal.vue';
 import EditReservationModal from '@/modules/reservations/components/EditReservationModal.vue';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
@@ -104,9 +106,21 @@ async function loadReservations() {
   }
 }
 
-function openVehicleDetail(reservation: ReservationLog) {
-  selectedReservation.value = reservation;
+async function openVehicleDetail(reservation: ReservationLog) {
+  if (!reservation) return;
+
+  try {
+    const fullReservation = await reservationLogService.getLogById(reservation.id);
+    selectedReservation.value = fullReservation;
+  } catch {
+    selectedReservation.value = { ...reservation };
+  }
+
   showVehicleModal.value = true;
+}
+
+function closeVehicleModal() {
+  showVehicleModal.value = false;
 }
 
 function openEditModal(reservation: ReservationLog) {
@@ -155,13 +169,19 @@ async function handleCancel() {
     loading.value = true;
     // Backend deletion would be implemented here
     toast.success(t('reservations.toast.deleted'));
-    showVehicleModal.value = false;
+    if (showVehicleModal.value) {
+      showVehicleModal.value = false;
+    }
     await loadReservations();
   } catch (err: any) {
     toast.error(err?.message || t('reservations.errors.delete'));
   } finally {
     loading.value = false;
   }
+}
+
+function openDeleteModal() {
+  handleCancel();
 }
 
 function handleRenew(reservation: ReservationLog) {

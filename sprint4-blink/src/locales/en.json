@@ -406,6 +406,8 @@
       "edit": "Edit",
       "cancel": "Cancel",
       "extend": "Extend",
+      "vehicleColumn": "Vehicle",
+      "viewVehicleDetails": "View vehicle details",
       "confirmCancel": "Are you sure you want to cancel this reservation?",
       "checkingAvailability": "Checking availability...",
       "reservationUpdated": "Reservation updated successfully"
@@ -427,8 +429,12 @@
     },
     "buttons": {
       "reserveButton": "Reserve",
+      "preReserveButton": "Pre-book",
       "cancelButton": "Cancel reservation",
       "confirmButton": "Confirm reservation"
+    },
+    "preReservation": {
+      "busySlots": "Already reserved time slots"
     }
   },
   "table": {

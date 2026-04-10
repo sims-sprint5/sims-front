@@ -87,7 +87,7 @@
           variant="warning"
           size="sm"
           block
-          @click="$emit('cancel', reservation)"
+          @click="$emit('cancel')"
         >
           ✕ {{ $t('reservations.myReservations.cancel') }}
         </BaseButton>
@@ -111,7 +111,7 @@ defineProps<Props>();
 defineEmits<{
   close: [];
   edit: [reservation: ReservationLog];
-  cancel: [reservation: ReservationLog];
+  cancel: [];
   renew: [];
 }>();
 

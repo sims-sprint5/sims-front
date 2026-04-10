@@ -39,10 +39,58 @@ const defaultEndAt = computed(() => {
   return toDateTimeLocalInput(d);
 });
 
+function normalizeDateInput(value?: string | null): string | undefined {
+  if (!value) return undefined;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return undefined;
+  return toDateTimeLocalInput(parsed);
+}
+
+function getSuggestedStartForPreReservation(vehicle: ReservationVehicleCardModel): string {
+  const byNextAvailable = normalizeDateInput(vehicle.nextAvailableAt);
+  if (byNextAvailable) return byNextAvailable;
+
+  const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
+  if (!slots.length) return defaultStartAt.value;
+
+  const latestEnd = slots
+    .map((slot) => new Date(slot.endDate))
+    .filter((d) => !Number.isNaN(d.getTime()))
+    .sort((a, b) => b.getTime() - a.getTime())[0];
+
+  return latestEnd ? toDateTimeLocalInput(latestEnd) : defaultStartAt.value;
+}
+
+function getSuggestedEndFromStart(startAt: string): string {
+  const d = new Date(startAt);
+  if (Number.isNaN(d.getTime())) return defaultEndAt.value;
+  d.setHours(d.getHours() + 24);
+  return toDateTimeLocalInput(d);
+}
+
+function isVehicleReservedNow(vehicle: ReservationVehicleCardModel): boolean {
+  const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
+  if (!slots.length) return String(vehicle.status ?? vehicle.category ?? '').trim().toLowerCase() === 'reserved';
+
+  const now = new Date();
+  return slots.some((slot) => {
+    const start = new Date(slot.startDate);
+    const end = new Date(slot.endDate);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
+    return start <= now && now < end;
+  });
+}
+
 function openReservationModal(vehicle: ReservationVehicleCardModel) {
   selectedVehicle.value = vehicle;
-  reservationForm.startAt = '';
-  reservationForm.endAt = '';
+  if (isVehicleReservedNow(vehicle)) {
+    const suggestedStart = getSuggestedStartForPreReservation(vehicle);
+    reservationForm.startAt = suggestedStart;
+    reservationForm.endAt = getSuggestedEndFromStart(suggestedStart);
+  } else {
+    reservationForm.startAt = '';
+    reservationForm.endAt = '';
+  }
   showReservationModal.value = true;
 }
 
@@ -135,6 +183,12 @@ function normalizeDateTime(value: string): string {
   return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
 }
 
+function formatReservationSlot(value: string): string {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return parsed.toLocaleString();
+}
+
 async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
 
@@ -172,13 +226,15 @@ async function createReservation() {
     }
 
     // Si está disponible, proceder a crear la reserva
+    const status = startDate > new Date() ? 'pending' : 'active';
+
     await reservationLogService.createLog({
       user_id: user.value?.id ?? null,
       user_name: user.value?.name ?? 'N/A',
       vehicle_id: Number(selectedVehicle.value.id) || 0,
       vehicle_name: selectedVehicle.value.name,
       license_plate: selectedVehicle.value.licensePlate ?? '',
-      status: 'active',
+      status,
       start_at: normalizeDateTime(reservationForm.startAt),
       end_at: normalizeDateTime(reservationForm.endAt),
     });
@@ -257,6 +313,23 @@ async function createReservation() {
                 <p class="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600">
                   {{ selectedVehicle?.name }} · {{ $t('reservations.selectDates') }}
                 </p>
+
+                <div
+                  v-if="selectedVehicle?.calendarReservations?.length"
+                  class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2"
+                >
+                  <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                    {{ $t('reservations.preReservation.busySlots') }}
+                  </p>
+                  <ul class="mt-2 space-y-1 text-sm text-amber-900">
+                    <li
+                      v-for="(slot, idx) in selectedVehicle.calendarReservations"
+                      :key="`${slot.startDate}-${slot.endDate}-${idx}`"
+                    >
+                      {{ formatReservationSlot(slot.startDate) }} - {{ formatReservationSlot(slot.endDate) }}
+                    </li>
+                  </ul>
+                </div>
 
                 <div class="mt-6 space-y-4">
                   <div>

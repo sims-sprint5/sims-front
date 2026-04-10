@@ -73,22 +73,6 @@ const createPopupRow = (label: string, value: string) => {
   return row
 }
 
-const createGeofencePopup = (geofence: Geofence) => {
-  const container = document.createElement('div')
-  container.className = 'p-2'
-
-  const title = document.createElement('b')
-  title.textContent = geofence.name
-  container.appendChild(title)
-  container.appendChild(document.createElement('br'))
-
-  container.appendChild(createPopupRow('Type', String(geofence.type)))
-  container.appendChild(createPopupRow('Radius', `${geofence.radius}m`))
-  container.appendChild(createPopupRow('Status', String(geofence.status)))
-
-  return container
-}
-
 const initMap = () => {
   if (!mapContainer.value) return
 
@@ -227,8 +211,6 @@ const renderGeofences = () => {
         dashArray: geofence.status === 'inactive' ? '5, 5' : undefined
       }
     )
-
-    circle.bindPopup(createGeofencePopup(geofence))
 
     // Click event to select geofence
     circle.on('click', () => {
