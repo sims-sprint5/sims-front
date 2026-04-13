@@ -47,10 +47,7 @@ function toCardModel(v: Vehicle): ReservationVehicleCardModel {
   const available = isVehicleAvailableNow(v);
   const category = available ? 'available' : (v.status || '—');
 
-  const yearLabel = v.year ? String(v.year) : '—';
-  const description = [v.color ? `Color: ${v.color}` : null, v.year ? `Año: ${yearLabel}` : null]
-    .filter(Boolean)
-    .join(' · ');
+  const description = v.color ? `Color: ${v.color}` : '';
 
   return {
     id: v.id,
@@ -73,8 +70,6 @@ function toCardModel(v: Vehicle): ReservationVehicleCardModel {
     description,
     specs: {
       seatsLabel: v.license_plate ? `Matrícula: ${v.license_plate}` : undefined,
-      doorsLabel: v.brand ? `Marca: ${v.brand}` : undefined,
-      luggageLabel: v.model ? `Modelo: ${v.model}` : undefined,
       transmissionLabel: undefined,
       acLabel: v.color ? `Color: ${v.color}` : undefined,
       minAgeLabel: undefined,

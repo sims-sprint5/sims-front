@@ -44,10 +44,10 @@ function onReset() {
 </script>
 
 <template>
-  <div class="bg-gray-50 rounded-2xl shadow-lg border border-gray-100 p-5 max-h-none lg:max-h-[calc(100vh-8.5rem)] overflow-visible lg:overflow-auto">
-    <div class="flex items-center justify-between mb-5">
+  <div class="w-full min-w-0 bg-gray-50 rounded-2xl shadow-lg border border-gray-100 p-6 max-h-none lg:max-h-[calc(100vh-8.5rem)] overflow-visible lg:overflow-auto">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
       <h2 class="text-base font-bold text-gray-900">{{ t('reservations.filters.title') }}</h2>
-      <BaseButton size="sm" variant="secondary" :disabled="disabled" @click="onReset">
+      <BaseButton size="sm" variant="secondary" class="w-full sm:w-auto justify-center" :disabled="disabled" @click="onReset">
         {{ t('reservations.filters.reset') }}
       </BaseButton>
     </div>

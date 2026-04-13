@@ -414,6 +414,8 @@
     "filters": {
       "title": "Filtres",
       "reset": "Restablir",
+      "show": "Veure filtres",
+      "hide": "Ocultar filtres",
       "searchLabel": "Buscar",
       "searchPlaceholder": "Matrícula, marca o model",
       "statusLabel": "Estat",
@@ -434,6 +436,11 @@
     },
     "preReservation": {
       "busySlots": "Franja(es) ja reservada(es)"
+    }
+    ,
+    "view": {
+      "large": "Vista ampliada",
+      "compact": "Vista compacta"
     }
   },
   "table": {
@@ -672,6 +679,10 @@
   },  "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
+    "openReservationPanel": "Reserva ara!",
+    "closeReservationPanel": "Tancar panell de reserves",
+    "reservationPanelTitle": "Reserves de cotxes",
+    "reservationIframeTitle": "Panell de reserves",
     "geofences": "Geofences",
     "createZone": "Nova Zona",
     "editZone": "Editar Zona",

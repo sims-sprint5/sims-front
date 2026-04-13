@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hide-userway-widget #userwayAccessibilityIcon,
+.hide-userway-widget #userway-widget,
+.hide-userway-widget .uwy,
+.hide-userway-widget [data-userway],
+.hide-userway-widget [class*='userway'] {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+}

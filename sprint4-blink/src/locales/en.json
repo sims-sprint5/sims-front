@@ -416,6 +416,8 @@
     "filters": {
       "title": "Filters",
       "reset": "Reset",
+      "show": "Show filters",
+      "hide": "Hide filters",
       "searchLabel": "Search",
       "searchPlaceholder": "License plate, brand or model",
       "statusLabel": "Status",
@@ -436,6 +438,11 @@
     },
     "preReservation": {
       "busySlots": "Already reserved time slots"
+    }
+    ,
+    "view": {
+      "large": "Large view",
+      "compact": "Compact view"
     }
   },
   "table": {
@@ -675,6 +682,10 @@
   "mapa": {
     "title": "Geofencing Map",
     "userTitle": "Map",
+    "openReservationPanel": "Reserve now!",
+    "closeReservationPanel": "Close reservation panel",
+    "reservationPanelTitle": "Car reservations",
+    "reservationIframeTitle": "Reservation panel",
     "geofences": "Geofences",
     "createZone": "New Zone",
     "editZone": "Edit Zone",
