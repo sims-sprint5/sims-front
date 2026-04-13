@@ -16,9 +16,6 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
-import markerIcon from 'leaflet/dist/images/marker-icon.png'
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
-import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle as Car } from '@/modules/vehicles/types/vehicle.types'
 import VehicleDetailsModal from './VehicleDetailsModal.vue'
@@ -57,36 +54,18 @@ const logMapWarning = (message: string, details?: unknown) => {
   }
 }
 
-const defaultMarkerIcon = L.icon({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+const vehicleIcon = L.divIcon({
+  html: '<i class="fas fa-car" style="color: #000000; font-size: 24px;"></i>',
+  iconSize: [30, 30],
+  iconAnchor: [15, 15],
+  popupAnchor: [0, -15],
+  className: 'vehicle-marker'
 })
 
 const createPopupRow = (label: string, value: string) => {
   const row = document.createElement('div')
   row.textContent = `${label}: ${value}`
   return row
-}
-
-const createGeofencePopup = (geofence: Geofence) => {
-  const container = document.createElement('div')
-  container.className = 'p-2'
-
-  const title = document.createElement('b')
-  title.textContent = geofence.name
-  container.appendChild(title)
-  container.appendChild(document.createElement('br'))
-
-  container.appendChild(createPopupRow('Type', String(geofence.type)))
-  container.appendChild(createPopupRow('Radius', `${geofence.radius}m`))
-  container.appendChild(createPopupRow('Status', String(geofence.status)))
-
-  return container
 }
 
 const initMap = () => {
@@ -228,8 +207,6 @@ const renderGeofences = () => {
       }
     )
 
-    circle.bindPopup(createGeofencePopup(geofence))
-
     // Click event to select geofence
     circle.on('click', () => {
       emit('geofence-click', geofence)
@@ -261,7 +238,7 @@ const renderVehicles = () => {
         [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
         {
           title: vehicle.license_plate,
-          icon: defaultMarkerIcon
+          icon: vehicleIcon
         }
       )
 

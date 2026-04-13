@@ -153,6 +153,7 @@ import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
+import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types'
 import VehicleDetailsModal from '../components/VehicleDetailsModal.vue'
 import ReservationPage from '@/modules/reservations/views/ReservationPage.vue'
 
@@ -351,30 +352,6 @@ const defaultMarkerIcon = L.icon({
   shadowSize: [41, 41]
 })
 
-const createGeofencePopup = (geofence: Geofence) => {
-  const popupContent = document.createElement('div')
-  popupContent.className = 'p-2'
-
-  const title = document.createElement('b')
-  title.textContent = geofence.name
-  popupContent.appendChild(title)
-  popupContent.appendChild(document.createElement('br'))
-
-  if (geofence.description) {
-    const description = document.createElement('div')
-    description.textContent = geofence.description
-    popupContent.appendChild(description)
-  }
-
-  return popupContent
-}
-
-const createPopupRow = (label: string, value: string) => {
-  const row = document.createElement('div')
-  row.textContent = `${label}: ${value}`
-  return row
-}
-
 const getColorByType = (type: string): string => {
   const colors: Record<string, string> = {
     allowed: '#22c55e',
@@ -411,10 +388,49 @@ const renderGeofences = (geofences: Geofence[]) => {
       }
     )
 
-    circle.bindPopup(createGeofencePopup(geofence))
-
     circle.addTo(map!)
   })
+}
+
+const selectUserReservedVehicleId = (reservations: ReservationLog[]): number | null => {
+  const now = new Date()
+  const activeNow = reservations.find((r) => {
+    if (r.status !== 'active') return false
+    const start = new Date(r.start_at)
+    const end = new Date(r.end_at)
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false
+    return start <= now && now < end
+  })
+
+  if (activeNow) return Number(activeNow.vehicle_id)
+  return null
+}
+
+const isVehicleAvailableNow = (vehicle: Vehicle): boolean => {
+  const statusKey = String(vehicle.status ?? '').trim().toLowerCase()
+  const now = new Date()
+
+  if (statusKey === 'maintenance' || statusKey === 'inactive' || statusKey === 'out_of_service' || statusKey === 'rented') {
+    return false
+  }
+
+  if (statusKey === 'reserved' && vehicle.next_reservation?.start_date) {
+    const start = new Date(vehicle.next_reservation.start_date)
+    if (!Number.isNaN(start.getTime()) && start > now) return true
+  }
+
+  if (vehicle.available === true) return true
+  if (vehicle.available === false) return false
+  return statusKey === 'available' || statusKey === 'active'
+}
+
+const filterVehiclesForUserMap = (vehicles: Vehicle[], reservations: ReservationLog[]): Vehicle[] => {
+  const reservedVehicleId = selectUserReservedVehicleId(reservations)
+  if (reservedVehicleId !== null && Number.isFinite(reservedVehicleId)) {
+    return vehicles.filter((v) => Number(v.vehicle_id ?? v.id) === reservedVehicleId)
+  }
+
+  return vehicles.filter((v) => isVehicleAvailableNow(v))
 }
 
 const renderVehicles = (vehicles: Vehicle[]) => {
@@ -429,18 +445,9 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       [lat, lng],
       {
         title: vehicle.license_plate,
-          icon: defaultMarkerIcon
+          icon: vehicleIcon
       }
     )
-
-    const popupContent = document.createElement('div')
-    popupContent.className = 'p-2'
-    const title = document.createElement('b')
-    title.textContent = vehicle.license_plate ?? ''
-    popupContent.appendChild(title)
-    popupContent.appendChild(document.createElement('br'))
-    popupContent.appendChild(createPopupRow('Última actualización', String(vehicle.last_location_update || 'N/A')))
-    marker.bindPopup(popupContent)
 
     marker.on('click', () => {
       selectedCar.value = vehicle
@@ -512,13 +519,17 @@ onMounted(async () => {
   initMap()
 
   try {
-    const [geofences, vehicles] = await Promise.all([
+    const isAdminRole = user.value?.role === 'admin' || user.value?.role === 'superadmin'
+
+    const [geofences, vehiclesResponse, reservations] = await Promise.all([
       geofenceService.getGeofences(),
-      vehicleService.getVehiclesList()
+      vehicleService.getVehiclesCalendar(1, 500),
+      isAdminRole ? Promise.resolve([]) : reservationLogService.getMyReservations(),
     ])
 
+    const vehicles = Array.isArray(vehiclesResponse?.data) ? vehiclesResponse.data : []
     renderGeofences(geofences)
-    renderVehicles(vehicles)
+    renderVehicles(isAdminRole ? vehicles : filterVehiclesForUserMap(vehicles, reservations))
   } catch (err) {
     console.warn('Failed to load map data:', err)
   }

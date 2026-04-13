@@ -8,6 +8,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "close": "Close",
+    "back": "Back",
     "avatar": "Avatar",
     "search": "Search",
     "refresh": "Refresh",
@@ -32,6 +33,7 @@
     "map": "Map",
     "tickets": "Tickets",
     "bookings": "Bookings",
+    "myReservations": "My Reservations",
     "reservationsAdmin": "Reservation log",
     "users": "Users",
     "vehicles": "Vehicles",
@@ -293,6 +295,10 @@
       "startAt": "Start",
       "endAt": "End",
       "createdAt": "Created",
+      "timeRemaining": "Time remaining",
+      "renewal": "Renewal status",
+      "expired": "Expired",
+      "renew": "Renew",
       "actions": "Actions"
     },
     "form": {
@@ -309,6 +315,7 @@
     },
     "status": {
       "pending": "Pending",
+      "in_progress": "In Progress",
       "active": "Confirmed",
       "completed": "Completed",
       "cancelled": "Cancelled",
@@ -349,7 +356,62 @@
       "invalidId": "Invalid reservation ID",
       "missingDates": "Provide start and end dates for the reservation.",
       "invalidDates": "The end date must be later than the start date.",
-      "create": "Failed to create the reservation. Please try again."
+      "create": "Failed to create the reservation. Please try again.",
+      "renewal": "Failed to request renewal. Please try again.",
+      "notAvailable": "This vehicle is not available for the selected period.",
+      "availableFrom": "This vehicle will be available from {date}.",
+      "invalidDateRange": "The end date must be after the start date.",
+      "checkAvailability": "Failed to check vehicle availability.",
+      "updateFailed": "Failed to update the reservation."
+    },
+    "completed": {
+      "title": "Reservation Completed",
+      "vehicleInfo": "Vehicle Information",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "notice": "Notice",
+      "extendReservation": "Extend Your Reservation",
+      "extendDescription": "You have {minutes} minutes remaining on this reservation. Would you like to extend it?",
+      "proceedToPayment": "Proceed to Payment",
+      "noRenewal": "This reservation is no longer available for extension."
+    },
+    "renewal": {
+      "title": "Renew Reservation",
+      "description": "Extend your {vehicleName} reservation",
+      "vehicle": "Vehicle",
+      "currentEnd": "Current End Time",
+      "timeRemaining": "Time Remaining",
+      "notice": "Notice",
+      "proceedInfo": "Click below to proceed with the renewal payment.",
+      "paymentInfo": "You will be redirected to our secure payment page.",
+      "proceed": "Proceed to Payment",
+      "minutesRemaining": "{count} minute | {count} minutes",
+      "hoursMinutesRemaining": "{hours}h {minutes}m remaining"
+    },
+    "myReservations": {
+      "title": "My Reservations",
+      "description": "View, edit, and manage your vehicle reservations",
+      "empty": "No reservations yet",
+      "emptyDesc": "You don't have any reservations. Book a vehicle to get started.",
+      "bookNow": "Book Now",
+      "vehicle": "Vehicle",
+      "licensePlate": "License Plate",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "pickupLocation": "Pickup Location",
+      "dropoffLocation": "Dropoff Location",
+      "status": "Status",
+      "notice": "Notice",
+      "vehicleDetails": "Vehicle Details",
+      "editReservation": "Edit Reservation",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "extend": "Extend",
+      "vehicleColumn": "Vehicle",
+      "viewVehicleDetails": "View vehicle details",
+      "confirmCancel": "Are you sure you want to cancel this reservation?",
+      "checkingAvailability": "Checking availability...",
+      "reservationUpdated": "Reservation updated successfully"
     },
     "filters": {
       "title": "Filters",
@@ -370,8 +432,12 @@
     },
     "buttons": {
       "reserveButton": "Reserve",
+      "preReserveButton": "Pre-book",
       "cancelButton": "Cancel reservation",
       "confirmButton": "Confirm reservation"
+    },
+    "preReservation": {
+      "busySlots": "Already reserved time slots"
     }
     ,
     "view": {

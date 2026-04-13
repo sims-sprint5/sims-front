@@ -57,15 +57,6 @@
               >
                 {{ $t('reservations.buttons.reserveButton') }}
               </BaseButton>
-
-              <BaseButton
-                size="md"
-                variant="secondary"
-                :full-width="true"
-                @click="emit('close')"
-              >
-                {{ $t('reservations.buttons.cancelButton') }}
-              </BaseButton>
             </div>
           </div>
         </div>
