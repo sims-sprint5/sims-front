@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, nextTick } from 'vue';
+import { computed, reactive, ref, watch, nextTick, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { BaseButton } from '@/components/base';
-import AppLayout from '@/layouts/AppLayout.vue';
 import { useUser } from '@/modules/auth/composables/useUser';
 import FilterSidebar from '@/modules/reservations/components/FilterSidebar.vue';
 import VehicleList from '@/modules/reservations/components/VehicleList.vue';
@@ -26,6 +25,7 @@ const reservationForm = reactive({
   startAt: '',
   endAt: '',
 });
+const hideAccessibilityClass = 'hide-userway-widget';
 
 function toDateTimeLocalInput(value: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -84,6 +84,25 @@ const reservationPrefill = computed(() => {
 
   if (!vehicleId) return null;
   return { vehicleId, brand, model, licensePlate, startAt, endAt, lat, lng };
+});
+
+const shouldHideAccessibility = computed(() => {
+  const queryValue = route.query.hideAccessibility;
+  if (typeof queryValue === 'string') return queryValue === '1' || queryValue.toLowerCase() === 'true';
+  if (Array.isArray(queryValue)) return queryValue.some(v => v === '1' || String(v).toLowerCase() === 'true');
+  return false;
+});
+
+watch(
+  shouldHideAccessibility,
+  (hide) => {
+    document.body.classList.toggle(hideAccessibilityClass, hide);
+  },
+  { immediate: true }
+);
+
+onBeforeUnmount(() => {
+  document.body.classList.remove(hideAccessibilityClass);
 });
 
 watch(
@@ -178,67 +197,66 @@ async function createReservation() {
 </script>
 
 <template>
-  <AppLayout :title="$t('nav.bookings')">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="flex flex-col lg:flex-row gap-6">
-        <aside class="lg:w-80 shrink-0">
-          <div class="lg:sticky lg:top-6">
-            <FilterSidebar
-              v-model="filters"
-              :statuses="facets.statuses"
-              :brands="facets.brands"
-              :year-min="facets.yearMin"
-              :year-max="facets.yearMax"
-              :disabled="loading"
-              @reset="resetFilters"
-            />
-          </div>
-        </aside>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-6">
+      <aside class="lg:w-80 shrink-0">
+        <div class="lg:sticky lg:top-6">
+          <FilterSidebar
+            v-model="filters"
+            :statuses="facets.statuses"
+            :brands="facets.brands"
+            :year-min="facets.yearMin"
+            :year-max="facets.yearMax"
+            :disabled="loading"
+            @reset="resetFilters"
+          />
+        </div>
+      </aside>
 
-        <section class="min-w-0 flex-1">
-          <div class="flex items-center justify-end mb-4">
-            <div class="text-sm text-gray-600">
-              <span class="font-medium text-gray-900">Ordenar por:</span>
-              <span class="ml-2">Recomendado</span>
+      <section class="min-w-0 flex-1">
+        <div class="flex items-center justify-end mb-4">
+          <div class="text-sm text-gray-600">
+            <span class="font-medium text-gray-900">Ordenar por:</span>
+            <span class="ml-2">Recomendado</span>
+          </div>
+        </div>
+
+        <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ error }}
+        </div>
+
+        <VehicleList :vehicles="vehicleCards" :loading="loading" @reserve="openReservationModal">
+          <template #empty>
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">
+              No hay vehículos que coincidan con los filtros.
             </div>
-          </div>
-
-          <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {{ error }}
-          </div>
-
-          <VehicleList :vehicles="vehicleCards" :loading="loading" @reserve="openReservationModal">
-            <template #empty>
-              <div class="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">
-                No hay vehículos que coincidan con los filtros.
-              </div>
-            </template>
-          </VehicleList>
-        </section>
-      </div>
+          </template>
+        </VehicleList>
+      </section>
     </div>
+  </div>
 
-    <Teleport to="body">
-      <Transition name="modal">
-        <div
-          v-if="showReservationModal"
-          class="fixed inset-0 z-50 overflow-y-auto"
-          aria-labelledby="reservation-modal-title"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeReservationModal" />
-            <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+  <Teleport to="body">
+    <Transition name="modal">
+      <div
+        v-if="showReservationModal"
+        class="fixed inset-0 z-50 overflow-y-auto"
+        aria-labelledby="reservation-modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeReservationModal" />
+          <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
-            <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
-              <div class="px-6 py-5">
-                <h2 id="reservation-modal-title" class="text-xl font-semibold text-gray-900">
-                  {{ $t('reservations.createTitle') }}
-                </h2>
-                <p class="mt-1 text-sm text-gray-500">
-                  {{ $t('reservations.createDescription') }}
-                </p>
+          <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
+            <div class="px-6 py-5">
+              <h2 id="reservation-modal-title" class="text-xl font-semibold text-gray-900">
+                {{ $t('reservations.createTitle') }}
+              </h2>
+              <p class="mt-1 text-sm text-gray-500">
+                {{ $t('reservations.createDescription') }}
+              </p>
 
                 <p class="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600">
                   {{ selectedVehicle?.name }} · {{ $t('reservations.selectDates') }}
@@ -273,10 +291,9 @@ async function createReservation() {
                   {{ $t('reservations.actions.createReservation') }}
                 </BaseButton>
               </div>
-            </div>
           </div>
         </div>
-      </Transition>
-    </Teleport>
-  </AppLayout>
+      </div>
+    </Transition>
+  </Teleport>
 </template>

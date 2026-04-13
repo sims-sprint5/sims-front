@@ -609,6 +609,10 @@
   "mapa": {
     "title": "Geofencing Map",
     "userTitle": "Map",
+    "openReservationPanel": "Reserve",
+    "closeReservationPanel": "Close reservation panel",
+    "reservationPanelTitle": "Car reservations",
+    "reservationIframeTitle": "Reservation panel",
     "geofences": "Geofences",
     "createZone": "New Zone",
     "editZone": "Edit Zone",

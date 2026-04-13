@@ -608,6 +608,10 @@
   },  "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
+    "openReservationPanel": "Reservar",
+    "closeReservationPanel": "Tancar panell de reserves",
+    "reservationPanelTitle": "Reserves de cotxes",
+    "reservationIframeTitle": "Panell de reserves",
     "geofences": "Geofences",
     "createZone": "Nova Zona",
     "editZone": "Editar Zona",

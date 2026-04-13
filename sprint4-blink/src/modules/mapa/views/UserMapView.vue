@@ -1,9 +1,48 @@
 <template>
   <AppLayout :title="pageTitle">
     <div class="h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] flex flex-col p-3 sm:p-4 overflow-hidden">
-      <!-- Map takes full height -->
-      <div class="flex-1 min-h-0 rounded-lg overflow-hidden shadow-lg">
-        <div ref="mapEl" class="w-full h-full"></div>
+      <div class="flex-1 min-h-0 flex gap-3 relative">
+        <div class="absolute top-3 right-3 z-[1000]">
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            @click="openReservationPanel"
+            :aria-label="t('mapa.openReservationPanel')"
+          >
+            {{ t('mapa.openReservationPanel') }}
+          </button>
+        </div>
+
+        <div class="flex-1 min-w-0 rounded-lg overflow-hidden shadow-lg">
+          <div ref="mapEl" class="w-full h-full"></div>
+        </div>
+
+        <aside
+          v-if="isReservationPanelOpen"
+          class="absolute inset-y-0 right-0 z-[1200] w-full sm:w-[72%] md:static md:w-[48%] rounded-lg bg-white shadow-2xl border border-gray-200 overflow-hidden flex flex-col"
+          role="complementary"
+          :aria-label="t('mapa.reservationPanelTitle')"
+        >
+          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
+            <h2 class="text-sm sm:text-base font-semibold text-gray-800">
+              {{ t('mapa.reservationPanelTitle') }}
+            </h2>
+            <button
+              type="button"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              @click="closeReservationPanel"
+              :aria-label="t('mapa.closeReservationPanel')"
+            >
+              X
+            </button>
+          </div>
+
+          <iframe
+            :src="reservationIframeUrl"
+            class="h-full w-full border-0"
+            :title="t('mapa.reservationIframeTitle')"
+          />
+        </aside>
       </div>
     </div>
 
@@ -16,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick, computed } from 'vue'
+import { onMounted, ref, nextTick, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
@@ -42,9 +81,24 @@ const pageTitle = computed(() => {
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let userMarker: L.Marker | null = null
+const isReservationPanelOpen = ref(false)
 
 const selectedCar = ref<Vehicle | null>(null)
 const isModalOpen = ref(false)
+
+const reservationIframeUrl = computed(() => {
+  const url = new URL('/reservation', window.location.origin)
+  url.searchParams.set('hideAccessibility', '1')
+  return url.toString()
+})
+
+const openReservationPanel = () => {
+  isReservationPanelOpen.value = true
+}
+
+const closeReservationPanel = () => {
+  isReservationPanelOpen.value = false
+}
 
 const closeVehicleModal = () => {
   isModalOpen.value = false
@@ -208,6 +262,11 @@ const initMap = () => {
 
   setTimeout(() => map?.invalidateSize(), 200)
 }
+
+watch(isReservationPanelOpen, async () => {
+  await nextTick()
+  map?.invalidateSize()
+})
 
 onMounted(async () => {
   await nextTick()
