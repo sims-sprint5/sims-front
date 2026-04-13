@@ -353,6 +353,8 @@
     "filters": {
       "title": "Filtros",
       "reset": "Restablecer",
+      "show": "Ver filtros",
+      "hide": "Ocultar filtros",
       "searchLabel": "Buscar",
       "searchPlaceholder": "Matrícula, marca o modelo",
       "statusLabel": "Estado",
@@ -369,6 +371,11 @@
       "reserveButton": "Reservar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
+    }
+    ,
+    "view": {
+      "large": "Vista ampliada",
+      "compact": "Vista compacta"
     }
   },
   "table": {
@@ -608,7 +615,7 @@
   "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
-    "openReservationPanel": "Reservar",
+    "openReservationPanel": "¡Reserva ahora!",
     "closeReservationPanel": "Cerrar panel de reservas",
     "reservationPanelTitle": "Reservas de coches",
     "reservationIframeTitle": "Panel de reservas",

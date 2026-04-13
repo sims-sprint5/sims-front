@@ -37,11 +37,9 @@
             </button>
           </div>
 
-          <iframe
-            :src="reservationIframeUrl"
-            class="h-full w-full border-0"
-            :title="t('mapa.reservationIframeTitle')"
-          />
+          <div class="h-full w-full overflow-auto">
+            <ReservationPage :prefill="reservationPrefill" :hideAccessibility="true" />
+          </div>
         </aside>
       </div>
     </div>
@@ -50,6 +48,7 @@
       :open="isModalOpen"
       :car="selectedCar"
       @close="closeVehicleModal"
+      @openReservation="openReservationFromVehicle"
       />
   </AppLayout>
 </template>
@@ -69,6 +68,7 @@ import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
 import VehicleDetailsModal from '../components/VehicleDetailsModal.vue'
+import ReservationPage from '@/modules/reservations/views/ReservationPage.vue'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -86,13 +86,14 @@ const isReservationPanelOpen = ref(false)
 const selectedCar = ref<Vehicle | null>(null)
 const isModalOpen = ref(false)
 
-const reservationIframeUrl = computed(() => {
-  const url = new URL('/reservation', window.location.origin)
-  url.searchParams.set('hideAccessibility', '1')
-  return url.toString()
-})
+const reservationPrefill = ref<Record<string, string> | null>(null)
 
 const openReservationPanel = () => {
+  isReservationPanelOpen.value = true
+}
+
+const openReservationFromVehicle = (payload: Record<string, string>) => {
+  reservationPrefill.value = payload
   isReservationPanelOpen.value = true
 }
 

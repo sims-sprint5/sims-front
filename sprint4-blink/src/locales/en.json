@@ -354,6 +354,8 @@
     "filters": {
       "title": "Filters",
       "reset": "Reset",
+      "show": "Show filters",
+      "hide": "Hide filters",
       "searchLabel": "Search",
       "searchPlaceholder": "License plate, brand or model",
       "statusLabel": "Status",
@@ -370,6 +372,11 @@
       "reserveButton": "Reserve",
       "cancelButton": "Cancel reservation",
       "confirmButton": "Confirm reservation"
+    }
+    ,
+    "view": {
+      "large": "Large view",
+      "compact": "Compact view"
     }
   },
   "table": {
@@ -609,7 +616,7 @@
   "mapa": {
     "title": "Geofencing Map",
     "userTitle": "Map",
-    "openReservationPanel": "Reserve",
+    "openReservationPanel": "Reserve now!",
     "closeReservationPanel": "Close reservation panel",
     "reservationPanelTitle": "Car reservations",
     "reservationIframeTitle": "Reservation panel",

@@ -354,6 +354,8 @@
     "filters": {
       "title": "Filtres",
       "reset": "Restablir",
+      "show": "Veure filtres",
+      "hide": "Ocultar filtres",
       "searchLabel": "Buscar",
       "searchPlaceholder": "Matrícula, marca o model",
       "statusLabel": "Estat",
@@ -370,6 +372,11 @@
       "reserveButton": "Reservar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
+    }
+    ,
+    "view": {
+      "large": "Vista ampliada",
+      "compact": "Vista compacta"
     }
   },
   "table": {
@@ -608,7 +615,7 @@
   },  "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
-    "openReservationPanel": "Reservar",
+    "openReservationPanel": "Reserva ara!",
     "closeReservationPanel": "Tancar panell de reserves",
     "reservationPanelTitle": "Reserves de cotxes",
     "reservationIframeTitle": "Panell de reserves",

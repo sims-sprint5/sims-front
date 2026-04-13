@@ -16,6 +16,7 @@ type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'warning' | 'info' |
 interface Props {
   vehicle?: ReservationVehicleCardModel;
   skeleton?: boolean;
+  largeView?: boolean;
 }
 
 const emit = defineEmits<{
@@ -25,6 +26,7 @@ const emit = defineEmits<{
 const props = withDefaults(defineProps<Props>(), {
   vehicle: undefined,
   skeleton: false,
+  largeView: false,
 });
 
 const { t } = useI18n();
@@ -93,7 +95,7 @@ function handleReserve() {
       :class="skeleton ? 'bg-gray-200' : statusStyle.bar"
     />
 
-    <div class="pl-5 pr-5 py-5 md:pr-6 md:py-6">
+    <div :class="[props.largeView ? 'pl-8 pr-8 py-8 md:pr-10 md:py-10' : 'pl-5 pr-5 py-5 md:pr-6 md:py-6']">
       <div class="flex flex-col md:flex-row gap-5">
         <div class="min-w-0 flex-1">
           <div v-if="skeleton" class="space-y-3">
@@ -106,7 +108,7 @@ function handleReserve() {
 
           <template v-else>
             <div class="flex flex-wrap items-center gap-3">
-              <h3 class="text-lg md:text-xl font-bold text-gray-900 truncate">
+              <h3 :class="[props.largeView ? 'text-xl md:text-2xl' : 'text-lg md:text-xl', 'font-bold text-gray-900 whitespace-normal md:truncate']">
                 {{ vehicle?.name ?? '—' }}
               </h3>
               <span
@@ -142,7 +144,7 @@ function handleReserve() {
           </template>
         </div>
 
-        <div class="md:w-48 shrink-0 flex flex-col justify-between gap-4">
+        <div :class="[props.largeView ? 'md:w-56' : 'md:w-48', 'shrink-0 flex flex-col justify-between gap-4']">
           <template v-if="skeleton">
             <div class="h-4 w-20 rounded bg-gray-200 animate-pulse md:ml-auto" />
             <div class="h-9 w-full rounded-lg bg-gray-200 animate-pulse mt-auto" />

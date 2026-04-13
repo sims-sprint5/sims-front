@@ -80,7 +80,6 @@
 <script setup lang="ts">
 import { BaseButton } from '@/components/base'
 import type { Vehicle as Car } from '@/modules/vehicles/types/vehicle.types'
-import { useRouter } from 'vue-router'
 import { useToast } from '@/shared/composables/useToast'
 import { useI18n } from 'vue-i18n'
 
@@ -90,10 +89,17 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  close: []
+  (e: 'close'): void
+  (e: 'openReservation', payload: {
+    vehicleId: string
+    brand: string
+    model: string
+    licensePlate: string
+    startAt: string
+    endAt: string
+  }): void
 }>()
 
-const router = useRouter()
 const toast = useToast()
 const { t } = useI18n()
 
@@ -139,7 +145,7 @@ function isCarAvailable(car: Car): boolean {
   return statusKey === 'available' || statusKey === 'active'
 }
 
-async function goToReservation(car: Car) {
+function goToReservation(car: Car) {
   if (!isCarAvailable(car)) {
     toast.error(t('vehicles.errors.notAvailable'))
     return
@@ -151,16 +157,13 @@ async function goToReservation(car: Car) {
   end.setDate(end.getDate() + 1)
   const endAt = toDateTimeLocalInput(end)
 
-  await router.push({
-    name: 'ReservationPage',
-    query: {
-      vehicleId: String(vehicleId),
-      brand: car.brand ?? '',
-      model: car.model ?? '',
-      licensePlate: car.license_plate ?? '',
-      startAt,
-      endAt,
-    },
+  emit('openReservation', {
+    vehicleId: String(vehicleId),
+    brand: car.brand ?? '',
+    model: car.model ?? '',
+    licensePlate: car.license_plate ?? '',
+    startAt,
+    endAt,
   })
 
   emit('close')

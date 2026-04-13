@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, nextTick, onBeforeUnmount } from 'vue';
+import { computed, reactive, ref, watch, nextTick, onBeforeUnmount, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
@@ -17,6 +17,11 @@ const { t } = useI18n();
 const route = useRoute();
 const toast = useToast();
 const { user } = useUser();
+
+const props = defineProps<{
+  prefill?: Record<string, string | undefined> | null
+  hideAccessibility?: boolean
+}>()
 
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
@@ -62,6 +67,17 @@ function closeReservationModal() {
 
 const lastAppliedPrefillKey = ref<string | null>(null);
 
+// UI: show/hide filters (visible by default on large screens)
+const showFilters = ref(false)
+onMounted(() => {
+  try {
+    showFilters.value = typeof window !== 'undefined' && window.innerWidth >= 1024
+  } catch (e) {
+    showFilters.value = false
+  }
+})
+const toggleFilters = () => { showFilters.value = !showFilters.value }
+
 const queryFirstString = (value: unknown): string | undefined => {
   if (typeof value === 'string') return value || undefined;
   if (Array.isArray(value)) {
@@ -72,6 +88,19 @@ const queryFirstString = (value: unknown): string | undefined => {
 };
 
 const reservationPrefill = computed(() => {
+  if (props.prefill && props.prefill.vehicleId) {
+    return {
+      vehicleId: props.prefill.vehicleId,
+      brand: props.prefill.brand,
+      model: props.prefill.model,
+      licensePlate: props.prefill.licensePlate,
+      startAt: props.prefill.startAt,
+      endAt: props.prefill.endAt,
+      lat: props.prefill.lat,
+      lng: props.prefill.lng,
+    } as Record<string, string | undefined>;
+  }
+
   const q = route.query;
   const vehicleId = queryFirstString(q.vehicleId);
   const brand = queryFirstString(q.brand);
@@ -87,6 +116,7 @@ const reservationPrefill = computed(() => {
 });
 
 const shouldHideAccessibility = computed(() => {
+  if (typeof props.hideAccessibility === 'boolean') return props.hideAccessibility;
   const queryValue = route.query.hideAccessibility;
   if (typeof queryValue === 'string') return queryValue === '1' || queryValue.toLowerCase() === 'true';
   if (Array.isArray(queryValue)) return queryValue.some(v => v === '1' || String(v).toLowerCase() === 'true');
@@ -125,16 +155,14 @@ watch(
     const cards = vehicleCards.value;
     const idNum = Number(prefill.vehicleId);
 
-    const found = cards.find(
-      (c) =>
-        String(c.id) === prefill.vehicleId ||
-        (Number.isFinite(idNum) && Number(c.id) === idNum) ||
-        c.pricing?.total === prefill.vehicleId,
+    const found = cards.find((c) =>
+      (Number.isFinite(idNum) && Number(c.id) === idNum) ||
+      c.pricing?.total === prefill.vehicleId
     );
 
     const fallbackName = [prefill.brand, prefill.model].filter(Boolean).join(' ').trim() || prefill.licensePlate || '—';
     const vehicle: ReservationVehicleCardModel = found ?? {
-      id: prefill.vehicleId,
+      id: prefill.vehicleId as string,
       name: fallbackName,
       category: '—',
       brand: prefill.brand,
@@ -198,8 +226,8 @@ async function createReservation() {
 
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col lg:flex-row gap-6">
-      <aside class="lg:w-80 shrink-0">
+    <div class="space-y-6">
+      <aside v-if="showFilters" class="w-full">
         <div class="lg:sticky lg:top-6">
           <FilterSidebar
             v-model="filters"
@@ -213,8 +241,14 @@ async function createReservation() {
         </div>
       </aside>
 
-      <section class="min-w-0 flex-1">
-        <div class="flex items-center justify-end mb-4">
+      <section class="min-w-0">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div class="flex items-center gap-3">
+            <BaseButton size="sm" variant="muted" @click="toggleFilters">
+              {{ showFilters ? t('reservations.filters.hide') : t('reservations.filters.show') }}
+            </BaseButton>
+          </div>
+
           <div class="text-sm text-gray-600">
             <span class="font-medium text-gray-900">Ordenar por:</span>
             <span class="ml-2">Recomendado</span>

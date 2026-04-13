@@ -9,6 +9,7 @@ interface Props {
   loading?: boolean;
   skeletonCount?: number;
   pageSize?: number;
+  largeView?: boolean;
 }
 
 const emit = defineEmits<{
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   skeletonCount: 3,
   pageSize: 3,
+  largeView: false,
 });
 
 const currentPage = ref(1);
@@ -67,6 +69,7 @@ function handleReserve(vehicle: ReservationVehicleCardModel) {
           v-for="v in paginatedVehicles"
           :key="v.id"
           :vehicle="v"
+          :large-view="props.largeView"
           @reserve="handleReserve"
         />
       </slot>
