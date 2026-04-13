@@ -37,19 +37,7 @@
       <p v-if="(errors as any).type" class="text-sm text-red-600 mt-1">{{ formatError((errors as any).type) }}</p>
     </div>
 
-    <!-- Prioridad -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('tickets.form.priority') }}</label>
-      <select
-        v-model="formData.priority"
-        :disabled="priorityOptions.length === 0"
-        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
-      >
-        <option disabled value="">{{ $t('tickets.form.prioritySelect') }}</option>
-        <option v-for="opt in priorityOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-      </select>
-      <p v-if="(errors as any).priority" class="text-sm text-red-600 mt-1">{{ formatError((errors as any).priority) }}</p>
-    </div>
+   
 
     <div class="flex justify-end space-x-3 pt-4">
       <BaseButton type="button" variant="secondary" @click="$emit('cancel')">
@@ -100,7 +88,6 @@ const formData = ref<CreateTicketData>({
 });
 
 const typeOptions = computed(() => props.typeOptions ?? []);
-const priorityOptions = computed(() => props.priorityOptions ?? []);
 
 const handleSubmit = () => {
   emit('submit', formData.value);
