@@ -426,8 +426,7 @@
       "prioritySelect": "Selecciona prioritat",
       "priorityLow": "Baixa",
       "priorityMedium": "Mitjana",
-      "priorityHigh": "Alta",
-      "priorityUrgent": "Urgent"
+      "priorityHigh": "Alta"
     },
     "estados": {
       "pendiente": "Pendent",
@@ -478,6 +477,9 @@
     "title": "Gestió de Tickets",
     "description": "Administra tots els tickets del sistema",
     "searchPlaceholder": "Cercar per assumpte, descripció o usuari...",
+    "filters": {
+      "all": "Tots"
+    },
     "actions": {
       "editTicket": "Editar ticket",
       "reply": "Respondre"

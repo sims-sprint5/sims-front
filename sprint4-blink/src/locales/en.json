@@ -426,8 +426,7 @@
       "prioritySelect": "Select priority",
       "priorityLow": "Low",
       "priorityMedium": "Medium",
-      "priorityHigh": "High",
-      "priorityUrgent": "Urgent"
+      "priorityHigh": "High"
     },
     "estados": {
       "pendiente": "Pending",
@@ -478,6 +477,9 @@
     "title": "Ticket Management",
     "description": "Manage all system tickets",
     "searchPlaceholder": "Search by subject, description or user...",
+    "filters": {
+      "all": "All"
+    },
     "actions": {
       "editTicket": "Edit ticket",
       "reply": "Reply"
