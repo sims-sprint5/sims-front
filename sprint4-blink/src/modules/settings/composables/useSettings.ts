@@ -5,7 +5,6 @@ import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
 import { useI18n } from 'vue-i18n'
 import { useTranslateError } from '@/shared/composables/useTranslateError'
-import { isAdminRole } from '@/shared/utils/roleUtils'
 
 export function useSettings() {
   const router = useRouter()
@@ -82,14 +81,19 @@ export function useSettings() {
       // Avoid hitting /v1/users/:id which is frequently admin-protected.
       const updates: { name?: string; email?: string; phone?: string } = {}
       if (fullName) updates.name = fullName
-
-      // Be conservative for normal users: many backends restrict self-updates to name/avatar only.
-      if (isAdminRole(me.role)) {
-        if (email.value && email.value !== me.email) updates.email = email.value
-        if (me.phone) updates.phone = me.phone
+      
+      // Always include email if it has a value, trimmed
+      const trimmedEmail = email.value.trim()
+      if (trimmedEmail) {
+        updates.email = trimmedEmail
       }
+      
+      if (me.phone) updates.phone = me.phone
+
+
 
       const updatedUserData = await authService.updateCurrentUser(updates)
+      
       
       // Update local user data
       updateUser(updatedUserData)
