@@ -160,9 +160,11 @@ import { useI18n } from 'vue-i18n';
 import { useTranslateError } from '@/shared/composables/useTranslateError';
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
 import { useDebouncedSearch } from '@/shared/composables/useDebouncedSearch';
+import { useRouter } from 'vue-router';
 
 const toast = useToast();
 const { t } = useI18n();
+const router = useRouter();
 const { translateErrorMessage } = useTranslateError();
 const { formatDate } = useDateFormatter();
 const { run: runDebouncedSearch } = useDebouncedSearch(300);
@@ -308,6 +310,9 @@ const handleUpdateMetadata = async () => {
     );
 
     toast.success(t('adminTickets.toast.updated'));
+    closeViewModal();
+    await router.push({ name: 'AdminTickets' });
+
   } catch (error: any) {
     toast.error(translateErrorMessage(error?.message, t('tickets.errors.save')));
   } finally {
