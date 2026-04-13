@@ -7,16 +7,26 @@ const localeMap: Record<string, string> = {
   en: 'en-GB',
 };
 
-/** Returns a reactive `formatDate` function that respects the current i18n locale.,,, */
-export function useDateFormatter(options?: Intl.DateTimeFormatOptions) {
-  const { locale } = useI18n();
+interface DateTimeOptions extends Intl.DateTimeFormatOptions {
+  includeTime?: boolean;
+}
 
-  const resolvedOptions: Intl.DateTimeFormatOptions = options ?? {
+/** Returns a reactive `formatDate` function that respects the current i18n locale. */
+export function useDateFormatter(options?: DateTimeOptions) {
+  const { locale } = useI18n();
+  const { includeTime = true } = options ?? {};
+
+  const resolvedOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    ...(includeTime && {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+    ...Object.fromEntries(
+      Object.entries(options ?? {}).filter(([key]) => key !== 'includeTime')
+    ),
   };
 
   const formatter = computed(
@@ -32,5 +42,10 @@ export function useDateFormatter(options?: Intl.DateTimeFormatOptions) {
     return formatter.value.format(new Date(date));
   };
 
-  return { formatDate };
+  const formatDateTime = (date: string): string => {
+    if (!date) return '';
+    return formatter.value.format(new Date(date));
+  };
+
+  return { formatDate, formatDateTime };
 }

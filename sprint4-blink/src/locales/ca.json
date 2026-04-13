@@ -8,6 +8,7 @@
     "save": "Guardar",
     "cancel": "Cancel·lar",
     "close": "Tancar",
+    "back": "Enrere",
     "avatar": "Avatar",
     "search": "Buscar",
     "refresh": "Actualitzar",
@@ -32,6 +33,7 @@
     "map": "Mapa",
     "tickets": "Tickets",
     "bookings": "Reserves",
+    "myReservations": "Les Meves Reserves",
     "reservationsAdmin": "Log de reserves",
     "users": "Usuaris",
     "vehicles": "Vehicles",
@@ -293,6 +295,10 @@
       "startAt": "Inici",
       "endAt": "Fi",
       "createdAt": "Creat",
+      "timeRemaining": "Temps restant",
+      "renewal": "Estat de renovació",
+      "expired": "Vençut",
+      "renew": "Renovar",
       "actions": "Accions"
     },
     "form": {
@@ -308,8 +314,7 @@
       "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
     },
     "status": {
-      "pending": "Pendent",
-      "active": "Confirmada",
+      "pending": "Pendent",      "in_progress": "En curs",      "active": "Confirmada",
       "completed": "Completada",
       "cancelled": "Cancel·lada",
       "available": "Disponible",
@@ -349,7 +354,62 @@
       "invalidId": "ID de reserva invàlid",
       "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
       "create": "Error en crear la reserva. Torna-ho a intentar.",
-      "invalidDates": "La data de fi ha de ser posterior a la d'inici."
+      "invalidDates": "La data de fi ha de ser posterior a la d'inici.",
+      "renewal": "Error al sol·licitar la renovació. Torna-ho a intentar.",
+      "notAvailable": "Aquest vehicle no està disponible per al període seleccionat.",
+      "availableFrom": "Aquest vehicle estarà disponible des de {date}.",
+      "invalidDateRange": "La data de fi ha de ser posterior a la data d'inici.",
+      "checkAvailability": "No s'ha pogut verificar la disponibilitat del vehicle.",
+      "updateFailed": "No s'ha pogut actualitzar la reserva."
+    },
+    "completed": {
+      "title": "Reserva Completada",
+      "vehicleInfo": "Informació del Vehicle",
+      "startDate": "Data d'Inici",
+      "endDate": "Data de Fi",
+      "notice": "Avís",
+      "extendReservation": "Ampliar la teva Reserva",
+      "extendDescription": "Et resten {minutes} minuts en aquesta reserva. Vols ampliar-la?",
+      "proceedToPayment": "Procedir al Pagament",
+      "noRenewal": "Aquesta reserva ja no està disponible per a ampliació."
+    },
+    "renewal": {
+      "title": "Renovar Reserva",
+      "description": "Ampliar la teva reserva de {vehicleName}",
+      "vehicle": "Vehicle",
+      "currentEnd": "Hora de Finalització Actual",
+      "timeRemaining": "Temps Restant",
+      "notice": "Avís",
+      "proceedInfo": "Fes clic a sota per procedir amb el pagament de la renovació.",
+      "paymentInfo": "Serà redirigit a la nostra pàgina de pagament segura.",
+      "proceed": "Procedir al Pagament",
+      "minutesRemaining": "{count} minut | {count} minuts",
+      "hoursMinutesRemaining": "{hours}h {minutes}m restants"
+    },
+    "myReservations": {
+      "title": "Les Meves Reserves",
+      "description": "Visualitza, edita i gestiona les teves reserves de vehicles",
+      "empty": "Cap reserva sense fer",
+      "emptyDesc": "No tens cap reserva. Reserva un vehicle per començar.",
+      "bookNow": "Reservar Ara",
+      "vehicle": "Vehicle",
+      "licensePlate": "Matrícula",
+      "startDate": "Data d'Inici",
+      "endDate": "Data de Finalització",
+      "pickupLocation": "Ubicació de Recollida",
+      "dropoffLocation": "Ubicació de Devolució",
+      "status": "Estat",
+      "notice": "Avís",
+      "vehicleDetails": "Detalls del Vehicle",
+      "editReservation": "Editar Reserva",
+      "edit": "Editar",
+      "cancel": "Cancel·lar",
+      "extend": "Ampliar",
+      "vehicleColumn": "Vehicle",
+      "viewVehicleDetails": "Veure detalls del vehicle",
+      "confirmCancel": "Estàs segur que vols cancel·lar aquesta reserva?",
+      "checkingAvailability": "Comprovant disponibilitat...",
+      "reservationUpdated": "Reserva actualitzada correctament"
     },
     "filters": {
       "title": "Filtres",
@@ -368,8 +428,12 @@
     },
     "buttons": {
       "reserveButton": "Reservar",
+      "preReserveButton": "Prereservar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
+    },
+    "preReservation": {
+      "busySlots": "Franja(es) ja reservada(es)"
     }
   },
   "table": {

@@ -14,6 +14,14 @@ export interface ReservationLog {
   start_at: string;
   end_at: string;
   created_at: string;
+  pickup_location?: string;
+  dropoff_location?: string;
+  // Campos calculados del backend
+  is_expired?: boolean;
+  minutes_remaining?: number;
+  can_renew?: boolean;
+  renewal_notice?: string | null;
+  renewal_payment_url?: string | null;
 }
 
 export interface CreateReservationLogData {
@@ -25,4 +33,12 @@ export interface CreateReservationLogData {
   status?: ReservationStatus;
   start_at: string;
   end_at: string;
+  pickup_location?: string;
+  dropoff_location?: string;
+}
+
+export interface RenewalIntentResponse {
+  id: number;
+  payment_url: string;
+  renewal_notice: string | null;
 }

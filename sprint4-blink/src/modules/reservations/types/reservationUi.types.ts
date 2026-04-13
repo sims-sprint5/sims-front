@@ -18,10 +18,18 @@ export interface ReservationVehicleCardModel {
   id: string | number;
   name: string;
   category: string;
+  status?: string;
   licensePlate?: string;
   brand?: string;
   model?: string;
   available?: boolean;
+  nextAvailableAt?: string | null;
+  calendarReservations?: Array<{
+    startDate: string;
+    endDate: string;
+    userName?: string;
+    status?: string;
+  }>;
   description?: string;
   specs?: ReservationVehicleCardSpecs;
   features?: string[];

@@ -107,6 +107,7 @@ import { useUser } from '@/modules/auth/composables/useUser'
 import { isAdminRole } from '@/shared/utils/roleUtils'
 import {
   Cog6ToothIcon,
+  ClipboardDocumentListIcon,
   HomeIcon,
   MapPinIcon,
   TicketIcon,
@@ -182,8 +183,9 @@ const getItemClasses = (item: NavItem) => {
 
 const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.map', href: '/mapa', icon: MapPinIcon },
-  { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
   { nameKey: 'nav.bookings', href: '/reservation', icon: ReservesIcon },
+  { nameKey: 'nav.myReservations', href: '/mis-reservas', icon: ClipboardDocumentListIcon },
+  { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])
 

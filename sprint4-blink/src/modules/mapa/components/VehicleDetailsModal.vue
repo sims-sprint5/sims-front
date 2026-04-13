@@ -60,15 +60,6 @@
               >
                 {{ $t('reservations.buttons.reserveButton') }}
               </BaseButton>
-
-              <BaseButton
-                size="md"
-                variant="secondary"
-                :full-width="true"
-                @click="emit('close')"
-              >
-                {{ $t('reservations.buttons.cancelButton') }}
-              </BaseButton>
             </div>
           </div>
         </div>
@@ -160,6 +151,7 @@ async function goToReservation(car: Car) {
       licensePlate: car.license_plate ?? '',
       startAt,
       endAt,
+      fromMap: 'true',
     },
   })
 

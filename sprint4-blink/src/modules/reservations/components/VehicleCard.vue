@@ -63,6 +63,19 @@ const isAvailable = computed(() => {
   return false;
 });
 
+const isReservedNow = computed(() => {
+  if (!props.vehicle?.calendarReservations?.length) return statusKey.value === 'reserved' && !isAvailable.value;
+  const now = new Date();
+  return props.vehicle.calendarReservations.some((slot) => {
+    const start = new Date(slot.startDate);
+    const end = new Date(slot.endDate);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
+    return start <= now && now < end;
+  });
+});
+
+const canPreReserve = computed(() => isReservedNow.value);
+
 const actionButtonVariant = computed<ButtonVariant>(() => {
   if (isAvailable.value) return 'primary';
   const key = statusKey.value;
@@ -75,7 +88,7 @@ const actionButtonVariant = computed<ButtonVariant>(() => {
 
 function handleReserve() {
   if (!props.vehicle) return;
-  if (!isAvailable.value) {
+  if (!isAvailable.value && !canPreReserve.value) {
     toast.error('Este coche no está disponible');
     return;
   }
@@ -161,7 +174,7 @@ function handleReserve() {
               @click="handleReserve"
             >
               <CalendarIcon class="h-4 w-4 mr-1.5" />
-              {{ isAvailable ? $t('common.confirm') : statusLabel(vehicle?.category) }}
+              {{ isAvailable ? $t('reservations.buttons.reserveButton') : canPreReserve ? $t('reservations.buttons.preReserveButton') : statusLabel(vehicle?.category) }}
             </BaseButton>
           </template>
         </div>

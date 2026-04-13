@@ -11,6 +11,24 @@ export const reservationsRoutes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/reservation/:id/completed',
+    name: 'ReservationCompleted',
+    component: () => import('./views/ReservationCompletedView.vue'),
+    meta: {
+      requiresAuth: true,
+      titleKey: 'reservations.completed.title',
+    },
+  },
+  {
+    path: '/mis-reservas',
+    name: 'MyReservations',
+    component: () => import('./views/MyReservationsView.vue'),
+    meta: {
+      requiresAuth: true,
+      titleKey: 'reservations.myReservations.title',
+    },
+  },
+  {
     path: '/admin/reservations',
     name: 'AdminReservations',
     component: () => import('./views/AdminReservationsView.vue'),

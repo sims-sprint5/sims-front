@@ -39,7 +39,7 @@ function normalizeTenant(raw: any): Tenant {
   return {
     id: String(raw.id),
     name: raw.name ?? '',
-    domain: raw.domains?. [0]?.domain ?? '',
+    domain: raw.domains?.[0]?.domain ?? '',
     email: raw.email ?? undefined,
     admin_email: raw.admin_email ?? undefined,
     created_at: raw.created_at ?? '',
