@@ -23,6 +23,10 @@ const props = defineProps<{
   hideAccessibility?: boolean
 }>()
 
+const emit = defineEmits<{
+  (e: 'reservationModalVisibility', open: boolean): void
+}>()
+
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
 const submitting = ref(false);
@@ -49,6 +53,7 @@ function openReservationModal(vehicle: ReservationVehicleCardModel) {
   reservationForm.startAt = '';
   reservationForm.endAt = '';
   showReservationModal.value = true;
+  emit('reservationModalVisibility', true)
 }
 
 function openReservationModalPrefilled(vehicle: ReservationVehicleCardModel, startAt?: string, endAt?: string) {
@@ -56,6 +61,7 @@ function openReservationModalPrefilled(vehicle: ReservationVehicleCardModel, sta
   reservationForm.startAt = startAt || defaultStartAt.value;
   reservationForm.endAt = endAt || defaultEndAt.value;
   showReservationModal.value = true;
+  emit('reservationModalVisibility', true)
 }
 
 function closeReservationModal() {
@@ -63,6 +69,7 @@ function closeReservationModal() {
   selectedVehicle.value = null;
   reservationForm.startAt = '';
   reservationForm.endAt = '';
+  emit('reservationModalVisibility', false)
 }
 
 const lastAppliedPrefillKey = ref<string | null>(null);

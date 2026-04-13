@@ -19,6 +19,7 @@
 
         <div
           v-if="isReservationPanelOpen"
+          v-show="!isReservationCreateModalOpen"
           class="absolute inset-0 z-[1100] bg-black/20 backdrop-blur-[1px] md:hidden"
           @click="closeReservationPanel"
           aria-hidden="true"
@@ -26,6 +27,7 @@
 
         <aside
           v-if="isReservationPanelOpen"
+          v-show="!isReservationCreateModalOpen"
           class="absolute right-3 top-16 bottom-3 z-[1200] w-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] rounded-2xl bg-white/95 shadow-2xl border border-gray-200 overflow-hidden flex flex-col backdrop-blur-sm"
           :style="reservationPanelStyle"
           role="complementary"
@@ -52,7 +54,12 @@
           </div>
 
           <div class="h-full w-full overflow-auto">
-            <ReservationPage :key="reservationPageKey" :prefill="reservationPrefill" :hideAccessibility="true" />
+            <ReservationPage
+              :key="reservationPageKey"
+              :prefill="reservationPrefill"
+              :hideAccessibility="true"
+              @reservationModalVisibility="onReservationModalVisibility"
+            />
           </div>
         </aside>
       </div>
@@ -163,6 +170,7 @@ const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let userMarker: L.Marker | null = null
 const isReservationPanelOpen = ref(false)
+const isReservationCreateModalOpen = ref(false)
 const reservationPanelWidth = ref(0)
 const isResizingPanel = ref(false)
 
@@ -271,7 +279,12 @@ const closeQuickReservationModal = () => {
 
 const closeReservationPanel = () => {
   isReservationPanelOpen.value = false
+  isReservationCreateModalOpen.value = false
   reservationPrefill.value = null
+}
+
+const onReservationModalVisibility = (open: boolean) => {
+  isReservationCreateModalOpen.value = open
 }
 
 const closeVehicleModal = () => {

@@ -6,7 +6,7 @@ import { useToast } from '@/shared/composables/useToast';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
 import {
   IdentificationIcon,
-  TruckIcon,
+  SwatchIcon,
   CalendarIcon,
 } from '@heroicons/vue/24/outline';
 
@@ -127,20 +127,12 @@ function handleReserve() {
                 <p class="mt-1 text-blue-700 text-sm font-bold truncate">{{ vehicle?.licensePlate ?? '—' }}</p>
               </div>
 
-              <div class="rounded-lg px-2.5 py-2 bg-amber-50 border border-amber-100 min-w-[150px] shrink-0">
+              <div class="rounded-lg px-2.5 py-2 bg-pink-50 border border-pink-100 min-w-[150px] shrink-0">
                 <div class="flex items-center gap-1.5">
-                  <TruckIcon class="h-3.5 w-3.5 shrink-0 text-amber-600" />
-                  <span class="font-semibold text-amber-900 text-xs">Marca</span>
+                  <SwatchIcon class="h-3.5 w-3.5 shrink-0 text-pink-600" />
+                  <span class="font-semibold text-pink-900 text-xs">Color</span>
                 </div>
-                <p class="mt-1 text-amber-700 text-sm font-bold truncate">{{ vehicle?.brand ?? '—' }}</p>
-              </div>
-
-              <div class="rounded-lg px-2.5 py-2 bg-emerald-50 border border-emerald-100 min-w-[150px] shrink-0">
-                <div class="flex items-center gap-1.5">
-                  <TruckIcon class="h-3.5 w-3.5 shrink-0 text-emerald-600" />
-                  <span class="font-semibold text-emerald-900 text-xs">Modelo</span>
-                </div>
-                <p class="mt-1 text-emerald-700 text-sm font-bold truncate">{{ vehicle?.model ?? '—' }}</p>
+                <p class="mt-1 text-pink-700 text-sm font-bold truncate">{{ vehicle?.description ?? '—' }}</p>
               </div>
 
             </div>

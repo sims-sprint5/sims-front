@@ -45,10 +45,7 @@
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.colorsLabel') }}</p>
                 <p class="text-base font-bold text-gray-900 mt-1">{{ colorLabel(car.color) }}</p>
               </div>
-              <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.yearLabel') }}</p>
-                <p class="text-base font-bold text-gray-900 mt-1">{{ car.year ?? '—' }}</p>
-              </div>
+              <!-- Year removed as per UI request -->
             </div>
 
             <div class="mt-6 space-y-3">
