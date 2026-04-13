@@ -29,6 +29,7 @@ function normalizeAdminTicket(raw: any): AdminTicket {
     asunto: raw.subject ?? raw.asunto ?? '',
     descripcion: raw.description ?? raw.descripcion ?? '',
     estado: raw.status ?? raw.estado ?? 'pendiente',
+    priority: raw.priority ?? raw.prioridad ?? undefined,
     created_at: raw.created_at ?? '',
     updated_at: raw.updated_at ?? '',
     usuario_nombre: raw.user?.name ?? raw.usuario_nombre ?? undefined,
@@ -92,6 +93,7 @@ export const adminTicketService = {
     if (data.asunto !== undefined) payload.subject = data.asunto;
     if (data.descripcion !== undefined) payload.description = data.descripcion;
     if (data.estado !== undefined) payload.status = data.estado;
+    if (data.priority !== undefined) payload.priority = data.priority;
     const raw = await apiClient.patch<any>(`/v1/tickets/${id}`, payload);
     return normalizeAdminTicket(raw?.data ?? raw);
   },

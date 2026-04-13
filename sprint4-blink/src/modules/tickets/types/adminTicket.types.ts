@@ -15,6 +15,7 @@ export interface AdminTicket {
   asunto?: string;
   descripcion?: string;
   estado?: string;
+  priority?: string;
   created_at: string;
   updated_at: string;
   // Related user info (joined from backend)
@@ -28,6 +29,7 @@ export interface UpdateTicketData {
   asunto?: string;
   descripcion?: string;
   estado?: string;
+  priority?: string;
 }
 
 export interface CreateMessageData {
