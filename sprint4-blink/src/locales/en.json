@@ -396,6 +396,7 @@
       "descripcion": "Description",
       "precio": "Price",
       "estado": "Status",
+      "priority": "Priority",
       "usuario": "User",
       "fechaUsuario": "Date",
       "fechaCompra": "Purchase date",
@@ -425,16 +426,18 @@
       "prioritySelect": "Select priority",
       "priorityLow": "Low",
       "priorityMedium": "Medium",
-      "priorityHigh": "High",
-      "priorityUrgent": "Urgent"
+      "priorityHigh": "High"
     },
     "estados": {
       "pendiente": "Pending",
       "pending": "Pending",
       "open": "Open",
+      "obert": "Open",
       "in_progress": "In Progress",
+      "en_progres": "In Progress",
       "resolved": "Resolved",
       "closed": "Closed",
+      "finalitzat": "Completed",
       "confirmado": "Confirmed",
       "confirmed": "Confirmed",
       "cancelado": "Cancelled",
@@ -474,6 +477,9 @@
     "title": "Ticket Management",
     "description": "Manage all system tickets",
     "searchPlaceholder": "Search by subject, description or user...",
+    "filters": {
+      "all": "All"
+    },
     "actions": {
       "editTicket": "Edit ticket",
       "reply": "Reply"
@@ -490,6 +496,10 @@
       "messagePlaceholder": "Write your reply...",
       "replyAs": "Reply as",
       "send": "Send"
+    },
+    "permissions": {
+      "statusEditableByAdmin": "Only administrators can modify the status.",
+      "priorityVisibleByAdmin": "Priority is visible and editable only for administrators."
     },
     "toast": {
       "updated": "Ticket updated successfully",

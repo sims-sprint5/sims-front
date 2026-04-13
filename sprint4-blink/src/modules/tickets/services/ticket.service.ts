@@ -72,7 +72,6 @@ export const ticketService = {
       description: data.descripcion ?? '',
       user_id: userId,
       type: data.type,
-      priority: data.priority,
     };
 
     const raw = await apiClient.post<any>('/v1/tickets', payload);

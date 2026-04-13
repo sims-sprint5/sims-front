@@ -396,6 +396,7 @@
       "descripcion": "Descripció",
       "precio": "Preu",
       "estado": "Estat",
+      "priority": "Prioritat",
       "usuario": "Usuari",
       "fechaUsuario": "Data",
       "fechaCompra": "Data de compra",
@@ -425,16 +426,18 @@
       "prioritySelect": "Selecciona prioritat",
       "priorityLow": "Baixa",
       "priorityMedium": "Mitjana",
-      "priorityHigh": "Alta",
-      "priorityUrgent": "Urgent"
+      "priorityHigh": "Alta"
     },
     "estados": {
       "pendiente": "Pendent",
       "pending": "Pendent",
       "open": "Obert",
+      "obert": "Obert",
       "in_progress": "En progrés",
+      "en_progres": "En progrés",
       "resolved": "Resolt",
       "closed": "Tancat",
+      "finalitzat": "Finalitzat",
       "confirmado": "Confirmat",
       "confirmed": "Confirmat",
       "cancelado": "Cancel·lat",
@@ -474,6 +477,9 @@
     "title": "Gestió de Tickets",
     "description": "Administra tots els tickets del sistema",
     "searchPlaceholder": "Cercar per assumpte, descripció o usuari...",
+    "filters": {
+      "all": "Tots"
+    },
     "actions": {
       "editTicket": "Editar ticket",
       "reply": "Respondre"
@@ -490,6 +496,10 @@
       "messagePlaceholder": "Escriu la teva resposta...",
       "replyAs": "Respondre com",
       "send": "Enviar"
+    },
+    "permissions": {
+      "statusEditableByAdmin": "Només els administradors poden modificar l'estat.",
+      "priorityVisibleByAdmin": "La prioritat només és visible i editable per administradors."
     },
     "toast": {
       "updated": "Ticket actualitzat correctament",
