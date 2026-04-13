@@ -18,6 +18,12 @@
       </span>
     </template>
 
+    <template #cell-priority="{ value }">
+      <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full" :class="getPriorityClass(value)">
+        {{ value ? displayPriority(value) : '-' }}
+      </span>
+    </template>
+
     <template #cell-created_at="{ value }">
       {{ formatDate(value) }}
     </template>
@@ -58,7 +64,7 @@ import type { TableColumn } from '@/components/base/BaseTable.vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
-import { getEstadoClass } from '@/modules/tickets/utils/ticketHelpers';
+import { getEstadoClass, getPriorityClass } from '@/modules/tickets/utils/ticketHelpers';
 
 interface Props {
   tickets?: AdminTicket[];
@@ -82,9 +88,18 @@ const columns = computed<TableColumn[]>(() => [
   { key: 'asunto', label: t('tickets.table.asunto'), align: 'left' },
   { key: 'usuario', label: t('tickets.table.usuario'), align: 'left' },
   { key: 'estado', label: t('tickets.table.estado'), align: 'left' },
+  { key: 'priority', label: t('tickets.table.priority'), align: 'left' },
   { key: 'created_at', label: t('tickets.table.createdAt'), align: 'left' },
   { key: 'actions', label: t('tickets.table.actions'), align: 'right' },
 ]);
+
+function displayPriority(value: string): string {
+  const normalized = value.toLowerCase();
+  if (normalized === 'low' || normalized === 'baja' || normalized === 'baixa') return t('tickets.form.priorityLow');
+  if (normalized === 'medium' || normalized === 'media' || normalized === 'mitjana') return t('tickets.form.priorityMedium');
+  if (normalized === 'high' || normalized === 'alta') return t('tickets.form.priorityHigh');
+  return value;
+}
 
 const { formatDate } = useDateFormatter();
 </script>

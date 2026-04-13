@@ -54,7 +54,6 @@
                     :loading="submitting"
                     :errors="formErrors"
                     :type-options="typeOptions"
-                    :priority-options="priorityOptions"
                     @submit="handleSubmit"
                     @cancel="closeTicketModal" />
                 </div>
@@ -121,17 +120,6 @@ const viewingTicket = ref<Ticket | null>(null);
 const formErrors = ref<ValidationErrors>({});
 
 const ALL_TICKET_TYPES = ['technical', 'billing', 'complaint', 'inquiry'] as const;
-const ALL_TICKET_PRIORITIES = ['low', 'medium', 'high', 'urgent'] as const;
-
-function labelPriority(value: string): string {
-  const v = value.toLowerCase();
-  if (v === 'low') return t('tickets.form.priorityLow');
-  if (v === 'medium') return t('tickets.form.priorityMedium');
-  if (v === 'high') return t('tickets.form.priorityHigh');
-  if (v === 'urgent') return t('tickets.form.priorityUrgent');
-  return value;
-}
-
 function labelType(value: string): string {
   const v = value.toLowerCase();
   if (v === 'technical') return t('tickets.form.typeTechnical');
@@ -143,10 +131,6 @@ function labelType(value: string): string {
 
 const typeOptions = computed<SelectOption[]>(() =>
   ALL_TICKET_TYPES.map((v) => ({ value: v, label: labelType(v) }))
-);
-
-const priorityOptions = computed<SelectOption[]>(() =>
-  ALL_TICKET_PRIORITIES.map((v) => ({ value: v, label: labelPriority(v) }))
 );
 
 // Cargar tickets

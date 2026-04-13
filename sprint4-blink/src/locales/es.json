@@ -395,6 +395,7 @@
       "descripcion": "Descripción",
       "precio": "Precio",
       "estado": "Estado",
+      "priority": "Prioridad",
       "usuario": "Usuario",
       "fechaUsuario": "Fecha",
       "fechaCompra": "Fecha de compra",
@@ -431,9 +432,12 @@
       "pendiente": "Pendiente",
       "pending": "Pendiente",
       "open": "Abierto",
+      "obert": "Abierto",
       "in_progress": "En progreso",
+      "en_progres": "En progreso",
       "resolved": "Resuelto",
       "closed": "Cerrado",
+      "finalitzat": "Finalizado",
       "confirmado": "Confirmado",
       "confirmed": "Confirmado",
       "cancelado": "Cancelado",
@@ -489,6 +493,10 @@
       "messagePlaceholder": "Escribe tu respuesta...",
       "replyAs": "Responder como",
       "send": "Enviar"
+    },
+    "permissions": {
+      "statusEditableByAdmin": "Solo los administradores pueden modificar el estado.",
+      "priorityVisibleByAdmin": "La prioridad solo es visible y editable para administradores."
     },
     "toast": {
       "updated": "Ticket actualizado correctamente",

@@ -63,14 +63,12 @@ interface Props {
   loading?: boolean;
   errors?: ValidationErrors | Record<string, string>;
   typeOptions?: SelectOption[];
-  priorityOptions?: SelectOption[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   loading: false,
   errors: () => ({}),
   typeOptions: () => [],
-  priorityOptions: () => [],
 });
 
 const emit = defineEmits<{
@@ -84,7 +82,6 @@ const formData = ref<CreateTicketData>({
   asunto: '',
   descripcion: '',
   type: '',
-  priority: '',
 });
 
 const typeOptions = computed(() => props.typeOptions ?? []);
