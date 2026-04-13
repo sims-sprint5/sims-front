@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, nextTick, onBeforeUnmount, onMounted } from 'vue';
+import { computed, reactive, ref, watch, nextTick, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
@@ -67,15 +67,8 @@ function closeReservationModal() {
 
 const lastAppliedPrefillKey = ref<string | null>(null);
 
-// UI: show/hide filters (visible by default on large screens)
+// UI: show/hide filters (hidden by default; user opens manually)
 const showFilters = ref(false)
-onMounted(() => {
-  try {
-    showFilters.value = typeof window !== 'undefined' && window.innerWidth >= 1024
-  } catch (e) {
-    showFilters.value = false
-  }
-})
 const toggleFilters = () => { showFilters.value = !showFilters.value }
 
 const queryFirstString = (value: unknown): string | undefined => {
@@ -94,6 +87,8 @@ const reservationPrefill = computed(() => {
       brand: props.prefill.brand,
       model: props.prefill.model,
       licensePlate: props.prefill.licensePlate,
+      status: props.prefill.status,
+      available: props.prefill.available,
       startAt: props.prefill.startAt,
       endAt: props.prefill.endAt,
       lat: props.prefill.lat,
@@ -106,13 +101,15 @@ const reservationPrefill = computed(() => {
   const brand = queryFirstString(q.brand);
   const model = queryFirstString(q.model);
   const licensePlate = queryFirstString(q.licensePlate);
+  const status = queryFirstString(q.status);
+  const available = queryFirstString(q.available);
   const startAt = queryFirstString(q.startAt);
   const endAt = queryFirstString(q.endAt);
   const lat = queryFirstString(q.lat);
   const lng = queryFirstString(q.lng);
 
   if (!vehicleId) return null;
-  return { vehicleId, brand, model, licensePlate, startAt, endAt, lat, lng };
+  return { vehicleId, brand, model, licensePlate, status, available, startAt, endAt, lat, lng };
 });
 
 const shouldHideAccessibility = computed(() => {
@@ -161,14 +158,17 @@ watch(
     );
 
     const fallbackName = [prefill.brand, prefill.model].filter(Boolean).join(' ').trim() || prefill.licensePlate || '—';
+    const prefillStatus = String(prefill.status ?? '').trim().toLowerCase();
+    const prefillAvailable = String(prefill.available ?? '').trim().toLowerCase();
+    const derivedAvailable = prefillAvailable === 'true' || prefillStatus === 'available' || prefillStatus === 'active';
     const vehicle: ReservationVehicleCardModel = found ?? {
       id: prefill.vehicleId as string,
       name: fallbackName,
-      category: '—',
+      category: prefill.status || '—',
       brand: prefill.brand,
       model: prefill.model,
       licensePlate: prefill.licensePlate,
-      available: true,
+      available: derivedAvailable,
     };
 
     openReservationModalPrefilled(vehicle, prefill.startAt, prefill.endAt);
@@ -185,7 +185,10 @@ function normalizeDateTime(value: string): string {
 async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
 
-  if (selectedVehicle.value.available !== true) {
+  const statusKey = String(selectedVehicle.value.category ?? '').trim().toLowerCase();
+  const blockedByStatus = ['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey);
+  const explicitlyUnavailable = selectedVehicle.value.available === false;
+  if (blockedByStatus || explicitlyUnavailable) {
     toast.error('Este coche no está disponible');
     return;
   }
@@ -225,7 +228,7 @@ async function createReservation() {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="space-y-6">
       <aside v-if="showFilters" class="w-full">
         <div class="lg:sticky lg:top-6">

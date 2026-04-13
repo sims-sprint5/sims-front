@@ -26,28 +26,28 @@
           <div class="p-6" v-if="car">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.brandLabel') }}</p>
-                <p class="font-semibold">{{ car.brand || '—' }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.brandLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ car.brand || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.modelLabel') }}</p>
-                <p class="font-semibold">{{ car.model || '—' }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.modelLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ car.model || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.matrixLabel') }}</p>
-                <p class="font-semibold">{{ car.license_plate || '—' }}</p>
-              </div>
-                          <div>
-                            <p class="text-sm text-gray-600">{{ $t('reservations.filters.statusLabel') }}</p>
-                            <p class="font-semibold">{{ statusLabel(car.status) }}</p>
-                          </div>
-              <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.colorsLabel') }}</p>
-                            <p class="font-semibold">{{ colorLabel(car.color) }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.matrixLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ car.license_plate || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.yearLabel') }}</p>
-                <p class="font-semibold">{{ car.year ?? '—' }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.statusLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ statusLabel(car.status) }}</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.colorsLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ colorLabel(car.color) }}</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.yearLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ car.year ?? '—' }}</p>
               </div>
             </div>
 
@@ -95,6 +95,8 @@ const emit = defineEmits<{
     brand: string
     model: string
     licensePlate: string
+    status?: string
+    available?: string
     startAt: string
     endAt: string
   }): void
@@ -139,10 +141,12 @@ function toDateTimeLocalInput(value: Date): string {
 }
 
 function isCarAvailable(car: Car): boolean {
-  if (car.available === true) return true
-  if (car.available === false) return false
   const statusKey = String(car.status ?? '').trim().toLowerCase()
-  return statusKey === 'available' || statusKey === 'active'
+  if (['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  if (statusKey === 'available' || statusKey === 'active') return true
+  if (car.available === false) return false
+  if (car.available === true) return true
+  return false
 }
 
 function goToReservation(car: Car) {
@@ -162,6 +166,8 @@ function goToReservation(car: Car) {
     brand: car.brand ?? '',
     model: car.model ?? '',
     licensePlate: car.license_plate ?? '',
+    status: String(car.status ?? ''),
+    available: String(isCarAvailable(car)),
     startAt,
     endAt,
   })

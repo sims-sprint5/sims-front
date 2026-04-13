@@ -6,7 +6,6 @@ import { useToast } from '@/shared/composables/useToast';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
 import {
   IdentificationIcon,
-  SwatchIcon,
   TruckIcon,
   CalendarIcon,
 } from '@heroicons/vue/24/outline';
@@ -95,8 +94,8 @@ function handleReserve() {
       :class="skeleton ? 'bg-gray-200' : statusStyle.bar"
     />
 
-    <div :class="[props.largeView ? 'pl-8 pr-8 py-8 md:pr-10 md:py-10' : 'pl-5 pr-5 py-5 md:pr-6 md:py-6']">
-      <div class="flex flex-col md:flex-row gap-5">
+    <div :class="[props.largeView ? 'pl-8 pr-8 py-8 md:pr-10 md:py-10' : 'pl-6 pr-6 py-4 md:pr-8 md:py-4']">
+      <div class="flex flex-col gap-3 lg:grid lg:grid-cols-[minmax(0,1fr)_180px] lg:items-start lg:gap-4">
         <div class="min-w-0 flex-1">
           <div v-if="skeleton" class="space-y-3">
             <div class="h-6 w-56 max-w-full rounded-lg bg-gray-200 animate-pulse" />
@@ -108,7 +107,7 @@ function handleReserve() {
 
           <template v-else>
             <div class="flex flex-wrap items-center gap-3">
-              <h3 :class="[props.largeView ? 'text-xl md:text-2xl' : 'text-lg md:text-xl', 'font-bold text-gray-900 whitespace-normal md:truncate']">
+              <h3 :class="[props.largeView ? 'text-xl md:text-2xl' : 'text-lg md:text-xl', 'font-bold text-gray-900 whitespace-normal lg:truncate']">
                 {{ vehicle?.name ?? '—' }}
               </h3>
               <span
@@ -119,44 +118,41 @@ function handleReserve() {
               </span>
             </div>
 
-            <dl class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm">
-              <div class="flex items-center gap-2 text-gray-600">
-                <IdentificationIcon class="h-4 w-4 shrink-0 text-gray-400" />
-                <dt class="font-medium text-gray-500 shrink-0">{{ $t('vehicles.table.licensePlate') }}</dt>
-                <dd class="truncate">{{ vehicle?.licensePlate ?? '—' }}</dd>
+            <div class="mt-3 flex gap-2.5 overflow-x-auto pb-1 pr-1">
+              <div class="rounded-lg px-2.5 py-2 bg-blue-50 border border-blue-100 min-w-[150px] shrink-0">
+                <div class="flex items-center gap-1.5">
+                  <IdentificationIcon class="h-3.5 w-3.5 shrink-0 text-blue-600" />
+                  <span class="font-semibold text-blue-900 text-xs">Matrícula</span>
+                </div>
+                <p class="mt-1 text-blue-700 text-sm font-bold truncate">{{ vehicle?.licensePlate ?? '—' }}</p>
               </div>
-              <div class="flex items-center gap-2 text-gray-600">
-                <TruckIcon class="h-4 w-4 shrink-0 text-gray-400" />
-                <dt class="font-medium text-gray-500 shrink-0">{{ $t('vehicles.table.brand') }}</dt>
-                <dd class="truncate">{{ vehicle?.brand ?? '—' }}</dd>
+
+              <div class="rounded-lg px-2.5 py-2 bg-amber-50 border border-amber-100 min-w-[150px] shrink-0">
+                <div class="flex items-center gap-1.5">
+                  <TruckIcon class="h-3.5 w-3.5 shrink-0 text-amber-600" />
+                  <span class="font-semibold text-amber-900 text-xs">Marca</span>
+                </div>
+                <p class="mt-1 text-amber-700 text-sm font-bold truncate">{{ vehicle?.brand ?? '—' }}</p>
               </div>
-              <div class="flex items-center gap-2 text-gray-600">
-                <TruckIcon class="h-4 w-4 shrink-0 text-gray-400" />
-                <dt class="font-medium text-gray-500 shrink-0">{{ $t('vehicles.table.model') }}</dt>
-                <dd class="truncate">{{ vehicle?.model ?? '—' }}</dd>
+
+              <div class="rounded-lg px-2.5 py-2 bg-emerald-50 border border-emerald-100 min-w-[150px] shrink-0">
+                <div class="flex items-center gap-1.5">
+                  <TruckIcon class="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                  <span class="font-semibold text-emerald-900 text-xs">Modelo</span>
+                </div>
+                <p class="mt-1 text-emerald-700 text-sm font-bold truncate">{{ vehicle?.model ?? '—' }}</p>
               </div>
-              <div class="flex items-center gap-2 text-gray-600">
-                <SwatchIcon class="h-4 w-4 shrink-0 text-gray-400" />
-                <dt class="font-medium text-gray-500 shrink-0">{{ $t('vehicles.table.color') }}</dt>
-                <dd class="truncate">{{ vehicle?.description ?? '—' }}</dd>
-              </div>
-            </dl>
+
+            </div>
           </template>
         </div>
 
-        <div :class="[props.largeView ? 'md:w-56' : 'md:w-48', 'shrink-0 flex flex-col justify-between gap-4']">
+        <div :class="[props.largeView ? 'lg:w-56' : 'lg:w-[180px]', 'w-full lg:shrink-0 flex flex-col justify-end gap-2 pt-2 lg:pt-0']">
           <template v-if="skeleton">
             <div class="h-4 w-20 rounded bg-gray-200 animate-pulse md:ml-auto" />
             <div class="h-9 w-full rounded-lg bg-gray-200 animate-pulse mt-auto" />
           </template>
           <template v-else>
-            <div class="md:text-right">
-              <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">
-                {{ $t('vehicles.table.licensePlate') }}
-              </p>
-              <p class="mt-0.5 text-base font-bold text-gray-800">{{ vehicle?.licensePlate ?? '—' }}</p>
-            </div>
-
             <BaseButton
               :variant="actionButtonVariant"
               full-width
