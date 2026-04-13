@@ -226,12 +226,13 @@ onMounted(async () => {
   try {
     const isAdminRole = user.value?.role === 'admin' || user.value?.role === 'superadmin'
 
-    const [geofences, vehicles, reservations] = await Promise.all([
+    const [geofences, vehiclesResponse, reservations] = await Promise.all([
       geofenceService.getGeofences(),
-      vehicleService.getVehiclesList(),
+      vehicleService.getVehiclesCalendar(1, 500),
       isAdminRole ? Promise.resolve([]) : reservationLogService.getMyReservations(),
     ])
 
+    const vehicles = Array.isArray(vehiclesResponse?.data) ? vehiclesResponse.data : []
     renderGeofences(geofences)
     renderVehicles(isAdminRole ? vehicles : filterVehiclesForUserMap(vehicles, reservations))
   } catch (err) {

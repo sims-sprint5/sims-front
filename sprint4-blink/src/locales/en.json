@@ -315,6 +315,7 @@
     },
     "status": {
       "pending": "Pending",
+      "in_progress": "In Progress",
       "active": "Confirmed",
       "completed": "Completed",
       "cancelled": "Cancelled",

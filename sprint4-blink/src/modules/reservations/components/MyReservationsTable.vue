@@ -11,35 +11,29 @@
       <div class="space-y-1">
         <div class="font-medium text-gray-900">{{ item.vehicle_name }}</div>
         <div class="text-xs text-gray-500">{{ item.license_plate }}</div>
-        <button
-          type="button"
-          class="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
-          @click="$emit('view-vehicle', item)"
-        >
-          {{ $t('reservations.myReservations.viewVehicleDetails') }}
-        </button>
       </div>
     </template>
 
     <template #cell-start_at="{ value }">
-      {{ formatDateTime(value) }}
+      {{ formatDateCustom(value) }}
     </template>
 
     <template #cell-end_at="{ value }">
-      {{ formatDateTime(value) }}
+      {{ formatDateCustom(value) }}
     </template>
 
-    <template #cell-status="{ value }">
+    <template #cell-status="{ item }">
       <span
         class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
         :class="{
-          'bg-amber-100 text-amber-800': value === 'pending',
-          'bg-emerald-100 text-emerald-800': value === 'active',
-          'bg-blue-100 text-blue-800': value === 'completed',
-          'bg-red-100 text-red-800': value === 'cancelled',
+          'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending',
+          'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
+          'bg-emerald-100 text-emerald-800': item.status === 'active',
+          'bg-blue-100 text-blue-800': item.status === 'completed',
+          'bg-red-100 text-red-800': item.status === 'cancelled',
         }"
       >
-        {{ $t(`reservations.status.${value}`) }}
+        {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
       </span>
     </template>
 
@@ -71,7 +65,7 @@
           <PencilIcon class="w-5 h-5" />
         </button>
         <button
-          v-if="!item.is_expired"
+          v-if="canCancelReservation(item)"
           @click="$emit('delete', item)"
           class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
           :title="$t('reservations.myReservations.cancel')"
@@ -119,7 +113,19 @@ defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { formatDateTime } = useDateFormatter();
+const { formatDateTime: _ } = useDateFormatter();
+
+const formatDateCustom = (dateStr: string): string => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return '';
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
 
 // Format time remaining as "Xh Ym" (horas y minutos, sin decimales ni segundos)
 const formatTimeRemaining = (minutes: number): string => {
@@ -130,6 +136,36 @@ const formatTimeRemaining = (minutes: number): string => {
     return `${hours}h ${mins}m`;
   }
   return `${mins}m`;
+};
+
+const canCancelReservation = (item: ReservationLog): boolean => {
+  // No se puede cancelar si ya está expirada
+  if (item.is_expired) return false;
+  
+  // No se puede cancelar si ya ha comenzado
+  const now = new Date();
+  const startDate = new Date(item.start_at);
+  if (Number.isNaN(startDate.getTime())) return false;
+  
+  // Solo se puede cancelar si aún no ha comenzado
+  return startDate > now;
+};
+
+const getReservationDisplayStatus = (item: ReservationLog): string => {
+  const now = new Date();
+  const startDate = new Date(item.start_at);
+  const endDate = new Date(item.end_at);
+  
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return item.status;
+  }
+  
+  // Si ya ha comenzado y aún no ha terminado, está en curso
+  if (startDate <= now && now < endDate) {
+    return 'in_progress';
+  }
+  
+  return item.status;
 };
 
 const columns = computed<TableColumn[]>(() => [

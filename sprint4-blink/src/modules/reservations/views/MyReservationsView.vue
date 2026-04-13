@@ -98,7 +98,13 @@ async function loadReservations() {
   try {
     loading.value = true;
     error.value = null;
-    reservations.value = await reservationLogService.getMyReservations();
+    const data = await reservationLogService.getMyReservations();
+    // Ordenar por fecha de creación descendente (más nuevas primero)
+    reservations.value = data.sort((a, b) => {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      return dateB - dateA;
+    });
   } catch (err: any) {
     error.value = err?.message || t('reservations.errors.load');
   } finally {
@@ -162,26 +168,30 @@ async function handleSaveEdit(updatedData: any) {
   }
 }
 
-async function handleCancel() {
+async function handleCancel(reservation?: ReservationLog) {
+  const targetReservation = reservation || selectedReservation.value;
+  if (!targetReservation) return;
+
   if (!confirm(t('reservations.myReservations.confirmCancel'))) return;
 
   try {
     loading.value = true;
-    // Backend deletion would be implemented here
+    await reservationLogService.deleteReservation(targetReservation.id);
     toast.success(t('reservations.toast.deleted'));
     if (showVehicleModal.value) {
       showVehicleModal.value = false;
     }
     await loadReservations();
   } catch (err: any) {
-    toast.error(err?.message || t('reservations.errors.delete'));
+    const errorMessage = err?.response?.data?.message || err?.message || t('reservations.errors.delete');
+    toast.error(errorMessage);
   } finally {
     loading.value = false;
   }
 }
 
-function openDeleteModal() {
-  handleCancel();
+function openDeleteModal(reservation: ReservationLog) {
+  handleCancel(reservation);
 }
 
 function handleRenew(reservation: ReservationLog) {

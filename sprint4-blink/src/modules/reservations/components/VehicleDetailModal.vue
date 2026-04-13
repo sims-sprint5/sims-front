@@ -5,11 +5,11 @@
       <div class="space-y-3 border-b pb-4">
         <div>
           <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.vehicle') }}</p>
-          <h3 class="text-lg font-semibold text-gray-900">{{ reservation.vehicle_name }}</h3>
+          <h3 class="text-lg font-semibold text-gray-900">{{ reservation.vehicle_name || `Vehicle #${reservation.vehicle_id}` }}</h3>
         </div>
         <div>
           <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.licensePlate') }}</p>
-          <p class="font-mono text-gray-900">{{ reservation.license_plate }}</p>
+          <p class="font-mono text-gray-900">{{ reservation.license_plate || '—' }}</p>
         </div>
       </div>
 
@@ -18,11 +18,11 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.startDate') }}</p>
-            <p class="text-sm text-gray-900">{{ formatDateTime(reservation.start_at) }}</p>
+            <p class="text-sm text-gray-900">{{ formatDateCustom(reservation.start_at) }}</p>
           </div>
           <div>
             <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.endDate') }}</p>
-            <p class="text-sm text-gray-900">{{ formatDateTime(reservation.end_at) }}</p>
+            <p class="text-sm text-gray-900">{{ formatDateCustom(reservation.end_at) }}</p>
           </div>
         </div>
       </div>
@@ -45,13 +45,14 @@
         <span
           class="inline-flex rounded-full px-3 py-1 text-xs font-semibold"
           :class="{
-            'bg-amber-100 text-amber-800': reservation.status === 'pending',
+            'bg-amber-100 text-amber-800': getReservationDisplayStatus(reservation) === 'pending',
+            'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(reservation) === 'in_progress',
             'bg-emerald-100 text-emerald-800': reservation.status === 'active',
             'bg-blue-100 text-blue-800': reservation.status === 'completed',
             'bg-red-100 text-red-800': reservation.status === 'cancelled',
           }"
         >
-          {{ $t(`reservations.status.${reservation.status}`) }}
+          {{ $t(`reservations.status.${getReservationDisplayStatus(reservation)}`) }}
         </span>
       </div>
 
@@ -83,11 +84,11 @@
           ⏱️ {{ $t('reservations.myReservations.extend') }}
         </BaseButton>
         <BaseButton
-          v-if="!reservation.is_expired"
+          v-if="canCancelReservation(reservation)"
           variant="warning"
           size="sm"
           block
-          @click="$emit('cancel')"
+          @click="$emit('cancel', reservation)"
         >
           ✕ {{ $t('reservations.myReservations.cancel') }}
         </BaseButton>
@@ -111,9 +112,51 @@ defineProps<Props>();
 defineEmits<{
   close: [];
   edit: [reservation: ReservationLog];
-  cancel: [];
+  cancel: [reservation: ReservationLog];
   renew: [];
 }>();
 
-const { formatDateTime } = useDateFormatter();
+const { formatDateTime: _ } = useDateFormatter();
+
+const formatDateCustom = (dateStr: string): string => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return '';
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
+
+const canCancelReservation = (reservation: ReservationLog): boolean => {
+  // No se puede cancelar si ya está expirada
+  if (reservation.is_expired) return false;
+  
+  // No se puede cancelar si ya ha comenzado
+  const now = new Date();
+  const startDate = new Date(reservation.start_at);
+  if (Number.isNaN(startDate.getTime())) return false;
+  
+  // Solo se puede cancelar si aún no ha comenzado
+  return startDate > now;
+};
+
+const getReservationDisplayStatus = (reservation: ReservationLog): string => {
+  const now = new Date();
+  const startDate = new Date(reservation.start_at);
+  const endDate = new Date(reservation.end_at);
+  
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return reservation.status;
+  }
+  
+  // Si ya ha comenzado y aún no ha terminado, está en curso
+  if (startDate <= now && now < endDate) {
+    return 'in_progress';
+  }
+  
+  return reservation.status;
+};
 </script>

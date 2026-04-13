@@ -314,8 +314,7 @@
       "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
     },
     "status": {
-      "pending": "Pendent",
-      "active": "Confirmada",
+      "pending": "Pendent",      "in_progress": "En curs",      "active": "Confirmada",
       "completed": "Completada",
       "cancelled": "Cancel·lada",
       "available": "Disponible",

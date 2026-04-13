@@ -314,6 +314,7 @@
     },
     "status": {
       "pending": "Pendiente",
+      "in_progress": "En curso",
       "active": "Confirmada",
       "completed": "Completada",
       "cancelled": "Cancelada",

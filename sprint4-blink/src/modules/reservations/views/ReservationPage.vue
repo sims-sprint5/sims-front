@@ -22,6 +22,7 @@ const { user } = useUser();
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
 const submitting = ref(false);
+const fromMap = computed(() => route.query.fromMap === 'true');
 const reservationForm = reactive({
   startAt: '',
   endAt: '',
@@ -353,7 +354,7 @@ async function createReservation() {
               </div>
 
               <div class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 sm:flex-row sm:justify-end">
-                <BaseButton variant="secondary" :disabled="submitting" @click="closeReservationModal">
+                <BaseButton v-if="!fromMap" variant="secondary" :disabled="submitting" @click="closeReservationModal">
                   {{ $t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submitting" @click="createReservation">

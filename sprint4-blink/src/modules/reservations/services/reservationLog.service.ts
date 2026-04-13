@@ -15,14 +15,23 @@ function normalizeStatus(value: unknown): ReservationStatus {
 }
 
 function normalizeLog(raw: any): ReservationLog {
-  return {
-    id: toNumber(raw?.id, 0),
-    log_type: 'created',
+  // Extraer datos del objeto vehicle anidado si existe
+  const vehicleData = typeof raw?.vehicle === 'object' ? raw.vehicle : {}
+  const userData = typeof raw?.user === 'object' ? raw.user : {}
+  
+  // Construir vehicle_name de brand + model
+  const vehicleName = (vehicleData.brand && vehicleData.model)
+    ? `${vehicleData.brand} ${vehicleData.model}`.trim()
+    : vehicleData.name || vehicleData.vehicle_name || ''
+  
+  const normalized: ReservationLog = {
+    id: toNumber(raw?.id ?? raw?.reservation_id, 0),
+    log_type: 'created' as const,
     user_id: raw?.user_id === null || raw?.user_id === undefined ? null : toNumber(raw.user_id, 0),
-    user_name: String(raw?.user_name ?? '').trim(),
+    user_name: String(raw?.user_name ?? userData.name ?? userData.user_name ?? '').trim(),
     vehicle_id: toNumber(raw?.vehicle_id, 0),
-    vehicle_name: String(raw?.vehicle_name ?? '').trim(),
-    license_plate: String(raw?.license_plate ?? '').trim(),
+    vehicle_name: vehicleName,
+    license_plate: String(vehicleData.license_plate ?? raw?.license_plate ?? raw?.plate ?? '').trim(),
     status: normalizeStatus(raw?.status),
     start_at: String(raw?.start_date ?? raw?.start_at ?? ''),
     end_at: String(raw?.end_date ?? raw?.end_at ?? ''),
@@ -35,6 +44,7 @@ function normalizeLog(raw: any): ReservationLog {
     renewal_notice: raw?.renewal_notice ?? null,
     renewal_payment_url: raw?.renewal_payment_url ?? null,
   };
+  return normalized;
 }
 
 function normalizeLogs(raw: any): ReservationLog[] {
@@ -129,6 +139,14 @@ export const reservationLogService = {
 
       return haystack.includes(normalizedQuery);
     });
+  },
+
+  async deleteReservation(reservationId: number): Promise<{ message: string; vehicle_id: number }> {
+    const raw = await apiClient.delete<any>(`/v1/reservations/${reservationId}`);
+    return {
+      message: raw?.message ?? 'Reservation deleted successfully',
+      vehicle_id: toNumber(raw?.vehicle_id, 0),
+    };
   },
 };
 
