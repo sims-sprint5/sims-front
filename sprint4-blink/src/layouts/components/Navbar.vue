@@ -1,37 +1,27 @@
 <script setup lang="ts">
-import { BaseButton } from '@/components/base';
 import { computed } from 'vue';
 import { useUser } from '@/modules/auth/composables/useUser';
 import { useI18n } from 'vue-i18n';
-import LanguageSelector from '@/components/LanguageSelector.vue';
 
 interface Props {
     title?: string;
     showMenuButton?: boolean;
-    showLogoutButton?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     title: '',
     showMenuButton: true,
-    showLogoutButton: true,
 });
 
 const emit = defineEmits<{
     toggleMenu: [];
-    logout: [];
 }>();
 
-const { user, avatarUrl, clearAvatar } = useUser();
+const { user, avatarUrl } = useUser();
 const { t } = useI18n();
 
 const handleMenuClick = () => {
     emit('toggleMenu');
-};
-
-const handleLogoutClick = () => {
-    clearAvatar();
-    emit('logout');
 };
 
 const userInitials = computed(() => {
@@ -65,29 +55,21 @@ const userInitials = computed(() => {
                 </h1>
             </div>
 
-            <!-- User name and Logout button -->
-            <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
-                <div v-if="user?.name" class="hidden md:flex items-center gap-3 pr-4 border-r border-gray-200">
-                    <!-- Avatar con gradiente o imagen -->
-                    <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
-                        <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
-                    </div>
-                    <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-md flex-shrink-0">
-                        <span class="text-sm font-bold text-white">{{ userInitials }}</span>
-                    </div>
-                    <!-- User name -->
-                    <div class="flex flex-col">
-                        <span class="text-base font-bold text-gray-900">
-                            {{ user?.name }}
-                        </span>
-                    </div>
+            <!-- User name -->
+            <div v-if="user?.name" class="hidden md:flex items-center gap-3">
+                <!-- Avatar con gradiente o imagen -->
+                <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
+                    <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
                 </div>
-
-                <LanguageSelector />
-
-                <BaseButton v-if="showLogoutButton" @click="handleLogoutClick" variant="tertiary" size="sm" class="whitespace-nowrap">
-                    {{ t('common.logout') }}
-                </BaseButton>
+                <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-md flex-shrink-0">
+                    <span class="text-sm font-bold text-white">{{ userInitials }}</span>
+                </div>
+                <!-- User name -->
+                <div class="flex flex-col">
+                    <span class="text-base font-bold text-gray-900">
+                        {{ user?.name }}
+                    </span>
+                </div>
             </div>
         </div>
     </nav>

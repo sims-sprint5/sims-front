@@ -139,7 +139,10 @@
     "saveChanges": "Guardar canvis",
     "deleteAccount": "Eliminar compte",
     "deleteAccountDesc": "Ja no vols utilitzar el nostre servei? Pots eliminar el teu compte ací. Aquesta acció no és reversible. Tota la informació relacionada amb aquest compte s’eliminarà permanentment.",
-    "deleteAccountCta": "Sí, eliminar el meu compte"
+    "deleteAccountCta": "Sí, eliminar el meu compte",
+    "language": "Idioma",
+    "languageDesc": "Selecciona l'idioma de l'aplicació.",
+    "logoutDesc": "Tanca la teua sessió actual."
   },
   "users": {
     "title": "Gestió d’usuaris",

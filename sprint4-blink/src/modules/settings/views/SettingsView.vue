@@ -88,6 +88,14 @@
           </form>
 
           <div class="pt-10 border-t border-gray-200 dark:border-white/10">
+            <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ $t('settings.language') }}</h3>
+            <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">{{ $t('settings.languageDesc') }}</p>
+            <div class="mt-6">
+              <LanguageSelector />
+            </div>
+          </div>
+
+          <div class="pt-10 border-t border-gray-200 dark:border-white/10">
             <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ $t('settings.deleteAccount') }}</h3>
             <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">
               {{ $t('settings.deleteAccountDesc') }}
@@ -107,8 +115,9 @@
 <script setup lang="ts">
 import { useSettings } from '@/modules/settings/composables/useSettings';
 import AppLayout from '@/layouts/AppLayout.vue';
-import userLogo from '@/assets/user_logo.png';
+import LanguageSelector from '@/components/LanguageSelector.vue';
 import BaseButton from '@/components/base/BaseButton.vue';
+import userLogo from '@/assets/user_logo.png';
 
 const {
   avatarUrl,

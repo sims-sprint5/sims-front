@@ -138,7 +138,10 @@
     "saveChanges": "Save changes",
     "deleteAccount": "Delete account",
     "deleteAccountDesc": "No longer want to use our service? You can delete your account here. This action cannot be undone. All information related to this account will be permanently deleted.",
-    "deleteAccountCta": "Yes, delete my account"
+    "deleteAccountCta": "Yes, delete my account",
+    "language": "Language",
+    "languageDesc": "Select the application language.",
+    "logoutDesc": "Close your current session."
   },
   "users": {
     "title": "User management",

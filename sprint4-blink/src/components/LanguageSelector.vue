@@ -104,7 +104,7 @@ const select = (value: SupportedLocale) => {
 
     <div
       v-if="open"
-      class="absolute right-0 mt-2 w-44 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg"
+      class="absolute left-0 mt-2 w-44 z-50 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg"
       role="menu"
     >
       <button
