@@ -250,11 +250,7 @@ function normalizeDateTime(value: string): string {
   return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
 }
 
-function formatReservationSlot(value: string): string {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return parsed.toLocaleString();
-}
+
 
 function parseDate(value?: string | null): Date | null {
   if (!value) return null;
