@@ -39,11 +39,15 @@
               </div>
               <div>
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.statusLabel') }}</p>
-                <p class="text-base font-bold text-gray-900 mt-1">{{ statusLabel(car.status) }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ statusLabel(getEffectiveStatus(car)) }}</p>
               </div>
               <div>
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.colorsLabel') }}</p>
                 <p class="text-base font-bold text-gray-900 mt-1">{{ colorLabel(car.color) }}</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ultima reserva</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ lastReservationLabel(car) }}</p>
               </div>
               <!-- Year removed as per UI request -->
             </div>
@@ -55,7 +59,12 @@
                 :full-width="true"
                 @click="goToReservation(car)"
               >
-                {{ $t('reservations.buttons.reserveButton') }}
+                {{ canPreReserve(car)
+                    ? $t('reservations.buttons.preReserveButton')
+                  : isCarAvailable(car)
+                    ? $t('reservations.buttons.reserveButton')
+                    : statusLabel(car.status)
+                }}
               </BaseButton>
             </div>
           </div>
@@ -128,6 +137,89 @@ function toDateTimeLocalInput(value: Date): string {
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`
 }
 
+function parseReservationDate(value: unknown): Date | null {
+  if (typeof value !== 'string' || !value.trim()) return null
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+function getCalendarSlots(car: Car): Array<{ start: Date; end: Date }> {
+  const rawSlots = Array.isArray(car.calendar_reservations) ? car.calendar_reservations : []
+  return rawSlots
+    .map((slot) => {
+      const start = parseReservationDate((slot as any)?.start_date ?? (slot as any)?.startDate)
+      const end = parseReservationDate((slot as any)?.end_date ?? (slot as any)?.endDate)
+      if (!start || !end) return null
+      return { start, end }
+    })
+    .filter((slot): slot is { start: Date; end: Date } => Boolean(slot))
+}
+
+function hasAnyReservation(car: Car): boolean {
+  const slots = getCalendarSlots(car)
+  if (slots.length > 0) return true
+
+  const nextStart = parseReservationDate(car.next_reservation?.start_date)
+  const nextEnd = parseReservationDate(car.next_reservation?.end_date)
+  return Boolean(nextStart && nextEnd)
+}
+
+function getEffectiveStatus(car: Car): string {
+  return hasAnyReservation(car) ? 'reserved' : String(car.status ?? '')
+}
+
+function isCarReservedNow(car: Car): boolean {
+  const statusKey = String(car.status ?? '').trim().toLowerCase()
+  const now = new Date()
+  const slots = getCalendarSlots(car)
+
+  if (slots.some((slot) => slot.start <= now && now < slot.end)) return true
+  return statusKey === 'reserved' || hasAnyReservation(car)
+}
+
+function canPreReserve(car: Car): boolean {
+  const statusKey = String(car.status ?? '').trim().toLowerCase()
+  if (['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  return isCarReservedNow(car)
+}
+
+function getSuggestedStartForPreReservation(car: Car): string {
+  const byNextAvailable = parseReservationDate(car.next_available_at)
+  if (byNextAvailable) return toDateTimeLocalInput(byNextAvailable)
+
+  const slots = getCalendarSlots(car)
+  if (!slots.length) return toDateTimeLocalInput(new Date())
+
+  const latestEnd = slots
+    .map((slot) => slot.end)
+    .sort((a, b) => b.getTime() - a.getTime())[0]
+
+  return latestEnd ? toDateTimeLocalInput(latestEnd) : toDateTimeLocalInput(new Date())
+}
+
+function getLatestReservationEnd(car: Car): Date | null {
+  const ends: Date[] = []
+
+  for (const slot of getCalendarSlots(car)) {
+    ends.push(slot.end)
+  }
+
+  const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
+  if (nextReservationEnd) ends.push(nextReservationEnd)
+
+  const nextAvailable = parseReservationDate(car.next_available_at)
+  if (nextAvailable) ends.push(nextAvailable)
+
+  if (!ends.length) return null
+  return ends.sort((a, b) => b.getTime() - a.getTime())[0] ?? null
+}
+
+function lastReservationLabel(car: Car): string {
+  const latest = getLatestReservationEnd(car)
+  if (!latest) return '—'
+  return latest.toLocaleString()
+}
+
 function isCarAvailable(car: Car): boolean {
   const statusKey = String(car.status ?? '').trim().toLowerCase()
   if (['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
@@ -138,15 +230,27 @@ function isCarAvailable(car: Car): boolean {
 }
 
 function goToReservation(car: Car) {
-  if (!isCarAvailable(car)) {
+  const canReserveNow = isCarAvailable(car)
+  const canPreReserveNow = canPreReserve(car)
+
+  if (!canReserveNow && !canPreReserveNow) {
     toast.error(t('vehicles.errors.notAvailable'))
     return
   }
 
   const vehicleId = Number(car.vehicle_id ?? car.id)
-  const startAt = toDateTimeLocalInput(new Date())
-  const end = new Date()
-  end.setDate(end.getDate() + 1)
+
+  let startAt = toDateTimeLocalInput(new Date())
+  if (canPreReserveNow) {
+    startAt = getSuggestedStartForPreReservation(car)
+  }
+
+  const end = new Date(startAt)
+  if (Number.isNaN(end.getTime())) {
+    end.setDate(end.getDate() + 1)
+  } else {
+    end.setDate(end.getDate() + 1)
+  }
   const endAt = toDateTimeLocalInput(end)
 
   emit('openReservation', {
@@ -154,8 +258,8 @@ function goToReservation(car: Car) {
     brand: car.brand ?? '',
     model: car.model ?? '',
     licensePlate: car.license_plate ?? '',
-    status: String(car.status ?? ''),
-    available: String(isCarAvailable(car)),
+    status: getEffectiveStatus(car),
+    available: String(canReserveNow),
     startAt,
     endAt,
   })

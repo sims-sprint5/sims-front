@@ -98,23 +98,32 @@
                   {{ quickReservationVehicleName }} · {{ t('reservations.selectDates') }}
                 </p>
 
+              
+
+                <BusyDaysCalendar
+                  :slots="quickReservationBusySlots"
+                  title="Calendario de ocupacion"
+                />
+
+                
+
                 <div class="mt-6 space-y-4">
                   <div>
                     <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.startAt') }}</label>
-                    <input
+                    <BaseDateTimePicker
                       v-model="quickReservationForm.startAt"
-                      type="datetime-local"
+                      :config="quickStartPickerConfig"
                       class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    />
                   </div>
 
                   <div>
                     <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.endAt') }}</label>
-                    <input
+                    <BaseDateTimePicker
                       v-model="quickReservationForm.endAt"
-                      type="datetime-local"
+                      :config="quickEndPickerConfig"
                       class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    />
                   </div>
                 </div>
               </div>
@@ -141,6 +150,8 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import BaseDateTimePicker from '@/components/base/BaseDateTimePicker.vue'
+import '@/styles/flatpickr.css'
 import { BaseButton } from '@/components/base'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { geofenceService } from '../services/geofence.service'
@@ -153,6 +164,7 @@ import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
 import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types'
 import VehicleDetailsModal from '../components/VehicleDetailsModal.vue'
 import ReservationPage from '@/modules/reservations/views/ReservationPage.vue'
+import BusyDaysCalendar from '@/modules/reservations/components/BusyDaysCalendar.vue'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -180,6 +192,7 @@ const reservationPageKey = ref(0)
 const quickReservationPayload = ref<Record<string, string> | null>(null)
 const showQuickReservationModal = ref(false)
 const submittingQuickReservation = ref(false)
+const mapVehicles = ref<Vehicle[]>([])
 const quickReservationForm = reactive({
   startAt: '',
   endAt: '',
@@ -249,6 +262,119 @@ const quickReservationVehicleName = computed(() => {
   return [p.brand, p.model].filter(Boolean).join(' ').trim() || p.licensePlate || '—'
 })
 
+const quickReservationVehicle = computed<Vehicle | null>(() => {
+  const vehicleIdRaw = quickReservationPayload.value?.vehicleId
+  if (!vehicleIdRaw) return null
+  const vehicleId = Number(vehicleIdRaw)
+  if (!Number.isFinite(vehicleId)) return null
+  return mapVehicles.value.find((v) => Number(v.vehicle_id ?? v.id) === vehicleId) ?? null
+})
+
+type ReservationSlot = { startDate: string; endDate: string }
+type DatePickerConfig = {
+  enableTime?: boolean
+  time_24hr?: boolean
+  minuteIncrement?: number
+  dateFormat?: string
+  disable?: Array<{ from: Date; to: Date }>
+  minDate?: Date
+}
+
+const parseDate = (value: string | null | undefined): Date | null => {
+  if (!value) return null
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+const quickReservationBusySlots = computed<ReservationSlot[]>(() => {
+  const vehicle = quickReservationVehicle.value
+  if (!vehicle) return []
+
+  const now = new Date()
+  const slots: ReservationSlot[] = []
+
+  for (const reservation of vehicle.calendar_reservations ?? []) {
+    const start = String(reservation.start_date ?? '').trim()
+    const end = String(reservation.end_date ?? '').trim()
+    const endDate = parseDate(end)
+    if (!start || !end || !endDate) continue
+    if (endDate < now) continue
+    slots.push({ startDate: start, endDate: end })
+  }
+
+  const nextStart = String(vehicle.next_reservation?.start_date ?? '').trim()
+  const nextEnd = String(vehicle.next_reservation?.end_date ?? '').trim()
+  if (nextStart && nextEnd) {
+    const alreadyIncluded = slots.some((slot) => slot.startDate === nextStart && slot.endDate === nextEnd)
+    const nextEndDate = parseDate(nextEnd)
+    if (!alreadyIncluded && nextEndDate && nextEndDate >= now) {
+      slots.push({ startDate: nextStart, endDate: nextEnd })
+    }
+  }
+
+  return slots.sort((a, b) => {
+    const aStart = parseDate(a.startDate)?.getTime() ?? 0
+    const bStart = parseDate(b.startDate)?.getTime() ?? 0
+    return aStart - bStart
+  })
+})
+
+const findOverlappingSlot = (
+  startDate: Date,
+  endDate: Date,
+  slots: ReservationSlot[],
+): { start: Date; end: Date } | null => {
+  for (const slot of slots) {
+    const slotStart = parseDate(slot.startDate)
+    const slotEnd = parseDate(slot.endDate)
+    if (!slotStart || !slotEnd) continue
+
+    if (startDate < slotEnd && slotStart < endDate) {
+      return { start: slotStart, end: slotEnd }
+    }
+  }
+
+  return null
+}
+
+const toDisabledRanges = (slots: ReservationSlot[]): Array<{ from: Date; to: Date }> => {
+  return slots
+    .map((slot) => {
+      const from = parseDate(slot.startDate)
+      const end = parseDate(slot.endDate)
+      if (!from || !end) return null
+
+      // Keep boundary behavior consistent with overlap checks: end moment can be used as next start.
+      const to = new Date(end.getTime() - 1)
+      if (to <= from) return null
+      return { from, to }
+    })
+    .filter((range): range is { from: Date; to: Date } => Boolean(range))
+}
+
+const quickReservationDisabledRanges = computed(() => toDisabledRanges(quickReservationBusySlots.value))
+
+const quickStartPickerConfig = computed<DatePickerConfig>(() => ({
+  enableTime: true,
+  time_24hr: true,
+  minuteIncrement: 1,
+  dateFormat: 'Y-m-d\\TH:i',
+  disable: quickReservationDisabledRanges.value,
+}))
+
+const quickEndPickerConfig = computed<DatePickerConfig>(() => {
+  const minEndDate = quickReservationForm.startAt ? parseDate(quickReservationForm.startAt) : null
+  return {
+    enableTime: true,
+    time_24hr: true,
+    minuteIncrement: 1,
+    dateFormat: 'Y-m-d\\TH:i',
+    disable: quickReservationDisabledRanges.value,
+    minDate: minEndDate ?? undefined,
+  }
+})
+
+
 const openReservationPanel = () => {
   reservationPageKey.value += 1
   reservationPrefill.value = null
@@ -295,14 +421,78 @@ const normalizeDateTime = (value: string): string => {
   return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString()
 }
 
+const isReservationActiveNow = (startAt: string, endAt: string): boolean => {
+  const now = new Date()
+  const start = new Date(startAt)
+  const end = new Date(endAt)
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false
+  return start <= now && now < end
+}
+
+const markVehicleAsReserved = (vehicleIdRaw: string, startAt: string, endAt: string) => {
+  const vehicleId = Number(vehicleIdRaw)
+  if (!Number.isFinite(vehicleId)) return
+
+  const target = mapVehicles.value.find((vehicle) => Number(vehicle.vehicle_id ?? vehicle.id) === vehicleId)
+  if (!target) return
+
+  const normalizedStart = normalizeDateTime(startAt)
+  const normalizedEnd = normalizeDateTime(endAt)
+
+  target.status = 'reserved'
+  target.available = false
+  const currentNextAvailable = parseDate(target.next_available_at)
+  const candidateNextAvailable = parseDate(normalizedEnd)
+  if (currentNextAvailable && candidateNextAvailable) {
+    target.next_available_at = currentNextAvailable > candidateNextAvailable
+      ? currentNextAvailable.toISOString()
+      : candidateNextAvailable.toISOString()
+  } else {
+    target.next_available_at = normalizedEnd
+  }
+
+  const currentSlots = Array.isArray(target.calendar_reservations) ? target.calendar_reservations : []
+  const newSlotExists = currentSlots.some((slot) =>
+    String(slot.start_date ?? '').trim() === normalizedStart &&
+    String(slot.end_date ?? '').trim() === normalizedEnd,
+  )
+  if (!newSlotExists) {
+    currentSlots.push({
+      start_date: normalizedStart,
+      end_date: normalizedEnd,
+      user_name: user.value?.name ?? '',
+      status: 'active',
+    })
+  }
+  target.calendar_reservations = currentSlots
+
+  if (isReservationActiveNow(normalizedStart, normalizedEnd)) {
+    target.next_reservation = {
+      start_date: normalizedStart,
+      end_date: normalizedEnd,
+      user_name: user.value?.name ?? '',
+    }
+  }
+}
+
+const persistVehicleAsReserved = async (vehicleId: number) => {
+  if (!Number.isFinite(vehicleId) || vehicleId <= 0) return
+  try {
+    await vehicleService.updateVehicle(vehicleId, { status: 'reserved' })
+  } catch (err) {
+    console.warn('Vehicle status update to reserved failed:', err)
+  }
+}
+
 const submitQuickReservation = async () => {
   if (!quickReservationPayload.value || submittingQuickReservation.value) return
 
   const statusKey = String(quickReservationPayload.value.status ?? '').trim().toLowerCase()
   const availableRaw = String(quickReservationPayload.value.available ?? '').trim().toLowerCase()
-  const blockedByStatus = ['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)
+  const canPreReserve = statusKey === 'reserved'
+  const blockedByStatus = ['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)
   const explicitlyUnavailable = availableRaw === 'false'
-  if (blockedByStatus || explicitlyUnavailable) {
+  if (blockedByStatus || (explicitlyUnavailable && !canPreReserve)) {
     toast.error(t('vehicles.errors.notAvailable'))
     return
   }
@@ -319,18 +509,69 @@ const submitQuickReservation = async () => {
     return
   }
 
+  const localOverlap = findOverlappingSlot(startDate, endDate, quickReservationBusySlots.value)
+  if (localOverlap) {
+    toast.error(t('reservations.errors.availableFrom', { date: localOverlap.end.toLocaleString() }))
+    return
+  }
+
   submittingQuickReservation.value = true
   try {
+    const vehicleIdRaw = quickReservationPayload.value.vehicleId
+    if (!vehicleIdRaw) {
+      toast.error(t('vehicles.errors.notAvailable'))
+      return
+    }
+
+    const vehicleId = Number(vehicleIdRaw) || 0
+    const normalizedStart = normalizeDateTime(quickReservationForm.startAt)
+    const normalizedEnd = normalizeDateTime(quickReservationForm.endAt)
+
+    const availability = await reservationLogService.checkAvailability(
+      vehicleId,
+      normalizedStart,
+      normalizedEnd,
+    )
+
+    if (!availability.available) {
+      let errorMsg = availability.message || t('reservations.errors.notAvailable')
+
+      const conflictingStart = parseDate(availability.conflicting_reservation?.start_date)
+      const conflictingEnd = parseDate(availability.conflicting_reservation?.end_date)
+      const overlapsWithConflict = Boolean(
+        conflictingStart && conflictingEnd && startDate < conflictingEnd && conflictingStart < endDate,
+      )
+
+      if (overlapsWithConflict && conflictingEnd) {
+        const formatted = conflictingEnd.toLocaleString()
+        errorMsg = t('reservations.errors.availableFrom', { date: formatted })
+      } else {
+        const backendAvailableAt = parseDate(availability.available_at)
+        const formatted = backendAvailableAt?.toLocaleString()
+        if (formatted) {
+          errorMsg = t('reservations.errors.availableFrom', { date: formatted })
+        }
+      }
+
+      toast.error(errorMsg)
+      return
+    }
+
+    const reservationStatus = startDate > new Date() ? 'pending' : 'active'
+
     await reservationLogService.createLog({
       user_id: user.value?.id ?? null,
       user_name: user.value?.name ?? 'N/A',
-      vehicle_id: Number(quickReservationPayload.value.vehicleId) || 0,
+      vehicle_id: vehicleId,
       vehicle_name: quickReservationVehicleName.value || quickReservationPayload.value.licensePlate || 'N/A',
       license_plate: quickReservationPayload.value.licensePlate || '',
-      status: 'active',
-      start_at: normalizeDateTime(quickReservationForm.startAt),
-      end_at: normalizeDateTime(quickReservationForm.endAt),
+      status: reservationStatus,
+      start_at: normalizedStart,
+      end_at: normalizedEnd,
     })
+
+    markVehicleAsReserved(vehicleIdRaw, normalizedStart, normalizedEnd)
+    await persistVehicleAsReserved(vehicleId)
 
     toast.success(t('reservations.toast.created'))
     closeQuickReservationModal()
@@ -523,8 +764,11 @@ onMounted(async () => {
     ])
 
     const vehicles = Array.isArray(vehiclesResponse?.data) ? vehiclesResponse.data : []
+    const visibleVehicles = isAdminRole ? vehicles : filterVehiclesForUserMap(vehicles, reservations)
+    mapVehicles.value = visibleVehicles
+
     renderGeofences(geofences)
-    renderVehicles(isAdminRole ? vehicles : filterVehiclesForUserMap(vehicles, reservations))
+    renderVehicles(visibleVehicles)
   } catch (err) {
     console.warn('Failed to load map data:', err)
   }
