@@ -10,7 +10,11 @@ import VehicleList from '@/modules/reservations/components/VehicleList.vue';
 import { useReservationVehicles } from '@/modules/reservations/composables/useReservationVehicles';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
+import { vehicleService } from '@/modules/vehicles/services/vehicle.service';
 import { useToast } from '@/shared/composables/useToast';
+import BaseDateTimePicker from '@/components/base/BaseDateTimePicker.vue';
+import BusyDaysCalendar from '@/modules/reservations/components/BusyDaysCalendar.vue';
+import '@/styles/flatpickr.css';
 
 const { vehicleCards, loading, filters, facets, resetFilters, error } = useReservationVehicles();
 const { t } = useI18n();
@@ -36,6 +40,14 @@ const reservationForm = reactive({
   endAt: '',
 });
 const hideAccessibilityClass = 'hide-userway-widget';
+type DatePickerConfig = {
+  enableTime?: boolean;
+  time_24hr?: boolean;
+  minuteIncrement?: number;
+  dateFormat?: string;
+  disable?: Array<{ from: Date; to: Date }>;
+  minDate?: Date;
+};
 
 function toDateTimeLocalInput(value: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -244,13 +256,77 @@ function formatReservationSlot(value: string): string {
   return parsed.toLocaleString();
 }
 
+function parseDate(value?: string | null): Date | null {
+  if (!value) return null;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function findOverlappingSlot(
+  startDate: Date,
+  endDate: Date,
+  slots: Array<{ startDate: string; endDate: string }> = [],
+): { start: Date; end: Date } | null {
+  for (const slot of slots) {
+    const slotStart = parseDate(slot.startDate);
+    const slotEnd = parseDate(slot.endDate);
+    if (!slotStart || !slotEnd) continue;
+
+    if (startDate < slotEnd && slotStart < endDate) {
+      return { start: slotStart, end: slotEnd };
+    }
+  }
+
+  return null;
+}
+
+function toDisabledRanges(slots: Array<{ startDate: string; endDate: string }> = []): Array<{ from: Date; to: Date }> {
+  return slots
+    .map((slot) => {
+      const from = parseDate(slot.startDate);
+      const end = parseDate(slot.endDate);
+      if (!from || !end) return null;
+
+      // Keep boundary behavior consistent with overlap checks: end moment can be used as next start.
+      const to = new Date(end.getTime() - 1);
+      if (to <= from) return null;
+      return { from, to };
+    })
+    .filter((range): range is { from: Date; to: Date } => Boolean(range));
+}
+
+const reservationDisabledRanges = computed(() =>
+  toDisabledRanges(selectedVehicle.value?.calendarReservations ?? []),
+);
+
+const startPickerConfig = computed<DatePickerConfig>(() => ({
+  enableTime: true,
+  time_24hr: true,
+  minuteIncrement: 1,
+  dateFormat: 'Y-m-d\\TH:i',
+  disable: reservationDisabledRanges.value,
+}));
+
+const endPickerConfig = computed<DatePickerConfig>(() => {
+  const minEndDate = reservationForm.startAt ? parseDate(reservationForm.startAt) : null;
+  return {
+    enableTime: true,
+    time_24hr: true,
+    minuteIncrement: 1,
+    dateFormat: 'Y-m-d\\TH:i',
+    disable: reservationDisabledRanges.value,
+    minDate: minEndDate ?? undefined,
+  };
+});
+
 async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
 
   const statusKey = String(selectedVehicle.value.category ?? '').trim().toLowerCase();
-  const blockedByStatus = ['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey);
+  const canPreReserve = statusKey === 'reserved';
+  const blockedByStatus = ['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey);
   const explicitlyUnavailable = selectedVehicle.value.available === false;
-  if (blockedByStatus || explicitlyUnavailable) {
+  if (blockedByStatus || (explicitlyUnavailable && !canPreReserve)) {
     toast.error('Este coche no está disponible');
     return;
   }
@@ -267,6 +343,16 @@ async function createReservation() {
     return;
   }
 
+  const localOverlap = findOverlappingSlot(
+    startDate,
+    endDate,
+    selectedVehicle.value.calendarReservations ?? [],
+  );
+  if (localOverlap) {
+    toast.error(t('reservations.errors.availableFrom', { date: localOverlap.end.toLocaleString() }));
+    return;
+  }
+
   submitting.value = true;
 
   try {
@@ -279,11 +365,24 @@ async function createReservation() {
 
     if (!availability.available) {
       let errorMsg = availability.message || t('reservations.errors.notAvailable');
-      if (availability.available_at) {
-        const availDate = new Date(availability.available_at);
-        const formatted = availDate.toLocaleString();
+
+      const conflictingStart = parseDate(availability.conflicting_reservation?.start_date);
+      const conflictingEnd = parseDate(availability.conflicting_reservation?.end_date);
+      const overlapsWithConflict = Boolean(
+        conflictingStart && conflictingEnd && startDate < conflictingEnd && conflictingStart < endDate,
+      );
+
+      if (overlapsWithConflict && conflictingEnd) {
+        const formatted = conflictingEnd.toLocaleString();
         errorMsg = t('reservations.errors.availableFrom', { date: formatted });
+      } else {
+        const backendAvailableAt = parseDate(availability.available_at);
+        const formatted = backendAvailableAt?.toLocaleString();
+        if (formatted) {
+          errorMsg = t('reservations.errors.availableFrom', { date: formatted });
+        }
       }
+
       toast.error(errorMsg);
       return;
     }
@@ -291,16 +390,33 @@ async function createReservation() {
     // Si está disponible, proceder a crear la reserva
     const status = startDate > new Date() ? 'pending' : 'active';
 
+    const vehicleId = Number(selectedVehicle.value.id) || 0;
+
     await reservationLogService.createLog({
       user_id: user.value?.id ?? null,
       user_name: user.value?.name ?? 'N/A',
-      vehicle_id: Number(selectedVehicle.value.id) || 0,
+      vehicle_id: vehicleId,
       vehicle_name: selectedVehicle.value.name,
       license_plate: selectedVehicle.value.licensePlate ?? '',
       status,
       start_at: normalizeDateTime(reservationForm.startAt),
       end_at: normalizeDateTime(reservationForm.endAt),
     });
+
+    // Refleja el cambio en UI inmediatamente.
+    selectedVehicle.value.category = 'reserved';
+    selectedVehicle.value.status = 'reserved';
+    selectedVehicle.value.available = false;
+    selectedVehicle.value.nextAvailableAt = normalizeDateTime(reservationForm.endAt);
+
+    // Intento best-effort para persistir estado del vehículo (si backend lo permite).
+    if (Number.isFinite(vehicleId) && vehicleId > 0) {
+      try {
+        await vehicleService.updateVehicle(vehicleId, { status: 'reserved' });
+      } catch (err) {
+        console.warn('Vehicle status update to reserved failed:', err);
+      }
+    }
 
     toast.success(t('reservations.toast.created'));
     closeReservationModal();
@@ -382,40 +498,29 @@ async function createReservation() {
                   {{ selectedVehicle?.name }} · {{ $t('reservations.selectDates') }}
                 </p>
 
-                <div
-                  v-if="selectedVehicle?.calendarReservations?.length"
-                  class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2"
-                >
-                  <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                    {{ $t('reservations.preReservation.busySlots') }}
-                  </p>
-                  <ul class="mt-2 space-y-1 text-sm text-amber-900">
-                    <li
-                      v-for="(slot, idx) in selectedVehicle.calendarReservations"
-                      :key="`${slot.startDate}-${slot.endDate}-${idx}`"
-                    >
-                      {{ formatReservationSlot(slot.startDate) }} - {{ formatReservationSlot(slot.endDate) }}
-                    </li>
-                  </ul>
-                </div>
+              
+                <BusyDaysCalendar
+                  :slots="selectedVehicle?.calendarReservations ?? []"
+                  title="Calendario de ocupacion"
+                />
 
                 <div class="mt-6 space-y-4">
                   <div>
                     <label class="mb-2 block text-sm font-medium text-gray-700">{{ $t('reservations.table.startAt') }}</label>
-                    <input
+                    <BaseDateTimePicker
                       v-model="reservationForm.startAt"
-                      type="datetime-local"
+                      :config="startPickerConfig"
                       class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    />
                   </div>
 
                   <div>
                     <label class="mb-2 block text-sm font-medium text-gray-700">{{ $t('reservations.table.endAt') }}</label>
-                    <input
+                    <BaseDateTimePicker
                       v-model="reservationForm.endAt"
-                      type="datetime-local"
+                      :config="endPickerConfig"
                       class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    />
                   </div>
                 </div>
               </div>
