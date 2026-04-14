@@ -107,7 +107,6 @@ import { useUser } from '@/modules/auth/composables/useUser'
 import { isAdminRole } from '@/shared/utils/roleUtils'
 import {
   Cog6ToothIcon,
-  ClipboardDocumentListIcon,
   HomeIcon,
   MapPinIcon,
   TicketIcon,

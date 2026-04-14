@@ -342,7 +342,7 @@ const submitQuickReservation = async () => {
   }
 }
 
-const defaultMarkerIcon = L.icon({
+const vehicleIcon = L.icon({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
