@@ -142,7 +142,6 @@ import { superadminAuthService } from '@/modules/superadmin/services/superadmin-
 import { isAdminRole } from '@/shared/utils/roleUtils'
 import {
   Cog6ToothIcon,
-  ClipboardDocumentListIcon,
   HomeIcon,
   MapPinIcon,
   TicketIcon,
@@ -217,10 +216,8 @@ const getItemClasses = (item: NavItem) => {
   return classes.join(' ')
 }
 
-const clienteNavigation = computed<NavItem[]>(() => [
+  const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.map', href: '/mapa', icon: MapPinIcon },
-  { nameKey: 'nav.bookings', href: '/reservation', icon: ReservesIcon },
-  { nameKey: 'nav.myReservations', href: '/mis-reservas', icon: ClipboardDocumentListIcon },
   { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])

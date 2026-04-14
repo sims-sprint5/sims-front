@@ -55,7 +55,7 @@ const logMapWarning = (message: string, details?: unknown) => {
 }
 
 const vehicleIcon = L.divIcon({
-  html: '<i class="fas fa-car" style="color: #3b82f6; font-size: 24px;"></i>',
+  html: '<i class="fas fa-car" style="color: #000000; font-size: 24px;"></i>',
   iconSize: [30, 30],
   iconAnchor: [15, 15],
   popupAnchor: [0, -15],

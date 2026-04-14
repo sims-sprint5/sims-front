@@ -26,29 +26,26 @@
           <div class="p-6" v-if="car">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.brandLabel') }}</p>
-                <p class="font-semibold">{{ car.brand || '—' }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.brandLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ car.brand || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.modelLabel') }}</p>
-                <p class="font-semibold">{{ car.model || '—' }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.modelLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ car.model || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.matrixLabel') }}</p>
-                <p class="font-semibold">{{ car.license_plate || '—' }}</p>
-              </div>
-                          <div>
-                            <p class="text-sm text-gray-600">{{ $t('reservations.filters.statusLabel') }}</p>
-                            <p class="font-semibold">{{ statusLabel(car.status) }}</p>
-                          </div>
-              <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.colorsLabel') }}</p>
-                            <p class="font-semibold">{{ colorLabel(car.color) }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.matrixLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ car.license_plate || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.yearLabel') }}</p>
-                <p class="font-semibold">{{ car.year ?? '—' }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.statusLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ statusLabel(car.status) }}</p>
               </div>
+              <div>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.colorsLabel') }}</p>
+                <p class="text-base font-bold text-gray-900 mt-1">{{ colorLabel(car.color) }}</p>
+              </div>
+              <!-- Year removed as per UI request -->
             </div>
 
             <div class="mt-6 space-y-3">
@@ -71,7 +68,6 @@
 <script setup lang="ts">
 import { BaseButton } from '@/components/base'
 import type { Vehicle as Car } from '@/modules/vehicles/types/vehicle.types'
-import { useRouter } from 'vue-router'
 import { useToast } from '@/shared/composables/useToast'
 import { useI18n } from 'vue-i18n'
 
@@ -81,10 +77,19 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  close: []
+  (e: 'close'): void
+  (e: 'openReservation', payload: {
+    vehicleId: string
+    brand: string
+    model: string
+    licensePlate: string
+    status?: string
+    available?: string
+    startAt: string
+    endAt: string
+  }): void
 }>()
 
-const router = useRouter()
 const toast = useToast()
 const { t } = useI18n()
 
@@ -124,13 +129,15 @@ function toDateTimeLocalInput(value: Date): string {
 }
 
 function isCarAvailable(car: Car): boolean {
-  if (car.available === true) return true
-  if (car.available === false) return false
   const statusKey = String(car.status ?? '').trim().toLowerCase()
-  return statusKey === 'available' || statusKey === 'active'
+  if (['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  if (statusKey === 'available' || statusKey === 'active') return true
+  if (car.available === false) return false
+  if (car.available === true) return true
+  return false
 }
 
-async function goToReservation(car: Car) {
+function goToReservation(car: Car) {
   if (!isCarAvailable(car)) {
     toast.error(t('vehicles.errors.notAvailable'))
     return
@@ -142,17 +149,15 @@ async function goToReservation(car: Car) {
   end.setDate(end.getDate() + 1)
   const endAt = toDateTimeLocalInput(end)
 
-  await router.push({
-    name: 'ReservationPage',
-    query: {
-      vehicleId: String(vehicleId),
-      brand: car.brand ?? '',
-      model: car.model ?? '',
-      licensePlate: car.license_plate ?? '',
-      startAt,
-      endAt,
-      fromMap: 'true',
-    },
+  emit('openReservation', {
+    vehicleId: String(vehicleId),
+    brand: car.brand ?? '',
+    model: car.model ?? '',
+    licensePlate: car.license_plate ?? '',
+    status: String(car.status ?? ''),
+    available: String(isCarAvailable(car)),
+    startAt,
+    endAt,
   })
 
   emit('close')

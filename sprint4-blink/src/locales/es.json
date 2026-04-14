@@ -418,6 +418,8 @@
     "filters": {
       "title": "Filtros",
       "reset": "Restablecer",
+      "show": "Ver filtros",
+      "hide": "Ocultar filtros",
       "searchLabel": "Buscar",
       "searchPlaceholder": "Matrícula, marca o modelo",
       "statusLabel": "Estado",
@@ -438,6 +440,11 @@
     },
     "preReservation": {
       "busySlots": "Franja(s) ya reservada(s)"
+    }
+    ,
+    "view": {
+      "large": "Vista ampliada",
+      "compact": "Vista compacta"
     }
   },
   "table": {
@@ -677,6 +684,10 @@
   "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
+    "openReservationPanel": "¡Reserva ahora!",
+    "closeReservationPanel": "Cerrar panel de reservas",
+    "reservationPanelTitle": "Reservas de coches",
+    "reservationIframeTitle": "Panel de reservas",
     "geofences": "Geofences",
     "createZone": "Nueva Zona",
     "editZone": "Editar Zona",
