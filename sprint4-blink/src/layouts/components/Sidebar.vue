@@ -94,6 +94,39 @@
         </li>
 
       </ul>
+
+      <!-- Logout button -->
+      <div class="w-full flex justify-center">
+        <button
+          @click="handleLogout"
+          :title="isCollapsed ? t('common.logout') : undefined"
+          :class="[
+            'text-red-400 hover:bg-red-500/10 hover:text-red-300',
+            'group relative flex items-center font-semibold rounded-md transition-colors',
+            isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
+          ]"
+        >
+          <!-- Exit door icon -->
+          <svg
+            class="size-6 shrink-0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M10 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4" />
+            <polyline points="17 16 21 12 17 8" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span v-if="!isCollapsed" class="truncate">
+            {{ t('common.logout') }}
+          </span>
+        </button>
+      </div>
     </nav>
 
   </div>
@@ -101,9 +134,11 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, h, type Component } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute, RouterLink, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUser } from '@/modules/auth/composables/useUser'
+import { authService } from '@/modules/auth/services/auth.service'
+import { superadminAuthService } from '@/modules/superadmin/services/superadmin-auth.service'
 import { isAdminRole } from '@/shared/utils/roleUtils'
 import {
   Cog6ToothIcon,
@@ -148,7 +183,8 @@ const props = defineProps<{
 
 const route = useRoute()
 const { t } = useI18n()
-const { user } = useUser()
+const { user, clearAvatar } = useUser()
+const router = useRouter()
 
 const isAdmin = computed(() => isAdminRole(user.value?.role) && user.value?.role !== 'superadmin')
 const isSuperadmin = computed(() => user.value?.role === 'superadmin')
@@ -202,4 +238,16 @@ const superadminNavigation = computed<NavItem[]>(() => [
   { nameKey: 'tenants.title', href: '/superadmin/tenants', icon: BuildingOffice2Icon },
   { nameKey: 'superadmin.admins.title', href: '/superadmin/admins', icon: UsersIcon },
 ])
+
+const handleLogout = async () => {
+  clearAvatar()
+  const storedUser = authService.getUser()
+  if (storedUser?.role === 'superadmin') {
+    await superadminAuthService.logout()
+    await router.push('/superadmin/login')
+  } else {
+    await authService.logout()
+    await router.push('/login')
+  }
+}
 </script>
