@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-indigo-50/30 flex">
+  <div class="min-h-screen bg-base flex">
     <aside class="hidden lg:block shrink-0 h-screen sticky top-0">
       <Sidebar :is-collapsed="isCollapsed" class="h-full" />
     </aside>
@@ -16,7 +16,7 @@
     <Teleport to="body">
       <div
         v-if="isMobileSidebarOpen"
-        class="fixed inset-0 z-40 bg-black/40 lg:hidden"
+        class="fixed inset-0 z-40 bg-surface-inverse/40 lg:hidden"
         @click="closeMobileSidebar"
       />
 

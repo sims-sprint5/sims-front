@@ -1,7 +1,7 @@
 <template>
   <div :class="sidebarClasses">
     <div class="flex h-20 shrink-0 items-center justify-center">
-      <img :class="logoClasses" :src="isDark ? blinkLogoDark : blinkLogoLight" :alt="t('common.logoAlt', { app: t('app.name') })" />
+      <img :class="logoClasses" :src="blinkLogoDark" :alt="t('common.logoAlt', { app: t('app.name') })" />
     </div>
 
     <nav class="relative flex flex-1 flex-col">
@@ -176,7 +176,6 @@ import {
   UsersIcon,
   BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline'
-import blinkLogoLight from '@/assets/fleetly_isotip_negre.svg'
 import blinkLogoDark from '@/assets/fleetly_isotip_blanc.svg'
 
 type NavItem = {
@@ -220,6 +219,7 @@ const isRegularUser = computed(() => user.value?.role === 'user')
 
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
+  'dark',
   'relative flex grow flex-col gap-y-5 overflow-y-auto bg-surface border-r border-default',
   'transition-[width,padding] duration-200 ease-in-out',
 ])
