@@ -31,7 +31,7 @@ const toastConfig: Record<string, { icon: string; classes: string }> = {
         <svg v-if="toastConfig[toast.type]" class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" :d="toastConfig[toast.type]?.icon" clip-rule="evenodd" />
         </svg>
-        <p class="flex-1 text-sm font-medium">{{ toast.message }}</p>
+        <p class="flex-1 text-sm font-medium text-main">{{ toast.message }}</p>
         <button @click="removeToast(toast.id)" class="flex-shrink-0 hover:opacity-75 transition-opacity"
           :aria-label="t('common.close')">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

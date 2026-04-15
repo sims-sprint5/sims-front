@@ -14,6 +14,7 @@
 
 		/* Background / Areas */
 		--color-bg-base: 249 250 251;	     /* gray-50 */
+		--color-bg-base-dark: 53 56 57;	  	 /* Gunmetal */
 		--color-surface: 255 255 255;        /* White */
 		--color-surface-muted: 243 244 246;  /* gray-100 */
 		--color-surface-inverse: 17 24 39;   /* white */
@@ -65,11 +66,11 @@
 	}
 
 	h1,h2,h3,h4,h5,h6 {
-		@apply font-bold tracking-tight text-[rgb(var(--color-text-main))];
+		@apply font-bold tracking-tight text-[rgb(var(--color-text-base))];
 	}
 
 	p {
-		@apply text-[rgb(var(--color-text-muted))] leading-relaxed;
+		@apply text-[rgb(var(--color-text-base))] leading-relaxed;
 
 	}
 

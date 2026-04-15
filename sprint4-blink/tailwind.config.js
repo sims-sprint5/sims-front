@@ -11,7 +11,10 @@ export default {
         sans: ['var(--font-main)'],
       },
       colors: {
-        base: 'rgb(var(--color-bg-base) / <alpha-value>)',
+        base: {
+          DEFAULT: 'rgb(var(--color-bg-base-dark) / <alpha-value>)',
+          dark: 'rgb(var(--color-bg-base-dark) / <alpha-value>)',
+        },
         surface: {
           DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
           muted: 'rgb(var(--color-surface-muted) / <alpha-value>)',

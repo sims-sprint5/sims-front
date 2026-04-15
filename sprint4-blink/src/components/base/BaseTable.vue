@@ -1,13 +1,13 @@
 <template>
   <div class="overflow-x-auto bg-white rounded-lg shadow">
     <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
+      <thead class="bg-base-dark">
         <tr>
           <th
             v-for="column in columns"
             :key="column.key"
             scope="col"
-            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+            class="px-6 py-3 text-xs font-medium text-inverse uppercase tracking-wider"
             :class="column.align === 'right' ? 'text-right' : column.align === 'center' ? 'text-center' : 'text-left'"
           >
             {{ column.label }}
