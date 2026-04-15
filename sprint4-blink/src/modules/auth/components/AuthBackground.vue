@@ -23,7 +23,7 @@ withDefaults(
       <source :src="backgroundVideo" type="video/mp4">
     </video>
 
-    <div class="absolute inset-0 bg-white/15"></div>
+    <div class="absolute inset-0 bg-white/5"></div>
     
     <!-- Contenido -->
     <div :class="['w-full relative z-10', containerClass]">
