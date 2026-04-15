@@ -6,28 +6,28 @@
 	:root {
 		/* Background / Areas */
 		--color-bg-base: 255 255 255;	     /* White */
-		--color-bg-base-dark: 245 245 245;	 /* Off-white for slight contrast */
+		--color-bg-base-dark: 245 247 248;	 /* Light Gray */
 		--color-surface: 255 255 255;        /* White */
-		--color-surface-muted: 240 240 240;  /* Very Light Gray (for input backgrounds) */
-		--color-surface-inverse: 0 0 0;      /* Black */
+		--color-surface-muted: 235 237 239;  /* Light Gray */
+		--color-surface-inverse: 53 56 57;   /* Gunmetal */
 		
 		/* Texts */
 		--color-text-main: 0 0 0;		     /* Black */
-		--color-text-muted: 53 56 57; 	     /* Gunmetal used as legible muted text */
+		--color-text-muted: 53 56 57; 	     /* Gunmetal */
 		--color-text-inverse: 255 255 255;	 /* White */
 
 		/* Edges */
 		--color-border-default: 190 191 197; /* Pale Slate */
 
 		/* Theme Colors */
-		--color-primary: 38 97 156; 		 /* Baltic blue */
+		--color-primary: 38 97 156; 		 /* Baltic Blue */
 		--color-primary-hover: 28 80 130;    /* Dark Baltic Blue */
 
 		/* Status colors */
 		--color-danger: 153 51 51; 			 /* Red (#993333) */
 		--color-success: 51 153 51; 		 /* Green (#339933) */
 		--color-warning: 204 153 51; 		 /* Yellow (#CC9933) */
-		--color-info: 38 97 156;			 /* Baltic blue */
+		--color-info: 38 97 156;			 /* Baltic Blue */
 
 		/* Tipography*/
 		--font-main: 'Switzer', system-ui, sans-serif;
@@ -36,17 +36,32 @@
 
 	  /* Dark Mode Variables */
 	.dark {
-		--color-bg-base: 0 0 0;             /* Black for full dark background */
-		--color-bg-base-dark: 53 56 57;     /* Gunmetal for alternate backgrounds */
-		--color-surface: 53 56 57;          /* Gunmetal for Cards and Navbars */
-		--color-surface-muted: 0 0 0;       /* Black for nested inner inputs */
+		/* Background / Areas */
+		--color-bg-base: 0 0 0;             /* Black */
+		--color-bg-base-dark: 25 26 27;     /* Dark Gunmetal */
+		
+		/* Surfaces */
+		--color-surface: 53 56 57;          /* Gunmetal */
+		--color-surface-muted: 0 0 0;       /* Black */
 		--color-surface-inverse: 255 255 255; /* White */
 		
-		--color-text-main: 255 255 255;     /* White text */
-		--color-text-muted: 190 191 197;    /* Pale Slate for muted text */
-		--color-text-inverse: 0 0 0;        /* Black */
+		/* Texts */
+		--color-text-main: 255 255 255;     /* White */
+		--color-text-muted: 190 191 197;    /* Pale Slate */
+		--color-text-inverse: 255 255 255;  /* White */
 		
-		--color-border-default: 0 0 0;      /* Black borders on Gunmetal surfaces */
+		/* Edges */
+		--color-border-default: 190 191 197; /* Pale Slate */
+
+		/* Theme Colors */
+		--color-primary: 110 168 220;       /* Light Baltic Blue */
+		--color-primary-hover: 140 190 230; /* Lighter Baltic Blue */
+
+		/* Status colors */
+		--color-danger: 220 100 100;        /* Light Red */
+		--color-success: 90 200 90;         /* Light Green */
+		--color-warning: 240 190 90;        /* Light Yellow */
+		--color-info: 110 168 220;          /* Light Baltic Blue */
 	}
 
 
