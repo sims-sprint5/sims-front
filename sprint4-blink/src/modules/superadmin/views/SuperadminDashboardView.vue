@@ -1,27 +1,27 @@
 <template>
     <AppLayout :title="$t('superadmin.title')">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $t('nav.dashboard') }}</h2>
+            <h2 class="text-2xl font-bold text-main mb-6">{{ $t('nav.dashboard') }}</h2>
             
             <!-- Key Metrics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <!-- Total Companies -->
-                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500 hover:shadow-md transition">
+                <div class="bg-surface p-6 rounded-lg shadow border-l-4 border-primary hover:shadow-md transition">
                     <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-indigo-100 text-indigo-600 mr-4">
+                        <div class="p-3 rounded-full bg-[rgb(var(--color-bg-base-dark))] text-primary mr-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
                         </div>
                         <div>
-                            <h4 class="text-gray-500 text-sm font-medium uppercase">{{ $t('tenants.title') }} Total</h4>
-                            <p class="text-3xl font-bold text-indigo-600 mt-1">{{ totalTenants }}</p>
+                            <h4 class="text-muted text-sm font-medium uppercase">{{ $t('tenants.title') }} Total</h4>
+                            <p class="text-3xl font-bold text-primary mt-1">{{ totalTenants }}</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Recent Companies (Aquest mes) -->
-                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-emerald-500 hover:shadow-md transition">
+                <div class="bg-surface p-6 rounded-lg shadow border-l-4 border-success hover:shadow-md transition">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-emerald-100 text-emerald-600 mr-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,7 +29,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h4 class="text-gray-500 text-sm font-medium uppercase">{{ $t('superadmin.dashboard.newThisMonth') }}</h4>
+                            <h4 class="text-muted text-sm font-medium uppercase">{{ $t('superadmin.dashboard.newThisMonth') }}</h4>
                             <p class="text-3xl font-bold text-emerald-600 mt-1">{{ newTenantsThisMonth }}</p>
                         </div>
                     </div>
@@ -38,11 +38,11 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Graphic: Line Chart -->
-                <div class="bg-white p-6 rounded-lg shadow lg:col-span-2 flex flex-col">
-                    <h3 class="text-lg font-medium text-gray-900 mb-6 font-semibold">{{ $t('superadmin.dashboard.companySignups') }}</h3>
+                <div class="bg-surface p-6 rounded-lg shadow lg:col-span-2 flex flex-col">
+                    <h3 class="text-lg font-medium text-main mb-6 font-semibold">{{ $t('superadmin.dashboard.companySignups') }}</h3>
                     
                     <div v-if="loading" class="flex-grow flex items-center justify-center py-12">
-                         <svg class="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+                         <svg class="animate-spin h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                             <path class="opacity-75" fill="currentColor"
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -53,11 +53,11 @@
                     <div v-else-if="!loading && chartData.length > 0" class="relative w-full h-64 mt-4">
                         <!-- Grid Lines Y -->
                         <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                            <div class="border-t border-gray-200 border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-gray-400">{{ maxCount + 1 }}</span></div>
-                            <div class="border-t border-gray-200 border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-gray-400">{{ Math.round((maxCount + 1) * 0.75) }}</span></div>
-                            <div class="border-t border-gray-200 border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-gray-400">{{ Math.round((maxCount + 1) * 0.5) }}</span></div>
-                            <div class="border-t border-gray-200 border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-gray-400">{{ Math.round((maxCount + 1) * 0.25) }}</span></div>
-                            <div class="border-t border-gray-300 border-solid w-full h-0 relative"><span class="absolute -top-3 -left-4 text-xs text-gray-400">0</span></div>
+                            <div class="border-t border-default border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-muted">{{ maxCount + 1 }}</span></div>
+                            <div class="border-t border-default border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-muted">{{ Math.round((maxCount + 1) * 0.75) }}</span></div>
+                            <div class="border-t border-default border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-muted">{{ Math.round((maxCount + 1) * 0.5) }}</span></div>
+                            <div class="border-t border-default border-dashed w-full h-0 relative"><span class="absolute -top-3 -left-6 text-xs text-muted">{{ Math.round((maxCount + 1) * 0.25) }}</span></div>
+                            <div class="border-t border-default border-solid w-full h-0 relative"><span class="absolute -top-3 -left-4 text-xs text-muted">0</span></div>
                         </div>
 
                         <!-- Vector Line -->
@@ -90,13 +90,13 @@
                              class="absolute w-3 h-3 bg-indigo-600 border-2 border-white rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 group hover:scale-125 cursor-pointer transition-transform duration-200"
                              :style="{ left: point.x + '%', top: point.y + '%' }">
                             
-                            <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                            <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-inverse text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
                                 {{ $t('superadmin.dashboard.companies', { count: chartData[idx]?.count ?? 0 }) }}
                             </div>
                         </div>
 
                         <!-- Labels X -->
-                        <div class="absolute w-full top-full mt-4 h-6 flex justify-between text-xs text-gray-500 font-medium">
+                        <div class="absolute w-full top-full mt-4 h-6 flex justify-between text-xs text-muted font-medium">
                             <div v-for="(item, idx) in chartData" :key="idx" 
                                 class="absolute transform -translate-x-1/2 whitespace-nowrap capitalize"
                                 :style="{ left: (idx * (100 / (chartData.length - 1))) + '%' }">
@@ -105,32 +105,32 @@
                         </div>
                     </div>
                     
-                    <div v-else-if="!loading" class="flex-grow flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg mt-4">
+                    <div v-else-if="!loading" class="flex-grow flex items-center justify-center text-muted bg-base-dark rounded-lg mt-4">
                         {{ $t('superadmin.dashboard.noData') }}
                     </div>
                 </div>
 
                 <!-- Latest Companies List -->
-                <div class="bg-white p-6 rounded-lg shadow lg:col-span-1">
-                    <h3 class="text-lg font-medium text-gray-900 mb-6 font-semibold border-b pb-2">{{ $t('superadmin.dashboard.recentCompanies') }}</h3>
+                <div class="bg-surface p-6 rounded-lg shadow lg:col-span-1">
+                    <h3 class="text-lg font-medium text-main mb-6 font-semibold border-b pb-2">{{ $t('superadmin.dashboard.recentCompanies') }}</h3>
                     
                     <div v-if="loading" class="flex justify-center py-6">
-                         <svg class="animate-spin h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24">
+                         <svg class="animate-spin h-6 w-6 text-muted" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
                     </div>
                     
                     <ul class="divide-y divide-gray-100" v-else-if="recentCompanies.length > 0">
-                        <li v-for="company in recentCompanies" :key="company.id" class="py-3 flex hover:bg-gray-50 -mx-4 px-4 rounded transition">
+                        <li v-for="company in recentCompanies" :key="company.id" class="py-3 flex hover:bg-base-dark -mx-4 px-4 rounded transition">
                             <div class="flex items-center w-full justify-between">
                                 <div class="flex items-center">
-                                    <div class="bg-indigo-50 p-2 rounded-lg text-indigo-600 mr-3 shadow-sm">
+                                    <div class="bg-indigo-50 p-2 rounded-lg text-primary mr-3 shadow-sm">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="text-sm font-semibold text-gray-900">{{ company.name }}</span>
-                                        <span class="text-xs text-gray-500">{{ formatDate(company.created_at) }}</span>
+                                        <span class="text-sm font-semibold text-main">{{ company.name }}</span>
+                                        <span class="text-xs text-muted">{{ formatDate(company.created_at) }}</span>
                                     </div>
                                 </div>
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-100 text-emerald-800">{{ $t('superadmin.dashboard.new') }}</span>
@@ -138,7 +138,7 @@
                         </li>
                     </ul>
                     
-                    <div v-else-if="!loading" class="text-sm text-gray-500 italic text-center py-8">
+                    <div v-else-if="!loading" class="text-sm text-muted italic text-center py-8">
                         {{ $t('superadmin.dashboard.noCompaniesToShow') }}
                     </div>
                 </div>

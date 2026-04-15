@@ -13,11 +13,11 @@
 
     <!-- Descripcion / Problema -->
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('tickets.form.descripcion') }}</label>
+      <label class="block text-sm font-medium text-main mb-2">{{ $t('tickets.form.descripcion') }}</label>
       <textarea
         v-model="formData.descripcion"
         rows="4"
-        class="w-full px-4 py-3 border rounded-lg transition-all focus:ring-2 focus:ring-purple-500 focus:border-transparent border-gray-300"
+        class="w-full px-4 py-3 border rounded-lg transition-all focus:ring-2 focus:ring-purple-500 focus:border-transparent border-default"
         :placeholder="$t('tickets.form.descripcionPlaceholder')"
       />
       <p v-if="(errors as any).descripcion" class="text-sm text-red-600 mt-1">{{ formatError((errors as any).descripcion) }}</p>
@@ -25,7 +25,7 @@
 
     <!-- Tipo -->
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('tickets.form.type') }}</label>
+      <label class="block text-sm font-medium text-main mb-2">{{ $t('tickets.form.type') }}</label>
       <select
         v-model="formData.type"
         :disabled="typeOptions.length === 0"

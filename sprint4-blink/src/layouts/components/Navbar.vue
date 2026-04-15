@@ -37,12 +37,12 @@ const userInitials = computed(() => {
 </script>
 
 <template>
-    <nav class="sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200 px-3 py-3 sm:px-6">
+    <nav class="sticky top-0 z-10 bg-surface shadow-sm border-b border-default px-3 py-3 sm:px-6">
         <div class="flex items-center justify-between gap-3">
             <!-- Menu button & Title -->
             <div class="flex min-w-0 items-center gap-2 sm:gap-4">
                 <button v-if="showMenuButton" @click="handleMenuClick"
-                    class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                    class="p-2 text-muted hover:text-main hover:bg-surface-muted rounded-md transition-colors"
                     :aria-label="t('nav.menu')">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -50,7 +50,7 @@ const userInitials = computed(() => {
                     </svg>
                 </button>
 
-                <h1 class="truncate text-base font-medium text-gray-900 sm:text-xl">
+                <h1 class="truncate text-base font-medium text-main sm:text-xl">
                     {{ title }}
                 </h1>
             </div>
@@ -61,12 +61,12 @@ const userInitials = computed(() => {
                 <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
                     <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
                 </div>
-                <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-md flex-shrink-0">
-                    <span class="text-sm font-bold text-white">{{ userInitials }}</span>
+                <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-surface-inverse flex items-center justify-center shadow-md flex-shrink-0">
+                    <span class="text-sm font-bold text-inverse">{{ userInitials }}</span>
                 </div>
                 <!-- User name -->
                 <div class="flex flex-col">
-                    <span class="text-base font-bold text-gray-900">
+                    <span class="text-base font-bold text-main">
                         {{ user?.name }}
                     </span>
                 </div>

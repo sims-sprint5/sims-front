@@ -14,7 +14,7 @@
 
       <div>
         <div class="w-full">
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label class="block text-sm font-medium text-main mb-2">
             {{ $t('vehicles.form.status') }}
             <span class="text-red-500">*</span>
           </label>
@@ -24,8 +24,8 @@
             :class="[
               'w-full px-4 py-3 border rounded-lg transition-all',
               'focus:ring-2 focus:ring-purple-500 focus:border-transparent',
-              'disabled:bg-gray-100 disabled:cursor-not-allowed',
-              (errors as any).status ? 'border-red-500' : 'border-gray-300',
+              'disabled:bg-surface-muted disabled:cursor-not-allowed',
+              (errors as any).status ? 'border-red-500' : 'border-default',
             ].join(' ')"
             required
           >

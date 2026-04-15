@@ -4,19 +4,19 @@
     <div class="border-b pb-4 mb-4">
       <div class="flex items-start justify-between gap-3">
         <div class="flex-1 min-w-0">
-          <h4 class="text-lg font-semibold text-gray-900 truncate">{{ ticket.asunto }}</h4>
-          <p class="text-sm text-gray-500 mt-0.5">{{ formatDate(ticket.created_at) }}</p>
+          <h4 class="text-lg font-semibold text-main truncate">{{ ticket.asunto }}</h4>
+          <p class="text-sm text-muted mt-0.5">{{ formatDate(ticket.created_at) }}</p>
         </div>
         <span class="shrink-0 inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full" :class="getEstadoClass(ticket.estado)">
           {{ ticket.estado ? t(`tickets.estados.${ticket.estado}`) : t('tickets.estados.pendiente') }}
         </span>
       </div>
-      <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ ticket.descripcion }}</p>
+      <p class="text-sm text-muted mt-2 leading-relaxed">{{ ticket.descripcion }}</p>
     </div>
 
     <!-- Àrea de missatges -->
     <div class="flex-1 overflow-y-auto space-y-4 mb-4 px-1" ref="messagesContainer">
-      <div v-if="!messages || messages.length === 0" class="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
+      <div v-if="!messages || messages.length === 0" class="flex flex-col items-center justify-center h-full text-muted gap-2">
         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
@@ -42,13 +42,13 @@
             :class="[
               'rounded-2xl px-4 py-2.5 shadow-sm',
               isOwnMessage(message)
-                ? 'bg-blue-600 text-white rounded-tr-sm'
-                : 'bg-white border border-purple-200 text-gray-900 rounded-tl-sm'
+                ? 'bg-primary text-inverse rounded-tr-sm'
+                : 'bg-surface border border-purple-200 text-main rounded-tl-sm'
             ]"
           >
             <p class="text-sm whitespace-pre-wrap leading-relaxed">{{ message.mensaje }}</p>
           </div>
-          <p class="text-xs mt-1 px-1 text-gray-400">
+          <p class="text-xs mt-1 px-1 text-muted">
             {{ formatDate(message.created_at) }}
           </p>
         </div>
@@ -68,7 +68,7 @@
         <textarea
           v-model="newMessage"
           rows="3"
-          class="w-full px-4 py-3 border border-gray-300 rounded-xl transition-all focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm"
+          class="w-full px-4 py-3 border border-default rounded-xl transition-all focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm"
           :placeholder="$t('tickets.chat.messagePlaceholder')"
           :disabled="loading"
         />

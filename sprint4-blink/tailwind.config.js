@@ -12,7 +12,7 @@ export default {
       },
       colors: {
         base: {
-          DEFAULT: 'rgb(var(--color-bg-base-dark) / <alpha-value>)',
+          DEFAULT: 'rgb(var(--color-bg-base) / <alpha-value>)',
           dark: 'rgb(var(--color-bg-base-dark) / <alpha-value>)',
         },
         surface: {

@@ -12,7 +12,7 @@ withDefaults(
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+  <div class="min-h-screen flex items-center justify-center px-4 relative overflow-hidden dark">
     <video 
       autoplay 
       loop 
@@ -23,7 +23,7 @@ withDefaults(
       <source :src="backgroundVideo" type="video/mp4">
     </video>
 
-    <div class="absolute inset-0 bg-white/5"></div>
+    <div class="absolute inset-0 bg-surface/5"></div>
     
     <!-- Contenido -->
     <div :class="['w-full relative z-10', containerClass]">

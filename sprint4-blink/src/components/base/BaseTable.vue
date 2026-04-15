@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto bg-white rounded-lg shadow">
+  <div class="overflow-x-auto bg-surface rounded-lg shadow">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-base-dark">
         <tr>
@@ -7,25 +7,25 @@
             v-for="column in columns"
             :key="column.key"
             scope="col"
-            class="px-6 py-3 text-xs font-medium text-inverse uppercase tracking-wider"
+            class="px-6 py-3 text-xs font-medium text-main uppercase tracking-wider"
             :class="column.align === 'right' ? 'text-right' : column.align === 'center' ? 'text-center' : 'text-left'"
           >
             {{ column.label }}
           </th>
         </tr>
       </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
+      <tbody class="bg-surface divide-y divide-gray-200">
         <tr v-if="loading">
-          <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-gray-500">
+          <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-muted">
             {{ resolvedLoadingText }}
           </td>
         </tr>
         <tr v-else-if="data.length === 0">
-          <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-gray-500">
+          <td :colspan="columns.length" class="px-6 py-4 text-center text-sm text-muted">
             {{ resolvedEmptyText }}
           </td>
         </tr>
-        <tr v-else v-for="(item, index) in paginatedData" :key="getItemKey(item, index)" class="hover:bg-gray-50">
+        <tr v-else v-for="(item, index) in paginatedData" :key="getItemKey(item, index)" class="hover:bg-base-dark">
           <td
             v-for="column in columns"
             :key="column.key"

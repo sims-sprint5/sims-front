@@ -2,7 +2,7 @@
   <BaseTable :columns="columns" :data="tickets" :loading="loading" :loadingText="$t('tickets.loading')"
     :emptyText="$t('tickets.empty')">
     <template #cell-asunto="{ value }">
-      <div class="text-sm font-medium text-gray-900">{{ value }}</div>
+      <div class="text-sm font-medium text-main">{{ value }}</div>
     </template>
 
     <template #cell-estado="{ value }">
@@ -19,7 +19,7 @@
       <div class="flex gap-2 justify-end">
         <button
           @click="$emit('view', item)"
-          class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+          class="p-2 bg-success text-inverse hover:bg-success/90 rounded-lg transition-colors"
           :title="$t('common.view')"
         >
           <ChatBubbleLeftRightIcon class="w-5 h-5" />

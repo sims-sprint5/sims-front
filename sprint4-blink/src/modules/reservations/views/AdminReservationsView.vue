@@ -2,12 +2,12 @@
   <AppLayout :title="$t('reservations.title')">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div class="mb-8">
-        <p class="mt-2 text-sm text-gray-600">
+        <p class="mt-2 text-sm text-muted">
           {{ $t('reservations.description') }}
         </p>
       </div>
 
-      <div class="mb-6 rounded-lg bg-white p-4 shadow">
+      <div class="mb-6 rounded-lg bg-surface p-4 shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
             <BaseInput

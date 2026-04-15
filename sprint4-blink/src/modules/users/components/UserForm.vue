@@ -37,12 +37,12 @@
       </div>
 
       <div class="space-y-2">
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="block text-sm font-medium text-main">
           {{ $t('users.form.role') }}
         </label>
         <select
           v-model="formData.role"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          class="w-full px-4 py-3 border border-default rounded-lg transition-all focus:ring-2 focus:ring-purple-500 focus:border-transparent"
           required
         >
           <option value="user">{{ $t('roles.user') }}</option>

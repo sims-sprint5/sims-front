@@ -26,7 +26,7 @@ const toastConfig: Record<string, { icon: string; classes: string }> = {
     <transition-group name="toast" tag="div" class="space-y-2">
       <div v-for="toast in toasts" :key="toast.id" :class="[
         'flex items-center gap-3 p-4 rounded-lg border shadow-lg',
-        toastConfig[toast.type]?.classes || 'bg-gray-50 text-gray-800 border-gray-200'
+        toastConfig[toast.type]?.classes || 'bg-base-dark text-main border-default'
       ]" role="alert">
         <svg v-if="toastConfig[toast.type]" class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" :d="toastConfig[toast.type]?.icon" clip-rule="evenodd" />

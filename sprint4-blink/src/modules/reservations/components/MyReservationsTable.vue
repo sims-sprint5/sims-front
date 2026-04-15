@@ -9,8 +9,8 @@
   >
     <template #cell-vehicle_id="{ item }">
       <div class="space-y-1">
-        <div class="font-medium text-gray-900">{{ item.vehicle_name }}</div>
-        <div class="text-xs text-gray-500">{{ item.license_plate }}</div>
+        <div class="font-medium text-main">{{ item.vehicle_name }}</div>
+        <div class="text-xs text-muted">{{ item.license_plate }}</div>
       </div>
     </template>
 
@@ -44,14 +44,14 @@
       <div v-else-if="value !== undefined && value >= 0" class="text-xs font-semibold">
         <span class="text-blue-600">{{ formatTimeRemaining(value) }}</span>
       </div>
-      <div v-else class="text-xs text-gray-500">—</div>
+      <div v-else class="text-xs text-muted">—</div>
     </template>
 
     <template #cell-actions="{ item }">
       <div class="flex gap-2 justify-end">
         <button
           @click="$emit('view-vehicle', item)"
-          class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+          class="p-2 bg-primary text-inverse hover:bg-primary-hover rounded-lg transition-colors"
           :title="$t('common.view')"
         >
           <EyeIcon class="w-5 h-5" />
@@ -59,7 +59,7 @@
         <button
           v-if="!item.is_expired"
           @click="$emit('edit', item)"
-          class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+          class="p-2 bg-success text-inverse hover:bg-success/90 rounded-lg transition-colors"
           :title="$t('common.edit')"
         >
           <PencilIcon class="w-5 h-5" />
@@ -67,7 +67,7 @@
         <button
           v-if="canCancelReservation(item)"
           @click="$emit('delete', item)"
-          class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+          class="p-2 bg-danger text-inverse hover:bg-danger/90 rounded-lg transition-colors"
           :title="$t('reservations.myReservations.cancel')"
         >
           <TrashIcon class="w-5 h-5" />
@@ -75,7 +75,7 @@
         <button
           v-if="item.can_renew"
           @click="$emit('renew', item)"
-          class="p-2 bg-purple-600 text-white hover:bg-purple-700 rounded-lg transition-colors"
+          class="p-2 bg-purple-600 text-inverse hover:bg-purple-700 rounded-lg transition-colors"
           :title="$t('reservations.table.renew')"
         >
           <ArrowPathIcon class="w-5 h-5" />

@@ -4,39 +4,30 @@
 
 @layer base {
 	:root {
-
-
-		/* SUPPORT COLORS */
-		--color-text-base: 255 255 255;	  	 /* White */
-		--color-text-base2: 53 56 57;	  	 /* Gunmetal */
-		--color-text-muted: 190 191 197; 	 /* Pale Slate */
-
-
 		/* Background / Areas */
-		--color-bg-base: 249 250 251;	     /* gray-50 */
-		--color-bg-base-dark: 53 56 57;	  	 /* Gunmetal */
+		--color-bg-base: 255 255 255;	     /* White */
+		--color-bg-base-dark: 245 245 245;	 /* Off-white for slight contrast */
 		--color-surface: 255 255 255;        /* White */
-		--color-surface-muted: 243 244 246;  /* gray-100 */
-		--color-surface-inverse: 17 24 39;   /* white */
+		--color-surface-muted: 240 240 240;  /* Very Light Gray (for input backgrounds) */
+		--color-surface-inverse: 0 0 0;      /* Black */
 		
 		/* Texts */
-		--color-text-main: 17 24 39;		 /* gray-900 */
-		--color-text-muted: 107 114 128; 	 /* gray-500 */
-		--color-text-inverse: 255 255 255;	 /* white */
+		--color-text-main: 0 0 0;		     /* Black */
+		--color-text-muted: 53 56 57; 	     /* Gunmetal used as legible muted text */
+		--color-text-inverse: 255 255 255;	 /* White */
 
 		/* Edges */
-		--color-border-default: 229 231 235; /* gray-200 */
+		--color-border-default: 190 191 197; /* Pale Slate */
 
-		/* Secondary color */
+		/* Theme Colors */
 		--color-primary: 38 97 156; 		 /* Baltic blue */
 		--color-primary-hover: 28 80 130;    /* Dark Baltic Blue */
 
 		/* Status colors */
-		--color-danger: 220 38 38; 			 /* red-600 */
-		--color-success: 22 163 74; 		 /* green-600 */
-		--color-warning: 250 204 21; 		 /* yellow-400 */
-		--color-info: 37 99 235;			 /* blue-600 */
-
+		--color-danger: 153 51 51; 			 /* Red (#993333) */
+		--color-success: 51 153 51; 		 /* Green (#339933) */
+		--color-warning: 204 153 51; 		 /* Yellow (#CC9933) */
+		--color-info: 38 97 156;			 /* Baltic blue */
 
 		/* Tipography*/
 		--font-main: 'Switzer', system-ui, sans-serif;
@@ -45,32 +36,32 @@
 
 	  /* Dark Mode Variables */
 	.dark {
-		--color-bg-base: 17 24 39;          /* gray-900 */
-		--color-surface: 31 41 55;          /* gray-800 */
-		--color-surface-muted: 55 65 81;    /* gray-700 */
-		--color-surface-inverse: 249 250 251; /* gray-50 */
+		--color-bg-base: 0 0 0;             /* Black for full dark background */
+		--color-bg-base-dark: 53 56 57;     /* Gunmetal for alternate backgrounds */
+		--color-surface: 53 56 57;          /* Gunmetal for Cards and Navbars */
+		--color-surface-muted: 0 0 0;       /* Black for nested inner inputs */
+		--color-surface-inverse: 255 255 255; /* White */
 		
-		--color-text-main: 249 250 251;     /* gray-50 */
-		--color-text-muted: 156 163 175;    /* gray-400 */
-		--color-text-inverse: 17 24 39;     /* gray-900 */
+		--color-text-main: 255 255 255;     /* White text */
+		--color-text-muted: 190 191 197;    /* Pale Slate for muted text */
+		--color-text-inverse: 0 0 0;        /* Black */
 		
-		--color-border-default: 55 65 81;   /* gray-700 */
-		
+		--color-border-default: 0 0 0;      /* Black borders on Gunmetal surfaces */
 	}
 
 
 	body{
-		background-color: rgb(var(--cokir-bg-base));
-		color: rgb(var(--color-text-base));
+		background-color: rgb(var(--color-bg-base));
+		color: rgb(var(--color-text-main));
 		font-family: var(--font-main);
 	}
 
 	h1,h2,h3,h4,h5,h6 {
-		@apply font-bold tracking-tight text-[rgb(var(--color-text-base))];
+		@apply font-bold tracking-tight text-[rgb(var(--color-text-main))];
 	}
 
 	p {
-		@apply text-[rgb(var(--color-text-base))] leading-relaxed;
+		@apply text-[rgb(var(--color-text-main))] leading-relaxed;
 
 	}
 

@@ -21,7 +21,7 @@
       />
 
       <aside
-        class="fixed left-0 top-0 bottom-0 z-50 w-72 bg-gray-900 transition-transform duration-200 ease-in-out lg:hidden"
+        class="fixed left-0 top-0 bottom-0 z-50 w-72 bg-surface-inverse transition-transform duration-200 ease-in-out lg:hidden"
         :class="isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
       >
         <Sidebar :is-collapsed="false" class="h-full" />

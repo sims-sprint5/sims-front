@@ -6,24 +6,24 @@
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
         @click.self="onClose"
       >
-        <div class="bg-white rounded-lg shadow-xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+        <div class="bg-surface rounded-lg shadow-xl w-full mx-4 max-h-[90vh] overflow-y-auto"
              :class="isEditMode ? 'max-w-md' : 'max-w-2xl'">
           <!-- Header -->
-          <div class="p-6 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white z-10">
+          <div class="p-6 border-b border-default flex items-center justify-between sticky top-0 bg-surface z-10">
             <h2 class="text-lg font-semibold">
               {{ isEditMode ? $t('mapa.editZone') : $t('mapa.createZone') }}
             </h2>
-            <button @click="onClose" class="text-gray-400 hover:text-gray-600">✕</button>
+            <button @click="onClose" class="text-muted hover:text-muted">✕</button>
           </div>
 
           <!-- Body -->
           <div class="p-6 space-y-4">
             <!-- Mini map for coordinate selection (only on create) -->
             <div v-if="!isEditMode">
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-main mb-1">
                 {{ $t('mapa.form.clickToSelect') }}
               </label>
-              <div class="w-full h-72 rounded-lg overflow-hidden border border-gray-300 shadow">
+              <div class="w-full h-72 rounded-lg overflow-hidden border border-default shadow">
                 <div ref="miniMapEl" class="w-full h-full"></div>
               </div>
             </div>
@@ -48,12 +48,12 @@
 
             <!-- Type -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-main mb-1">
                 {{ $t('mapa.form.type') }}
               </label>
               <select
                 v-model="form.formData.type"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 @blur="form.errors.type = form.validateType(form.formData.type)"
               >
                   <option
@@ -103,12 +103,12 @@
 
             <!-- Status -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-main mb-1">
                 {{ $t('mapa.form.status') }}
               </label>
               <select
                 v-model="form.formData.status"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="active">{{ $t('mapa.status.active') }}</option>
                 <option value="inactive">{{ $t('mapa.status.inactive') }}</option>

@@ -2,7 +2,7 @@
   <AppLayout :title="$t('reservations.completed.title')">
     <div class="mx-auto max-w-md px-4 py-12 sm:px-6 lg:px-8">
       <!-- Success Card -->
-      <div class="rounded-lg bg-white p-8 shadow">
+      <div class="rounded-lg bg-surface p-8 shadow">
         <!-- Success Icon -->
         <div class="mb-6 flex justify-center">
           <div class="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
@@ -13,14 +13,14 @@
         </div>
 
         <!-- Title -->
-        <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
+        <h1 class="mb-2 text-center text-2xl font-bold text-main">
           {{ $t('reservations.completed.title') }}
         </h1>
 
         <!-- Loading State -->
         <div v-if="loading" class="space-y-4">
-          <div class="h-4 w-full animate-pulse rounded bg-gray-200" />
-          <div class="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+          <div class="h-4 w-full animate-pulse rounded bg-surface-dark" />
+          <div class="h-4 w-3/4 animate-pulse rounded bg-surface-dark" />
         </div>
 
         <!-- Error State -->
@@ -35,22 +35,22 @@
         <div v-else-if="reservation" class="space-y-6">
           <!-- Vehicle Info -->
           <div class="space-y-2 border-b pb-4">
-            <p class="text-sm text-gray-600">{{ $t('reservations.completed.vehicleInfo') }}</p>
-            <h2 class="text-xl font-semibold text-gray-900">{{ reservation.vehicle_name }}</h2>
-            <p class="text-sm text-gray-600">{{ reservation.license_plate }}</p>
+            <p class="text-sm text-muted">{{ $t('reservations.completed.vehicleInfo') }}</p>
+            <h2 class="text-xl font-semibold text-main">{{ reservation.vehicle_name }}</h2>
+            <p class="text-sm text-muted">{{ reservation.license_plate }}</p>
           </div>
 
           <!-- Reservation Times -->
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
-              <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.completed.startDate') }}</p>
-              <p class="text-lg font-semibold text-gray-900">
+              <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.completed.startDate') }}</p>
+              <p class="text-lg font-semibold text-main">
                 {{ formatDateTime(reservation.start_at) }}
               </p>
             </div>
             <div class="space-y-2">
-              <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.completed.endDate') }}</p>
-              <p class="text-lg font-semibold text-gray-900">
+              <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.completed.endDate') }}</p>
+              <p class="text-lg font-semibold text-main">
                 {{ formatDateTime(reservation.end_at) }}
               </p>
             </div>
@@ -75,8 +75,8 @@
           <!-- Renewal Section -->
           <div v-if="reservation.can_renew" class="border-t pt-4 space-y-3">
             <div class="space-y-2">
-              <p class="text-sm font-medium text-gray-900">{{ $t('reservations.completed.extendReservation') }}</p>
-              <p class="text-xs text-gray-600">
+              <p class="text-sm font-medium text-main">{{ $t('reservations.completed.extendReservation') }}</p>
+              <p class="text-xs text-muted">
                 {{ $t('reservations.completed.extendDescription', { minutes: reservation.minutes_remaining || 0 }) }}
               </p>
             </div>
@@ -92,7 +92,7 @@
           </div>
 
           <!-- No Renewal Available -->
-          <div v-else class="rounded-lg bg-blue-50 p-4">
+          <div v-else class="rounded-lg bg-base p-4">
             <p class="text-sm text-blue-800">
               {{ $t('reservations.completed.noRenewal') }}
             </p>

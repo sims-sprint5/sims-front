@@ -71,7 +71,7 @@ const updateValue = (event: Event) => {
 <template>
   <div class="w-full">
     <!-- Label -->
-    <label v-if="label" :for="inputId" class="block text-sm font-medium text-base mb-2">
+    <label v-if="label" :for="inputId" class="block text-sm font-medium text-main mb-2">
       {{ label }}
       <span v-if="required" class="text-danger">*</span>
     </label>

@@ -5,7 +5,7 @@
       <div class="mb-8">
         <div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
           <div>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm text-muted">
               {{ $t('users.description') }}
             </p>
           </div>
@@ -19,7 +19,7 @@
       </div>
 
       <!-- Búsqueda y filtros -->
-      <div class="mb-6 bg-white p-4 rounded-lg shadow">
+      <div class="mb-6 bg-surface p-4 rounded-lg shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
             <BaseInput v-model="searchQuery" type="text" :placeholder="$t('users.searchPlaceholder')"
@@ -48,16 +48,16 @@
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
               <!-- Overlay -->
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeUserModal" />
+              <div class="fixed inset-0 bg-base-dark0 bg-opacity-75 transition-opacity" @click="closeUserModal" />
 
               <!-- Center modal -->
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
               <!-- Modal panel -->
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <h3 class="text-lg leading-6 font-medium text-main mb-4">
                     {{ editingUser ? $t('users.actions.editUser') : $t('users.actions.createNewUser') }}
                   </h3>
                   <UserForm :user="editingUser" :loading="submitting" :errors="formErrors" @submit="handleSubmit"
@@ -82,41 +82,41 @@
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
               <!-- Overlay -->
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeViewModal" />
+              <div class="fixed inset-0 bg-base-dark0 bg-opacity-75 transition-opacity" @click="closeViewModal" />
 
               <!-- Center modal -->
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
               <!-- Modal panel -->
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <h3 class="text-lg leading-6 font-medium text-main mb-4">
                     {{ $t('users.modal.detailsTitle') }}
                   </h3>
                   <div v-if="viewingUser" class="space-y-4">
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.name') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingUser.name }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('dashboard.user.name') }}</p>
+                      <p class="text-base text-main">{{ viewingUser.name }}</p>
                     </div>
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.email') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingUser.email }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('dashboard.user.email') }}</p>
+                      <p class="text-base text-main">{{ viewingUser.email }}</p>
                     </div>
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.phone') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingUser.phone }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('dashboard.user.phone') }}</p>
+                      <p class="text-base text-main">{{ viewingUser.phone }}</p>
                     </div>
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('dashboard.user.role') }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('dashboard.user.role') }}</p>
                       <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full"
                         :class="viewingUser.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'">
                         {{ $t(`roles.${viewingUser.role}`) }}
                       </span>
                     </div>
                     <div>
-                      <p class="text-sm font-medium text-gray-500">{{ $t('users.table.createdAt') }}</p>
-                      <p class="text-base text-gray-900">{{ formatDate(viewingUser.created_at) }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('users.table.createdAt') }}</p>
+                      <p class="text-base text-main">{{ formatDate(viewingUser.created_at) }}</p>
                     </div>
                   </div>
                   <div class="flex justify-end space-x-3 pt-6 border-t mt-6">

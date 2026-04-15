@@ -7,7 +7,7 @@
     :emptyText="$t('vehicles.empty')"
   >
     <template #cell-license_plate="{ value }">
-      <div class="text-sm font-medium text-gray-900">{{ value }}</div>
+      <div class="text-sm font-medium text-main">{{ value }}</div>
     </template>
 
     <template #cell-status="{ value }">
@@ -23,21 +23,21 @@
       <div class="flex gap-2 justify-end">
         <button
           @click="$emit('view', item)"
-          class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+          class="p-2 bg-primary text-inverse hover:bg-primary-hover rounded-lg transition-colors"
           :title="$t('common.view')"
         >
           <EyeIcon class="w-5 h-5" />
         </button>
         <button
           @click="$emit('edit', item)"
-          class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+          class="p-2 bg-success text-inverse hover:bg-success/90 rounded-lg transition-colors"
           :title="$t('common.edit')"
         >
           <PencilIcon class="w-5 h-5" />
         </button>
         <button
           @click="$emit('delete', item)"
-          class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+          class="p-2 bg-danger text-inverse hover:bg-danger/90 rounded-lg transition-colors"
           :title="$t('common.delete')"
         >
           <TrashIcon class="w-5 h-5" />

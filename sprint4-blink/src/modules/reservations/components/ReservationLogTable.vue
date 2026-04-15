@@ -15,8 +15,8 @@
 
     <template #cell-user_id="{ item }">
       <div class="min-w-0">
-        <div class="font-medium text-gray-900">{{ item.user_name }}</div>
-        <div class="text-xs text-gray-500">#{{ item.user_id ?? 'N/A' }}</div>
+        <div class="font-medium text-main">{{ item.user_name }}</div>
+        <div class="text-xs text-muted">#{{ item.user_id ?? 'N/A' }}</div>
       </div>
     </template>
 
@@ -27,7 +27,7 @@
         @click="$emit('select-row', item)"
       >
         <div class="font-medium text-blue-600">{{ item.vehicle_name }}</div>
-        <div class="text-xs text-gray-500">{{ item.license_plate }} · #{{ item.vehicle_id }}</div>
+        <div class="text-xs text-muted">{{ item.license_plate }} · #{{ item.vehicle_id }}</div>
       </button>
     </template>
 
@@ -64,7 +64,7 @@
       <div v-else-if="value !== undefined && value >= 0" class="text-xs font-semibold text-blue-600">
         {{ formatTimeRemaining(value) }}
       </div>
-      <div v-else class="text-xs text-gray-500">—</div>
+      <div v-else class="text-xs text-muted">—</div>
     </template>
 
     <template #cell-renewal="{ item }">
@@ -74,7 +74,7 @@
         </svg>
         <span class="text-xs font-medium text-yellow-700">{{ item.renewal_notice }}</span>
       </div>
-      <div v-else class="text-xs text-gray-500">—</div>
+      <div v-else class="text-xs text-muted">—</div>
     </template>
 
     <template #cell-actions="{ item }">
@@ -82,7 +82,7 @@
         <router-link
           v-if="item.status === 'completed' && item.can_renew"
           :to="{ name: 'ReservationCompleted', params: { id: item.id } }"
-          class="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
+          class="inline-flex items-center gap-1 rounded-md bg-base px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
         >
           <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 1119.414 9.414 1 1 0 11-1.414-1.414 5 5 0 10-9.172-5.814H9a1 1 0 110-2H4a1 1 0 01-1-1V3a1 1 0 011-1z" clip-rule="evenodd" />
@@ -91,7 +91,7 @@
         </router-link>
         <button
           v-else-if="item.can_renew"
-          class="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
+          class="inline-flex items-center gap-1 rounded-md bg-base px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
           @click="$emit('renew', item)"
         >
           <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">

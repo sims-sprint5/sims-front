@@ -8,14 +8,14 @@
         aria-modal="true"
         @click.self="emit('close')"
       >
-        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-          <div class="p-6 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+        <div class="bg-surface rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+          <div class="p-6 border-b border-default flex items-center justify-between sticky top-0 bg-surface">
             <h2 class="text-lg font-semibold">
             {{ $t('vehicles.modal.detailsTitle') }}
             </h2>
             <button
               type="button"
-              class="text-gray-400 hover:text-gray-600"
+              class="text-muted hover:text-muted"
               aria-label="Cerrar"
               @click="emit('close')"
             >
@@ -26,24 +26,24 @@
           <div class="p-6" v-if="car">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.brandLabel') }}</p>
-                <p class="text-base font-bold text-gray-900 mt-1">{{ car.brand || '—' }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.brandLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ car.brand || '—' }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.modelLabel') }}</p>
-                <p class="text-base font-bold text-gray-900 mt-1">{{ car.model || '—' }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.modelLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ car.model || '—' }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.matrixLabel') }}</p>
-                <p class="text-base font-bold text-gray-900 mt-1">{{ car.license_plate || '—' }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.matrixLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ car.license_plate || '—' }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.statusLabel') }}</p>
-                <p class="text-base font-bold text-gray-900 mt-1">{{ statusLabel(car.status) }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.statusLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ statusLabel(car.status) }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $t('reservations.filters.colorsLabel') }}</p>
-                <p class="text-base font-bold text-gray-900 mt-1">{{ colorLabel(car.color) }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.colorsLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ colorLabel(car.color) }}</p>
               </div>
               <!-- Year removed as per UI request -->
             </div>
