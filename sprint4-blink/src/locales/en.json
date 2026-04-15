@@ -146,7 +146,9 @@
   "admin": {
     "stats": {
       "totalVehicles": "Total vehicles",
-      "availableVehicles": "Available vehicles"
+      "availableVehicles": "Available vehicles",
+      "maintenanceVehicles": "Under maintenance",
+      "inactiveVehicles": "Inactive"
     }
   },
   "users": {
