@@ -30,7 +30,7 @@ const inputId = `input-${useId()}`;
 const inputClasses = computed(() => {
   const classes = [
     'w-full px-4 py-3 border rounded-lg transition-all',
-    'focus:ring-2 focus:ring-purple-500 focus:border-transparent',
+    'focus:ring-2 focus:ring-primary focus:border-transparent',
     'disabled:bg-gray-100 disabled:cursor-not-allowed',
   ];
 
@@ -71,7 +71,7 @@ const updateValue = (event: Event) => {
 <template>
   <div class="w-full">
     <!-- Label -->
-    <label v-if="label" :for="inputId" class="block text-sm font-medium text-gray-700 mb-2">
+    <label v-if="label" :for="inputId" class="block text-sm font-medium text-gray-300 mb-2">
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
     </label>

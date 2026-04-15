@@ -9,7 +9,7 @@
 
         <!-- Superadmin Navigation -->
         <li v-if="isSuperadmin" class="w-full">
-          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-400 px-2 mb-2">
+          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-gray-200 px-2 mb-2">
             {{ t('superadmin.title') }}
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
@@ -149,7 +149,7 @@ import {
   UsersIcon,
   BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline'
-import blinkLogo from '@/assets/blink-logo.png'
+import blinkLogo from '@/assets/fleetly_isotip_blanc.svg'
 
 type NavItem = {
   nameKey: string
@@ -191,7 +191,7 @@ const isRegularUser = computed(() => user.value?.role === 'user')
 
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
-  'relative flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900',
+  'relative flex grow flex-col gap-y-5 overflow-y-auto bg-black',
   'transition-[width,padding] duration-200 ease-in-out',
 ])
 
@@ -201,7 +201,7 @@ const logoClasses = computed(() => [
 ])
 
 const navLinkClasses = computed(() => [
-  'text-gray-400 hover:bg-white/5 hover:text-white',
+  'text-paleslate hover:bg-white/5 hover:text-white-200',
   'group relative flex items-center font-semibold rounded-md transition-colors',
   props.isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
 ])
@@ -209,9 +209,9 @@ const navLinkClasses = computed(() => [
 const getItemClasses = (item: NavItem) => {
   const classes = [...navLinkClasses.value]
   if (route.path === item.href) {
-    classes.push('!bg-white/10', '!text-white')
+    classes.push('!bg-white/10', '!text-primary')
   } else {
-    classes.push('!bg-transparent', '!text-gray-400')
+    classes.push('!bg-transparent', '!text-gray-300')
   }
   return classes.join(' ')
 }

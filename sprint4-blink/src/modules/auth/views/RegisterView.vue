@@ -97,12 +97,12 @@ const togglePasswordConfirmationVisibility = () => {
             <AuthLogo />
 
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                <h1 class="text-3xl font-bold mb-2">
                     {{ $t('auth.register.title') }}
                 </h1>
-                <p class="text-gray-600">
+                <p>
                     {{ $t('auth.register.haveAccount') }}
-                    <router-link to="/login" class="text-green-600 hover:text-green-700 font-medium">
+                    <router-link to="/login" class="font-medium">
                         {{ $t('auth.register.goLogin') }}
                     </router-link>
                 </p>

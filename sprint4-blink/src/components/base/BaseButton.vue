@@ -34,13 +34,14 @@ const buttonClasses = computed(() => {
   classes.push(sizeClasses[props.size]);
 
   const variantClasses = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 shadow-md',
-    secondary: 'bg-green-600 hover:bg-green-700 text-white focus:ring-green-500 shadow-md',
+    primary: 'bg-primary hover:bg-primary-hover text-white focus:ring-primary shadow-md',
+    secondary: 'bg-gunmetal hover:opacity-80 text-white focus:ring-gunmetal shadow-md',
     tertiary: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 shadow-md',
     warning: 'bg-yellow-400 hover:bg-yellow-500 text-gray-900 focus:ring-yellow-300 shadow-md',
     info: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 shadow-md',
     muted: 'bg-gray-200 hover:bg-gray-300 text-gray-900 focus:ring-gray-300 shadow-md',
   };
+
   classes.push(variantClasses[props.variant]);
 
   if (props.fullWidth) {

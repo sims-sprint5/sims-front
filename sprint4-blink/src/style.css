@@ -2,6 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	:root {
+
+		/* MAIN COLOR */
+		--COLOR-BG-BASE: 0 0 0;	  /* Black */
+
+		/* SECONDARY COLORS */
+		--color-primary: 38 97 156;		  /* Baltic Blue */
+		--color-primary-hover: 28 80 130; /* Dark Baltic Blue */
+
+		/* SUPPORT COLORS */
+		--color-text-base: 255 255 255;	  /* White */
+		--color-text-base2: 53 56 57;	  /* Gunmetal */
+		--color-text-muted: 190 191 197;  /* Pale Slate */
+
+		/* Tipography*/
+		--font-main: 'Switzer', system-ui, sans-serif;
+	}
+
+	body{
+		background-color: rgb(var(--cokir-bg-base));
+		color: rgb(var(--color-text-base));
+		font-family: var(--font-main);
+	}
+
+	h1,h2,h3,h4,h5,h6 {
+		@apply font-bold tracking-tight text-[rgb(var(--color-text-base))];
+	}
+
+	p {
+		@apply text-[rgb(var(--color-text-muted))] leading-relaxed;
+
+	}
+
+	a {
+		@apply text-[rgb(var(--color-primary))] transition-colors hover:text-[rgb(var(--color-primary-hover))];
+	}
+	input, textarea, select {
+		color: rgb(var(--color-text-base2))
+	}
+}
+
+
+
+
 .hide-userway-widget #userwayAccessibilityIcon,
 .hide-userway-widget #userway-widget,
 .hide-userway-widget .uwy,

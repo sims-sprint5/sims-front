@@ -3,12 +3,9 @@
     <div class="h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] flex flex-col p-3 sm:p-4 overflow-hidden">
       <div class="flex-1 min-h-0 flex gap-3 relative">
         <div class="absolute top-3 right-3 z-[1000]">
-          <button
-            type="button"
-            class="inline-flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            @click="openReservationPanel"
-            :aria-label="t('mapa.openReservationPanel')"
-          >
+          <button type="button"
+            class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium bg-primary hover:bg-primary-hover text-white shadow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            @click="openReservationPanel" :aria-label="t('mapa.openReservationPanel')">
             {{ t('mapa.openReservationPanel') }}
           </button>
         </div>
@@ -17,75 +14,50 @@
           <div ref="mapEl" class="w-full h-full"></div>
         </div>
 
-        <div
-          v-if="isReservationPanelOpen"
-          v-show="!isReservationCreateModalOpen"
-          class="absolute inset-0 z-[1100] bg-black/20 backdrop-blur-[1px] md:hidden"
-          @click="closeReservationPanel"
-          aria-hidden="true"
-        />
+        <div v-if="isReservationPanelOpen" v-show="!isReservationCreateModalOpen"
+          class="absolute inset-0 z-[1100] bg-black/20 backdrop-blur-[1px] md:hidden" @click="closeReservationPanel"
+          aria-hidden="true" />
 
-        <aside
-          v-if="isReservationPanelOpen"
-          v-show="!isReservationCreateModalOpen"
+        <aside v-if="isReservationPanelOpen" v-show="!isReservationCreateModalOpen"
           class="absolute right-3 top-16 bottom-3 z-[1200] w-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] rounded-2xl bg-white/95 shadow-2xl border border-gray-200 overflow-hidden flex flex-col backdrop-blur-sm"
-          :style="reservationPanelStyle"
-          role="complementary"
-          :aria-label="t('mapa.reservationPanelTitle')"
-        >
+          :style="reservationPanelStyle" role="complementary" :aria-label="t('mapa.reservationPanelTitle')">
           <div
             class="hidden sm:block absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-transparent hover:bg-primary-100/50"
-            @mousedown.prevent="startPanelResize"
-            aria-hidden="true"
-          />
+            @mousedown.prevent="startPanelResize" aria-hidden="true" />
 
           <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200/80 bg-gray-50/90">
             <h2 class="text-sm sm:text-base font-semibold text-gray-800">
               {{ t('mapa.reservationPanelTitle') }}
             </h2>
-            <button
-              type="button"
+            <button type="button"
               class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              @click="closeReservationPanel"
-              :aria-label="t('mapa.closeReservationPanel')"
-            >
+              @click="closeReservationPanel" :aria-label="t('mapa.closeReservationPanel')">
               X
             </button>
           </div>
 
           <div class="h-full w-full overflow-auto">
-            <ReservationPage
-              :key="reservationPageKey"
-              :prefill="reservationPrefill"
-              :hideAccessibility="true"
-              @reservationModalVisibility="onReservationModalVisibility"
-            />
+            <ReservationPage :key="reservationPageKey" :prefill="reservationPrefill" :hideAccessibility="true"
+              @reservationModalVisibility="onReservationModalVisibility" />
           </div>
         </aside>
       </div>
     </div>
 
-    <VehicleDetailsModal
-      :open="isModalOpen"
-      :car="selectedCar"
-      @close="closeVehicleModal"
-      @openReservation="openReservationFromVehicle"
-    />
+    <VehicleDetailsModal :open="isModalOpen" :car="selectedCar" @close="closeVehicleModal"
+      @openReservation="openReservationFromVehicle" />
 
     <Teleport to="body">
       <Transition name="modal">
-        <div
-          v-if="showQuickReservationModal"
-          class="fixed inset-0 z-[1400] overflow-y-auto"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="quick-reservation-title"
-        >
+        <div v-if="showQuickReservationModal" class="fixed inset-0 z-[1400] overflow-y-auto" role="dialog"
+          aria-modal="true" aria-labelledby="quick-reservation-title">
           <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeQuickReservationModal" />
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              @click="closeQuickReservationModal" />
             <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
-            <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
+            <div
+              class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
               <div class="px-6 py-5">
                 <h2 id="quick-reservation-title" class="text-xl font-semibold text-gray-900">
                   {{ t('reservations.createTitle') }}
@@ -100,27 +72,25 @@
 
                 <div class="mt-6 space-y-4">
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.startAt') }}</label>
-                    <input
-                      v-model="quickReservationForm.startAt"
-                      type="datetime-local"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.startAt')
+                      }}</label>
+                    <input v-model="quickReservationForm.startAt" type="datetime-local"
+                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
                   </div>
 
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.endAt') }}</label>
-                    <input
-                      v-model="quickReservationForm.endAt"
-                      type="datetime-local"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.endAt')
+                      }}</label>
+                    <input v-model="quickReservationForm.endAt" type="datetime-local"
+                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
                   </div>
                 </div>
               </div>
 
-              <div class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 sm:flex-row sm:justify-end">
-                <BaseButton variant="secondary" :disabled="submittingQuickReservation" @click="closeQuickReservationModal">
+              <div
+                class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 sm:flex-row sm:justify-end">
+                <BaseButton variant="secondary" :disabled="submittingQuickReservation"
+                  @click="closeQuickReservationModal">
                   {{ t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submittingQuickReservation" @click="submitQuickReservation">
@@ -440,7 +410,7 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       [lat, lng],
       {
         title: vehicle.license_plate,
-          icon: vehicleIcon
+        icon: vehicleIcon
       }
     )
 
