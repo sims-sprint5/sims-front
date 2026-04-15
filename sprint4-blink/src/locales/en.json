@@ -143,6 +143,12 @@
     "languageDesc": "Select the application language.",
     "logoutDesc": "Close your current session."
   },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total vehicles",
+      "availableVehicles": "Available vehicles"
+    }
+  },
   "users": {
     "title": "User management",
     "description": "Manage system users",
@@ -292,8 +298,8 @@
     "table": {
       "id": "ID",
       "logType": "Log type",
-      "userId": "User (ID)",
-      "vehicleId": "Vehicle (ID)",
+      "userId": "User",
+      "vehicleId": "Vehicle",
       "status": "Status",
       "startAt": "Start",
       "endAt": "End",
@@ -410,9 +416,13 @@
       "edit": "Edit",
       "cancel": "Cancel",
       "extend": "Extend",
+      "expandReservation": "Extend Reservation",
+      "startDateLocked": "Start date cannot be modified",
       "vehicleColumn": "Vehicle",
       "viewVehicleDetails": "View vehicle details",
       "confirmCancel": "Are you sure you want to cancel this reservation?",
+      "confirmDeleteTitle": "Delete Reservation",
+      "confirmDeleteMessage": "Are you sure you want to delete the reservation for {vehicle}? This action cannot be undone.",
       "checkingAvailability": "Checking availability...",
       "reservationUpdated": "Reservation updated successfully"
     },
@@ -436,6 +446,7 @@
     "buttons": {
       "reserveButton": "Reserve",
       "preReserveButton": "Pre-book",
+      "expandButton": "Expand",
       "cancelButton": "Cancel reservation",
       "confirmButton": "Confirm reservation"
     },

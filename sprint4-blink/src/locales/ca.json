@@ -144,6 +144,12 @@
     "languageDesc": "Selecciona l'idioma de l'aplicació.",
     "logoutDesc": "Tanca la teua sessió actual."
   },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total de vehicles",
+      "availableVehicles": "Vehicles disponibles"
+    }
+  },
   "users": {
     "title": "Gestió d’usuaris",
     "description": "Administra els usuaris del sistema",
@@ -292,8 +298,8 @@
     "table": {
       "id": "ID",
       "logType": "Tipus de log",
-      "userId": "Usuari (ID)",
-      "vehicleId": "Vehicle (ID)",
+      "userId": "Usuari",
+      "vehicleId": "Vehicle",
       "status": "Estat",
       "startAt": "Inici",
       "endAt": "Fi",
@@ -408,9 +414,13 @@
       "edit": "Editar",
       "cancel": "Cancel·lar",
       "extend": "Ampliar",
+      "expandReservation": "Ampliar Reserva",
+      "startDateLocked": "La data d'inici no pot ser modificada",
       "vehicleColumn": "Vehicle",
       "viewVehicleDetails": "Veure detalls del vehicle",
       "confirmCancel": "Estàs segur que vols cancel·lar aquesta reserva?",
+      "confirmDeleteTitle": "Eliminar Reserva",
+      "confirmDeleteMessage": "Estàs segur que vols eliminar la reserva de {vehicle}? Aquesta acció no es pot desfer.",
       "checkingAvailability": "Comprovant disponibilitat...",
       "reservationUpdated": "Reserva actualitzada correctament"
     },
@@ -434,6 +444,7 @@
     "buttons": {
       "reserveButton": "Reservar",
       "preReserveButton": "Prereservar",
+      "expandButton": "Ampliar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
     },

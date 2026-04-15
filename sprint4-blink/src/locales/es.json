@@ -143,6 +143,12 @@
     "languageDesc": "Selecciona el idioma de la aplicación.",
     "logoutDesc": "Cerrar tu sesión actual."
   },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total de vehículos",
+      "availableVehicles": "Vehículos disponibles"
+    }
+  },
   "users": {
     "title": "Gestión de usuarios",
     "description": "Administra los usuarios del sistema",
@@ -291,8 +297,8 @@
     "table": {
       "id": "ID",
       "logType": "Tipo de log",
-      "userId": "Usuario (ID)",
-      "vehicleId": "Vehículo (ID)",
+      "userId": "Usuario",
+      "vehicleId": "Vehículo",
       "status": "Estado",
       "startAt": "Inicio",
       "endAt": "Fin",
@@ -409,9 +415,13 @@
       "edit": "Editar",
       "cancel": "Cancelar",
       "extend": "Extender",
+      "expandReservation": "Extender Reserva",
+      "startDateLocked": "La fecha de inicio no puede ser modificada",
       "vehicleColumn": "Vehículo",
       "viewVehicleDetails": "Ver detalles del vehículo",
       "confirmCancel": "¿Estás seguro de que deseas cancelar esta reserva?",
+      "confirmDeleteTitle": "Eliminar Reserva",
+      "confirmDeleteMessage": "¿Estás seguro de que deseas eliminar la reserva de {vehicle}? Esta acción no se puede deshacer.",
       "checkingAvailability": "Comprobando disponibilidad...",
       "reservationUpdated": "Reserva actualizada correctamente"
     },
@@ -435,6 +445,7 @@
     "buttons": {
       "reserveButton": "Reservar",
       "preReserveButton": "Prereservar",
+      "expandButton": "Aumentar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
     },

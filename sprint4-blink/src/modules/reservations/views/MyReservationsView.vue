@@ -51,7 +51,6 @@
       :show="showVehicleModal"
       :reservation="selectedReservation"
       @close="closeVehicleModal"
-      @edit="openEditModal"
       @cancel="handleCancel"
     />
 

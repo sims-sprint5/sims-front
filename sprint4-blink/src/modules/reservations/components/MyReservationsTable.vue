@@ -57,12 +57,12 @@
           <EyeIcon class="w-5 h-5" />
         </button>
         <button
-          v-if="!item.is_expired"
+          v-if="!item.is_expired && getReservationDisplayStatus(item) !== 'completed'"
           @click="$emit('edit', item)"
-          class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
-          :title="$t('common.edit')"
+          class="px-3 py-2 bg-green-600 text-white text-sm font-medium hover:bg-green-700 rounded-lg transition-colors"
+          :title="$t('reservations.buttons.expandButton')"
         >
-          <PencilIcon class="w-5 h-5" />
+          {{ $t('reservations.buttons.expandButton') }}
         </button>
         <button
           v-if="canCancelReservation(item)"
@@ -72,14 +72,6 @@
         >
           <TrashIcon class="w-5 h-5" />
         </button>
-        <button
-          v-if="item.can_renew"
-          @click="$emit('renew', item)"
-          class="p-2 bg-purple-600 text-white hover:bg-purple-700 rounded-lg transition-colors"
-          :title="$t('reservations.table.renew')"
-        >
-          <ArrowPathIcon class="w-5 h-5" />
-        </button>
       </div>
     </template>
   </BaseTable>
@@ -88,7 +80,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { EyeIcon, PencilIcon, TrashIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
+import { EyeIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 import { BaseTable } from '@/components/base';
 import type { TableColumn } from '@/components/base/BaseTable.vue';

@@ -1,21 +1,21 @@
 <template>
-  <CustomModal :show="show" :title="$t('reservations.myReservations.editReservation')" @close="handleClose">
+  <CustomModal :show="show" :title="$t('reservations.myReservations.expandReservation')" @close="handleClose">
     <form @submit.prevent="handleSave" class="space-y-4">
-      <!-- Start Date -->
+      <!-- Start Date (Read-only) -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
           {{ $t('reservations.myReservations.startDate') }}
         </label>
         <input
-          v-model="formData.start_at"
+          :value="formData.start_at"
           type="datetime-local"
-          required
-          class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          :disabled="isLoading"
+          disabled
+          class="mt-1 block w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-500"
         />
+        <p class="mt-1 text-xs text-gray-500">{{ $t('reservations.myReservations.startDateLocked') }}</p>
       </div>
 
-      <!-- End Date -->
+      <!-- End Date (Editable) -->
       <div>
         <label class="block text-sm font-medium text-gray-700">
           {{ $t('reservations.myReservations.endDate') }}
@@ -24,35 +24,7 @@
           v-model="formData.end_at"
           type="datetime-local"
           required
-          class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          :disabled="isLoading"
-        />
-      </div>
-
-      <!-- Pickup Location -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          {{ $t('reservations.myReservations.pickupLocation') }}
-        </label>
-        <BaseInput
-          v-model="formData.pickup_location"
-          type="text"
-          placeholder="Ej: Calle Principal 123"
-          class="mt-1"
-          :disabled="isLoading"
-        />
-      </div>
-
-      <!-- Dropoff Location -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          {{ $t('reservations.myReservations.dropoffLocation') }}
-        </label>
-        <BaseInput
-          v-model="formData.dropoff_location"
-          type="text"
-          placeholder="Ej: Aeropuerto"
-          class="mt-1"
+          class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
           :disabled="isLoading"
         />
       </div>
@@ -101,7 +73,6 @@
 import { computed, reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { BaseInput } from '@/components/base';
 import BaseButton from '@/components/base/BaseButton.vue';
 import CustomModal from '@/modules/mapa/components/CustomModal.vue';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
@@ -222,10 +193,10 @@ const handleSave = async () => {
 
     // Prepare update data
     const updateData: Partial<ReservationLog> = {
-      start_at: formatToISO(formData.start_at),
+      start_at: props.reservation.start_at,
       end_at: formatToISO(formData.end_at),
-      pickup_location: formData.pickup_location,
-      dropoff_location: formData.dropoff_location,
+      pickup_location: props.reservation.pickup_location,
+      dropoff_location: props.reservation.dropoff_location,
     };
 
     // Call update service (would need to be implemented in service)
