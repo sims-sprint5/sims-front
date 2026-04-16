@@ -166,7 +166,14 @@ function isCarReservedNow(car: Car): boolean {
   const now = new Date()
   const slots = getCalendarSlots(car)
 
-  if (slots.some((slot) => slot.start <= now && now < slot.end)) return true
+  if (slots.some((slot) => slot.end > now)) return true
+
+  const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
+  if (nextReservationEnd && nextReservationEnd > now) return true
+
+  const nextAvailable = parseReservationDate(car.next_available_at)
+  if (nextAvailable && nextAvailable > now) return true
+
   if (!slots.length && statusKey === 'reserved') return true
   return false
 }
@@ -223,6 +230,7 @@ function lastReservationLabel(car: Car): string {
 
 function isCarAvailable(car: Car): boolean {
   const statusKey = String(car.status ?? '').trim().toLowerCase()
+  if (isCarReservedNow(car)) return false
   if (['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
   if (statusKey === 'available' || statusKey === 'active') return true
   if (car.available === false) return false

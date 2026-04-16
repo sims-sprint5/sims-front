@@ -13,7 +13,7 @@ function isReservationBlockingNow(startDate: string, endDate: string, now: Date)
   const start = new Date(startDate);
   const end = new Date(endDate);
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-  return start <= now && now < end;
+  return end > now;
 }
 
 function isVehicleAvailableNow(v: Vehicle): boolean {
@@ -27,15 +27,18 @@ function isVehicleAvailableNow(v: Vehicle): boolean {
     return !blocking;
   }
 
-  if (statusKey === 'maintenance' || statusKey === 'inactive' || statusKey === 'out_of_service' || statusKey === 'rented') {
+  const nextReservationEnd = v.next_reservation?.end_date ? new Date(v.next_reservation.end_date) : null;
+  if (nextReservationEnd && !Number.isNaN(nextReservationEnd.getTime()) && nextReservationEnd > now) {
     return false;
   }
 
-  if (statusKey === 'reserved' && v.next_reservation?.start_date) {
-    const startsAt = new Date(v.next_reservation.start_date);
-    if (!Number.isNaN(startsAt.getTime()) && startsAt > now) {
-      return true;
-    }
+  const nextAvailable = v.next_available_at ? new Date(v.next_available_at) : null;
+  if (nextAvailable && !Number.isNaN(nextAvailable.getTime()) && nextAvailable > now) {
+    return false;
+  }
+
+  if (statusKey === 'maintenance' || statusKey === 'inactive' || statusKey === 'out_of_service' || statusKey === 'rented') {
+    return false;
   }
 
   if (typeof v.available === 'boolean') return v.available;

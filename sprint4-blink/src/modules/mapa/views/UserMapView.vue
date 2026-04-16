@@ -586,13 +586,23 @@ const isVehicleAvailableNow = (vehicle: Vehicle): boolean => {
     return false
   }
 
-  const hasActiveReservation = (vehicle.calendar_reservations ?? []).some((reservation) => {
+  const hasBlockingReservation = (vehicle.calendar_reservations ?? []).some((reservation) => {
     const start = parseDate(reservation.start_date)
     const end = parseDate(reservation.end_date)
     if (!start || !end) return false
-    return start <= now && now < end
+    return end > now
   })
-  if (hasActiveReservation) {
+  if (hasBlockingReservation) {
+    return false
+  }
+
+  const nextReservationEnd = parseDate(vehicle.next_reservation?.end_date)
+  if (nextReservationEnd && nextReservationEnd > now) {
+    return false
+  }
+
+  const nextAvailable = parseDate(vehicle.next_available_at)
+  if (nextAvailable && nextAvailable > now) {
     return false
   }
 
