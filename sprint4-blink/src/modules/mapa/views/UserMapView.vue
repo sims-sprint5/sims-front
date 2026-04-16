@@ -133,7 +133,7 @@
                   {{ t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submittingQuickReservation" @click="submitQuickReservation">
-                  {{ t('reservations.actions.createReservation') }}
+                  Reservar y pagar
                 </BaseButton>
               </div>
             </div>
@@ -157,6 +157,7 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service'
+import { createReservationCheckoutSession } from '@/modules/reservations/services/reservationCheckout.service'
 import { useUser } from '@/modules/auth/composables/useUser'
 import { useToast } from '@/shared/composables/useToast'
 import type { Geofence } from '../types/geofence.types'
@@ -421,81 +422,28 @@ const normalizeDateTime = (value: string): string => {
   return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString()
 }
 
-const isReservationActiveNow = (startAt: string, endAt: string): boolean => {
-  const now = new Date()
-  const start = new Date(startAt)
-  const end = new Date(endAt)
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false
-  return start <= now && now < end
-}
+const buildReservationLocationText = (vehicle: Vehicle | null, fallbackName: string): string => {
+  if (vehicle) {
+    const lat = Number(vehicle.current_latitude)
+    const lng = Number(vehicle.current_longitude)
+    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+      return `Lat ${lat.toFixed(5)}, Lng ${lng.toFixed(5)}`
+    }
 
-const markVehicleAsReserved = (vehicleIdRaw: string, startAt: string, endAt: string) => {
-  const vehicleId = Number(vehicleIdRaw)
-  if (!Number.isFinite(vehicleId)) return
-
-  const target = mapVehicles.value.find((vehicle) => Number(vehicle.vehicle_id ?? vehicle.id) === vehicleId)
-  if (!target) return
-
-  const normalizedStart = normalizeDateTime(startAt)
-  const normalizedEnd = normalizeDateTime(endAt)
-
-  target.status = 'reserved'
-  target.available = false
-  const currentNextAvailable = parseDate(target.next_available_at)
-  const candidateNextAvailable = parseDate(normalizedEnd)
-  if (currentNextAvailable && candidateNextAvailable) {
-    target.next_available_at = currentNextAvailable > candidateNextAvailable
-      ? currentNextAvailable.toISOString()
-      : candidateNextAvailable.toISOString()
-  } else {
-    target.next_available_at = normalizedEnd
-  }
-
-  const currentSlots = Array.isArray(target.calendar_reservations) ? target.calendar_reservations : []
-  const newSlotExists = currentSlots.some((slot) =>
-    String(slot.start_date ?? '').trim() === normalizedStart &&
-    String(slot.end_date ?? '').trim() === normalizedEnd,
-  )
-  if (!newSlotExists) {
-    currentSlots.push({
-      start_date: normalizedStart,
-      end_date: normalizedEnd,
-      user_name: user.value?.name ?? '',
-      status: 'active',
-    })
-  }
-  target.calendar_reservations = currentSlots
-
-  if (isReservationActiveNow(normalizedStart, normalizedEnd)) {
-    target.next_reservation = {
-      start_date: normalizedStart,
-      end_date: normalizedEnd,
-      user_name: user.value?.name ?? '',
+    if (vehicle.license_plate?.trim()) {
+      return `Vehiculo ${vehicle.license_plate.trim()}`
     }
   }
-}
 
-const persistVehicleAsReserved = async (vehicleId: number) => {
-  if (!Number.isFinite(vehicleId) || vehicleId <= 0) return
-  try {
-    await vehicleService.updateVehicle(vehicleId, { status: 'reserved' })
-  } catch (err) {
-    console.warn('Vehicle status update to reserved failed:', err)
+  if (fallbackName.trim()) {
+    return `Vehiculo ${fallbackName.trim()}`
   }
+
+  return 'Ubicacion por confirmar'
 }
 
 const submitQuickReservation = async () => {
   if (!quickReservationPayload.value || submittingQuickReservation.value) return
-
-  const statusKey = String(quickReservationPayload.value.status ?? '').trim().toLowerCase()
-  const availableRaw = String(quickReservationPayload.value.available ?? '').trim().toLowerCase()
-  const canPreReserve = statusKey === 'reserved'
-  const blockedByStatus = ['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)
-  const explicitlyUnavailable = availableRaw === 'false'
-  if (blockedByStatus || (explicitlyUnavailable && !canPreReserve)) {
-    toast.error(t('vehicles.errors.notAvailable'))
-    return
-  }
 
   if (!quickReservationForm.startAt || !quickReservationForm.endAt) {
     toast.error(t('reservations.errors.missingDates'))
@@ -557,24 +505,26 @@ const submitQuickReservation = async () => {
       return
     }
 
-    const reservationStatus = startDate > new Date() ? 'pending' : 'active'
+    try {
+      const pickupLocation = buildReservationLocationText(
+        quickReservationVehicle.value,
+        quickReservationVehicleName.value,
+      )
 
-    await reservationLogService.createLog({
-      user_id: user.value?.id ?? null,
-      user_name: user.value?.name ?? 'N/A',
-      vehicle_id: vehicleId,
-      vehicle_name: quickReservationVehicleName.value || quickReservationPayload.value.licensePlate || 'N/A',
-      license_plate: quickReservationPayload.value.licensePlate || '',
-      status: reservationStatus,
-      start_at: normalizedStart,
-      end_at: normalizedEnd,
-    })
-
-    markVehicleAsReserved(vehicleIdRaw, normalizedStart, normalizedEnd)
-    await persistVehicleAsReserved(vehicleId)
-
-    toast.success(t('reservations.toast.created'))
-    closeQuickReservationModal()
+      const { checkoutUrl } = await createReservationCheckoutSession({
+        vehicleId,
+        startDate: normalizedStart,
+        endDate: normalizedEnd,
+        pickupLocation,
+        dropoffLocation: pickupLocation,
+      })
+      window.location.assign(checkoutUrl)
+    } catch (err: any) {
+      console.error('Checkout start failed (QuickReservation):', err)
+      const backendDetail = err?.responseData?.error || err?.responseData?.message || err?.message
+      toast.error(backendDetail || t('reservations.errors.checkoutFailed'))
+      return
+    }
   } finally {
     submittingQuickReservation.value = false
   }
@@ -628,31 +578,22 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-const selectUserReservedVehicleId = (reservations: ReservationLog[]): number | null => {
-  const now = new Date()
-  const activeNow = reservations.find((r) => {
-    if (r.status !== 'active') return false
-    const start = new Date(r.start_at)
-    const end = new Date(r.end_at)
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false
-    return start <= now && now < end
-  })
-
-  if (activeNow) return Number(activeNow.vehicle_id)
-  return null
-}
-
 const isVehicleAvailableNow = (vehicle: Vehicle): boolean => {
   const statusKey = String(vehicle.status ?? '').trim().toLowerCase()
   const now = new Date()
 
-  if (statusKey === 'maintenance' || statusKey === 'inactive' || statusKey === 'out_of_service' || statusKey === 'rented') {
+  if (statusKey === 'maintenance' || statusKey === 'inactive' || statusKey === 'out_of_service' || statusKey === 'rented' || statusKey === 'reserved') {
     return false
   }
 
-  if (statusKey === 'reserved' && vehicle.next_reservation?.start_date) {
-    const start = new Date(vehicle.next_reservation.start_date)
-    if (!Number.isNaN(start.getTime()) && start > now) return true
+  const hasActiveReservation = (vehicle.calendar_reservations ?? []).some((reservation) => {
+    const start = parseDate(reservation.start_date)
+    const end = parseDate(reservation.end_date)
+    if (!start || !end) return false
+    return start <= now && now < end
+  })
+  if (hasActiveReservation) {
+    return false
   }
 
   if (vehicle.available === true) return true
@@ -661,10 +602,7 @@ const isVehicleAvailableNow = (vehicle: Vehicle): boolean => {
 }
 
 const filterVehiclesForUserMap = (vehicles: Vehicle[], reservations: ReservationLog[]): Vehicle[] => {
-  const reservedVehicleId = selectUserReservedVehicleId(reservations)
-  if (reservedVehicleId !== null && Number.isFinite(reservedVehicleId)) {
-    return vehicles.filter((v) => Number(v.vehicle_id ?? v.id) === reservedVehicleId)
-  }
+  void reservations
 
   return vehicles.filter((v) => isVehicleAvailableNow(v))
 }

@@ -4,13 +4,12 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { BaseButton } from '@/components/base';
-import { useUser } from '@/modules/auth/composables/useUser';
 import FilterSidebar from '@/modules/reservations/components/FilterSidebar.vue';
 import VehicleList from '@/modules/reservations/components/VehicleList.vue';
 import { useReservationVehicles } from '@/modules/reservations/composables/useReservationVehicles';
+import { createReservationCheckoutSession } from '@/modules/reservations/services/reservationCheckout.service';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
-import { vehicleService } from '@/modules/vehicles/services/vehicle.service';
 import { useToast } from '@/shared/composables/useToast';
 import BaseDateTimePicker from '@/components/base/BaseDateTimePicker.vue';
 import BusyDaysCalendar from '@/modules/reservations/components/BusyDaysCalendar.vue';
@@ -20,7 +19,6 @@ const { vehicleCards, loading, filters, facets, resetFilters, error } = useReser
 const { t } = useI18n();
 const route = useRoute();
 const toast = useToast();
-const { user } = useUser();
 
 const props = defineProps<{
   prefill?: Record<string, string | undefined> | null
@@ -75,12 +73,24 @@ function getSuggestedStartForPreReservation(vehicle: ReservationVehicleCardModel
   const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
   if (!slots.length) return defaultStartAt.value;
 
-  const latestEnd = slots
-    .map((slot) => new Date(slot.endDate))
-    .filter((d) => !Number.isNaN(d.getTime()))
-    .sort((a, b) => b.getTime() - a.getTime())[0];
+  const sorted = slots
+    .map((slot) => ({
+      start: new Date(slot.startDate),
+      end: new Date(slot.endDate),
+    }))
+    .filter((slot) => !Number.isNaN(slot.start.getTime()) && !Number.isNaN(slot.end.getTime()))
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
 
-  return latestEnd ? toDateTimeLocalInput(latestEnd) : defaultStartAt.value;
+  let cursor = new Date();
+  for (const slot of sorted) {
+    if (slot.end <= cursor) continue;
+    if (slot.start > cursor) {
+      return toDateTimeLocalInput(cursor);
+    }
+    cursor = slot.end;
+  }
+
+  return toDateTimeLocalInput(cursor);
 }
 
 function getSuggestedEndFromStart(startAt: string): string {
@@ -250,6 +260,31 @@ function normalizeDateTime(value: string): string {
   return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
 }
 
+function getCheckoutErrorMessage(err: any, t: (key: string, params?: Record<string, unknown>) => string): string {
+  const status = Number(err?.status);
+
+  if (status === 401) {
+    return t('reservations.errors.checkoutUnauthorized');
+  }
+
+  if (status === 422) {
+    return t('reservations.errors.notAvailable');
+  }
+
+  if (status === 409) {
+    return t('reservations.errors.checkoutConflict');
+  }
+
+  if (status >= 500) {
+    return t('reservations.errors.checkoutServer');
+  }
+
+  const backendDetail = err?.responseData?.error || err?.responseData?.message || err?.message;
+  if (backendDetail) return String(backendDetail);
+
+  return t('reservations.errors.checkoutFailed');
+}
+
 
 
 function parseDate(value?: string | null): Date | null {
@@ -318,15 +353,6 @@ const endPickerConfig = computed<DatePickerConfig>(() => {
 async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
 
-  const statusKey = String(selectedVehicle.value.category ?? '').trim().toLowerCase();
-  const canPreReserve = statusKey === 'reserved';
-  const blockedByStatus = ['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey);
-  const explicitlyUnavailable = selectedVehicle.value.available === false;
-  if (blockedByStatus || (explicitlyUnavailable && !canPreReserve)) {
-    toast.error('Este coche no está disponible');
-    return;
-  }
-
   if (!reservationForm.startAt || !reservationForm.endAt) {
     toast.error(t('reservations.errors.missingDates'));
     return;
@@ -383,39 +409,26 @@ async function createReservation() {
       return;
     }
 
-    // Si está disponible, proceder a crear la reserva
-    const status = startDate > new Date() ? 'pending' : 'active';
-
     const vehicleId = Number(selectedVehicle.value.id) || 0;
+    const normalizedStart = normalizeDateTime(reservationForm.startAt);
+    const normalizedEnd = normalizeDateTime(reservationForm.endAt);
 
-    await reservationLogService.createLog({
-      user_id: user.value?.id ?? null,
-      user_name: user.value?.name ?? 'N/A',
-      vehicle_id: vehicleId,
-      vehicle_name: selectedVehicle.value.name,
-      license_plate: selectedVehicle.value.licensePlate ?? '',
-      status,
-      start_at: normalizeDateTime(reservationForm.startAt),
-      end_at: normalizeDateTime(reservationForm.endAt),
-    });
-
-    // Refleja el cambio en UI inmediatamente.
-    selectedVehicle.value.category = 'reserved';
-    selectedVehicle.value.status = 'reserved';
-    selectedVehicle.value.available = false;
-    selectedVehicle.value.nextAvailableAt = normalizeDateTime(reservationForm.endAt);
-
-    // Intento best-effort para persistir estado del vehículo (si backend lo permite).
-    if (Number.isFinite(vehicleId) && vehicleId > 0) {
-      try {
-        await vehicleService.updateVehicle(vehicleId, { status: 'reserved' });
-      } catch (err) {
-        console.warn('Vehicle status update to reserved failed:', err);
-      }
+    try {
+      const { checkoutUrl } = await createReservationCheckoutSession({
+        vehicleId,
+        startDate: normalizedStart,
+        endDate: normalizedEnd,
+        pickupLocation: 'Calle X',
+        dropoffLocation: 'Calle Y',
+      });
+      window.location.assign(checkoutUrl);
+    } catch (err: any) {
+      // Log full error for debugging
+      // eslint-disable-next-line no-console
+      console.error('Checkout start failed (ReservationPage):', err);
+      toast.error(getCheckoutErrorMessage(err, t));
+      return;
     }
-
-    toast.success(t('reservations.toast.created'));
-    closeReservationModal();
   } finally {
     submitting.value = false;
   }
@@ -526,7 +539,7 @@ async function createReservation() {
                   {{ $t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submitting" @click="createReservation">
-                  {{ $t('reservations.actions.createReservation') }}
+                  Reservar y pagar
                 </BaseButton>
               </div>
           </div>

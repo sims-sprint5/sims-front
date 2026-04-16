@@ -363,6 +363,10 @@
       "renewal": "Failed to request renewal. Please try again.",
       "notAvailable": "This vehicle is not available for the selected period.",
       "availableFrom": "This vehicle will be available from {date}.",
+      "checkoutFailed": "Could not start payment. Please try again.",
+      "checkoutUnauthorized": "Your session has expired. Sign in again to continue.",
+      "checkoutConflict": "There is a reservation conflict. Check availability and try again.",
+      "checkoutServer": "Server could not start payment. Please try again in a few minutes.",
       "invalidDateRange": "The end date must be after the start date.",
       "checkAvailability": "Failed to check vehicle availability.",
       "updateFailed": "Failed to update the reservation."

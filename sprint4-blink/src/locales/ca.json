@@ -361,6 +361,10 @@
       "renewal": "Error al sol·licitar la renovació. Torna-ho a intentar.",
       "notAvailable": "Aquest vehicle no està disponible per al període seleccionat.",
       "availableFrom": "Aquest vehicle estarà disponible des de {date}.",
+      "checkoutFailed": "No s'ha pogut iniciar el pagament. Torna-ho a provar.",
+      "checkoutUnauthorized": "La teva sessió ha caducat. Inicia sessió de nou per continuar.",
+      "checkoutConflict": "Hi ha un conflicte amb aquesta reserva. Revisa disponibilitat i torna-ho a provar.",
+      "checkoutServer": "El servidor no ha pogut iniciar el pagament. Torna-ho a provar d'aquí uns minuts.",
       "invalidDateRange": "La data de fi ha de ser posterior a la data d'inici.",
       "checkAvailability": "No s'ha pogut verificar la disponibilitat del vehicle.",
       "updateFailed": "No s'ha pogut actualitzar la reserva."
