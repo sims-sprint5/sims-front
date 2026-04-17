@@ -258,7 +258,9 @@
       "gray": "Gris",
       "grey": "Gris",
       "silver": "Plata",
-      "green": "Verd"
+      "green": "Verd",
+      "yellow": "Groc",
+      "groc": "Groc"
     },
     "modal": {
       "deleteTitle": "Eliminar vehicle",
@@ -310,7 +312,8 @@
       "renewal": "Estat de renovació",
       "expired": "Vençut",
       "renew": "Renovar",
-      "actions": "Accions"
+      "actions": "Accions",
+      "deleteReservation": "Eliminar reserva"
     },
     "form": {
       "userId": "ID d’usuari",
@@ -772,8 +775,7 @@
   },
   "actions": {
     "edit": "Editar"
-  },  "errors": {
-    "unexpected": "S’ha produït un error inesperat.",
+  },  "errors": {    "error": "Error",    "unexpected": "S’ha produït un error inesperat.",
     "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
     "requestFailed": "Error en la petició",
     "serverConnection": "Error de connexió amb el servidor",

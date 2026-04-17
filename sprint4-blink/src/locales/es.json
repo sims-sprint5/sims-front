@@ -257,7 +257,9 @@
       "gray": "Gris",
       "grey": "Gris",
       "silver": "Plateado",
-      "green": "Verde"
+      "green": "Verde",
+      "yellow": "Amarillo",
+      "groc": "Amarillo"
     },
     "modal": {
       "deleteTitle": "Eliminar vehículo",
@@ -309,7 +311,8 @@
       "renewal": "Estado de renovación",
       "expired": "Vencido",
       "renew": "Renovar",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "deleteReservation": "Eliminar reserva"
     },
     "form": {
       "userId": "ID de usuario",
@@ -776,6 +779,7 @@
     "edit": "Editar"
   },
   "errors": {
+    "error": "Error",
     "unexpected": "Ha ocurrido un error inesperado.",
     "invalidLoginResponse": "Respuesta de login inválida: falta token.",
     "requestFailed": "Error en la petición",

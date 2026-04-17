@@ -139,27 +139,15 @@ function closeEditModal() {
   editingReservation.value = null;
 }
 
-async function handleSaveEdit(updatedData: any) {
+async function handleSaveEdit(_updatedData?: any) {
   if (!editingReservation.value) return;
 
   try {
     loading.value = true;
-    await reservationLogService.createLog({
-      user_id: editingReservation.value.user_id,
-      user_name: editingReservation.value.user_name,
-      vehicle_id: editingReservation.value.vehicle_id,
-      vehicle_name: editingReservation.value.vehicle_name,
-      license_plate: editingReservation.value.license_plate,
-      status: editingReservation.value.status as any,
-      start_at: updatedData.start_at,
-      end_at: updatedData.end_at,
-      pickup_location: updatedData.pickup_location,
-      dropoff_location: updatedData.dropoff_location,
-    });
-
+    // Simply reload reservations since the edit modal already called the API
+    await loadReservations();
     toast.success(t('reservations.toast.updated'));
     closeEditModal();
-    await loadReservations();
   } catch (err: any) {
     toast.error(err?.message || t('reservations.errors.save'));
   } finally {

@@ -258,7 +258,9 @@
       "gray": "Gray",
       "grey": "Grey",
       "silver": "Silver",
-      "green": "Green"
+      "green": "Green",
+      "yellow": "Yellow",
+      "groc": "Yellow"
     },
     "modal": {
       "deleteTitle": "Delete vehicle",
@@ -310,7 +312,8 @@
       "renewal": "Renewal status",
       "expired": "Expired",
       "renew": "Renew",
-      "actions": "Actions"
+      "actions": "Actions",
+      "deleteReservation": "Delete reservation"
     },
     "form": {
       "userId": "User ID",
@@ -777,6 +780,7 @@
     "edit": "Edit"
   },
   "errors": {
+    "error": "Error",
     "unexpected": "An unexpected error occurred.",
     "invalidLoginResponse": "Invalid login response: missing token.",
     "requestFailed": "Request failed",

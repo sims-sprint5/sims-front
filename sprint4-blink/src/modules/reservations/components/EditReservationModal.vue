@@ -92,7 +92,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { error, success } = useToast();
+const { error } = useToast();
 
 const isLoading = ref(false);
 const errorMessage = ref('');
@@ -109,9 +109,18 @@ const formatToLocal = (isoDate: string): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-// Convert datetime-local back to ISO
+// Convert datetime-local back to ISO format para enviar al backend
+// Backend espera: 2026-04-26T18:00:00 (sin milisegundos ni Z)
 const formatToISO = (localDate: string): string => {
-  return new Date(localDate).toISOString();
+  if (!localDate) return '';
+  const date = new Date(localDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
 
 const formData = reactive({
@@ -173,8 +182,9 @@ const handleSave = async () => {
       try {
         const availabilityResult = await reservationLogService.checkAvailability(
           props.reservation.vehicle_id,
-          formData.start_at,
-          formData.end_at
+          formatToISO(formData.start_at),
+          formatToISO(formData.end_at),
+          props.reservation.id
         );
 
         if (!availabilityResult.available) {
@@ -192,19 +202,25 @@ const handleSave = async () => {
     }
 
     // Prepare update data
-    const updateData: Partial<ReservationLog> = {
-      start_at: props.reservation.start_at,
-      end_at: formatToISO(formData.end_at),
-      pickup_location: props.reservation.pickup_location,
-      dropoff_location: props.reservation.dropoff_location,
-    };
+    const isoEndDate = formatToISO(formData.end_at);
 
-    // Call update service (would need to be implemented in service)
-    // For now, emit save event and let parent handle it
-    emit('save', updateData);
-
-    success(t('reservations.myReservations.reservationUpdated'));
-    handleClose();
+    // Call update API
+    try {
+      await reservationLogService.updateReservation(props.reservation.id, isoEndDate);
+      emit('save', {
+        start_at: props.reservation.start_at,
+        end_at: isoEndDate,
+        pickup_location: props.reservation.pickup_location,
+        dropoff_location: props.reservation.dropoff_location,
+      });
+      handleClose();
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.message || err?.message || t('reservations.errors.updateFailed');
+      errorMessage.value = errorMsg;
+      error(errorMsg);
+      isLoading.value = false;
+      return;
+    }
   } catch (err) {
     console.error('Error saving reservation:', err);
     errorMessage.value = t('reservations.errors.updateFailed');

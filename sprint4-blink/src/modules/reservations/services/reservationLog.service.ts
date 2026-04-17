@@ -100,12 +100,24 @@ export const reservationLogService = {
     vehicleId: number,
     startDate: string,
     endDate: string,
+    excludeReservationId?: number,
   ): Promise<AvailabilityCheckResponse> {
-    const query = buildQuery({
+    // startDate y endDate vienen en formato: 2026-04-17T13:11:00
+    // Los convertimos a ISO 8601 con Z para query params
+    const startISO = `${startDate}.000Z`;
+    const endISO = `${endDate}.000Z`;
+    
+    const queryParams: Record<string, any> = {
       vehicle_id: vehicleId,
-      start_date: startDate,
-      end_date: endDate,
-    });
+      start_date: startISO,
+      end_date: endISO,
+    };
+    
+    if (excludeReservationId) {
+      queryParams.exclude_reservation_id = excludeReservationId;
+    }
+    
+    const query = buildQuery(queryParams);
     const raw = await apiClient.get<any>(`/v1/reservations/check-availability${query}`);
     return {
       available: Boolean(raw?.available ?? false),
@@ -147,6 +159,14 @@ export const reservationLogService = {
       message: raw?.message ?? 'Reservation deleted successfully',
       vehicle_id: toNumber(raw?.vehicle_id, 0),
     };
+  },
+
+  async updateReservation(reservationId: number, endDate: string): Promise<ReservationLog> {
+    const payload = {
+      end_date: endDate, // Formato esperado: 2026-04-26T18:00:00
+    };
+    const raw = await apiClient.patch<any>(`/v1/reservations/${reservationId}`, payload);
+    return normalizeLog(raw?.data ?? raw);
   },
 };
 
