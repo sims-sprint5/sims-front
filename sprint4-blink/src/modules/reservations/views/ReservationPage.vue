@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, nextTick, onBeforeUnmount } from 'vue';
+import { computed, reactive, ref, watch, nextTick, onBeforeUnmount, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
@@ -10,12 +10,18 @@ import { useReservationVehicles } from '@/modules/reservations/composables/useRe
 import { createReservationCheckoutSession } from '@/modules/reservations/services/reservationCheckout.service';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
+import { getPendingReservationCheckout, savePendingReservationCheckout } from '@/modules/reservations/utils/checkoutStorage';
+import {
+  getReservationDebugEventName,
+  getReservationDebugSnapshot,
+  isReservationDebugEnabled,
+} from '@/modules/reservations/utils/reservationDebug';
 import { useToast } from '@/shared/composables/useToast';
 import BaseDateTimePicker from '@/components/base/BaseDateTimePicker.vue';
 import BusyDaysCalendar from '@/modules/reservations/components/BusyDaysCalendar.vue';
 import '@/styles/flatpickr.css';
 
-const { vehicleCards, loading, filters, facets, resetFilters, error } = useReservationVehicles();
+const { vehicleCards, loading, filters, facets, resetFilters, error, reloadVehicles } = useReservationVehicles();
 const { t } = useI18n();
 const route = useRoute();
 const toast = useToast();
@@ -32,6 +38,9 @@ const emit = defineEmits<{
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
 const submitting = ref(false);
+let autoRefreshTimer: number | null = null;
+const debugEnabled = ref(false);
+const debugEntries = ref<any[]>([]);
 const fromMap = computed(() => route.query.fromMap === 'true');
 const reservationForm = reactive({
   startAt: '',
@@ -46,6 +55,25 @@ type DatePickerConfig = {
   disable?: Array<{ from: Date; to: Date }>;
   minDate?: Date;
 };
+
+const debugDump = computed(() =>
+  JSON.stringify(
+    {
+      pendingCheckout: getPendingReservationCheckout(),
+      selectedVehicleId: selectedVehicle.value?.id ?? null,
+      selectedVehicleSlots: selectedVehicle.value?.calendarReservations?.length ?? 0,
+      vehicleCardsCount: vehicleCards.value.length,
+      lastEntries: debugEntries.value.slice(-8),
+    },
+    null,
+    2,
+  ),
+);
+
+function refreshDebugEntries() {
+  debugEntries.value = getReservationDebugSnapshot();
+  void debugDump.value;
+}
 
 function toDateTimeLocalInput(value: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -207,7 +235,54 @@ watch(
 );
 
 onBeforeUnmount(() => {
+  if (autoRefreshTimer) {
+    window.clearInterval(autoRefreshTimer);
+    autoRefreshTimer = null;
+  }
+
+  window.removeEventListener('focus', handleWindowFocus);
+  document.removeEventListener('visibilitychange', handleVisibilityChange);
+  if (debugEnabled.value) {
+    window.removeEventListener(getReservationDebugEventName(), refreshDebugEntries);
+  }
   document.body.classList.remove(hideAccessibilityClass);
+});
+
+async function refreshAfterCheckout(): Promise<void> {
+  const pending = getPendingReservationCheckout();
+  if (!pending) return;
+
+  try {
+    await reloadVehicles();
+  } catch {
+    // Ignore transient refresh errors.
+  }
+}
+
+function handleWindowFocus() {
+  void refreshAfterCheckout();
+}
+
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    void refreshAfterCheckout();
+  }
+}
+
+onMounted(() => {
+  debugEnabled.value = isReservationDebugEnabled();
+  if (debugEnabled.value) {
+    refreshDebugEntries();
+    window.addEventListener(getReservationDebugEventName(), refreshDebugEntries);
+  }
+
+  void refreshAfterCheckout();
+  window.addEventListener('focus', handleWindowFocus);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  autoRefreshTimer = window.setInterval(() => {
+    void refreshAfterCheckout();
+  }, 4000);
 });
 
 watch(
@@ -414,13 +489,22 @@ async function createReservation() {
     const normalizedEnd = normalizeDateTime(reservationForm.endAt);
 
     try {
-      const { checkoutUrl } = await createReservationCheckoutSession({
+      const { checkoutUrl, stripeSessionId } = await createReservationCheckoutSession({
         vehicleId,
         startDate: normalizedStart,
         endDate: normalizedEnd,
         pickupLocation: 'Calle X',
         dropoffLocation: 'Calle Y',
       });
+
+      savePendingReservationCheckout({
+        vehicleId,
+        startDate: normalizedStart,
+        endDate: normalizedEnd,
+        stripeSessionId,
+        createdAt: new Date().toISOString(),
+      });
+
       window.location.assign(checkoutUrl);
     } catch (err: any) {
       // Log full error for debugging
@@ -468,6 +552,17 @@ async function createReservation() {
 
         <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {{ error }}
+        </div>
+
+        <div v-if="debugEnabled" class="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
+          <div class="mb-2 flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-amber-900">Reservation Debug Mode</h2>
+            <span class="text-xs text-amber-700">Activo via ?debugReservations=1</span>
+          </div>
+          <p class="mb-2 text-xs text-amber-800">
+            Muestra respuestas crudas/normalizadas de reservas y calendario para diagnostico.
+          </p>
+          <pre class="max-h-80 overflow-auto rounded bg-white p-3 text-[11px] leading-4 text-gray-800">{{ debugDump }}</pre>
         </div>
 
         <VehicleList :vehicles="vehicleCards" :loading="loading" @reserve="openReservationModal">

@@ -128,6 +128,7 @@ import { BaseButton } from '@/components/base';
 import ReservationRenewalModal from '@/modules/reservations/components/ReservationRenewalModal.vue';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationLog, RenewalIntentResponse } from '@/modules/reservations/types/reservationLog.types';
+import { clearPendingReservationCheckout, getPendingReservationCheckout } from '@/modules/reservations/utils/checkoutStorage';
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
 import { useToast } from '@/shared/composables/useToast';
 
@@ -137,23 +138,82 @@ const { t } = useI18n();
 const toast = useToast();
 const { formatDateTime } = useDateFormatter();
 
-const reservationId = Number(route.params.id);
 const reservation = ref<ReservationLog | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const renewalLoading = ref(false);
 const renewalData = ref<RenewalIntentResponse | null>(null);
 
-onMounted(async () => {
-  if (!reservationId || Number.isNaN(reservationId)) {
-    error.value = t('reservations.errors.invalidId');
-    loading.value = false;
-    return;
+function resolveReservationIdFromRoute(): number | null {
+  const candidates: unknown[] = [
+    route.params.id,
+    route.query.reservation_id,
+    route.query.reservationId,
+    route.query.id,
+  ];
+
+  for (const candidate of candidates) {
+    const value = Array.isArray(candidate) ? candidate[0] : candidate;
+    const parsed = Number(value);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
   }
 
+  return null;
+}
+
+function dateKey(value: string): string {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value.slice(0, 10);
+  return date.toISOString().slice(0, 10);
+}
+
+async function findReservationFromPendingCheckout(): Promise<ReservationLog | null> {
+  const pending = getPendingReservationCheckout();
+  if (!pending) return null;
+
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    let match: ReservationLog | undefined;
+
+    try {
+      const myReservations = await reservationLogService.getMyReservationsPages(5, 200);
+      match = myReservations.find((item) => {
+        const sameVehicle = Number(item.vehicle_id) === Number(pending.vehicleId);
+        const sameStart = dateKey(item.start_at) === dateKey(pending.startDate);
+        const sameEnd = dateKey(item.end_at) === dateKey(pending.endDate);
+        return sameVehicle && sameStart && sameEnd;
+      });
+    } catch {
+      match = undefined;
+    }
+
+    if (match) {
+      clearPendingReservationCheckout();
+      return match;
+    }
+
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, 1200);
+    });
+  }
+
+  return null;
+}
+
+onMounted(async () => {
   try {
     loading.value = true;
-    reservation.value = await reservationLogService.getLogById(reservationId);
+    const reservationId = resolveReservationIdFromRoute();
+
+    if (reservationId) {
+      reservation.value = await reservationLogService.getLogById(reservationId);
+      return;
+    }
+
+    reservation.value = await findReservationFromPendingCheckout();
+    if (!reservation.value) {
+      error.value = t('reservations.errors.load');
+    }
   } catch (err: any) {
     error.value = err?.message || t('reservations.errors.load');
   } finally {

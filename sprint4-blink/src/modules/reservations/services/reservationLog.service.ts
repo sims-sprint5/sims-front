@@ -2,6 +2,8 @@ import { apiClient } from '@/shared/services/api.service';
 import { buildQuery } from '@/shared/utils/queryBuilder';
 import type { CreateReservationLogData, ReservationLog, ReservationStatus, RenewalIntentResponse } from '@/modules/reservations/types/reservationLog.types';
 import type { AvailabilityCheckResponse } from '@/modules/vehicles/types/vehicle.types';
+import { pushReservationDebug } from '@/modules/reservations/utils/reservationDebug';
+import { authService } from '@/modules/auth/services/auth.service';
 
 function toNumber(value: unknown, fallback = 0): number {
   const parsed = Number(value);
@@ -29,12 +31,12 @@ function normalizeLog(raw: any): ReservationLog {
     log_type: 'created' as const,
     user_id: raw?.user_id === null || raw?.user_id === undefined ? null : toNumber(raw.user_id, 0),
     user_name: String(raw?.user_name ?? userData.name ?? userData.user_name ?? '').trim(),
-    vehicle_id: toNumber(raw?.vehicle_id, 0),
+    vehicle_id: toNumber(raw?.vehicle_id ?? vehicleData.id ?? vehicleData.vehicle_id, 0),
     vehicle_name: vehicleName,
     license_plate: String(vehicleData.license_plate ?? raw?.license_plate ?? raw?.plate ?? '').trim(),
     status: normalizeStatus(raw?.status),
-    start_at: String(raw?.start_date ?? raw?.start_at ?? ''),
-    end_at: String(raw?.end_date ?? raw?.end_at ?? ''),
+    start_at: String(raw?.start_date ?? raw?.start_at ?? raw?.startDate ?? ''),
+    end_at: String(raw?.end_date ?? raw?.end_at ?? raw?.endDate ?? ''),
     created_at: String(raw?.created_at ?? new Date().toISOString()),
     pickup_location: raw?.pickup_location ?? undefined,
     dropoff_location: raw?.dropoff_location ?? undefined,
@@ -48,21 +50,114 @@ function normalizeLog(raw: any): ReservationLog {
 }
 
 function normalizeLogs(raw: any): ReservationLog[] {
-  const arr = Array.isArray(raw) ? raw : Array.isArray(raw?.data) ? raw.data : [];
-  return arr.map(normalizeLog);
+  if (Array.isArray(raw)) {
+    return raw.map(normalizeLog);
+  }
+
+  const candidates: unknown[] = [
+    raw?.data,
+    raw?.data?.data,
+    raw?.rows,
+    raw?.items,
+    raw?.results,
+    raw?.reservations,
+  ];
+
+  const firstArray = candidates.find((value) => Array.isArray(value));
+  if (Array.isArray(firstArray)) {
+    return firstArray.map(normalizeLog);
+  }
+
+  return [];
+}
+
+async function fetchReservationsListRaw(page: number, perPage: number): Promise<any> {
+  const query = buildQuery({ page, per_page: perPage });
+
+  try {
+    const raw = await apiClient.get<any>(`/v1/reservations${query}`);
+    pushReservationDebug('reservations.fetch.primary', { page, perPage, raw });
+    return raw;
+  } catch (error: any) {
+    const userId = Number(authService.getUser()?.id ?? 0);
+    const shouldFallback = Number.isFinite(userId) && userId > 0;
+
+    pushReservationDebug('reservations.fetch.primary.error', {
+      page,
+      perPage,
+      status: Number(error?.status ?? 0),
+      message: error?.message,
+      userId,
+    });
+
+    if (!shouldFallback) {
+      throw error;
+    }
+
+    const fallbackRaw = await apiClient.get<any>(`/v1/reservations/user/${userId}${query}`);
+    pushReservationDebug('reservations.fetch.fallback.user', { page, perPage, userId, fallbackRaw });
+    return fallbackRaw;
+  }
 }
 
 export const reservationLogService = {
   async getLogs(page: number = 1, perPage: number = 200): Promise<ReservationLog[]> {
-    const query = buildQuery({ page, per_page: perPage });
-    const raw = await apiClient.get<any>(`/v1/reservations${query}`);
+    const raw = await fetchReservationsListRaw(page, perPage);
     return normalizeLogs(raw);
   },
 
   async getMyReservations(page: number = 1, perPage: number = 50): Promise<ReservationLog[]> {
-    const query = buildQuery({ page, per_page: perPage });
-    const raw = await apiClient.get<any>(`/v1/reservations${query}`);
-    return normalizeLogs(raw);
+    const raw = await fetchReservationsListRaw(page, perPage);
+    const normalized = normalizeLogs(raw);
+
+    pushReservationDebug('reservations.getMyReservations', {
+      page,
+      perPage,
+      raw,
+      normalizedCount: normalized.length,
+      normalizedSample: normalized.slice(0, 3),
+    });
+
+    return normalized;
+  },
+
+  async getMyReservationsPages(maxPages: number = 5, perPage: number = 200): Promise<ReservationLog[]> {
+    const all: ReservationLog[] = [];
+    const seen = new Set<number>();
+
+    for (let page = 1; page <= maxPages; page += 1) {
+      const raw = await fetchReservationsListRaw(page, perPage);
+      const current = normalizeLogs(raw);
+
+      pushReservationDebug('reservations.getMyReservationsPages.page', {
+        page,
+        perPage,
+        raw,
+        currentCount: current.length,
+        currentSample: current.slice(0, 2),
+      });
+
+      for (const item of current) {
+        if (!seen.has(item.id)) {
+          seen.add(item.id);
+          all.push(item);
+        }
+      }
+
+      const hasMoreByMeta = Number(raw?.last_page ?? raw?.meta?.last_page ?? 0);
+      if ((hasMoreByMeta > 0 && page >= hasMoreByMeta) || current.length < perPage) {
+        break;
+      }
+    }
+
+    pushReservationDebug('reservations.getMyReservationsPages.result', {
+      maxPages,
+      perPage,
+      dedupedCount: all.length,
+      dedupedSample: all.slice(0, 5),
+    });
+
+    return all;
   },
 
   async getLogById(id: number): Promise<ReservationLog> {

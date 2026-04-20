@@ -1,18 +1,26 @@
 <template>
   <AppLayout :title="$t('reservations.myReservations.title')">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <!-- Header -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">{{ $t('reservations.myReservations.title') }}</h1>
         <p class="mt-2 text-sm text-gray-600">{{ $t('reservations.myReservations.description') }}</p>
       </div>
 
-      <!-- Error -->
       <div v-if="error" class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
         {{ error }}
       </div>
 
-      <!-- Empty state -->
+      <div v-if="debugEnabled" class="mb-6 rounded-lg border border-amber-300 bg-amber-50 p-4">
+        <div class="mb-2 flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-amber-900">Reservation Debug Mode</h2>
+          <span class="text-xs text-amber-700">Activo via ?debugReservations=1</span>
+        </div>
+        <p class="mb-2 text-xs text-amber-800">
+          Revisa payload crudo y normalizado para diagnosticar por que no aparecen reservas.
+        </p>
+        <pre class="max-h-80 overflow-auto rounded bg-white p-3 text-[11px] leading-4 text-gray-800">{{ debugDump }}</pre>
+      </div>
+
       <div v-if="!loading && reservations.length === 0" class="rounded-lg border border-gray-200 bg-white p-12 text-center">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -26,7 +34,6 @@
         </div>
       </div>
 
-      <!-- Table -->
       <div v-if="!loading && reservations.length > 0" class="space-y-4">
         <MyReservationsTable
           :reservations="reservations"
@@ -38,14 +45,12 @@
         />
       </div>
 
-      <!-- Loading -->
       <div v-if="loading" class="space-y-4">
         <div class="h-12 w-full animate-pulse rounded bg-gray-200" />
         <div class="h-12 w-full animate-pulse rounded bg-gray-200" />
       </div>
     </div>
 
-    <!-- Vehicle Detail Modal -->
     <VehicleDetailModal
       v-if="selectedReservation"
       :show="showVehicleModal"
@@ -55,7 +60,6 @@
       @cancel="handleCancel"
     />
 
-    <!-- Edit Reservation Modal -->
     <EditReservationModal
       v-if="editingReservation"
       :show="showEditModal"
@@ -67,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -76,6 +80,12 @@ import VehicleDetailModal from '@/modules/reservations/components/VehicleDetailM
 import EditReservationModal from '@/modules/reservations/components/EditReservationModal.vue';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types';
+import { clearPendingReservationCheckout, getPendingReservationCheckout } from '@/modules/reservations/utils/checkoutStorage';
+import {
+  getReservationDebugEventName,
+  getReservationDebugSnapshot,
+  isReservationDebugEnabled,
+} from '@/modules/reservations/utils/reservationDebug';
 import { useToast } from '@/shared/composables/useToast';
 
 const { t } = useI18n();
@@ -89,26 +99,119 @@ const selectedReservation = ref<ReservationLog | null>(null);
 const showVehicleModal = ref(false);
 const editingReservation = ref<ReservationLog | null>(null);
 const showEditModal = ref(false);
+let retryTimer: number | null = null;
+
+const debugEnabled = ref(false);
+const debugEntries = ref<any[]>([]);
+
+const debugDump = computed(() =>
+  JSON.stringify(
+    {
+      pendingCheckout: getPendingReservationCheckout(),
+      reservationsCount: reservations.value.length,
+      lastEntries: debugEntries.value.slice(-8),
+    },
+    null,
+    2,
+  ),
+);
+
+function refreshDebugEntries() {
+  debugEntries.value = getReservationDebugSnapshot();
+}
 
 onMounted(async () => {
+  debugEnabled.value = isReservationDebugEnabled();
+  if (debugEnabled.value) {
+    refreshDebugEntries();
+    window.addEventListener(getReservationDebugEventName(), refreshDebugEntries);
+  }
+
   await loadReservations();
+  startAutoRefreshAfterCheckout();
+  window.addEventListener('focus', handleWindowFocus);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+});
+
+onBeforeUnmount(() => {
+  if (retryTimer) {
+    window.clearInterval(retryTimer);
+    retryTimer = null;
+  }
+
+  window.removeEventListener('focus', handleWindowFocus);
+  document.removeEventListener('visibilitychange', handleVisibilityChange);
+
+  if (debugEnabled.value) {
+    window.removeEventListener(getReservationDebugEventName(), refreshDebugEntries);
+  }
 });
 
 async function loadReservations() {
   try {
     loading.value = true;
     error.value = null;
-    const data = await reservationLogService.getMyReservations();
-    // Ordenar por fecha de creación descendente (más nuevas primero)
+    const data = await reservationLogService.getMyReservationsPages(5, 200);
     reservations.value = data.sort((a, b) => {
       const dateA = new Date(a.created_at).getTime();
       const dateB = new Date(b.created_at).getTime();
       return dateB - dateA;
     });
+
+    const pending = getPendingReservationCheckout();
+    if (pending) {
+      const found = reservations.value.some((item) =>
+        Number(item.vehicle_id) === Number(pending.vehicleId) &&
+        dateKey(item.start_at) === dateKey(pending.startDate) &&
+        dateKey(item.end_at) === dateKey(pending.endDate),
+      );
+      if (found) {
+        clearPendingReservationCheckout();
+      }
+    }
   } catch (err: any) {
     error.value = err?.message || t('reservations.errors.load');
   } finally {
     loading.value = false;
+  }
+}
+
+function dateKey(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value).slice(0, 10);
+  return date.toISOString().slice(0, 10);
+}
+
+function startAutoRefreshAfterCheckout() {
+  if (retryTimer) {
+    window.clearInterval(retryTimer);
+    retryTimer = null;
+  }
+
+  const pending = getPendingReservationCheckout();
+  if (!pending) return;
+
+  let attempts = 0;
+  retryTimer = window.setInterval(async () => {
+    attempts += 1;
+    await loadReservations();
+
+    if (!getPendingReservationCheckout() || attempts >= 8) {
+      if (retryTimer) {
+        window.clearInterval(retryTimer);
+        retryTimer = null;
+      }
+    }
+  }, 1500);
+}
+
+function handleWindowFocus() {
+  void loadReservations();
+}
+
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    void loadReservations();
   }
 }
 
@@ -191,11 +294,10 @@ async function handleCancel(reservation?: ReservationLog) {
 }
 
 function openDeleteModal(reservation: ReservationLog) {
-  handleCancel(reservation);
+  void handleCancel(reservation);
 }
 
 function handleRenew(reservation: ReservationLog) {
-  // Navegar a página de renovación
   window.location.href = `/reservation/${reservation.id}/completed`;
 }
 </script>

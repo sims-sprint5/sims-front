@@ -100,11 +100,7 @@ export function useReservationVehicles() {
   const facets = computed(() => getReservationFacets(vehicles.value));
 
   const filteredVehicles = computed(() => {
-    const statusFiltered = vehicles.value.filter((v) => {
-      const statusKey = (v.status ?? '').trim().toLowerCase();
-      return statusKey === 'available' || statusKey === 'reserved';
-    });
-    return applyReservationFilters(statusFiltered, filters.value);
+    return applyReservationFilters(vehicles.value, filters.value);
   });
 
   const vehicleCards = computed<ReservationVehicleCardModel[]>(() => filteredVehicles.value.map(toCardModel));
@@ -113,8 +109,25 @@ export function useReservationVehicles() {
     loading.value = true;
     error.value = '';
     try {
-      const response = await vehicleService.getVehiclesCalendar(1, 200);
-      vehicles.value = Array.isArray(response?.data) ? response.data : [];
+      const allVehicles: Vehicle[] = [];
+      let page = 1;
+
+      while (true) {
+        const response = await vehicleService.getVehiclesCalendar(page, 200);
+        const current = Array.isArray(response?.data) ? response.data : [];
+        allVehicles.push(...current);
+
+        const lastPage = Number(response?.meta?.last_page ?? 0);
+        if (lastPage > 0) {
+          if (page >= lastPage) break;
+        } else if (current.length < 200) {
+          break;
+        }
+
+        page += 1;
+      }
+
+      vehicles.value = allVehicles;
     } catch (e: any) {
       error.value = translateErrorMessage(e?.message, t('vehicles.errors.load'));
       vehicles.value = [];
@@ -136,5 +149,6 @@ export function useReservationVehicles() {
     loading,
     error,
     resetFilters,
+    reloadVehicles: loadVehicles,
   };
 }
