@@ -127,7 +127,7 @@
           @click="handleLogout"
           :title="isCollapsed ? t('common.logout') : undefined"
           :class="[
-            'text-red-400 hover:bg-red-500/10 hover:text-red-300',
+            'text-danger hover:opacity-80',
             'group relative flex items-center font-semibold rounded-md transition-colors',
             isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
           ]"

@@ -34,12 +34,7 @@
     <template #cell-status="{ value }">
       <span
         class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
-        :class="{
-          'bg-amber-100 text-amber-800': value === 'pending',
-          'bg-emerald-100 text-emerald-800': value === 'active',
-          'bg-blue-100 text-blue-800': value === 'completed',
-          'bg-red-100 text-red-800': value === 'cancelled',
-        }"
+        :class="`bg-status-${value}-bg text-status-${value}-text`"
       >
         {{ $t(`reservations.status.${value}`) }}
       </span>

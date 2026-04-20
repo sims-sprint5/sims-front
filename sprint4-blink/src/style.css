@@ -6,9 +6,9 @@
 	:root {
 		/* Background / Areas */
 		--color-bg-base: 255 255 255;	     /* White */
-		--color-bg-base-dark: 245 247 248;	 /* Light Gray */
+		--color-bg-base-dark: 255 255 255;	 /* White */
 		--color-surface: 255 255 255;        /* White */
-		--color-surface-muted: 235 237 239;  /* Light Gray */
+		--color-surface-muted: 190 191 197;  /* Pale Slate */
 		--color-surface-inverse: 53 56 57;   /* Gunmetal */
 		
 		/* Texts */
@@ -20,15 +20,67 @@
 		--color-border-default: 190 191 197; /* Pale Slate */
 		--color-border-nav: 190 191 197; 	 /* Pale Slate */	
 
+		/* Reservation Status Colors */
+		--color-status-pending-bg: 204 153 51; /* Yellow */
+		--color-status-pending-text: 0 0 0;    /* Black */
+		--color-status-in-progress-bg: 38 97 156; /* Baltic Blue */
+		--color-status-in-progress-text: 255 255 255; /* White */
+		--color-status-active-bg: 51 153 51;   /* Green */
+		--color-status-active-text: 255 255 255; /* White */
+		--color-status-completed-bg: 38 97 156; /* Baltic Blue */
+		--color-status-completed-text: 255 255 255; /* White */
+		--color-status-cancelled-bg: 153 51 51; /* Red */
+		--color-status-cancelled-text: 255 255 255; /* White */
+		--color-status-expired: 153 51 51;     /* Red */
+		--color-status-renew: 204 153 51;      /* Yellow */
+
+		/* Modal / Dialog Colors */
+		--color-modal-danger-bg: 153 51 51;    /* Red */
+		--color-modal-danger-text: 255 255 255;/* White */
+		--color-modal-success-bg: 51 153 51;   /* Green */
+		--color-modal-success-text: 255 255 255;/* White */
+		--color-modal-info-bg: 38 97 156;      /* Baltic Blue */
+		--color-modal-info-text: 255 255 255;  /* White */
+
+		/* Toast Colors */
+		--color-toast-success-bg: 51 153 51;   /* Green */
+		--color-toast-success-text: 255 255 255;/* White */
+		--color-toast-success-border: 51 153 51;/* Green */
+		--color-toast-error-bg: 153 51 51;     /* Red */
+		--color-toast-error-text: 255 255 255; /* White */
+		--color-toast-error-border: 153 51 51; /* Red */
+		--color-toast-warning-bg: 204 153 51;  /* Yellow */
+		--color-toast-warning-text: 0 0 0;     /* Black */
+		--color-toast-warning-border: 204 153 51;/* Yellow */
+
+		/* Vehicle Status Colors */
+		--color-vehicle-available-bg: 38 97 156; /* Baltic Blue */
+		--color-vehicle-available-text: 255 255 255; /* White */
+		--color-vehicle-available-ring: 38 97 156; /* Baltic Blue */
+		--color-vehicle-available-bar: 38 97 156; /* Baltic Blue */
+		--color-vehicle-maintenance-bg: 204 153 51; /* Yellow */
+		--color-vehicle-maintenance-text: 0 0 0; /* Black */
+		--color-vehicle-maintenance-ring: 204 153 51; /* Yellow */
+		--color-vehicle-maintenance-bar: 204 153 51; /* Yellow */
+		--color-vehicle-reserved-bg: 153 51 51; /* Red */
+		--color-vehicle-reserved-text: 255 255 255; /* White */
+		--color-vehicle-reserved-ring: 153 51 51; /* Red */
+		--color-vehicle-reserved-bar: 153 51 51; /* Red */
+
+		/* Input / Form Elements */
+		--color-input-border: 190 191 197; /* Pale Slate */
+		--color-input-focus: 38 97 156; /* Baltic Blue */
+		--color-input-bg: 255 255 255; /* White */
+		--color-divider: 190 191 197; /* Pale Slate */
 
 		/* Theme Colors */
 		--color-primary: 38 97 156; 		 /* Baltic Blue */
-		--color-primary-hover: 28 80 130;    /* Dark Baltic Blue */
+		--color-primary-hover: 38 97 156;    /* Baltic Blue */
 
 		/* Status colors */
-		--color-danger: 153 51 51; 			 /* Red (#993333) */
-		--color-success: 51 153 51; 		 /* Green (#339933) */
-		--color-warning: 204 153 51; 		 /* Yellow (#CC9933) */
+		--color-danger: 153 51 51; 			 /* Red */
+		--color-success: 51 153 51; 		 /* Green */
+		--color-warning: 204 153 51; 		 /* Yellow */
 		--color-info: 38 97 156;			 /* Baltic Blue */
 
 		/* Tipography*/
@@ -40,32 +92,86 @@
 	.dark {
 		/* Background / Areas */
 		--color-bg-base: 0 0 0;             /* Black */
-		--color-bg-base-dark: 25 26 27;     /* Dark Gunmetal */
+		--color-bg-base-dark: 53 56 57;     /* Gunmetal */
 		
 		/* Surfaces */
-		--color-surface: 53 56 57;          /* Gunmetal */
-		--color-surface-muted: 0 0 0;       /* Black */
+		--color-surface: 0 0 0;             /* Black */
+		--color-surface-muted: 53 56 57;    /* Gunmetal */
 		--color-surface-inverse: 255 255 255; /* White */
 		
 		/* Texts */
 		--color-text-main: 255 255 255;     /* White */
 		--color-text-muted: 190 191 197;    /* Pale Slate */
-		--color-text-inverse: 255 255 255;  /* White */
+		--color-text-inverse: 0 0 0;  		/* Black */
 		
 		/* Edges */
 		--color-border-default: 190 191 197; /* Pale Slate */
-		--color-border-nav: 25 26 27;    /* Pale Slate */; 		 /* Gunmetal */	
+		--color-border-nav: 53 56 57;    	 /* Gunmetal */
+
+		/* Reservation Status Colors */
+		--color-status-pending-bg: 204 153 51; /* Yellow */
+		--color-status-pending-text: 0 0 0;    /* Black */
+		--color-status-in-progress-bg: 38 97 156; /* Baltic Blue */
+		--color-status-in-progress-text: 255 255 255; /* White */
+		--color-status-active-bg: 51 153 51;   /* Green */
+		--color-status-active-text: 255 255 255; /* White */
+		--color-status-completed-bg: 38 97 156; /* Baltic Blue */
+		--color-status-completed-text: 255 255 255; /* White */
+		--color-status-cancelled-bg: 153 51 51; /* Red */
+		--color-status-cancelled-text: 255 255 255; /* White */
+		--color-status-expired: 153 51 51;     /* Red */
+		--color-status-renew: 204 153 51;      /* Yellow */
+
+		/* Modal / Dialog Colors */
+		--color-modal-danger-bg: 153 51 51;    /* Red */
+		--color-modal-danger-text: 255 255 255;/* White */
+		--color-modal-success-bg: 51 153 51;   /* Green */
+		--color-modal-success-text: 255 255 255;/* White */
+		--color-modal-info-bg: 38 97 156;      /* Baltic Blue */
+		--color-modal-info-text: 255 255 255;  /* White */
+
+		/* Toast Colors */
+		--color-toast-success-bg: 51 153 51;   /* Green */
+		--color-toast-success-text: 255 255 255;/* White */
+		--color-toast-success-border: 51 153 51;/* Green */
+		--color-toast-error-bg: 153 51 51;     /* Red */
+		--color-toast-error-text: 255 255 255; /* White */
+		--color-toast-error-border: 153 51 51; /* Red */
+		--color-toast-warning-bg: 204 153 51;  /* Yellow */
+		--color-toast-warning-text: 0 0 0;     /* Black */
+		--color-toast-warning-border: 204 153 51;/* Yellow */
+
+		/* Vehicle Status Colors */
+		--color-vehicle-available-bg: 38 97 156; /* Baltic Blue */
+		--color-vehicle-available-text: 255 255 255; /* White */
+		--color-vehicle-available-ring: 38 97 156; /* Baltic Blue */
+		--color-vehicle-available-bar: 38 97 156; /* Baltic Blue */
+		--color-vehicle-maintenance-bg: 204 153 51; /* Yellow */
+		--color-vehicle-maintenance-text: 0 0 0; /* Black */
+		--color-vehicle-maintenance-ring: 204 153 51; /* Yellow */
+		--color-vehicle-maintenance-bar: 204 153 51; /* Yellow */
+		--color-vehicle-reserved-bg: 153 51 51; /* Red */
+		--color-vehicle-reserved-text: 255 255 255; /* White */
+		--color-vehicle-reserved-ring: 153 51 51; /* Red */
+		--color-vehicle-reserved-bar: 153 51 51; /* Red */
+
+		/* Input / Form Elements */
+		--color-input-border: 190 191 197; /* Pale Slate */
+		--color-input-focus: 38 97 156; /* Baltic Blue */
+		--color-input-bg: 53 56 57; /* Gunmetal */
+		--color-divider: 190 191 197; /* Pale Slate */
 
 		/* Theme Colors */
-		--color-primary: 110 168 220;       /* Light Baltic Blue */
-		--color-primary-hover: 140 190 230; /* Lighter Baltic Blue */
+		--color-primary: 38 97 156;       /* Baltic Blue */
+		--color-primary-hover: 38 97 156; /* Baltic Blue */
 
 		/* Status colors */
-		--color-danger: 220 100 100;        /* Light Red */
-		--color-success: 90 200 90;         /* Light Green */
-		--color-warning: 240 190 90;        /* Light Yellow */
-		--color-info: 110 168 220;          /* Light Baltic Blue */
+		--color-danger: 153 51 51;        /* Red */
+		--color-success: 51 153 51;       /* Green */
+		--color-warning: 204 153 51;      /* Yellow */
+		--color-info: 38 97 156;          /* Baltic Blue */
 	}
+
 
 
 	body{

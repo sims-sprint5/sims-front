@@ -44,13 +44,7 @@
         <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.status') }}</p>
         <span
           class="inline-flex rounded-full px-3 py-1 text-xs font-semibold"
-          :class="{
-            'bg-amber-100 text-amber-800': getReservationDisplayStatus(reservation) === 'pending',
-            'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(reservation) === 'in_progress',
-            'bg-emerald-100 text-emerald-800': reservation.status === 'active',
-            'bg-blue-100 text-blue-800': reservation.status === 'completed',
-            'bg-red-100 text-red-800': reservation.status === 'cancelled',
-          }"
+          :class="`bg-status-${getReservationDisplayStatus(reservation)}-bg text-status-${getReservationDisplayStatus(reservation)}-text`"
         >
           {{ $t(`reservations.status.${getReservationDisplayStatus(reservation)}`) }}
         </span>

@@ -39,13 +39,13 @@ function statusLabel(raw: string | undefined): string {
 }
 
 const STATUS_STYLES: Record<string, { badge: string; bar: string }> = {
-  available:      { badge: 'bg-blue-100 text-blue-700 ring-1 ring-blue-300',  bar: 'bg-blue-400' },
-  active:         { badge: 'bg-blue-100   text-blue-700   ring-1 ring-blue-300',       bar: 'bg-blue-400'    },
-  maintenance:    { badge: 'bg-yellow-100 text-yellow-800 ring-1 ring-yellow-300',     bar: 'bg-yellow-400'  },
-  reserved:       { badge: 'bg-red-100    text-red-800    ring-1 ring-red-300',        bar: 'bg-red-400'     },
+  available:      { badge: 'bg-vehicle-available-bg text-vehicle-available-text ring-1 ring-vehicle-available-ring',  bar: 'bg-vehicle-available-bar' },
+  active:         { badge: 'bg-vehicle-available-bg text-vehicle-available-text ring-1 ring-vehicle-available-ring',       bar: 'bg-vehicle-available-bar'    },
+  maintenance:    { badge: 'bg-vehicle-maintenance-bg text-vehicle-maintenance-text ring-1 ring-vehicle-maintenance-ring',     bar: 'bg-vehicle-maintenance-bar'  },
+  reserved:       { badge: 'bg-vehicle-reserved-bg text-vehicle-reserved-text ring-1 ring-vehicle-reserved-ring',        bar: 'bg-vehicle-reserved-bar'     },
   rented:         { badge: 'bg-[rgb(var(--color-bg-base-dark))] text-indigo-700 ring-1 ring-indigo-300',     bar: 'bg-indigo-400'  },
-  inactive:       { badge: 'bg-surface-muted   text-main   ring-1 ring-gray-300',       bar: 'bg-gray-400'    },
-  out_of_service: { badge: 'bg-red-100    text-red-700    ring-1 ring-red-300',        bar: 'bg-red-400'     },
+  inactive:       { badge: 'bg-surface-muted text-main ring-1 ring-default',       bar: 'bg-muted'    },
+  out_of_service: { badge: 'bg-vehicle-reserved-bg text-vehicle-reserved-text ring-1 ring-vehicle-reserved-ring',        bar: 'bg-vehicle-reserved-bar'     },
 };
 
 const statusStyle = computed(() => {

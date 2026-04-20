@@ -153,22 +153,22 @@ defineEmits<{
 const iconBgColor = computed(() => {
   switch (props.type) {
     case 'danger':
-      return 'bg-red-100';
+      return 'bg-modal-danger-bg';
     case 'success':
-      return 'bg-green-100';
+      return 'bg-modal-success-bg';
     default:
-      return 'bg-blue-100';
+      return 'bg-modal-info-bg';
   }
 });
 
 const iconColor = computed(() => {
   switch (props.type) {
     case 'danger':
-      return 'text-red-600';
+      return 'text-modal-danger-text';
     case 'success':
-      return 'text-green-600';
+      return 'text-modal-success-text';
     default:
-      return 'text-blue-600';
+      return 'text-modal-info-text';
   }
 });
 

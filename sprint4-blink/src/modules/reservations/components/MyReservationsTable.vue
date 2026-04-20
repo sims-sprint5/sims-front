@@ -25,24 +25,18 @@
     <template #cell-status="{ item }">
       <span
         class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
-        :class="{
-          'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending',
-          'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
-          'bg-emerald-100 text-emerald-800': item.status === 'active',
-          'bg-blue-100 text-blue-800': item.status === 'completed',
-          'bg-red-100 text-red-800': item.status === 'cancelled',
-        }"
+        :class="`bg-status-${getReservationDisplayStatus(item)}-bg text-status-${getReservationDisplayStatus(item)}-text`"
       >
         {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
       </span>
     </template>
 
     <template #cell-minutes_remaining="{ value, item }">
-      <div v-if="item.is_expired" class="text-xs font-semibold text-red-600">
+      <div v-if="item.is_expired" class="text-xs font-semibold text-status-expired">
         {{ $t('reservations.table.expired') }}
       </div>
       <div v-else-if="value !== undefined && value >= 0" class="text-xs font-semibold">
-        <span class="text-blue-600">{{ formatTimeRemaining(value) }}</span>
+        <span class="text-muted">{{ formatTimeRemaining(value) }}</span>
       </div>
       <div v-else class="text-xs text-muted">—</div>
     </template>
@@ -75,7 +69,7 @@
         <button
           v-if="item.can_renew"
           @click="$emit('renew', item)"
-          class="p-2 bg-purple-600 text-inverse hover:bg-purple-700 rounded-lg transition-colors"
+          class="p-2 bg-status-renew text-inverse hover:opacity-90 rounded-lg transition-colors"
           :title="$t('reservations.table.renew')"
         >
           <ArrowPathIcon class="w-5 h-5" />
