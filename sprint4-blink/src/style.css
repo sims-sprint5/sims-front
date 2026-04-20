@@ -6,7 +6,7 @@
 	:root {
 		/* Background / Areas */
 		--color-bg-base: 255 255 255;	     /* White */
-		--color-bg-base-dark: 255 255 255;	 /* White */
+		--color-bg-base-dark: 190 191 197;	 /* Pale Slate */
 		--color-surface: 255 255 255;        /* White */
 		--color-surface-muted: 190 191 197;  /* Pale Slate */
 		--color-surface-inverse: 53 56 57;   /* Gunmetal */
@@ -92,11 +92,11 @@
 	.dark {
 		/* Background / Areas */
 		--color-bg-base: 0 0 0;             /* Black */
-		--color-bg-base-dark: 53 56 57;     /* Gunmetal */
+		--color-bg-base-dark: 0 0 0;        /* Black */
 		
 		/* Surfaces */
-		--color-surface: 0 0 0;             /* Black */
-		--color-surface-muted: 53 56 57;    /* Gunmetal */
+		--color-surface: 53 56 57;          /* Gunmetal */
+		--color-surface-muted: 0 0 0;       /* Black */
 		--color-surface-inverse: 255 255 255; /* White */
 		
 		/* Texts */
@@ -158,7 +158,7 @@
 		/* Input / Form Elements */
 		--color-input-border: 190 191 197; /* Pale Slate */
 		--color-input-focus: 38 97 156; /* Baltic Blue */
-		--color-input-bg: 53 56 57; /* Gunmetal */
+		--color-input-bg: 0 0 0; /* Black */
 		--color-divider: 190 191 197; /* Pale Slate */
 
 		/* Theme Colors */
