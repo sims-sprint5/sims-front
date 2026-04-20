@@ -10,6 +10,10 @@ export default {
       fontFamily: {
         sans: ['var(--font-main)'],
       },
+      borderColor: {
+        default: 'rgb(var(--color-border-default) / <alpha-value>)',
+        nav: 'rgb(var(--color-border-nav) / <alpha-value>)',
+      },
       colors: {
         base: {
           DEFAULT: 'rgb(var(--color-bg-base) / <alpha-value>)',

@@ -220,7 +220,7 @@ const isRegularUser = computed(() => user.value?.role === 'user')
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
   'dark',
-  'relative flex grow flex-col gap-y-5 overflow-y-auto bg-surface border-r border-default',
+  'relative flex grow flex-col gap-y-5 overflow-y-auto bg-surface border-r border-nav',
   'transition-[width,padding] duration-200 ease-in-out',
 ])
 

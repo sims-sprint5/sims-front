@@ -18,6 +18,8 @@
 
 		/* Edges */
 		--color-border-default: 190 191 197; /* Pale Slate */
+		--color-border-nav: 190 191 197; 	 /* Pale Slate */	
+
 
 		/* Theme Colors */
 		--color-primary: 38 97 156; 		 /* Baltic Blue */
@@ -52,6 +54,7 @@
 		
 		/* Edges */
 		--color-border-default: 190 191 197; /* Pale Slate */
+		--color-border-nav: 25 26 27;    /* Pale Slate */; 		 /* Gunmetal */	
 
 		/* Theme Colors */
 		--color-primary: 110 168 220;       /* Light Baltic Blue */

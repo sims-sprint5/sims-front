@@ -37,7 +37,7 @@ const userInitials = computed(() => {
 </script>
 
 <template>
-    <nav class="sticky top-0 z-10 bg-surface shadow-sm border-b border-default px-3 py-3 sm:px-6">
+    <nav class="sticky top-0 z-10 bg-surface shadow-sm border-b border-nav px-3 py-3 sm:px-6">
         <div class="flex items-center justify-between gap-3">
             <!-- Menu button & Title -->
             <div class="flex min-w-0 items-center gap-2 sm:gap-4">
