@@ -25,12 +25,12 @@
             class="hidden sm:block absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-transparent hover:bg-primary-100/50"
             @mousedown.prevent="startPanelResize" aria-hidden="true" />
 
-          <div class="flex items-center justify-between px-4 py-3 border-b border-default/80 bg-base-dark/90">
-            <h2 class="text-sm sm:text-base font-semibold text-main">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-default/80 bg-base">
+            <h2 class="text-sm sm:text-main font-semibold text-main">
               {{ t('mapa.reservationPanelTitle') }}
             </h2>
             <button type="button"
-              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-md  hover:bg-base-dark text-main focus:outline-none focus:ring-2 focus:ring-primary-500"
               @click="closeReservationPanel" :aria-label="t('mapa.closeReservationPanel')">
               X
             </button>
@@ -52,7 +52,7 @@
         <div v-if="showQuickReservationModal" class="fixed inset-0 z-[1400] overflow-y-auto" role="dialog"
           aria-modal="true" aria-labelledby="quick-reservation-title">
           <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-base-dark0 bg-opacity-75 transition-opacity"
+            <div class="fixed inset-0 bg-base-dark bg-opacity-75 transition-opacity"
               @click="closeQuickReservationModal" />
             <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 

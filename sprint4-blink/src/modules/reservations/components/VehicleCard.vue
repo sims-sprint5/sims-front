@@ -4,11 +4,6 @@ import { useI18n } from 'vue-i18n';
 import { BaseButton } from '@/components/base';
 import { useToast } from '@/shared/composables/useToast';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
-import {
-  IdentificationIcon,
-  SwatchIcon,
-  CalendarIcon,
-} from '@heroicons/vue/24/outline';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'warning' | 'info' | 'muted';
 
@@ -132,20 +127,18 @@ function handleReserve() {
             </div>
 
             <div class="mt-3 flex gap-2.5 overflow-x-auto pb-1 pr-1">
-              <div class="rounded-lg px-2.5 py-2 bg-base border border-blue-100 min-w-[150px] shrink-0">
+              <div class="rounded-lg px-2.5 py-2 bg-base border border-default min-w-[150px] shrink-0">
                 <div class="flex items-center gap-1.5">
-                  <IdentificationIcon class="h-3.5 w-3.5 shrink-0 text-blue-600" />
-                  <span class="font-semibold text-blue-900 text-xs">Matrícula</span>
+                  <span class="font-semibold text-main text-xs">Matrícula</span>
                 </div>
-                <p class="mt-1 text-blue-700 text-sm font-bold truncate">{{ vehicle?.licensePlate ?? '—' }}</p>
+                <p class="mt-1 text-main text-sm font-bold truncate">{{ vehicle?.licensePlate ?? '—' }}</p>
               </div>
 
-              <div class="rounded-lg px-2.5 py-2 bg-pink-50 border border-pink-100 min-w-[150px] shrink-0">
+              <div class="rounded-lg px-2.5 py-2 bg-base border border-default min-w-[150px] shrink-0">
                 <div class="flex items-center gap-1.5">
-                  <SwatchIcon class="h-3.5 w-3.5 shrink-0 text-pink-600" />
-                  <span class="font-semibold text-pink-900 text-xs">Color</span>
+                  <span class="font-semibold text-main text-xs">Color</span>
                 </div>
-                <p class="mt-1 text-pink-700 text-sm font-bold truncate">{{ vehicle?.description ?? '—' }}</p>
+                <p class="mt-1 text-main text-sm font-bold truncate">{{ vehicle?.description ?? '—' }}</p>
               </div>
 
             </div>
@@ -163,7 +156,6 @@ function handleReserve() {
               full-width
               @click="handleReserve"
             >
-              <CalendarIcon class="h-4 w-4 mr-1.5" />
               {{ isAvailable ? $t('reservations.buttons.reserveButton') : canPreReserve ? $t('reservations.buttons.preReserveButton') : statusLabel(vehicle?.category) }}
             </BaseButton>
           </template>

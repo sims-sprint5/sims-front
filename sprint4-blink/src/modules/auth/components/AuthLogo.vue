@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import blinkLogo from '@/assets/fleetly_logotip_blanc.png';  
+import blinkLogo from '@/assets/fleetly_isotip_blanc.svg';  
 import { useI18n } from 'vue-i18n';
 
 defineProps<{

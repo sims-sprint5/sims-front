@@ -23,6 +23,7 @@ export default {
         'input-focus': 'rgb(var(--color-input-focus))',
       },
       colors: {
+        'sidebar-bg': 'rgb(var(--color-sidebar-bg) / <alpha-value>)',
         base: {
           DEFAULT: 'rgb(var(--color-bg-base) / <alpha-value>)',
           dark: 'rgb(var(--color-bg-base-dark) / <alpha-value>)',
@@ -35,6 +36,7 @@ export default {
         main: 'rgb(var(--color-text-main) / <alpha-value>)',
         muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
         inverse: 'rgb(var(--color-text-inverse) / <alpha-value>)',
+        ps: 'rgb(var(--color-text-ps) / <alpha-value>)',
         border: {
           DEFAULT: 'rgb(var(--color-border-default) / <alpha-value>)',
         },

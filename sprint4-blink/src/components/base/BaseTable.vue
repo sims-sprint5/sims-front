@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-x-auto bg-surface rounded-lg shadow">
     <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-base-dark">
+      <thead class="color-surface">
         <tr>
           <th
             v-for="column in columns"

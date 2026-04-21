@@ -1,7 +1,7 @@
 <template>
   <div :class="sidebarClasses">
     <div class="flex h-20 shrink-0 items-center justify-center">
-      <img :class="logoClasses" :src="blinkLogoDark" :alt="t('common.logoAlt', { app: t('app.name') })" />
+      <img :class="logoClasses" :src="currentLogo" :alt="t('common.logoAlt', { app: t('app.name') })" />
     </div>
 
     <nav class="relative flex flex-1 flex-col">
@@ -9,7 +9,7 @@
 
         <!-- Superadmin Navigation -->
         <li v-if="isSuperadmin" class="w-full">
-          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-muted px-2 mb-2">
+          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-inverse px-2 mb-2">
             {{ t('superadmin.title') }}
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
@@ -26,7 +26,7 @@
         </li>
 
         <li v-if="isRegularUser || isAdmin" class="w-full">
-          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-muted px-2 mb-2">
+          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-inverse px-2 mb-2">
             {{ t('nav.sections.client') }}
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
@@ -43,7 +43,7 @@
         </li>
 
         <li v-if="isAdmin" class="w-full">
-          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-muted px-2 mb-2">
+          <div v-if="!isCollapsed" class="text-xs/6 font-semibold text-inverse px-2 mb-2">
             {{ t('nav.sections.admin') }}
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
@@ -101,7 +101,7 @@
           @click="toggleTheme"
           :title="isCollapsed ? t('common.themeToggle') : undefined"
           :class="[
-            'text-muted hover:bg-surface-muted hover:text-main',
+            'text-inverse hover:text-ps',
             'group relative flex items-center font-semibold rounded-md transition-colors',
             isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
           ]"
@@ -176,7 +176,8 @@ import {
   UsersIcon,
   BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline'
-import blinkLogoDark from '@/assets/fleetly_isotip_blanc.svg'
+import isotopeLogo from '@/assets/fleetly_isotip_blanc.svg'
+import fullLogo from '@/assets/fleetly_logotip_blanc.png'
 
 type NavItem = {
   nameKey: string
@@ -219,19 +220,21 @@ const isRegularUser = computed(() => user.value?.role === 'user')
 
 const sidebarClasses = computed(() => [
   props.isCollapsed ? 'w-20 px-3' : 'w-72 px-6',
-  'dark',
-  'relative flex grow flex-col gap-y-5 overflow-y-auto bg-surface border-r border-nav',
+  isDark.value ? 'dark' : '',
+  'relative flex grow flex-col gap-y-5 overflow-y-auto bg-sidebar-bg border-r border-nav',
   'transition-[width,padding] duration-200 ease-in-out',
 ])
 
+const currentLogo = computed(() => props.isCollapsed ? isotopeLogo : fullLogo)
+
 const logoClasses = computed(() => [
-  'bg-transparent p-0 transition-all duration-200 shadow-none',
-  props.isCollapsed ? 'size-9' : 'h-12'
+  'bg-transparent p-0 transition-all duration-200 shadow-none object-contain',
+  'h-14 w-auto'
 ])
 
 const navLinkClasses = computed(() => [
-  'text-muted hover:bg-surface-muted hover:text-main',
-  'group relative flex items-center font-semibold rounded-md transition-colors',
+  'text-inverse hover:bg-surface-muted hover:text-main',
+  'group relative flex items-center font-semibold rounded-md transition-all duration-200 hover:scale-105',
   props.isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
 ])
 
@@ -240,7 +243,7 @@ const getItemClasses = (item: NavItem) => {
   if (route.path === item.href) {
     classes.push('!bg-primary/10', '!text-primary')
   } else {
-    classes.push('!bg-transparent', '!text-muted')
+    classes.push('!bg-transparent', '!text-inverse')
   }
   return classes.join(' ')
 }

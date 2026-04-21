@@ -42,7 +42,7 @@
 
                 <!-- Taula -->
                 <table v-else class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-base-dark">
+                    <thead class="bg-surface">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">
                                 {{ $t('superadmin.admins.table.name') }}

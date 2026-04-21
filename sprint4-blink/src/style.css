@@ -5,16 +5,17 @@
 @layer base {
 	:root {
 		/* Background / Areas */
-		--color-bg-base: 255 255 255;	     /* White */
+		--color-bg-base: 245 245 245;	     /* White */
 		--color-bg-base-dark: 190 191 197;	 /* Pale Slate */
 		--color-surface: 255 255 255;        /* White */
 		--color-surface-muted: 190 191 197;  /* Pale Slate */
 		--color-surface-inverse: 53 56 57;   /* Gunmetal */
-		
+		--color-sidebar-bg: 0 0 0;  		 /* Gunmetal */
 		/* Texts */
 		--color-text-main: 0 0 0;		     /* Black */
 		--color-text-muted: 53 56 57; 	     /* Gunmetal */
 		--color-text-inverse: 255 255 255;	 /* White */
+		--color-text-ps: 190 191 197;	 	 /* Pale Slate */
 
 		/* Edges */
 		--color-border-default: 190 191 197; /* Pale Slate */
@@ -93,6 +94,7 @@
 		/* Background / Areas */
 		--color-bg-base: 0 0 0;             /* Black */
 		--color-bg-base-dark: 0 0 0;        /* Black */
+		--color-sidebar-bg: 53 56 57;       /* Gunmetal */
 		
 		/* Surfaces */
 		--color-surface: 53 56 57;          /* Gunmetal */
@@ -102,7 +104,7 @@
 		/* Texts */
 		--color-text-main: 255 255 255;     /* White */
 		--color-text-muted: 190 191 197;    /* Pale Slate */
-		--color-text-inverse: 0 0 0;  		/* Black */
+		--color-text-inverse: 255 255 255;  /* White */
 		
 		/* Edges */
 		--color-border-default: 190 191 197; /* Pale Slate */
@@ -192,8 +194,9 @@
 	a {
 		@apply text-[rgb(var(--color-primary))] transition-colors hover:text-[rgb(var(--color-primary-hover))];
 	}
-	input, textarea, select {
-		color: rgb(var(--color-text-main))
+	input, textarea, select, option {
+		color: rgb(var(--color-text-main));
+		background-color: rgb(var(--color-input-bg));
 	}
 }
 

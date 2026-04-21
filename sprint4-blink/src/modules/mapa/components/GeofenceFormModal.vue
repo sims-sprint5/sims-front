@@ -224,8 +224,8 @@ const updatePreview = () => {
     } else {
       previewCircle = L.circle(latlng, {
         radius,
-        color: '#3b82f6',
-        fillColor: '#3b82f6',
+        color: 'rgb(38, 97, 156)',
+        fillColor: 'rgb(38, 97, 156)',
         fillOpacity: 0.15,
         weight: 2
       }).addTo(miniMap)

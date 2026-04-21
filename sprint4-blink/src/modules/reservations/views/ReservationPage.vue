@@ -330,7 +330,7 @@ async function createReservation() {
       <section class="min-w-0">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div class="flex items-center gap-3">
-            <BaseButton size="sm" variant="muted" @click="toggleFilters">
+            <BaseButton size="sm" variant="primary" @click="toggleFilters">
               {{ showFilters ? t('reservations.filters.hide') : t('reservations.filters.show') }}
             </BaseButton>
           </div>

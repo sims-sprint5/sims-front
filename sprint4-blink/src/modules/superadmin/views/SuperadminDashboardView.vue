@@ -8,7 +8,7 @@
                 <!-- Total Companies -->
                 <div class="bg-surface p-6 rounded-lg shadow border-l-4 border-primary hover:shadow-md transition">
                     <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-[rgb(var(--color-bg-base-dark))] text-primary mr-4">
+                        <div class="p-3 rounded-full bg-[rgb(var(--color-bg-base))] text-primary mr-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
@@ -21,16 +21,16 @@
                 </div>
 
                 <!-- Recent Companies (Aquest mes) -->
-                <div class="bg-surface p-6 rounded-lg shadow border-l-4 border-success hover:shadow-md transition">
+                <div class="bg-surface p-6 rounded-lg shadow border-l-4 border-primary hover:shadow-md transition">
                     <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-emerald-100 text-emerald-600 mr-4">
+                        <div class="p-3 rounded-full bg-base text-primary mr-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                             </svg>
                         </div>
                         <div>
                             <h4 class="text-muted text-sm font-medium uppercase">{{ $t('superadmin.dashboard.newThisMonth') }}</h4>
-                            <p class="text-3xl font-bold text-emerald-600 mt-1">{{ newTenantsThisMonth }}</p>
+                            <p class="text-3xl font-bold text-primary mt-1">{{ newTenantsThisMonth }}</p>
                         </div>
                     </div>
                 </div>
@@ -64,8 +64,8 @@
                         <svg class="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
                             <!-- Fill Area under the line (Gradient) -->
                             <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-                                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.2" />
-                                <stop offset="100%" stop-color="#4f46e5" stop-opacity="0" />
+                                <stop offset="0%" stop-color="rgb(38, 97, 156)" stop-opacity="0.2" />
+                                <stop offset="100%" stop-color="rgb(38, 97, 156)" stop-opacity="0" />
                             </linearGradient>
                             <polygon 
                                 :points="`0,100 ${svgPoints} 100,100`" 
@@ -76,7 +76,7 @@
                             <polyline 
                                 :points="svgPoints" 
                                 fill="none" 
-                                stroke="#4f46e5" 
+                                stroke="rgb(38, 97, 156)" 
                                 stroke-width="2" 
                                 vector-effect="non-scaling-stroke"
                                 stroke-linecap="round" 
@@ -87,10 +87,10 @@
 
                         <!-- Interactive Dots -->
                         <div v-for="(point, idx) in pointCoordinates" :key="idx" 
-                             class="absolute w-3 h-3 bg-indigo-600 border-2 border-white rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 group hover:scale-125 cursor-pointer transition-transform duration-200"
+                             class="absolute w-3 h-3 bg-primary border-2 border-surface rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 group hover:scale-125 cursor-pointer transition-transform duration-200"
                              :style="{ left: point.x + '%', top: point.y + '%' }">
                             
-                            <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-inverse text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                            <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-surface-inverse text-inverse text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
                                 {{ $t('superadmin.dashboard.companies', { count: chartData[idx]?.count ?? 0 }) }}
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                         <li v-for="company in recentCompanies" :key="company.id" class="py-3 flex hover:bg-base-dark -mx-4 px-4 rounded transition">
                             <div class="flex items-center w-full justify-between">
                                 <div class="flex items-center">
-                                    <div class="bg-indigo-50 p-2 rounded-lg text-primary mr-3 shadow-sm">
+                                    <div class="bg-base-dark p-2 rounded-lg text-primary mr-3 shadow-sm">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                     </div>
                                     <div class="flex flex-col">
@@ -133,7 +133,7 @@
                                         <span class="text-xs text-muted">{{ formatDate(company.created_at) }}</span>
                                     </div>
                                 </div>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-100 text-emerald-800">{{ $t('superadmin.dashboard.new') }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-success text-inverse">{{ $t('superadmin.dashboard.new') }}</span>
                             </div>
                         </li>
                     </ul>
