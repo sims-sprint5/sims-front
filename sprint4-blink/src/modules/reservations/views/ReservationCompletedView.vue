@@ -200,17 +200,33 @@ async function findReservationFromPendingCheckout(): Promise<ReservationLog | nu
   return null;
 }
 
+async function ensureCompletedStatus(log: ReservationLog): Promise<ReservationLog> {
+  if (log.status === 'completed') return log;
+
+  try {
+    const updated = await reservationLogService.updateReservationStatus(log.id, 'completed');
+    return updated;
+  } catch {
+    return {
+      ...log,
+      status: 'completed',
+    };
+  }
+}
+
 onMounted(async () => {
   try {
     loading.value = true;
     const reservationId = resolveReservationIdFromRoute();
 
     if (reservationId) {
-      reservation.value = await reservationLogService.getLogById(reservationId);
+      const byId = await reservationLogService.getLogById(reservationId);
+      reservation.value = await ensureCompletedStatus(byId);
       return;
     }
 
-    reservation.value = await findReservationFromPendingCheckout();
+    const found = await findReservationFromPendingCheckout();
+    reservation.value = found ? await ensureCompletedStatus(found) : null;
     if (!reservation.value) {
       error.value = t('reservations.errors.load');
     }

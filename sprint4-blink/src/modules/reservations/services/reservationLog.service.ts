@@ -12,6 +12,7 @@ function toNumber(value: unknown, fallback = 0): number {
 
 function normalizeStatus(value: unknown): ReservationStatus {
   const s = String(value).toLowerCase();
+  if (s === 'paid' || s === 'succeeded' || s === 'success') return 'completed';
   if (s === 'pending' || s === 'active' || s === 'completed' || s === 'cancelled') return s;
   return 'pending';
 }
@@ -34,7 +35,7 @@ function normalizeLog(raw: any): ReservationLog {
     vehicle_id: toNumber(raw?.vehicle_id ?? vehicleData.id ?? vehicleData.vehicle_id, 0),
     vehicle_name: vehicleName,
     license_plate: String(vehicleData.license_plate ?? raw?.license_plate ?? raw?.plate ?? '').trim(),
-    status: normalizeStatus(raw?.status),
+    status: normalizeStatus(raw?.status ?? (raw?.paid_at ? 'completed' : undefined)),
     start_at: String(raw?.start_date ?? raw?.start_at ?? raw?.startDate ?? ''),
     end_at: String(raw?.end_date ?? raw?.end_at ?? raw?.endDate ?? ''),
     created_at: String(raw?.created_at ?? new Date().toISOString()),
@@ -179,6 +180,11 @@ export const reservationLogService = {
       ...(data.dropoff_location && { dropoff_location: data.dropoff_location }),
     };
     const raw = await apiClient.post<any>('/v1/reservations', payload);
+    return normalizeLog(raw?.data ?? raw);
+  },
+
+  async updateReservationStatus(reservationId: number, status: ReservationStatus): Promise<ReservationLog> {
+    const raw = await apiClient.patch<any>(`/v1/reservations/${reservationId}/status`, { status });
     return normalizeLog(raw?.data ?? raw);
   },
 

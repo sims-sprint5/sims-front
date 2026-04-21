@@ -73,6 +73,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
 import AppLayout from '@/layouts/AppLayout.vue';
 import MyReservationsTable from '@/modules/reservations/components/MyReservationsTable.vue';
@@ -90,6 +91,7 @@ import { useToast } from '@/shared/composables/useToast';
 
 const { t } = useI18n();
 const toast = useToast();
+const router = useRouter();
 
 const reservations = ref<ReservationLog[]>([]);
 const loading = ref(false);
@@ -121,6 +123,12 @@ function refreshDebugEntries() {
 }
 
 onMounted(async () => {
+  const pending = getPendingReservationCheckout();
+  if (pending) {
+    await router.replace({ name: 'ReservationPaymentReturn' });
+    return;
+  }
+
   debugEnabled.value = isReservationDebugEnabled();
   if (debugEnabled.value) {
     refreshDebugEntries();
