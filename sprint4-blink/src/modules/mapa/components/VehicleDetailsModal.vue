@@ -139,6 +139,13 @@ function toDateTimeLocalInput(value: Date): string {
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`
 }
 
+function getNextReservableMinute(): Date {
+  const now = new Date()
+  now.setSeconds(0, 0)
+  now.setMinutes(now.getMinutes() + 1)
+  return now
+}
+
 function parseReservationDate(value: unknown): Date | null {
   if (typeof value !== 'string' || !value.trim()) return null
   const parsed = new Date(value)
@@ -166,10 +173,11 @@ function isCarReservedNow(car: Car): boolean {
   const now = new Date()
   const slots = getCalendarSlots(car)
 
-  if (slots.some((slot) => slot.end > now)) return true
+  if (slots.some((slot) => slot.start <= now && now < slot.end)) return true
 
+  const nextReservationStart = parseReservationDate(car.next_reservation?.start_date)
   const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
-  if (nextReservationEnd && nextReservationEnd > now) return true
+  if (nextReservationStart && nextReservationEnd && nextReservationStart <= now && now < nextReservationEnd) return true
 
   const nextAvailable = parseReservationDate(car.next_available_at)
   if (nextAvailable && nextAvailable > now) return true
@@ -189,10 +197,10 @@ function getSuggestedStartForPreReservation(car: Car): string {
   if (byNextAvailable) return toDateTimeLocalInput(byNextAvailable)
 
   const slots = getCalendarSlots(car)
-  if (!slots.length) return toDateTimeLocalInput(new Date())
+  if (!slots.length) return toDateTimeLocalInput(getNextReservableMinute())
 
   const sorted = [...slots].sort((a, b) => a.start.getTime() - b.start.getTime())
-  let cursor = new Date()
+  let cursor = getNextReservableMinute()
 
   for (const slot of sorted) {
     if (slot.end <= cursor) continue
@@ -251,7 +259,7 @@ function goToReservation(car: Car) {
 
   const vehicleId = Number(car.vehicle_id ?? car.id)
 
-  let startAt = toDateTimeLocalInput(new Date())
+  let startAt = toDateTimeLocalInput(getNextReservableMinute())
   if (canPreReserveNow) {
     startAt = getSuggestedStartForPreReservation(car)
   }

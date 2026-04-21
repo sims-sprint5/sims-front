@@ -13,7 +13,7 @@ function isReservationBlockingNow(startDate: string, endDate: string, now: Date)
   const start = new Date(startDate);
   const end = new Date(endDate);
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-  return end > now;
+  return start <= now && now < end;
 }
 
 function isVehicleAvailableNow(v: Vehicle): boolean {

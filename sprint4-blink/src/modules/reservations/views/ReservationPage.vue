@@ -46,6 +46,8 @@ const reservationForm = reactive({
   startAt: '',
   endAt: '',
 });
+type ReservationSlot = { startDate: string; endDate: string };
+const runtimeConflictSlot = ref<ReservationSlot | null>(null);
 const hideAccessibilityClass = 'hide-userway-widget';
 type DatePickerConfig = {
   enableTime?: boolean;
@@ -80,7 +82,14 @@ function toDateTimeLocalInput(value: Date): string {
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`;
 }
 
-const defaultStartAt = computed(() => toDateTimeLocalInput(new Date()));
+function getNextReservableMinute(): Date {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  now.setMinutes(now.getMinutes() + 1);
+  return now;
+}
+
+const defaultStartAt = computed(() => toDateTimeLocalInput(getNextReservableMinute()));
 const defaultEndAt = computed(() => {
   const d = new Date();
   d.setDate(d.getDate() + 1);
@@ -137,12 +146,13 @@ function isVehicleReservedNow(vehicle: ReservationVehicleCardModel): boolean {
     const start = new Date(slot.startDate);
     const end = new Date(slot.endDate);
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-    return end > now;
+    return start <= now && now < end;
   });
 }
 
 function openReservationModal(vehicle: ReservationVehicleCardModel) {
   selectedVehicle.value = vehicle;
+  runtimeConflictSlot.value = null;
   if (isVehicleReservedNow(vehicle)) {
     const suggestedStart = getSuggestedStartForPreReservation(vehicle);
     reservationForm.startAt = suggestedStart;
@@ -157,6 +167,7 @@ function openReservationModal(vehicle: ReservationVehicleCardModel) {
 
 function openReservationModalPrefilled(vehicle: ReservationVehicleCardModel, startAt?: string, endAt?: string) {
   selectedVehicle.value = vehicle;
+  runtimeConflictSlot.value = null;
   reservationForm.startAt = startAt || defaultStartAt.value;
   reservationForm.endAt = endAt || defaultEndAt.value;
   showReservationModal.value = true;
@@ -166,6 +177,7 @@ function openReservationModalPrefilled(vehicle: ReservationVehicleCardModel, sta
 function closeReservationModal() {
   showReservationModal.value = false;
   selectedVehicle.value = null;
+  runtimeConflictSlot.value = null;
   reservationForm.startAt = '';
   reservationForm.endAt = '';
   emit('reservationModalVisibility', false)
@@ -332,7 +344,23 @@ watch(
 
 function normalizeDateTime(value: string): string {
   const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const year = parsed.getFullYear();
+  const month = pad(parsed.getMonth() + 1);
+  const day = pad(parsed.getDate());
+  const hours = pad(parsed.getHours());
+  const minutes = pad(parsed.getMinutes());
+  const seconds = pad(parsed.getSeconds());
+
+  const offsetMinutes = -parsed.getTimezoneOffset();
+  const sign = offsetMinutes >= 0 ? '+' : '-';
+  const absOffset = Math.abs(offsetMinutes);
+  const offsetHours = pad(Math.floor(absOffset / 60));
+  const offsetMins = pad(absOffset % 60);
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`;
 }
 
 function getCheckoutErrorMessage(err: any, t: (key: string, params?: Record<string, unknown>) => string): string {
@@ -401,8 +429,26 @@ function toDisabledRanges(slots: Array<{ startDate: string; endDate: string }> =
     .filter((range): range is { from: Date; to: Date } => Boolean(range));
 }
 
+const selectedVehicleCalendarSlots = computed<ReservationSlot[]>(() => {
+  const baseSlots = selectedVehicle.value?.calendarReservations ?? [];
+  const merged = [...baseSlots];
+
+  if (runtimeConflictSlot.value) {
+    const exists = merged.some(
+      (slot) =>
+        slot.startDate === runtimeConflictSlot.value?.startDate &&
+        slot.endDate === runtimeConflictSlot.value?.endDate,
+    );
+    if (!exists) {
+      merged.push(runtimeConflictSlot.value);
+    }
+  }
+
+  return merged;
+});
+
 const reservationDisabledRanges = computed(() =>
-  toDisabledRanges(selectedVehicle.value?.calendarReservations ?? []),
+  toDisabledRanges(selectedVehicleCalendarSlots.value),
 );
 
 const startPickerConfig = computed<DatePickerConfig>(() => ({
@@ -411,6 +457,7 @@ const startPickerConfig = computed<DatePickerConfig>(() => ({
   minuteIncrement: 1,
   dateFormat: 'Y-m-d\\TH:i',
   disable: reservationDisabledRanges.value,
+  minDate: getNextReservableMinute(),
 }));
 
 const endPickerConfig = computed<DatePickerConfig>(() => {
@@ -440,10 +487,16 @@ async function createReservation() {
     return;
   }
 
+  const minStartDate = getNextReservableMinute();
+  if (startDate < minStartDate) {
+    toast.error(t('reservations.errors.availableFrom', { date: minStartDate.toLocaleString() }));
+    return;
+  }
+
   const localOverlap = findOverlappingSlot(
     startDate,
     endDate,
-    selectedVehicle.value.calendarReservations ?? [],
+    selectedVehicleCalendarSlots.value,
   );
   if (localOverlap) {
     toast.error(t('reservations.errors.availableFrom', { date: localOverlap.end.toLocaleString() }));
@@ -462,6 +515,20 @@ async function createReservation() {
 
     if (!availability.available) {
       let errorMsg = availability.message || t('reservations.errors.notAvailable');
+
+      const conflictStartRaw = String(availability.conflicting_reservation?.start_date ?? '').trim();
+      const conflictEndRaw = String(availability.conflicting_reservation?.end_date ?? '').trim();
+      if (conflictStartRaw && conflictEndRaw) {
+        runtimeConflictSlot.value = { startDate: conflictStartRaw, endDate: conflictEndRaw };
+      } else {
+        const backendAvailableAt = parseDate(availability.available_at);
+        if (backendAvailableAt) {
+          runtimeConflictSlot.value = {
+            startDate: normalizeDateTime(reservationForm.startAt),
+            endDate: toDateTimeLocalInput(backendAvailableAt),
+          };
+        }
+      }
 
       const conflictingStart = parseDate(availability.conflicting_reservation?.start_date);
       const conflictingEnd = parseDate(availability.conflicting_reservation?.end_date);
@@ -604,7 +671,7 @@ async function createReservation() {
 
               
                 <BusyDaysCalendar
-                  :slots="selectedVehicle?.calendarReservations ?? []"
+                  :slots="selectedVehicleCalendarSlots"
                   title="Calendario de ocupacion"
                 />
 
