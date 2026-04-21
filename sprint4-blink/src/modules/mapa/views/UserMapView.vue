@@ -611,10 +611,30 @@ const isVehicleAvailableNow = (vehicle: Vehicle): boolean => {
   return statusKey === 'available' || statusKey === 'active'
 }
 
-const filterVehiclesForUserMap = (vehicles: Vehicle[], reservations: ReservationLog[]): Vehicle[] => {
-  void reservations
+// Oculta un vehículo solo si existe una reserva en curso (now) hecha por OTRO usuario.
+const isOccupiedNowByOthers = (vehicle: Vehicle, myUserId: number): boolean => {
+  const now = Date.now()
+  for (const r of vehicle.calendar_reservations ?? []) {
+    const s = parseDate(r.start_date)
+    const e = parseDate(r.end_date)
+    if (!s || !e) continue
+    if (s.getTime() <= now && now < e.getTime()) {
+      if (!r.user_id || Number(r.user_id) !== myUserId) return true
+    }
+  }
+  return false
+}
 
-  return vehicles.filter((v) => isVehicleAvailableNow(v))
+const filterVehiclesForUserMap = (vehicles: Vehicle[], reservations: ReservationLog[]): Vehicle[] => {
+  const myUserId = Number(user.value?.id)
+
+  return vehicles.filter((v) => {
+    // Si hay una reserva en curso ahora de otro usuario, ocultar
+    if (isOccupiedNowByOthers(v, myUserId)) return false
+
+    // En cualquier otro caso, mostrar el vehículo (incluso si su `status` no dice disponible)
+    return true
+  })
 }
 
 const renderVehicles = (vehicles: Vehicle[]) => {

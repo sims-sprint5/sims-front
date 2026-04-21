@@ -19,15 +19,7 @@ export const reservationsRoutes: RouteRecordRaw[] = [
       titleKey: 'reservations.completed.title',
     },
   },
-  {
-    path: '/user/pago',
-    name: 'ReservationPaymentReturn',
-    component: () => import('./views/ReservationCompletedView.vue'),
-    meta: {
-      requiresAuth: true,
-      titleKey: 'reservations.completed.title',
-    },
-  },
+  // Eliminada la ruta de retorno de pago '/user/pago' — ahora usamos '/mis-reservas'
   {
     path: '/mis-reservas',
     name: 'MyReservations',
