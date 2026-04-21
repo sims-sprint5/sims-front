@@ -148,6 +148,7 @@ import {
   TruckIcon,
   UsersIcon,
   BuildingOffice2Icon,
+  ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline'
 import blinkLogo from '@/assets/blink-logo.png'
 
@@ -220,6 +221,7 @@ const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.map', href: '/mapa', icon: MapPinIcon },
   { nameKey: 'nav.myReservations', href: '/mis-reservas', icon: ReservesIcon },
   { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
+  { nameKey: 'nav.chat', href: '/chat', icon: ChatBubbleLeftRightIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])
 

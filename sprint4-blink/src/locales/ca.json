@@ -19,10 +19,12 @@
     "view": "Veure",
     "actions": "Accions",
     "logout": "Tancar sessió",
+    "send": "Enviar",
     "passwordMismatch": "Les contrasenyes no coincideixen."
   },
   "language": {
     "label": "Idioma",
+    "_lang": "ca",
     "ca": "Català",
     "es": "Espanyol",
     "en": "Anglés"
@@ -31,8 +33,7 @@
     "menu": "Menú",
     "dashboard": "Tauler",
     "map": "Mapa",
-    "tickets": "Tickets",
-    "bookings": "Reserves",
+    "tickets": "Tickets",    "chat": "Xat",    "bookings": "Reserves",
     "myReservations": "Les Meves Reserves",
     "reservationsAdmin": "Log de reserves",
     "users": "Usuaris",
@@ -892,5 +893,25 @@
       "save": "Error en guardar la companyia",
       "delete": "Error en eliminar la companyia"
     }
+  },
+  "chatbot": {
+    "title": "Assistent SIMS",
+    "openChat": "Obrir xat d'assistència",
+    "greeting": "👋 Hola {name}, ¿com puc ajudar-te?",
+    "defaultGreeting": "Usuari",
+    "typing": "⏳ Escrivint...",
+    "footer": "Impulsat per IA • {context}",
+    "contextMap": "Explorant vehícles",
+    "contextReservations": "Les teves reserves",
+    "contextTickets": "Els teus tickets de suport",
+    "contextDefault": "A SIMS",
+    "placeholderMap": "¿És aquest vehícle bo per a mi?",
+    "placeholderReservations": "¿Com modifico la meva reserva?",
+    "placeholderTickets": "¿Necessites ajuda amb el teu ticket?",
+    "placeholderDefault": "¿Tens alguna pregunta?",
+    "welcomeMessage": "Sóc el teu assistent de SIMS. Explica'm amb què necessites ajuda i faré el meu millor esforç per assistir-te.",
+    "errorProcessing": "Error en processar la teva pregunta",
+    "errorServer": "Error del servidor. Intenta novament.",
+    "errorConnection": "Error de connexió. Intenta més tard."
   }
 }
