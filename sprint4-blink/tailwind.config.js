@@ -24,6 +24,7 @@ export default {
       },
       colors: {
         'sidebar-bg': 'rgb(var(--color-sidebar-bg) / <alpha-value>)',
+        'navbar-bg': 'rgb(var(--color-navbar-bg) / <alpha-value>)',
         base: {
           DEFAULT: 'rgb(var(--color-bg-base) / <alpha-value>)',
           dark: 'rgb(var(--color-bg-base-dark) / <alpha-value>)',

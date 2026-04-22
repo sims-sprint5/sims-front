@@ -10,7 +10,9 @@
 		--color-surface: 255 255 255;        /* White */
 		--color-surface-muted: 190 191 197;  /* Pale Slate */
 		--color-surface-inverse: 53 56 57;   /* Gunmetal */
-		--color-sidebar-bg: 0 0 0;  		 /* Gunmetal */
+		--color-sidebar-bg: 0 0 0;  		 /* Black */
+		--color-navbar-bg: 255 255 255;   	 /* White */
+
 		/* Texts */
 		--color-text-main: 0 0 0;		     /* Black */
 		--color-text-muted: 53 56 57; 	     /* Gunmetal */
@@ -92,14 +94,15 @@
 	  /* Dark Mode Variables */
 	.dark {
 		/* Background / Areas */
-		--color-bg-base: 0 0 0;             /* Black */
-		--color-bg-base-dark: 0 0 0;        /* Black */
-		--color-sidebar-bg: 53 56 57;       /* Gunmetal */
-		
+		--color-bg-base: 33 33 33;         /* Gunmetal */
+		--color-bg-base-dark: 0 0 0;       /* Black */
+		--color-sidebar-bg: 0 0 0;         /* Black */
+		--color-navbar-bg: 53 56 57;       /* Gunmetal */
+
 		/* Surfaces */
 		--color-surface: 53 56 57;          /* Gunmetal */
 		--color-surface-muted: 0 0 0;       /* Black */
-		--color-surface-inverse: 255 255 255; /* White */
+		--color-surface-inverse: 0 0 0;     /* Black */
 		
 		/* Texts */
 		--color-text-main: 255 255 255;     /* White */

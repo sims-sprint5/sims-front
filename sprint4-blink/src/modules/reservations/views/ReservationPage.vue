@@ -420,7 +420,7 @@ async function createReservation() {
                 </div>
               </div>
 
-              <div class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-base-dark px-6 py-4 sm:flex-row sm:justify-end">
+              <div class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-surface px-6 py-4 sm:flex-row sm:justify-end">
                 <BaseButton v-if="!fromMap" variant="secondary" :disabled="submitting" @click="closeReservationModal">
                   {{ $t('common.cancel') }}
                 </BaseButton>
