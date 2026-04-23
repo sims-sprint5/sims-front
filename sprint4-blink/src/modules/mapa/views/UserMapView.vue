@@ -187,6 +187,7 @@ const pageTitle = computed(() => {
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let userMarker: L.Marker | null = null
+let markerLayer: L.LayerGroup | null = null
 const isReservationPanelOpen = ref(false)
 const isReservationCreateModalOpen = ref(false)
 const reservationPanelWidth = ref(0)
@@ -230,6 +231,8 @@ const reservationPanelStyle = computed(() => {
     maxWidth: 'calc(100% - 1.5rem)'
   }
 })
+
+  // Capa para agrupar marcadores y permitir limpieza/re-dibujo (se inicializa en initMap)
 
 const syncPanelWidthToViewport = () => {
   const target = reservationPanelWidth.value || getDefaultPanelWidth()
@@ -712,15 +715,16 @@ const filterVehiclesForUserMap = async (
       const vehicleId = Number(v.vehicle_id ?? v.id)
       if (!Number.isFinite(vehicleId)) continue
 
-      const activeOrFutureReservations = (v.calendar_reservations ?? []).filter((cr) => {
+      // Considerar solo reservas que estén activas AHORA (start <= now < end).
+      const activeNowReservations = (v.calendar_reservations ?? []).filter((cr) => {
         const s = parseDate(cr.start_date)
         const e = parseDate(cr.end_date)
         if (!s || !e) return false
         if (!isReservationStateBlocking(cr.status, cr.calendar_state)) return false
-        return now < e.getTime()
+        return s.getTime() <= now && now < e.getTime()
       })
-      const hasActiveOrFutureReservation = activeOrFutureReservations.length > 0
-      const hasMyActiveOrFutureReservation = activeOrFutureReservations.some((cr) => {
+      const hasActiveOrFutureReservation = activeNowReservations.length > 0
+      const hasMyActiveOrFutureReservation = activeNowReservations.some((cr) => {
         const reservationUserId = Number(cr.user_id)
         const reservationUserName = String(cr.user_name ?? '').trim().toLowerCase()
         const byId = hasCurrentUserId && Number.isFinite(reservationUserId) && reservationUserId === currentUserId
@@ -729,14 +733,12 @@ const filterVehiclesForUserMap = async (
       })
 
       // Fallback por si solo viene en next_reservation
+      // next_reservation puede venir para una reserva futura; considerarla solo si ocurre AHORA
       const nextStart = parseDate(v.next_reservation?.start_date)
       const nextEnd = parseDate(v.next_reservation?.end_date)
       const nextStatus = (v.next_reservation as any)?.status
       const hasNextReservationActiveOrFuture = Boolean(
-        nextStart &&
-          nextEnd &&
-          isReservationStateBlocking(nextStatus, null) &&
-          now < nextEnd.getTime(),
+        nextStart && nextEnd && isReservationStateBlocking(nextStatus, null) && nextStart.getTime() <= now && now < nextEnd.getTime()
       )
       const nextReservationUserId = Number(v.next_reservation?.user_id)
       const nextReservationUserName = String(v.next_reservation?.user_name ?? '').trim().toLowerCase()
@@ -860,6 +862,13 @@ const filterVehiclesForUserMap = async (
 const renderVehicles = (vehicles: Vehicle[]) => {
   if (!map) return
 
+  if (!markerLayer && map) {
+    markerLayer = L.layerGroup().addTo(map)
+  }
+
+  // Limpiar marcadores anteriores
+  markerLayer?.clearLayers()
+
   vehicles.forEach(vehicle => {
     const lat = parseCoordinate(vehicle.current_latitude)
     const lng = parseCoordinate(vehicle.current_longitude)
@@ -869,7 +878,7 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       [lat, lng],
       {
         title: vehicle.license_plate,
-          icon: vehicleIcon
+        icon: vehicleIcon,
       }
     )
 
@@ -878,7 +887,7 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       isModalOpen.value = true
     })
 
-    marker.addTo(map!)
+    markerLayer?.addLayer(marker)
   })
 }
 
@@ -928,6 +937,10 @@ const initMap = () => {
   })
 
   setTimeout(() => map?.invalidateSize(), 200)
+  // Inicializar layer para marcadores ahora que el mapa existe
+  if (map) {
+    markerLayer = L.layerGroup().addTo(map)
+  }
 }
 
 watch(isReservationPanelOpen, async () => {
@@ -987,7 +1000,7 @@ onMounted(async () => {
       if (isMapDebugEnabled) {
         console.info('[map-debug] no vehicles returned to render')
       }
-      return
+      // continuar: queremos que el mapa se inicialice aunque no haya vehículos
     }
 
     const now = Date.now()
@@ -1023,7 +1036,23 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   stopPanelResize()
   window.removeEventListener('resize', syncPanelWidthToViewport)
+  // limpiar marcadores y referencias al desmontar
+  try {
+    markerLayer?.clearLayers()
+    markerLayer = null
+  } catch (e) {
+    // ignore
+  }
 })
+
+// Re-renderizar marcadores cuando cambie la lista de vehículos
+watch(mapVehicles, (v) => {
+  try {
+    renderVehicles(v)
+  } catch (e) {
+    if (isMapDebugEnabled) console.warn('[map-debug] renderVehicles failed on watch', e)
+  }
+}, { deep: true })
 </script>
 
 <style scoped>

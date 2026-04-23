@@ -254,10 +254,25 @@ export const reservationLogService = {
     endDate: string,
     excludeReservationId?: number,
   ): Promise<AvailabilityCheckResponse> {
-    // startDate y endDate vienen en formato: 2026-04-17T13:11:00
-    // Los convertimos a ISO 8601 con Z para query params
-    const startISO = `${startDate}.000Z`;
-    const endISO = `${endDate}.000Z`;
+    // Normalizar startDate/endDate a ISO 8601 UTC antes de enviarlos al backend.
+    // Evitar concatenar ".000Z" sobre cadenas que ya contienen offset (+02:00) o Z.
+    const normalizeToISOString = (value: string): string => {
+      if (!value) return value
+      // Si ya termina en Z o tiene offset +/-HH:MM, convertir a Date y usar toISOString()
+      try {
+        const parsed = new Date(value)
+        if (!Number.isNaN(parsed.getTime())) {
+          return parsed.toISOString()
+        }
+      } catch (e) {
+        // ignore
+      }
+      // Fallback: devolver tal cual (backend validará)
+      return value
+    }
+
+    const startISO = normalizeToISOString(startDate)
+    const endISO = normalizeToISOString(endDate)
     
     const queryParams: Record<string, any> = {
       vehicle_id: vehicleId,
