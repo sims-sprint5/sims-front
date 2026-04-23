@@ -19,10 +19,12 @@
     "view": "View",
     "actions": "Actions",
     "logout": "Sign out",
+    "send": "Send",
     "passwordMismatch": "Passwords do not match."
   },
   "language": {
     "label": "Language",
+    "_lang": "en",
     "ca": "Catalan",
     "es": "Spanish",
     "en": "English"
@@ -32,6 +34,7 @@
     "dashboard": "Dashboard",
     "map": "Map",
     "tickets": "Tickets",
+    "chat": "Chat",
     "bookings": "Bookings",
     "myReservations": "My Reservations",
     "reservationsAdmin": "Reservation log",
@@ -898,5 +901,25 @@
       "save": "Failed to save company",
       "delete": "Failed to delete company"
     }
+  },
+  "chatbot": {
+    "title": "SIMS Assistant",
+    "openChat": "Open support chat",
+    "greeting": "👋 Hello {name}, how can I help you?",
+    "defaultGreeting": "User",
+    "typing": "⏳ Writing...",
+    "footer": "Powered by AI • {context}",
+    "contextMap": "Exploring vehicles",
+    "contextReservations": "Your reservations",
+    "contextTickets": "Your support tickets",
+    "contextDefault": "In SIMS",
+    "placeholderMap": "Is this vehicle good for me?",
+    "placeholderReservations": "How do I modify my reservation?",
+    "placeholderTickets": "Need help with your ticket?",
+    "placeholderDefault": "Do you have any questions?",
+    "welcomeMessage": "I'm your SIMS assistant. Tell me what you need help with and I'll do my best to assist you.",
+    "errorProcessing": "Error processing your question",
+    "errorServer": "Server error. Try again.",
+    "errorConnection": "Connection error. Try later."
   }
 }

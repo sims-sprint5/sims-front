@@ -21,4 +21,13 @@ export const ticketsRoutes: RouteRecordRaw[] = [
       titleKey: 'adminTickets.title',
     },
   },
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: () => import('./views/ChatView.vue'),
+    meta: {
+      requiresAuth: true,
+      titleKey: 'nav.chat',
+    },
+  },
 ];
