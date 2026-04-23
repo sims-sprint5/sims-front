@@ -376,6 +376,10 @@
       "renewal": "Error al solicitar renovación. Por favor, inténtalo de nuevo.",
       "notAvailable": "Este vehículo no está disponible para el período seleccionado.",
       "availableFrom": "Este vehículo estará disponible desde {date}.",
+      "checkoutFailed": "No se pudo iniciar el pago. Inténtalo de nuevo.",
+      "checkoutUnauthorized": "Tu sesión ha caducado. Inicia sesión de nuevo para continuar.",
+      "checkoutConflict": "Existe un conflicto con esta reserva. Revisa disponibilidad y vuelve a intentar.",
+      "checkoutServer": "El servidor no pudo iniciar el pago. Inténtalo en unos minutos.",
       "invalidDateRange": "La fecha de fin debe ser posterior a la fecha de inicio.",
       "checkAvailability": "No se pudo verificar la disponibilidad del vehículo.",
       "updateFailed": "No se pudo actualizar la reserva."

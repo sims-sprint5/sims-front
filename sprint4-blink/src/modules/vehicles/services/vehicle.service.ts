@@ -1,5 +1,6 @@
 import { apiClient } from '@/shared/services/api.service';
 import { buildQuery } from '@/shared/utils/queryBuilder';
+import { pushReservationDebug } from '@/modules/reservations/utils/reservationDebug';
 import type {
   CalendarReservation,
   CreateVehicleData,
@@ -26,14 +27,20 @@ function normalizeVehicle(raw: any): Vehicle {
 
   const calendarReservationsRaw = Array.isArray(raw.calendar_reservations)
     ? raw.calendar_reservations
-    : [];
+    : Array.isArray(raw.calendarReservations)
+      ? raw.calendarReservations
+      : Array.isArray(raw.reservations)
+        ? raw.reservations
+        : [];
 
   const calendar_reservations: CalendarReservation[] = calendarReservationsRaw
     .map((reservation: any) => ({
-      start_date: String(reservation?.start_date ?? ''),
-      end_date: String(reservation?.end_date ?? ''),
+      start_date: String(reservation?.start_date ?? reservation?.start_at ?? reservation?.startDate ?? ''),
+      end_date: String(reservation?.end_date ?? reservation?.end_at ?? reservation?.endDate ?? ''),
       user_name: reservation?.user_name ? String(reservation.user_name) : undefined,
+      user_id: Number.isFinite(Number(reservation?.user_id)) ? Number(reservation.user_id) : undefined,
       status: reservation?.status ? String(reservation.status) : undefined,
+      calendar_state: reservation?.calendar_state ? String(reservation.calendar_state) : undefined,
     }))
     .filter((reservation: CalendarReservation) => reservation.start_date && reservation.end_date);
 
@@ -54,11 +61,18 @@ function normalizeVehicle(raw: any): Vehicle {
     updated_at: raw.updated_at ?? '',
     next_available_at: raw.next_available_at ?? null,
     calendar_reservations,
+    blocked_dates: Array.isArray(raw.blocked_dates)
+      ? raw.blocked_dates.map((date: unknown) => String(date))
+      : [],
+    reservations: Array.isArray(raw.reservations) ? raw.reservations : [],
     next_reservation: raw.next_reservation
       ? {
           start_date: String(raw.next_reservation.start_date ?? ''),
           end_date: String(raw.next_reservation.end_date ?? ''),
           user_name: String(raw.next_reservation.user_name ?? ''),
+          user_id: Number.isFinite(Number(raw.next_reservation.user_id))
+            ? Number(raw.next_reservation.user_id)
+            : undefined,
         }
       : null,
   };
@@ -69,8 +83,29 @@ function normalizeVehiclesResponse(raw: any): VehiclesResponse {
   if (Array.isArray(raw)) {
     return { data: raw.map(normalizeVehicle) };
   }
-  if (Array.isArray(raw?.data)) {
-    return { data: raw.data.map(normalizeVehicle), meta: raw.meta };
+
+  const dataCandidate = Array.isArray(raw?.data)
+    ? raw.data
+    : Array.isArray(raw?.data?.data)
+      ? raw.data.data
+      : Array.isArray(raw?.rows)
+        ? raw.rows
+        : Array.isArray(raw?.items)
+          ? raw.items
+          : Array.isArray(raw?.results)
+            ? raw.results
+            : null;
+
+  if (Array.isArray(dataCandidate)) {
+    const meta = raw.meta ?? {
+      current_page: raw.current_page,
+      from: raw.from,
+      last_page: raw.last_page,
+      per_page: raw.per_page,
+      to: raw.to,
+      total: raw.total,
+    };
+    return { data: dataCandidate.map(normalizeVehicle), meta };
   }
   return { data: [] };
 }
@@ -110,10 +145,57 @@ export const vehicleService = {
     return allVehicles;
   },
 
-  async getVehiclesCalendar(page: number = 1, perPage: number = 200): Promise<VehiclesResponse> {
-    const query = buildQuery({ page, per_page: perPage });
-    const raw = await apiClient.get<any>(`/v1/vehicles-calendar${query}`);
-    return normalizeVehiclesResponse(raw);
+  async getVehiclesCalendar(page: number = 1, perPage: number = 200, vehicleId?: number): Promise<VehiclesResponse> {
+    const query = buildQuery({
+      page,
+      per_page: perPage,
+      ...(vehicleId ? { vehicleId } : {}),
+    });
+    let raw: any;
+    let source = 'vehicles-calendar';
+
+    try {
+      raw = await apiClient.get<any>(`/v1/vehicles-calendar${query}`);
+    } catch (error: any) {
+      source = 'vehicles-fallback';
+      const fallbackQuery = buildQuery({ page, per_page: perPage });
+
+      if (vehicleId) {
+        raw = await apiClient.get<any>(`/v1/vehicles/${vehicleId}`);
+      } else {
+        raw = await apiClient.get<any>(`/v1/vehicles${fallbackQuery}`);
+      }
+
+      pushReservationDebug('vehicles.getVehiclesCalendar.fallback', {
+        page,
+        perPage,
+        vehicleId,
+        status: Number(error?.status ?? 0),
+        message: error?.message,
+      });
+    }
+
+    const normalized = normalizeVehiclesResponse(raw);
+
+    pushReservationDebug('vehicles.getVehiclesCalendar', {
+      source,
+      page,
+      perPage,
+      vehicleId,
+      raw,
+      normalizedCount: normalized.data.length,
+      normalizedSample: normalized.data.slice(0, 2).map((vehicle) => ({
+        id: vehicle.id,
+        vehicle_id: vehicle.vehicle_id,
+        license_plate: vehicle.license_plate,
+        status: vehicle.status,
+        calendarReservationsCount: Array.isArray(vehicle.calendar_reservations)
+          ? vehicle.calendar_reservations.length
+          : 0,
+      })),
+    });
+
+    return normalized;
   },
 
   async getVehicleById(id: number): Promise<Vehicle> {
