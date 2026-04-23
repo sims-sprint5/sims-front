@@ -6,12 +6,14 @@ export interface NextReservation {
   start_date: string;
   end_date: string;
   user_name: string;
+  user_id?: number;
 }
 
 export interface CalendarReservation {
   start_date: string;
   end_date: string;
   user_name?: string;
+  user_id?: number;
   status?: string;
   calendar_state?: string;
 }

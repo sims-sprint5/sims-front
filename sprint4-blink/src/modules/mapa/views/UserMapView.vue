@@ -159,6 +159,7 @@ import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service'
 import { createReservationCheckoutSession } from '@/modules/reservations/services/reservationCheckout.service'
 import { useUser } from '@/modules/auth/composables/useUser'
+import { authService } from '@/modules/auth/services/auth.service'
 import { useToast } from '@/shared/composables/useToast'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
@@ -170,6 +171,13 @@ const route = useRoute()
 const { t } = useI18n()
 const { user } = useUser()
 const toast = useToast()
+
+const isMapDebugEnabled = (() => {
+  if (!import.meta.env.DEV) return false
+  const queryFlag = String(route.query.debugMap ?? '').trim()
+  const storageFlag = String(localStorage.getItem('debugMap') ?? '').trim()
+  return queryFlag === '1' || queryFlag.toLowerCase() === 'true' || storageFlag === '1' || storageFlag.toLowerCase() === 'true'
+})()
 
 const pageTitle = computed(() => {
   const titleKey = route.meta.titleKey as string | undefined
@@ -322,6 +330,16 @@ const quickReservationBusySlots = computed<ReservationSlot[]>(() => {
     }
   }
 
+  const nextAvailableAt = parseDate(vehicle.next_available_at)
+  if (nextAvailableAt && nextAvailableAt > now) {
+    const syntheticStart = toDateTimeLocalInput(now)
+    const syntheticEnd = toDateTimeLocalInput(nextAvailableAt)
+    const exists = slots.some((slot) => slot.startDate === syntheticStart && slot.endDate === syntheticEnd)
+    if (!exists) {
+      slots.push({ startDate: syntheticStart, endDate: syntheticEnd })
+    }
+  }
+
   if (quickRuntimeConflictSlot.value) {
     const exists = slots.some(
       (slot) =>
@@ -461,6 +479,24 @@ const normalizeDateTime = (value: string): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`
 }
 
+const formatDateTimeWithOffset = (value: Date): string => {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const year = value.getFullYear()
+  const month = pad(value.getMonth() + 1)
+  const day = pad(value.getDate())
+  const hours = pad(value.getHours())
+  const minutes = pad(value.getMinutes())
+  const seconds = pad(value.getSeconds())
+
+  const offsetMinutes = -value.getTimezoneOffset()
+  const sign = offsetMinutes >= 0 ? '+' : '-'
+  const absOffset = Math.abs(offsetMinutes)
+  const offsetHours = pad(Math.floor(absOffset / 60))
+  const offsetMins = pad(absOffset % 60)
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`
+}
+
 const buildReservationLocationText = (vehicle: Vehicle | null, fallbackName: string): string => {
   if (vehicle) {
     const lat = Number(vehicle.current_latitude)
@@ -552,6 +588,8 @@ const submitQuickReservation = async () => {
       if (overlapsWithConflict && conflictingEnd) {
         const formatted = conflictingEnd.toLocaleString()
         errorMsg = t('reservations.errors.availableFrom', { date: formatted })
+        toast.error(errorMsg)
+        return
       } else {
         const backendAvailableAt = parseDate(availability.available_at)
         const formatted = backendAvailableAt?.toLocaleString()
@@ -637,53 +675,164 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-// Nota: la lógica de disponibilidad por estado se mantiene en otros módulos.
-// Aquí mostramos vehículos por defecto salvo si están reservados AHORA por otro usuario.
-
-// Oculta un vehículo solo si existe una reserva en curso (now) hecha por OTRO usuario.
-// Decide si hay una reserva en curso AHORA de otro usuario usando calendar_reservations (backend)
-// y la lista `reservations` (mis reservas) para detectar reservas propias.
-const filterVehiclesForUserMap = (vehicles: Vehicle[]): Vehicle[] => {
-  const myUserName = String(user.value?.name ?? '')
+// Mapa de usuario: ocultar solo coches ocupados AHORA.
+// Si hoy tiene reservas en otras horas, se mantiene visible para reservar huecos.
+const filterVehiclesForUserMap = async (
+  vehicles: Vehicle[],
+  myActiveVehicleIds: Set<number>,
+  currentUserId: number,
+  currentUserName: string,
+): Promise<Vehicle[]> => {
   const now = Date.now()
+  const hasCurrentUserId = Number.isFinite(currentUserId) && currentUserId > 0
+  const hasCurrentUserName = Boolean(currentUserName)
+  const availabilityProbeStart = formatDateTimeWithOffset(new Date(now))
+  const availabilityProbeEnd = formatDateTimeWithOffset(new Date(now + 2 * 60 * 1000))
+  const visible: Vehicle[] = []
 
-  return vehicles
-    .map((orig) => ({ ...orig })) // evitar mutar objetos originales
-    .filter((v) => {
+  for (const orig of vehicles) {
+    const v = { ...orig } // evitar mutar objetos originales
       const vehicleId = Number(v.vehicle_id ?? v.id)
-      if (!Number.isFinite(vehicleId)) return false
+      if (!Number.isFinite(vehicleId)) continue
 
-      // Comprueba reservas activas NOW desde calendar_reservations
-      const activeReservations = (v.calendar_reservations ?? []).filter((cr) => {
+      const activeReservationsNow = (v.calendar_reservations ?? []).filter((cr) => {
         const s = parseDate(cr.start_date)
         const e = parseDate(cr.end_date)
         if (!s || !e) return false
         return s.getTime() <= now && now < e.getTime()
       })
+      const hasActiveReservationNow = activeReservationsNow.length > 0
+      const hasMyActiveReservationNow = activeReservationsNow.some((cr) => {
+        const reservationUserId = Number(cr.user_id)
+        const reservationUserName = String(cr.user_name ?? '').trim().toLowerCase()
+        const byId = hasCurrentUserId && Number.isFinite(reservationUserId) && reservationUserId === currentUserId
+        const byName = hasCurrentUserName && reservationUserName === currentUserName
+        return byId || byName
+      })
 
-      // Si hay reservas activas
-      if (activeReservations.length > 0) {
-        // ¿alguna es mía (por user_name) ?
-        const mine = activeReservations.some((cr) => {
-          if (!cr.user_name) return false
-          return cr.user_name.trim() === myUserName.trim()
+      // Fallback por si solo viene ocupación actual en next_reservation
+      const nextStart = parseDate(v.next_reservation?.start_date)
+      const nextEnd = parseDate(v.next_reservation?.end_date)
+      const hasNextReservationNow = Boolean(
+        nextStart && nextEnd && nextStart.getTime() <= now && now < nextEnd.getTime(),
+      )
+      const nextReservationUserId = Number(v.next_reservation?.user_id)
+      const nextReservationUserName = String(v.next_reservation?.user_name ?? '').trim().toLowerCase()
+      const hasMyNextReservationNow = Boolean(
+        hasNextReservationNow && (
+          (hasCurrentUserId && Number.isFinite(nextReservationUserId) && nextReservationUserId === currentUserId)
+          || (hasCurrentUserName && nextReservationUserName === currentUserName)
+        ),
+      )
+
+      const nextAvailableAt = parseDate(v.next_available_at)
+      const blockedByNextAvailable = Boolean(nextAvailableAt && now < nextAvailableAt.getTime())
+      const statusKey = String(v.status ?? '').trim().toLowerCase()
+      // `reserved` o `next_available_at` pueden representar disponibilidad futura,
+      // no necesariamente ocupación en este instante. Para no ocultar todo,
+      // en el mapa de usuario solo bloqueamos por solape temporal "ahora".
+      const blockedByReservedStatus = statusKey === 'reserved' && (
+        hasActiveReservationNow || hasNextReservationNow
+      )
+      const hasMyReservationNow = hasMyActiveReservationNow || hasMyNextReservationNow
+      const hasMyReservationById = myActiveVehicleIds.has(vehicleId)
+
+      if (isMapDebugEnabled) {
+        console.info('[map-debug] vehicle visibility', {
+          vehicleId,
+          plate: v.license_plate,
+          status: v.status,
+          hasActiveReservationNow,
+          hasMyActiveReservationNow,
+          hasNextReservationNow,
+          hasMyNextReservationNow,
+          hasMyReservationNow,
+          hasMyReservationById,
+          blockedByNextAvailable,
+          nextAvailableAt: v.next_available_at,
+          blockedByReservedStatus,
+          available: v.available,
         })
-
-        if (mine) {
-          // muéstralo al usuario y marca estado reservado
-          v.status = 'reserved'
-          return true
-        }
-
-        // Si no es mía -> ocultar (está en uso por otro)
-        return false
       }
 
-      // No hay reservas activas ahora: inferimos que está disponible ahora.
-      // Para reflejar esto en la UI, marcamos localmente como 'available' si el backend aún no lo hizo.
+      if (hasMyReservationNow || hasMyReservationById) {
+        v.status = 'reserved'
+        if (isMapDebugEnabled) {
+          console.info('[map-debug] visible own reserved vehicle', {
+            vehicleId,
+            plate: v.license_plate,
+          })
+        }
+        visible.push(v)
+        continue
+      }
+
+      const blockedByTemporalOverlap = hasActiveReservationNow || hasNextReservationNow
+      if (blockedByTemporalOverlap || blockedByReservedStatus) {
+        if (isMapDebugEnabled) {
+          console.info('[map-debug] hidden vehicle', {
+            vehicleId,
+            plate: v.license_plate,
+            reason: {
+              hasActiveReservationNow,
+              hasNextReservationNow,
+              blockedByNextAvailable,
+              blockedByReservedStatus,
+            },
+          })
+        }
+        continue
+      }
+
+      // Fallback robusto: cuando status/available/next_available_at sugieren bloqueo,
+      // validar disponibilidad real "ahora" con backend para evitar falsos positivos.
+      const needsAvailabilityProbe = v.available === false || statusKey === 'reserved' || blockedByNextAvailable
+      if (needsAvailabilityProbe) {
+        try {
+          const availability = await reservationLogService.checkAvailability(
+            vehicleId,
+            availabilityProbeStart,
+            availabilityProbeEnd,
+          )
+          if (!availability.available) {
+            if (isMapDebugEnabled) {
+              console.info('[map-debug] hidden by checkAvailability', {
+                vehicleId,
+                plate: v.license_plate,
+                availability,
+              })
+            }
+            continue
+          }
+        } catch (err) {
+          // Si falla el chequeo pero el backend ya marca potencialmente no disponible,
+          // ocultamos para evitar enseñar coches reservados por otros usuarios.
+          if (isMapDebugEnabled) {
+            console.warn('[map-debug] checkAvailability failed', {
+              vehicleId,
+              plate: v.license_plate,
+              error: err,
+              fallbackHidden: Boolean(v.available === false || statusKey === 'reserved' || blockedByNextAvailable),
+            })
+          }
+          if (v.available === false || statusKey === 'reserved' || blockedByNextAvailable) {
+            continue
+          }
+        }
+      }
+
+      // No está ocupado ahora: visible para reservar hoy u otro día.
       v.status = 'available'
-      return true
-    })
+      if (isMapDebugEnabled) {
+        console.info('[map-debug] visible vehicle', {
+          vehicleId,
+          plate: v.license_plate,
+        })
+      }
+      visible.push(v)
+  }
+
+  return visible
 }
 
 const renderVehicles = (vehicles: Vehicle[]) => {
@@ -772,15 +921,74 @@ onMounted(async () => {
   initMap()
 
   try {
-    const isAdminRole = user.value?.role === 'admin' || user.value?.role === 'superadmin'
+    const storedUser = authService.getUser()
+    const currentUser = storedUser ?? user.value
+    const isAdminRole = currentUser?.role === 'admin' || currentUser?.role === 'superadmin'
+    const currentUserId = Number(currentUser?.id ?? 0)
+    const currentUserName = String(currentUser?.name ?? '').trim().toLowerCase()
 
-    const [geofences, vehiclesResponse] = await Promise.all([
-      geofenceService.getGeofences(),
-      vehicleService.getVehiclesCalendar(1, 500),
+    const geofencesPromise = geofenceService.getGeofences()
+    const vehiclesPromise = vehicleService.getVehiclesCalendar(1, 500)
+    const myReservationsPromise = isAdminRole ? Promise.resolve([]) : reservationLogService.getMyReservationsPages(3, 200)
+
+    const [geofencesResult, vehiclesResult, myReservationsResult] = await Promise.allSettled([
+      geofencesPromise,
+      vehiclesPromise,
+      myReservationsPromise,
     ])
 
+    const geofences = geofencesResult.status === 'fulfilled' ? geofencesResult.value : []
+    const vehiclesResponse = vehiclesResult.status === 'fulfilled' ? vehiclesResult.value : { data: [] }
+    let myReservations = myReservationsResult.status === 'fulfilled' ? myReservationsResult.value : []
+
+    if (geofencesResult.status === 'rejected') {
+      console.warn('Failed to load geofences:', geofencesResult.reason)
+    }
+    if (myReservationsResult.status === 'rejected') {
+      console.warn('Failed to load my reservations for user map filtering:', myReservationsResult.reason)
+      if (!isAdminRole) {
+        try {
+          myReservations = await reservationLogService.getMyReservations(1, 500)
+        } catch (fallbackErr) {
+          console.warn('Fallback failed while loading my reservations:', fallbackErr)
+        }
+      }
+    }
+
     const vehicles = Array.isArray(vehiclesResponse?.data) ? vehiclesResponse.data : []
-    const visibleVehicles = isAdminRole ? vehicles : filterVehiclesForUserMap(vehicles)
+
+    if (vehiclesResult.status === 'rejected') {
+      console.warn('Failed to load vehicles:', vehiclesResult.reason)
+    }
+
+    if (vehicles.length === 0) {
+      if (isMapDebugEnabled) {
+        console.info('[map-debug] no vehicles returned to render')
+      }
+      return
+    }
+
+    const now = Date.now()
+    const myActiveVehicleIds = new Set(
+      (myReservations ?? [])
+        .filter((reservation) => {
+          const start = parseDate(reservation.start_at)
+          const end = parseDate(reservation.end_at)
+          if (!end) return false
+
+          const statusKey = String(reservation.status ?? '').trim().toLowerCase()
+          const isActiveByStatus = statusKey === 'active' && now < end.getTime()
+          const overlapsNow = Boolean(start && start.getTime() <= now && now < end.getTime())
+
+          return overlapsNow || isActiveByStatus
+        })
+        .map((reservation) => Number(reservation.vehicle_id))
+        .filter((id) => Number.isFinite(id)),
+    )
+
+    const visibleVehicles = isAdminRole
+      ? vehicles
+      : await filterVehiclesForUserMap(vehicles, myActiveVehicleIds, currentUserId, currentUserName)
     mapVehicles.value = visibleVehicles
 
     renderGeofences(geofences)

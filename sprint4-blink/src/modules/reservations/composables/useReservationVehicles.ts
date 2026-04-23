@@ -27,13 +27,17 @@ function isVehicleAvailableNow(v: Vehicle): boolean {
     return !blocking;
   }
 
+  const nextReservationStart = v.next_reservation?.start_date ? new Date(v.next_reservation.start_date) : null;
   const nextReservationEnd = v.next_reservation?.end_date ? new Date(v.next_reservation.end_date) : null;
-  if (nextReservationEnd && !Number.isNaN(nextReservationEnd.getTime()) && nextReservationEnd > now) {
-    return false;
-  }
-
-  const nextAvailable = v.next_available_at ? new Date(v.next_available_at) : null;
-  if (nextAvailable && !Number.isNaN(nextAvailable.getTime()) && nextAvailable > now) {
+  const hasNextReservationNow = Boolean(
+    nextReservationStart &&
+    nextReservationEnd &&
+    !Number.isNaN(nextReservationStart.getTime()) &&
+    !Number.isNaN(nextReservationEnd.getTime()) &&
+    nextReservationStart <= now &&
+    now < nextReservationEnd,
+  );
+  if (hasNextReservationNow) {
     return false;
   }
 
@@ -42,7 +46,7 @@ function isVehicleAvailableNow(v: Vehicle): boolean {
   }
 
   if (typeof v.available === 'boolean') return v.available;
-  return statusKey === 'available' || statusKey === 'active';
+  return true;
 }
 
 function toCardModel(v: Vehicle): ReservationVehicleCardModel {

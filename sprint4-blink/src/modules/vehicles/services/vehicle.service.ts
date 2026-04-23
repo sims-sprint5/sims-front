@@ -38,6 +38,7 @@ function normalizeVehicle(raw: any): Vehicle {
       start_date: String(reservation?.start_date ?? reservation?.start_at ?? reservation?.startDate ?? ''),
       end_date: String(reservation?.end_date ?? reservation?.end_at ?? reservation?.endDate ?? ''),
       user_name: reservation?.user_name ? String(reservation.user_name) : undefined,
+      user_id: Number.isFinite(Number(reservation?.user_id)) ? Number(reservation.user_id) : undefined,
       status: reservation?.status ? String(reservation.status) : undefined,
       calendar_state: reservation?.calendar_state ? String(reservation.calendar_state) : undefined,
     }))
@@ -69,6 +70,9 @@ function normalizeVehicle(raw: any): Vehicle {
           start_date: String(raw.next_reservation.start_date ?? ''),
           end_date: String(raw.next_reservation.end_date ?? ''),
           user_name: String(raw.next_reservation.user_name ?? ''),
+          user_id: Number.isFinite(Number(raw.next_reservation.user_id))
+            ? Number(raw.next_reservation.user_id)
+            : undefined,
         }
       : null,
   };

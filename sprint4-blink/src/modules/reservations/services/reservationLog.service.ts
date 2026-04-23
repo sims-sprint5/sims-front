@@ -30,8 +30,12 @@ function normalizeLog(raw: any): ReservationLog {
   const normalized: ReservationLog = {
     id: toNumber(raw?.id ?? raw?.reservation_id, 0),
     log_type: 'created' as const,
-    user_id: raw?.user_id === null || raw?.user_id === undefined ? null : toNumber(raw.user_id, 0),
-    user_name: String(raw?.user_name ?? userData.name ?? userData.user_name ?? '').trim(),
+    user_id: (raw?.user_id === null || raw?.user_id === undefined)
+      ? (userData && (userData.id ?? userData.user_id) ? toNumber(userData.id ?? userData.user_id, 0) : null)
+      : toNumber(raw.user_id, 0),
+    user_name: String(
+      raw?.user_name ?? userData.name ?? `${userData.first_name ?? ''} ${userData.last_name ?? ''}`.trim() ?? userData.user_name ?? '',
+    ).trim(),
     vehicle_id: toNumber(raw?.vehicle_id ?? vehicleData.id ?? vehicleData.vehicle_id, 0),
     vehicle_name: vehicleName,
     license_plate: String(vehicleData.license_plate ?? raw?.license_plate ?? raw?.plate ?? '').trim(),
@@ -72,6 +76,26 @@ function normalizeLogs(raw: any): ReservationLog[] {
   return [];
 }
 
+function filterToCurrentUserReservations(logs: ReservationLog[]): ReservationLog[] {
+  const currentUser = authService.getUser();
+  const currentUserId = Number(currentUser?.id ?? 0);
+  const currentUserName = String(currentUser?.name ?? '').trim().toLowerCase();
+
+  if ((!Number.isFinite(currentUserId) || currentUserId <= 0) && !currentUserName) {
+    return logs;
+  }
+
+  return logs.filter((item) => {
+    const itemUserId = Number(item.user_id ?? 0);
+    const byId = Number.isFinite(currentUserId) && currentUserId > 0 && itemUserId === currentUserId;
+
+    const itemUserName = String(item.user_name ?? '').trim().toLowerCase();
+    const byName = Boolean(currentUserName) && itemUserName === currentUserName;
+
+    return byId || byName;
+  });
+}
+
 async function fetchReservationsListRaw(page: number, perPage: number): Promise<any> {
   const query = buildQuery({ page, per_page: perPage });
 
@@ -101,6 +125,31 @@ async function fetchReservationsListRaw(page: number, perPage: number): Promise<
   }
 }
 
+async function fetchMyReservationsListRaw(page: number, perPage: number): Promise<any> {
+  const query = buildQuery({ page, per_page: perPage });
+  const userId = Number(authService.getUser()?.id ?? 0);
+
+  if (Number.isFinite(userId) && userId > 0) {
+    try {
+      const raw = await apiClient.get<any>(`/v1/reservations/user/${userId}${query}`);
+      pushReservationDebug('reservations.fetch.my.user', { page, perPage, userId, raw });
+      return raw;
+    } catch (error: any) {
+      pushReservationDebug('reservations.fetch.my.user.error', {
+        page,
+        perPage,
+        userId,
+        status: Number(error?.status ?? 0),
+        message: error?.message,
+      });
+    }
+  }
+
+  const raw = await fetchReservationsListRaw(page, perPage);
+  pushReservationDebug('reservations.fetch.my.fallback', { page, perPage, raw });
+  return raw;
+}
+
 export const reservationLogService = {
   async getLogs(page: number = 1, perPage: number = 200): Promise<ReservationLog[]> {
     const raw = await fetchReservationsListRaw(page, perPage);
@@ -108,18 +157,20 @@ export const reservationLogService = {
   },
 
   async getMyReservations(page: number = 1, perPage: number = 50): Promise<ReservationLog[]> {
-    const raw = await fetchReservationsListRaw(page, perPage);
+    const raw = await fetchMyReservationsListRaw(page, perPage);
     const normalized = normalizeLogs(raw);
+    const mine = filterToCurrentUserReservations(normalized);
 
     pushReservationDebug('reservations.getMyReservations', {
       page,
       perPage,
       raw,
       normalizedCount: normalized.length,
+      mineCount: mine.length,
       normalizedSample: normalized.slice(0, 3),
     });
 
-    return normalized;
+    return mine;
   },
 
   async getMyReservationsPages(maxPages: number = 5, perPage: number = 200): Promise<ReservationLog[]> {
@@ -127,8 +178,8 @@ export const reservationLogService = {
     const seen = new Set<number>();
 
     for (let page = 1; page <= maxPages; page += 1) {
-      const raw = await fetchReservationsListRaw(page, perPage);
-      const current = normalizeLogs(raw);
+      const raw = await fetchMyReservationsListRaw(page, perPage);
+      const current = filterToCurrentUserReservations(normalizeLogs(raw));
 
       pushReservationDebug('reservations.getMyReservationsPages.page', {
         page,

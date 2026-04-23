@@ -169,7 +169,6 @@ function getEffectiveStatus(car: Car): string {
 }
 
 function isCarReservedNow(car: Car): boolean {
-  const statusKey = String(car.status ?? '').trim().toLowerCase()
   const now = new Date()
   const slots = getCalendarSlots(car)
 
@@ -178,11 +177,6 @@ function isCarReservedNow(car: Car): boolean {
   const nextReservationStart = parseReservationDate(car.next_reservation?.start_date)
   const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
   if (nextReservationStart && nextReservationEnd && nextReservationStart <= now && now < nextReservationEnd) return true
-
-  const nextAvailable = parseReservationDate(car.next_available_at)
-  if (nextAvailable && nextAvailable > now) return true
-
-  if (!slots.length && statusKey === 'reserved') return true
   return false
 }
 
@@ -239,11 +233,11 @@ function lastReservationLabel(car: Car): string {
 function isCarAvailable(car: Car): boolean {
   const statusKey = String(car.status ?? '').trim().toLowerCase()
   if (isCarReservedNow(car)) return false
-  if (['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  if (['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
   if (statusKey === 'available' || statusKey === 'active') return true
   if (car.available === false) return false
   if (car.available === true) return true
-  return false
+  return true
 }
 
 

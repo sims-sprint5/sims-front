@@ -433,6 +433,17 @@ const selectedVehicleCalendarSlots = computed<ReservationSlot[]>(() => {
   const baseSlots = selectedVehicle.value?.calendarReservations ?? [];
   const merged = [...baseSlots];
 
+  const nextAvailableAt = parseDate(selectedVehicle.value?.nextAvailableAt ?? null);
+  const now = new Date();
+  if (nextAvailableAt && nextAvailableAt > now) {
+    const syntheticStart = toDateTimeLocalInput(now);
+    const syntheticEnd = toDateTimeLocalInput(nextAvailableAt);
+    const hasSynthetic = merged.some((slot) => slot.startDate === syntheticStart && slot.endDate === syntheticEnd);
+    if (!hasSynthetic) {
+      merged.push({ startDate: syntheticStart, endDate: syntheticEnd });
+    }
+  }
+
   if (runtimeConflictSlot.value) {
     const exists = merged.some(
       (slot) =>
@@ -539,6 +550,8 @@ async function createReservation() {
       if (overlapsWithConflict && conflictingEnd) {
         const formatted = conflictingEnd.toLocaleString();
         errorMsg = t('reservations.errors.availableFrom', { date: formatted });
+        toast.error(errorMsg);
+        return;
       } else {
         const backendAvailableAt = parseDate(availability.available_at);
         const formatted = backendAvailableAt?.toLocaleString();
