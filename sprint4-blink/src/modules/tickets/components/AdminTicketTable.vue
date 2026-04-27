@@ -67,27 +67,30 @@
 
         <template #cell-actions="{ item }">
           <div class="flex gap-2 justify-end">
-            <button
-              @click="$emit('view', item)"
-              class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
-              :title="$t('common.view')"
-            >
-              <EyeIcon class="w-5 h-5" />
-            </button>
-            <button
-              @click="$emit('chat', item)"
-              class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
-              :title="$t('adminTickets.actions.reply')"
-            >
-              <ChatBubbleLeftRightIcon class="w-5 h-5" />
-            </button>
-            <button
-              @click="$emit('delete', item)"
-              class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
-              :title="$t('common.delete')"
-            >
-              <TrashIcon class="w-5 h-5" />
-            </button>
+            <BaseTooltip :text="$t('common.view')">
+              <button
+                @click="$emit('view', item)"
+                class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+              >
+                <EyeIcon class="w-5 h-5" />
+              </button>
+            </BaseTooltip>
+            <BaseTooltip :text="$t('adminTickets.actions.reply')">
+              <button
+                @click="$emit('chat', item)"
+                class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+              >
+                <ChatBubbleLeftRightIcon class="w-5 h-5" />
+              </button>
+            </BaseTooltip>
+            <BaseTooltip :text="$t('common.delete')">
+              <button
+                @click="$emit('delete', item)"
+                class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+              >
+                <TrashIcon class="w-5 h-5" />
+              </button>
+            </BaseTooltip>
           </div>
         </template>
       </BaseTable>
@@ -164,7 +167,7 @@
 </template>
 
 <script setup lang="ts">
-import { BaseTable } from '@/components/base';
+import { BaseTable, BaseTooltip } from '@/components/base';
 import ResponsiveTable from '@/components/base/ResponsiveTable.vue';
 import { EyeIcon, ChatBubbleLeftRightIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import type { AdminTicket } from '@/modules/tickets/types/adminTicket.types';

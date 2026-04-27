@@ -237,10 +237,26 @@ const renderVehicles = () => {
       const marker = L.marker(
         [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
         {
-          title: vehicle.license_plate,
+          title: String(vehicle.brand ?? '').trim() || 'Vehiculo',
           icon: vehicleIcon
         }
       )
+
+      const vehicleBrandTooltip = String(vehicle.brand ?? '').trim() || 'Vehiculo'
+      marker.bindTooltip(vehicleBrandTooltip, {
+        direction: 'top',
+        offset: [0, -12],
+        opacity: 0.95,
+        sticky: true,
+      })
+
+      marker.on('mouseover', () => {
+        marker.openTooltip()
+      })
+
+      marker.on('mouseout', () => {
+        marker.closeTooltip()
+      })
 
       marker.on('click', () => {
         selectedCar.value = vehicle
@@ -249,6 +265,19 @@ const renderVehicles = () => {
 
       marker.addTo(map!)
       vehicleMarkersMap.set(vehicleId, marker)
+      
+      // Ensure hover works reliably by attaching listeners to the marker DOM element
+      const el = (marker as any).getElement && (marker as any).getElement()
+      if (el) {
+        el.style.pointerEvents = 'auto'
+        el.style.cursor = 'pointer'
+        el.addEventListener('mouseenter', () => {
+          marker.openTooltip()
+        })
+        el.addEventListener('mouseleave', () => {
+          marker.closeTooltip()
+        })
+      }
     }
   })
 }
@@ -305,5 +334,12 @@ defineExpose({
 <style scoped>
 :deep(.leaflet-container) {
   font-family: inherit;
+}
+:deep(.vehicle-marker) {
+  pointer-events: auto;
+  cursor: pointer;
+}
+:deep(.leaflet-tooltip) {
+  z-index: 9999;
 }
 </style>

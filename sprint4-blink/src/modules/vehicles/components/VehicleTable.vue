@@ -6,8 +6,10 @@
     :loadingText="$t('vehicles.loading')"
     :emptyText="$t('vehicles.empty')"
   >
-    <template #cell-license_plate="{ value }">
-      <div class="text-sm font-medium text-gray-900">{{ value }}</div>
+    <template #cell-license_plate="{ value, item }">
+      <BaseTooltip :text="item.brand || ''">
+        <div class="text-sm font-medium text-gray-900">{{ value }}</div>
+      </BaseTooltip>
     </template>
 
     <template #cell-status="{ value }">
@@ -21,34 +23,37 @@
 
     <template #cell-actions="{ item }">
       <div class="flex gap-2 justify-end">
-        <button
-          @click="$emit('view', item)"
-          class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
-          :title="$t('common.view')"
-        >
-          <EyeIcon class="w-5 h-5" />
-        </button>
-        <button
-          @click="$emit('edit', item)"
-          class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
-          :title="$t('common.edit')"
-        >
-          <PencilIcon class="w-5 h-5" />
-        </button>
-        <button
-          @click="$emit('delete', item)"
-          class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
-          :title="$t('common.delete')"
-        >
-          <TrashIcon class="w-5 h-5" />
-        </button>
+        <BaseTooltip :text="$t('common.view')">
+          <button
+            @click="$emit('view', item)"
+            class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+          >
+            <EyeIcon class="w-5 h-5" />
+          </button>
+        </BaseTooltip>
+        <BaseTooltip :text="$t('common.edit')">
+          <button
+            @click="$emit('edit', item)"
+            class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+          >
+            <PencilIcon class="w-5 h-5" />
+          </button>
+        </BaseTooltip>
+        <BaseTooltip :text="$t('common.delete')">
+          <button
+            @click="$emit('delete', item)"
+            class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+          >
+            <TrashIcon class="w-5 h-5" />
+          </button>
+        </BaseTooltip>
       </div>
     </template>
   </BaseTable>
 </template>
 
 <script setup lang="ts">
-import { BaseTable } from '@/components/base';
+import { BaseTable, BaseTooltip } from '@/components/base';
 import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import type { Vehicle } from '@/modules/vehicles/types/vehicle.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';

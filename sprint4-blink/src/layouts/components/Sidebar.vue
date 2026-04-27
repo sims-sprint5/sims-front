@@ -14,13 +14,14 @@
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
             <li v-for="item in superadminNavigation" :key="item.nameKey" class="w-full flex justify-center">
-              <RouterLink :to="item.href" :title="isCollapsed ? t(item.nameKey) : undefined"
-                :class="getItemClasses(item)">
-                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-                <span v-if="!isCollapsed" class="truncate">
-                  {{ t(item.nameKey) }}
-                </span>
-              </RouterLink>
+              <BaseTooltip :text="t(item.nameKey)" :disabled="!isCollapsed" position="right" :full-width="true">
+                <RouterLink :to="item.href" :class="getItemClasses(item)">
+                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                  <span v-if="!isCollapsed" class="truncate">
+                    {{ t(item.nameKey) }}
+                  </span>
+                </RouterLink>
+              </BaseTooltip>
             </li>
           </ul>
         </li>
@@ -31,13 +32,14 @@
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
             <li v-for="item in clienteNavigation" :key="item.nameKey" class="w-full flex justify-center">
-              <RouterLink :to="item.href" :title="isCollapsed ? t(item.nameKey) : undefined"
-                :class="getItemClasses(item)">
-                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-                <span v-if="!isCollapsed" class="truncate">
-                  {{ t(item.nameKey) }}
-                </span>
-              </RouterLink>
+              <BaseTooltip :text="t(item.nameKey)" :disabled="!isCollapsed" position="right" :full-width="true">
+                <RouterLink :to="item.href" :class="getItemClasses(item)">
+                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                  <span v-if="!isCollapsed" class="truncate">
+                    {{ t(item.nameKey) }}
+                  </span>
+                </RouterLink>
+              </BaseTooltip>
             </li>
           </ul>
         </li>
@@ -48,47 +50,47 @@
           </div>
           <ul role="list" class="space-y-1 flex flex-col items-center">
             <li v-for="item in adminNavigation" :key="item.nameKey" class="w-full flex justify-center">
-              <button
-                v-if="item.href === '#'"
-                :disabled="true"
-                :title="isCollapsed ? t(item.nameKey) : undefined"
-                :class="getItemClasses(item)"
-              >
-                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+              <BaseTooltip :text="t(item.nameKey)" :disabled="!isCollapsed" position="right" :full-width="true">
+                <button
+                  v-if="item.href === '#'"
+                  :disabled="true"
+                  :class="getItemClasses(item)"
+                >
+                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
-                <span v-if="!isCollapsed" class="truncate">
-                  {{ t(item.nameKey) }}
-                </span>
+                  <span v-if="!isCollapsed" class="truncate">
+                    {{ t(item.nameKey) }}
+                  </span>
 
-                <span v-if="!isCollapsed && item.count"
-                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                  {{ item.count }}
-                </span>
+                  <span v-if="!isCollapsed && item.count"
+                    class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
+                    {{ item.count }}
+                  </span>
 
-                <span v-if="isCollapsed && item.count"
-                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-              </button>
-              
-              <RouterLink
-                v-else
-                :to="item.href"
-                :title="isCollapsed ? t(item.nameKey) : undefined"
-                :class="getItemClasses(item)"
-              >
-                <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                  <span v-if="isCollapsed && item.count"
+                    class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+                </button>
 
-                <span v-if="!isCollapsed" class="truncate">
-                  {{ t(item.nameKey) }}
-                </span>
+                <RouterLink
+                  v-else
+                  :to="item.href"
+                  :class="getItemClasses(item)"
+                >
+                  <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
 
-                <span v-if="!isCollapsed && item.count"
-                  class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
-                  {{ item.count }}
-                </span>
+                  <span v-if="!isCollapsed" class="truncate">
+                    {{ t(item.nameKey) }}
+                  </span>
 
-                <span v-if="isCollapsed && item.count"
-                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
-              </RouterLink>
+                  <span v-if="!isCollapsed && item.count"
+                    class="ml-auto w-9 min-w-max rounded-full bg-gray-900 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white">
+                    {{ item.count }}
+                  </span>
+
+                  <span v-if="isCollapsed && item.count"
+                    class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+                </RouterLink>
+              </BaseTooltip>
             </li>
           </ul>
         </li>
@@ -97,35 +99,36 @@
 
       <!-- Logout button -->
       <div class="w-full flex justify-center">
-        <button
-          @click="handleLogout"
-          :title="isCollapsed ? t('common.logout') : undefined"
-          :class="[
-            'text-red-400 hover:bg-red-500/10 hover:text-red-300',
-            'group relative flex items-center font-semibold rounded-md transition-colors',
-            isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
-          ]"
-        >
-          <!-- Exit door icon -->
-          <svg
-            class="size-6 shrink-0"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+        <BaseTooltip :text="t('common.logout')" :disabled="!isCollapsed" position="right" :full-width="true">
+          <button
+            @click="handleLogout"
+            :class="[
+              'text-red-400 hover:bg-red-500/10 hover:text-red-300',
+              'group relative flex items-center font-semibold rounded-md transition-colors',
+              isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-x-3 p-2 text-sm/6'
+            ]"
           >
-            <path d="M10 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4" />
-            <polyline points="17 16 21 12 17 8" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-          <span v-if="!isCollapsed" class="truncate">
-            {{ t('common.logout') }}
-          </span>
-        </button>
+            <!-- Exit door icon -->
+            <svg
+              class="size-6 shrink-0"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M10 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4" />
+              <polyline points="17 16 21 12 17 8" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span v-if="!isCollapsed" class="truncate">
+              {{ t('common.logout') }}
+            </span>
+          </button>
+        </BaseTooltip>
       </div>
     </nav>
 
@@ -139,6 +142,7 @@ import { useI18n } from 'vue-i18n'
 import { useUser } from '@/modules/auth/composables/useUser'
 import { authService } from '@/modules/auth/services/auth.service'
 import { superadminAuthService } from '@/modules/superadmin/services/superadmin-auth.service'
+import { BaseTooltip } from '@/components/base'
 import { isAdminRole } from '@/shared/utils/roleUtils'
 import {
   Cog6ToothIcon,

@@ -877,10 +877,26 @@ const renderVehicles = (vehicles: Vehicle[]) => {
     const marker = L.marker(
       [lat, lng],
       {
-        title: vehicle.license_plate,
+        title: String(vehicle.brand ?? '').trim() || 'Vehiculo',
         icon: vehicleIcon,
       }
     )
+
+    const vehicleBrandTooltip = String(vehicle.brand ?? '').trim() || 'Vehiculo'
+    marker.bindTooltip(vehicleBrandTooltip, {
+      direction: 'top',
+      offset: [0, -12],
+      opacity: 0.95,
+      sticky: true,
+    })
+
+    marker.on('mouseover', () => {
+      marker.openTooltip()
+    })
+
+    marker.on('mouseout', () => {
+      marker.closeTooltip()
+    })
 
     marker.on('click', () => {
       selectedCar.value = vehicle

@@ -31,13 +31,14 @@
 
         <template #cell-actions="{ item }">
           <div class="flex gap-2 justify-end">
-            <button
-              @click="$emit('view', item)"
-              class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
-              :title="$t('common.view')"
-            >
-              <ChatBubbleLeftRightIcon class="w-5 h-5" />
-            </button>
+            <BaseTooltip :text="$t('common.view')">
+              <button
+                @click="$emit('view', item)"
+                class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+              >
+                <ChatBubbleLeftRightIcon class="w-5 h-5" />
+              </button>
+            </BaseTooltip>
           </div>
         </template>
       </BaseTable>
@@ -81,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { BaseTable } from '@/components/base';
+import { BaseTable, BaseTooltip } from '@/components/base';
 import ResponsiveTable from '@/components/base/ResponsiveTable.vue';
 import type { Ticket } from '@/modules/tickets/types/ticket.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';

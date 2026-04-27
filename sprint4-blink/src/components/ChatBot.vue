@@ -1,20 +1,22 @@
 <template>
   <div class="chatbot-wrapper">
     <!-- Toggle Button -->
-    <button
-      class="chatbot-toggle"
-      @click="isOpen = !isOpen"
-      v-if="!isOpen"
-      :title="t('chatbot.openChat')"
-    >
-      Chat
-    </button>
+    <BaseTooltip :text="t('chatbot.openChat')" v-if="!isOpen">
+      <button
+        class="chatbot-toggle"
+        @click="isOpen = !isOpen"
+      >
+        Chat
+      </button>
+    </BaseTooltip>
 
     <!-- Chat Window -->
     <div v-if="isOpen" class="chatbot-window">
       <div class="chat-header">
         <h3>{{ t('chatbot.title') }}</h3>
-        <button class="close-btn" @click="isOpen = false">✕</button>
+        <BaseTooltip :text="t('common.close')">
+          <button class="close-btn" @click="isOpen = false">✕</button>
+        </BaseTooltip>
       </div>
 
       <div class="chat-messages" ref="messagesContainer">
@@ -63,6 +65,7 @@ import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/modules/auth/composables/useUser';
+import { BaseTooltip } from '@/components/base';
 
 interface Message {
   id: number;
