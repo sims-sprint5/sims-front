@@ -175,6 +175,7 @@ import {
   TruckIcon,
   UsersIcon,
   BuildingOffice2Icon,
+  ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline'
 import isotopeLogo from '@/assets/fleetly_isotip_blanc.svg'
 import fullLogo from '@/assets/fleetly_logotip_blanc.png'
@@ -252,6 +253,7 @@ const clienteNavigation = computed<NavItem[]>(() => [
   { nameKey: 'nav.map', href: '/mapa', icon: MapPinIcon },
   { nameKey: 'nav.myReservations', href: '/mis-reservas', icon: ReservesIcon },
   { nameKey: 'nav.tickets', href: '/user/tickets', icon: TicketIcon },
+  { nameKey: 'nav.chat', href: '/chat', icon: ChatBubbleLeftRightIcon },
   { nameKey: 'nav.settings', href: '/settings', icon: Cog6ToothIcon },
 ])
 

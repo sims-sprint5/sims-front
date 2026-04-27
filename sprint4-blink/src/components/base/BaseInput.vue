@@ -112,3 +112,15 @@ const updateValue = (event: Event) => {
     </p>
   </div>
 </template>
+
+<style scoped>
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+}
+</style>

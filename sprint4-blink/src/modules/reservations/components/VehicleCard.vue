@@ -66,7 +66,7 @@ const isReservedNow = computed(() => {
     const start = new Date(slot.startDate);
     const end = new Date(slot.endDate);
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-    return start <= now && now < end;
+    return end > now;
   });
 });
 

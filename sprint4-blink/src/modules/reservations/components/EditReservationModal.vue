@@ -1,21 +1,21 @@
-<template>
-  <CustomModal :show="show" :title="$t('reservations.myReservations.editReservation')" @close="handleClose">
+ <template>
+  <CustomModal :show="show" :title="$t('reservations.myReservations.expandReservation')" @close="handleClose">
     <form @submit.prevent="handleSave" class="space-y-4">
-      <!-- Start Date -->
+      <!-- Start Date (Read-only) -->
       <div>
         <label class="block text-sm font-medium text-main">
           {{ $t('reservations.myReservations.startDate') }}
         </label>
         <input
-          v-model="formData.start_at"
+          :value="formData.start_at"
           type="datetime-local"
-          required
-          class="mt-1 block w-full rounded-md border border-default px-3 py-2 text-sm"
-          :disabled="isLoading"
+          disabled
+          class="mt-1 block w-full rounded-md border border-default bg-base px-3 py-2 text-sm text-muted"
         />
+        <p class="mt-1 text-xs text-gray-500">{{ $t('reservations.myReservations.startDateLocked') }}</p>
       </div>
 
-      <!-- End Date -->
+      <!-- End Date (Editable) -->
       <div>
         <label class="block text-sm font-medium text-main">
           {{ $t('reservations.myReservations.endDate') }}
@@ -24,35 +24,7 @@
           v-model="formData.end_at"
           type="datetime-local"
           required
-          class="mt-1 block w-full rounded-md border border-default px-3 py-2 text-sm"
-          :disabled="isLoading"
-        />
-      </div>
-
-      <!-- Pickup Location -->
-      <div>
-        <label class="block text-sm font-medium text-main">
-          {{ $t('reservations.myReservations.pickupLocation') }}
-        </label>
-        <BaseInput
-          v-model="formData.pickup_location"
-          type="text"
-          placeholder="Ej: Calle Principal 123"
-          class="mt-1"
-          :disabled="isLoading"
-        />
-      </div>
-
-      <!-- Dropoff Location -->
-      <div>
-        <label class="block text-sm font-medium text-main">
-          {{ $t('reservations.myReservations.dropoffLocation') }}
-        </label>
-        <BaseInput
-          v-model="formData.dropoff_location"
-          type="text"
-          placeholder="Ej: Aeropuerto"
-          class="mt-1"
+          class="mt-1 block w-full rounded-md border border-default px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
           :disabled="isLoading"
         />
       </div>
@@ -101,7 +73,6 @@
 import { computed, reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { BaseInput } from '@/components/base';
 import BaseButton from '@/components/base/BaseButton.vue';
 import CustomModal from '@/modules/mapa/components/CustomModal.vue';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
@@ -121,7 +92,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { error, success } = useToast();
+const { error } = useToast();
 
 const isLoading = ref(false);
 const errorMessage = ref('');
@@ -138,9 +109,18 @@ const formatToLocal = (isoDate: string): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-// Convert datetime-local back to ISO
+// Convert datetime-local back to ISO format para enviar al backend
+// Backend espera: 2026-04-26T18:00:00 (sin milisegundos ni Z)
 const formatToISO = (localDate: string): string => {
-  return new Date(localDate).toISOString();
+  if (!localDate) return '';
+  const date = new Date(localDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
 
 const formData = reactive({
@@ -202,8 +182,9 @@ const handleSave = async () => {
       try {
         const availabilityResult = await reservationLogService.checkAvailability(
           props.reservation.vehicle_id,
-          formData.start_at,
-          formData.end_at
+          formatToISO(formData.start_at),
+          formatToISO(formData.end_at),
+          props.reservation.id
         );
 
         if (!availabilityResult.available) {
@@ -221,19 +202,25 @@ const handleSave = async () => {
     }
 
     // Prepare update data
-    const updateData: Partial<ReservationLog> = {
-      start_at: formatToISO(formData.start_at),
-      end_at: formatToISO(formData.end_at),
-      pickup_location: formData.pickup_location,
-      dropoff_location: formData.dropoff_location,
-    };
+    const isoEndDate = formatToISO(formData.end_at);
 
-    // Call update service (would need to be implemented in service)
-    // For now, emit save event and let parent handle it
-    emit('save', updateData);
-
-    success(t('reservations.myReservations.reservationUpdated'));
-    handleClose();
+    // Call update API
+    try {
+      await reservationLogService.updateReservation(props.reservation.id, isoEndDate);
+      emit('save', {
+        start_at: props.reservation.start_at,
+        end_at: isoEndDate,
+        pickup_location: props.reservation.pickup_location,
+        dropoff_location: props.reservation.dropoff_location,
+      });
+      handleClose();
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.message || err?.message || t('reservations.errors.updateFailed');
+      errorMessage.value = errorMsg;
+      error(errorMsg);
+      isLoading.value = false;
+      return;
+    }
   } catch (err) {
     console.error('Error saving reservation:', err);
     errorMessage.value = t('reservations.errors.updateFailed');

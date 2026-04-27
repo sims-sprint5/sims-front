@@ -22,10 +22,12 @@
     "view": "Ver",
     "actions": "Acciones",
     "logout": "Cerrar sesión",
+    "send": "Enviar",
     "passwordMismatch": "Las contraseñas no coinciden."
   },
   "language": {
     "label": "Idioma",
+    "_lang": "es",
     "ca": "Catalán",
     "es": "Español",
     "en": "Inglés"
@@ -35,6 +37,7 @@
     "dashboard": "Dashboard",
     "map": "Mapa",
     "tickets": "Tickets",
+    "chat": "Chat",
     "bookings": "Reservas",
     "myReservations": "Mis Reservas",
     "reservationsAdmin": "Log de reservas",
@@ -146,6 +149,14 @@
     "languageDesc": "Selecciona el idioma de la aplicación.",
     "logoutDesc": "Cerrar tu sesión actual."
   },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total de vehículos",
+      "availableVehicles": "Vehículos disponibles",
+      "maintenanceVehicles": "En mantenimiento",
+      "inactiveVehicles": "Inactivos"
+    }
+  },
   "users": {
     "title": "Gestión de usuarios",
     "description": "Administra los usuarios del sistema",
@@ -252,7 +263,9 @@
       "gray": "Gris",
       "grey": "Gris",
       "silver": "Plateado",
-      "green": "Verde"
+      "green": "Verde",
+      "yellow": "Amarillo",
+      "groc": "Amarillo"
     },
     "modal": {
       "deleteTitle": "Eliminar vehículo",
@@ -294,8 +307,8 @@
     "table": {
       "id": "ID",
       "logType": "Tipo de log",
-      "userId": "Usuario (ID)",
-      "vehicleId": "Vehículo (ID)",
+      "userId": "Usuario",
+      "vehicleId": "Vehículo",
       "status": "Estado",
       "startAt": "Inicio",
       "endAt": "Fin",
@@ -304,7 +317,8 @@
       "renewal": "Estado de renovación",
       "expired": "Vencido",
       "renew": "Renovar",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "deleteReservation": "Eliminar reserva"
     },
     "form": {
       "userId": "ID de usuario",
@@ -365,6 +379,10 @@
       "renewal": "Error al solicitar renovación. Por favor, inténtalo de nuevo.",
       "notAvailable": "Este vehículo no está disponible para el período seleccionado.",
       "availableFrom": "Este vehículo estará disponible desde {date}.",
+      "checkoutFailed": "No se pudo iniciar el pago. Inténtalo de nuevo.",
+      "checkoutUnauthorized": "Tu sesión ha caducado. Inicia sesión de nuevo para continuar.",
+      "checkoutConflict": "Existe un conflicto con esta reserva. Revisa disponibilidad y vuelve a intentar.",
+      "checkoutServer": "El servidor no pudo iniciar el pago. Inténtalo en unos minutos.",
       "invalidDateRange": "La fecha de fin debe ser posterior a la fecha de inicio.",
       "checkAvailability": "No se pudo verificar la disponibilidad del vehículo.",
       "updateFailed": "No se pudo actualizar la reserva."
@@ -412,9 +430,13 @@
       "edit": "Editar",
       "cancel": "Cancelar",
       "extend": "Extender",
+      "expandReservation": "Extender Reserva",
+      "startDateLocked": "La fecha de inicio no puede ser modificada",
       "vehicleColumn": "Vehículo",
       "viewVehicleDetails": "Ver detalles del vehículo",
       "confirmCancel": "¿Estás seguro de que deseas cancelar esta reserva?",
+      "confirmDeleteTitle": "Eliminar Reserva",
+      "confirmDeleteMessage": "¿Estás seguro de que deseas eliminar la reserva de {vehicle}? Esta acción no se puede deshacer.",
       "checkingAvailability": "Comprobando disponibilidad...",
       "reservationUpdated": "Reserva actualizada correctamente"
     },
@@ -438,6 +460,7 @@
     "buttons": {
       "reserveButton": "Reservar",
       "preReserveButton": "Prereservar",
+      "expandButton": "Aumentar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
     },
@@ -766,6 +789,7 @@
     "edit": "Editar"
   },
   "errors": {
+    "error": "Error",
     "unexpected": "Ha ocurrido un error inesperado.",
     "invalidLoginResponse": "Respuesta de login inválida: falta token.",
     "requestFailed": "Error en la petición",
@@ -883,5 +907,25 @@
       "save": "Error al guardar la compañía",
       "delete": "Error al eliminar la compañía"
     }
+  },
+  "chatbot": {
+    "title": "Asistente SIMS",
+    "openChat": "Abrir chat de asistencia",
+    "greeting": "👋 Hola {name}, ¿En qué puedo ayudarte?",
+    "defaultGreeting": "Usuario",
+    "typing": "⏳ Escribiendo...",
+    "footer": "Powered by AI • {context}",
+    "contextMap": "Explorando vehículos",
+    "contextReservations": "Tus reservas",
+    "contextTickets": "Tus tickets de soporte",
+    "contextDefault": "En SIMS",
+    "placeholderMap": "¿Es este vehículo bueno para mí?",
+    "placeholderReservations": "¿Cómo modifico mi reserva?",
+    "placeholderTickets": "¿Necesitas ayuda con tu ticket?",
+    "placeholderDefault": "¿Tienes alguna duda?",
+    "welcomeMessage": "Soy tu asistente de SIMS. Cuéntame qué necesitas ayuda y haré mi mejor esfuerzo para asistirte.",
+    "errorProcessing": "Error al procesar tu pregunta",
+    "errorServer": "Error del servidor. Intenta nuevamente.",
+    "errorConnection": "Error de conexión. Intenta más tarde."
   }
 }

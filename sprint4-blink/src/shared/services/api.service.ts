@@ -82,11 +82,13 @@ axiosInstance.interceptors.response.use(
         }
       }
 
+      // Include the raw response data so callers can show backend messages.
       throw {
         message: error.response.data?.message || 'errors.requestFailed',
         errors: error.response.data?.errors || {},
         status: error.response.status,
-      } as ApiError & { status: number };
+        responseData: error.response.data,
+      } as ApiError & { status: number; responseData?: any };
     }
 
     throw {

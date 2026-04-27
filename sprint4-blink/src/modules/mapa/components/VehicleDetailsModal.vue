@@ -55,8 +55,15 @@
                 :full-width="true"
                 @click="goToReservation(car)"
               >
-                {{ $t('reservations.buttons.reserveButton') }}
+                {{ canPreReserve(car)
+                    ? $t('reservations.buttons.preReserveButton')
+                  : isCarAvailable(car)
+                    ? $t('reservations.buttons.reserveButton')
+                    : statusLabel(car.status)
+                }}
               </BaseButton>
+
+              
             </div>
           </div>
         </div>
@@ -128,25 +135,145 @@ function toDateTimeLocalInput(value: Date): string {
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`
 }
 
-function isCarAvailable(car: Car): boolean {
-  const statusKey = String(car.status ?? '').trim().toLowerCase()
-  if (['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
-  if (statusKey === 'available' || statusKey === 'active') return true
-  if (car.available === false) return false
-  if (car.available === true) return true
+function getNextReservableMinute(): Date {
+  const now = new Date()
+  now.setSeconds(0, 0)
+  now.setMinutes(now.getMinutes() + 1)
+  return now
+}
+
+function parseReservationDate(value: unknown): Date | null {
+  if (typeof value !== 'string' || !value.trim()) return null
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+function isBlockingReservationState(status: unknown, calendarState: unknown): boolean {
+  const statusKey = String(status ?? '').trim().toLowerCase()
+  const calendarStateKey = String(calendarState ?? '').trim().toLowerCase()
+  const nonBlockingStates = new Set(['cancelled', 'canceled', 'completed', 'finished', 'expired'])
+
+  if (statusKey && nonBlockingStates.has(statusKey)) return false
+  if (calendarStateKey && nonBlockingStates.has(calendarStateKey)) return false
+  return true
+}
+
+function getCalendarSlots(car: Car): Array<{ start: Date; end: Date }> {
+  const rawSlots = Array.isArray(car.calendar_reservations) ? car.calendar_reservations : []
+  return rawSlots
+    .map((slot) => {
+      const start = parseReservationDate((slot as any)?.start_date ?? (slot as any)?.startDate)
+      const end = parseReservationDate((slot as any)?.end_date ?? (slot as any)?.endDate)
+      if (!start || !end) return null
+      return { start, end }
+    })
+    .filter((slot): slot is { start: Date; end: Date } => Boolean(slot))
+}
+
+function hasBlockingReservation(car: Car): boolean {
+  const now = new Date()
+
+  const rawSlots = Array.isArray(car.calendar_reservations) ? car.calendar_reservations : []
+  for (const rawSlot of rawSlots) {
+    const start = parseReservationDate((rawSlot as any)?.start_date ?? (rawSlot as any)?.startDate)
+    const end = parseReservationDate((rawSlot as any)?.end_date ?? (rawSlot as any)?.endDate)
+    if (!start || !end) continue
+    if (!isBlockingReservationState((rawSlot as any)?.status, (rawSlot as any)?.calendar_state)) continue
+    if (now < end) return true
+  }
+
+  const nextReservationStart = parseReservationDate(car.next_reservation?.start_date)
+  const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
+  const nextReservationStatus = (car.next_reservation as any)?.status
+  if (
+    nextReservationStart &&
+    nextReservationEnd &&
+    isBlockingReservationState(nextReservationStatus, null) &&
+    now < nextReservationEnd
+  ) {
+    return true
+  }
+
   return false
 }
 
+function getEffectiveStatus(car: Car): string {
+  return isCarReservedNow(car) ? 'reserved' : String(car.status ?? '')
+}
+
+function isCarReservedNow(car: Car): boolean {
+  const now = new Date()
+  const slots = getCalendarSlots(car)
+
+  if (slots.some((slot) => slot.start <= now && now < slot.end)) return true
+
+  const nextReservationStart = parseReservationDate(car.next_reservation?.start_date)
+  const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
+  if (nextReservationStart && nextReservationEnd && nextReservationStart <= now && now < nextReservationEnd) return true
+  return false
+}
+
+function canPreReserve(car: Car): boolean {
+  const statusKey = String(car.status ?? '').trim().toLowerCase()
+  if (['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  return hasBlockingReservation(car)
+}
+
+function getSuggestedStartForPreReservation(car: Car): string {
+  const byNextAvailable = parseReservationDate(car.next_available_at)
+  if (byNextAvailable) return toDateTimeLocalInput(byNextAvailable)
+
+  const slots = getCalendarSlots(car)
+  if (!slots.length) return toDateTimeLocalInput(getNextReservableMinute())
+
+  const sorted = [...slots].sort((a, b) => a.start.getTime() - b.start.getTime())
+  let cursor = getNextReservableMinute()
+
+  for (const slot of sorted) {
+    if (slot.end <= cursor) continue
+    if (slot.start > cursor) {
+      return toDateTimeLocalInput(cursor)
+    }
+    cursor = slot.end
+  }
+
+  return toDateTimeLocalInput(cursor)
+}
+
+function isCarAvailable(car: Car): boolean {
+  const statusKey = String(car.status ?? '').trim().toLowerCase()
+  if (isCarReservedNow(car)) return false
+  if (['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  if (statusKey === 'available' || statusKey === 'active') return true
+  if (car.available === false) return false
+  if (car.available === true) return true
+  return true
+}
+
+
+
 function goToReservation(car: Car) {
-  if (!isCarAvailable(car)) {
+  const canReserveNow = isCarAvailable(car)
+  const canPreReserveNow = canPreReserve(car)
+
+  if (!canReserveNow && !canPreReserveNow) {
     toast.error(t('vehicles.errors.notAvailable'))
     return
   }
 
   const vehicleId = Number(car.vehicle_id ?? car.id)
-  const startAt = toDateTimeLocalInput(new Date())
-  const end = new Date()
-  end.setDate(end.getDate() + 1)
+
+  let startAt = toDateTimeLocalInput(getNextReservableMinute())
+  if (canPreReserveNow) {
+    startAt = getSuggestedStartForPreReservation(car)
+  }
+
+  const end = new Date(startAt)
+  if (Number.isNaN(end.getTime())) {
+    end.setDate(end.getDate() + 1)
+  } else {
+    end.setDate(end.getDate() + 1)
+  }
   const endAt = toDateTimeLocalInput(end)
 
   emit('openReservation', {
@@ -154,8 +281,8 @@ function goToReservation(car: Car) {
     brand: car.brand ?? '',
     model: car.model ?? '',
     licensePlate: car.license_plate ?? '',
-    status: String(car.status ?? ''),
-    available: String(isCarAvailable(car)),
+    status: getEffectiveStatus(car),
+    available: String(canReserveNow),
     startAt,
     endAt,
   })

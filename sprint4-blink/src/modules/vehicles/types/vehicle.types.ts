@@ -6,13 +6,16 @@ export interface NextReservation {
   start_date: string;
   end_date: string;
   user_name: string;
+  user_id?: number;
 }
 
 export interface CalendarReservation {
   start_date: string;
   end_date: string;
   user_name?: string;
+  user_id?: number;
   status?: string;
+  calendar_state?: string;
 }
 
 export interface Vehicle {
@@ -33,6 +36,8 @@ export interface Vehicle {
   next_reservation?: NextReservation | null;
   next_available_at?: string | null;
   calendar_reservations?: CalendarReservation[];
+  blocked_dates?: string[];
+  reservations?: unknown[];
 }
 
 export interface CreateVehicleData {

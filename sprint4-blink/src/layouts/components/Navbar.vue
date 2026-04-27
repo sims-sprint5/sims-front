@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useUser } from '@/modules/auth/composables/useUser';
 import { useI18n } from 'vue-i18n';
+import { vehicleService } from '@/modules/vehicles/services/vehicle.service';
 
 interface Props {
     title?: string;
@@ -20,6 +21,13 @@ const emit = defineEmits<{
 const { user, avatarUrl } = useUser();
 const { t } = useI18n();
 
+// Vehicle statistics
+const totalVehicles = ref(0);
+const availableVehicles = ref(0);
+const maintenanceVehicles = ref(0);
+const inactiveVehicles = ref(0);
+const isAdminUser = ref(false);
+
 const handleMenuClick = () => {
     emit('toggleMenu');
 };
@@ -33,6 +41,62 @@ const userInitials = computed(() => {
         .join('');
 });
 
+async function loadVehicleStats() {
+    try {
+        const isAdmin = user.value?.role === 'admin' || user.value?.role === 'superadmin';
+        isAdminUser.value = isAdmin;
+
+        if (isAdmin) {
+            // Admin: obtener TODOS los vehículos
+            const allVehicles = await vehicleService.getVehiclesList();
+            totalVehicles.value = allVehicles.length;
+            
+            // Disponibles: solo available o active
+            availableVehicles.value = allVehicles.filter((v) => {
+                const statusKey = (v.status ?? '').trim().toLowerCase();
+                return statusKey === 'available' || statusKey === 'active';
+            }).length;
+
+            // En mantenimiento: solo maintenance
+            maintenanceVehicles.value = allVehicles.filter((v) => {
+                const statusKey = (v.status ?? '').trim().toLowerCase();
+                return statusKey === 'maintenance';
+            }).length;
+
+            // Inactivos: solo inactive
+            inactiveVehicles.value = allVehicles.filter((v) => {
+                const statusKey = (v.status ?? '').trim().toLowerCase();
+                return statusKey === 'inactive';
+            }).length;
+        } else {
+            // Usuario normal: solo ver vehículos disponibles + reservados
+            const response = await vehicleService.getVehiclesCalendar(1, 200);
+            const vehicles = Array.isArray(response?.data) ? response.data : [];
+            
+            // Total: solo available y reserved (excluye maintenance, inactive, out_of_service, rented)
+            const validStatuses = vehicles.filter((v) => {
+                const statusKey = (v.status ?? '').trim().toLowerCase();
+                return statusKey === 'available' || statusKey === 'reserved' || statusKey === 'active';
+            });
+            totalVehicles.value = validStatuses.length;
+            
+            // Disponibles: solo available o active
+            availableVehicles.value = validStatuses.filter((v) => {
+                const statusKey = (v.status ?? '').trim().toLowerCase();
+                return statusKey === 'available' || statusKey === 'active';
+            }).length;
+            
+            maintenanceVehicles.value = 0;
+            inactiveVehicles.value = 0;
+        }
+    } catch (err) {
+        console.error('Error loading vehicle stats:', err);
+    }
+}
+
+onMounted(() => {
+    loadVehicleStats();
+});
 
 </script>
 

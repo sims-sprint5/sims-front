@@ -16,7 +16,6 @@
     <template #cell-user_id="{ item }">
       <div class="min-w-0">
         <div class="font-medium text-main">{{ item.user_name }}</div>
-        <div class="text-xs text-muted">#{{ item.user_id ?? 'N/A' }}</div>
       </div>
     </template>
 
@@ -27,7 +26,7 @@
         @click="$emit('select-row', item)"
       >
         <div class="font-medium text-blue-600">{{ item.vehicle_name }}</div>
-        <div class="text-xs text-muted">{{ item.license_plate }} · #{{ item.vehicle_id }}</div>
+        <div class="text-xs text-muted">{{ item.license_plate }}</div>
       </button>
     </template>
 
@@ -74,25 +73,15 @@
 
     <template #cell-actions="{ item }">
       <div class="flex gap-2">
-        <router-link
-          v-if="item.status === 'completed' && item.can_renew"
-          :to="{ name: 'ReservationCompleted', params: { id: item.id } }"
-          class="inline-flex items-center gap-1 rounded-md bg-base px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
-        >
-          <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 1119.414 9.414 1 1 0 11-1.414-1.414 5 5 0 10-9.172-5.814H9a1 1 0 110-2H4a1 1 0 01-1-1V3a1 1 0 011-1z" clip-rule="evenodd" />
-          </svg>
-          {{ $t('reservations.table.renew') }}
-        </router-link>
         <button
-          v-else-if="item.can_renew"
-          class="inline-flex items-center gap-1 rounded-md bg-base px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
-          @click="$emit('renew', item)"
+          @click="$emit('delete-reservation', item)"
+          class="inline-flex items-center gap-1 rounded-md bg-danger/10 px-2.5 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-100 transition-colors"
+          :title="$t('reservations.table.deleteReservation')"
         >
           <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 1119.414 9.414 1 1 0 11-1.414-1.414 5 5 0 10-9.172-5.814H9a1 1 0 110-2H4a1 1 0 01-1-1V3a1 1 0 011-1z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
           </svg>
-          {{ $t('reservations.table.renew') }}
+          {{ $t('common.delete') }}
         </button>
       </div>
     </template>
@@ -119,7 +108,7 @@ withDefaults(defineProps<Props>(), {
 });
 
 defineEmits<{
-  renew: [item: ReservationLog];
+  'delete-reservation': [item: ReservationLog];
   'select-row': [item: ReservationLog];
 }>();
 

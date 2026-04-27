@@ -60,24 +60,6 @@
       <!-- Actions -->
       <div class="flex gap-2 border-t pt-4">
         <BaseButton
-          v-if="!reservation.is_expired"
-          variant="secondary"
-          size="sm"
-          block
-          @click="$emit('edit', reservation)"
-        >
-          ✏️ {{ $t('reservations.myReservations.edit') }}
-        </BaseButton>
-        <BaseButton
-          v-if="reservation.can_renew"
-          variant="secondary"
-          size="sm"
-          block
-          @click="$emit('renew')"
-        >
-          ⏱️ {{ $t('reservations.myReservations.extend') }}
-        </BaseButton>
-        <BaseButton
           v-if="canCancelReservation(reservation)"
           variant="warning"
           size="sm"
@@ -105,9 +87,7 @@ interface Props {
 defineProps<Props>();
 defineEmits<{
   close: [];
-  edit: [reservation: ReservationLog];
   cancel: [reservation: ReservationLog];
-  renew: [];
 }>();
 
 const { formatDateTime: _ } = useDateFormatter();

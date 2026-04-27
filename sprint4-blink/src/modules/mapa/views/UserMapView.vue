@@ -3,9 +3,12 @@
     <div class="h-[calc(100dvh-64px)] md:h-[calc(100vh-64px)] flex flex-col p-3 sm:p-4 overflow-hidden">
       <div class="flex-1 min-h-0 flex gap-3 relative">
         <div class="absolute top-3 right-3 z-[1000]">
-          <button type="button"
-            class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium bg-primary hover:brightness-110 text-inverse shadow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            @click="openReservationPanel" :aria-label="t('mapa.openReservationPanel')">
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-inverse shadow hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            @click="openReservationPanel"
+            :aria-label="t('mapa.openReservationPanel')"
+          >
             {{ t('mapa.openReservationPanel') }}
           </button>
         </div>
@@ -14,50 +17,75 @@
           <div ref="mapEl" class="w-full h-full"></div>
         </div>
 
-        <div v-if="isReservationPanelOpen" v-show="!isReservationCreateModalOpen"
-          class="absolute inset-0 z-[1100] bg-black/20 backdrop-blur-[1px] md:hidden" @click="closeReservationPanel"
-          aria-hidden="true" />
+        <div
+          v-if="isReservationPanelOpen"
+          v-show="!isReservationCreateModalOpen"
+          class="absolute inset-0 z-[1100] bg-black/20 backdrop-blur-[1px] md:hidden"
+          @click="closeReservationPanel"
+          aria-hidden="true"
+        />
 
-        <aside v-if="isReservationPanelOpen" v-show="!isReservationCreateModalOpen"
+        <aside
+          v-if="isReservationPanelOpen"
+          v-show="!isReservationCreateModalOpen"
           class="absolute right-3 top-16 bottom-3 z-[1200] w-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] rounded-2xl bg-surface/95 shadow-2xl border border-default overflow-hidden flex flex-col backdrop-blur-sm"
-          :style="reservationPanelStyle" role="complementary" :aria-label="t('mapa.reservationPanelTitle')">
+          :style="reservationPanelStyle"
+          role="complementary"
+          :aria-label="t('mapa.reservationPanelTitle')"
+        >
           <div
             class="hidden sm:block absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-transparent hover:bg-primary-100/50"
-            @mousedown.prevent="startPanelResize" aria-hidden="true" />
+            @mousedown.prevent="startPanelResize"
+            aria-hidden="true"
+          />
 
-          <div class="flex items-center justify-between px-4 py-3 border-b border-default/80 bg-base">
-            <h2 class="text-sm sm:text-main font-semibold text-main">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-default/80 bg-base/90">
+            <h2 class="text-sm sm:text-base font-semibold text-main">
               {{ t('mapa.reservationPanelTitle') }}
             </h2>
-            <button type="button"
-              class="inline-flex h-8 w-8 items-center justify-center rounded-md  hover:bg-base-dark text-main focus:outline-none focus:ring-2 focus:ring-primary-500"
-              @click="closeReservationPanel" :aria-label="t('mapa.closeReservationPanel')">
+            <button
+              type="button"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary-500"
+              @click="closeReservationPanel"
+              :aria-label="t('mapa.closeReservationPanel')"
+            >
               X
             </button>
           </div>
 
           <div class="h-full w-full overflow-auto">
-            <ReservationPage :key="reservationPageKey" :prefill="reservationPrefill" :hideAccessibility="true"
-              @reservationModalVisibility="onReservationModalVisibility" />
+            <ReservationPage
+              :key="reservationPageKey"
+              :prefill="reservationPrefill"
+              :hideAccessibility="true"
+              @reservationModalVisibility="onReservationModalVisibility"
+            />
           </div>
         </aside>
       </div>
     </div>
 
-    <VehicleDetailsModal :open="isModalOpen" :car="selectedCar" @close="closeVehicleModal"
-      @openReservation="openReservationFromVehicle" />
+    <VehicleDetailsModal
+      :open="isModalOpen"
+      :car="selectedCar"
+      @close="closeVehicleModal"
+      @openReservation="openReservationFromVehicle"
+    />
 
     <Teleport to="body">
       <Transition name="modal">
-        <div v-if="showQuickReservationModal" class="fixed inset-0 z-[1400] overflow-y-auto" role="dialog"
-          aria-modal="true" aria-labelledby="quick-reservation-title">
+        <div
+          v-if="showQuickReservationModal"
+          class="fixed inset-0 z-[1400] overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="quick-reservation-title"
+        >
           <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-base-dark bg-opacity-75 transition-opacity"
-              @click="closeQuickReservationModal" />
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeQuickReservationModal" />
             <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
-            <div
-              class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
+            <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
               <div class="px-6 py-5">
                 <h2 id="quick-reservation-title" class="text-xl font-semibold text-main">
                   {{ t('reservations.createTitle') }}
@@ -66,35 +94,46 @@
                   {{ t('reservations.createDescription') }}
                 </p>
 
-                <p class="mt-3 rounded-lg bg-base-dark px-3 py-2 text-sm text-muted">
+                <p class="mt-3 rounded-lg bg-base px-3 py-2 text-sm text-muted">
                   {{ quickReservationVehicleName }} · {{ t('reservations.selectDates') }}
                 </p>
 
+              
+
+                <BusyDaysCalendar
+                  :slots="quickReservationBusySlots"
+                  title="Calendario de ocupacion"
+                />
+
+                
+
                 <div class="mt-6 space-y-4">
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-main">{{ t('reservations.table.startAt')
-                      }}</label>
-                    <input v-model="quickReservationForm.startAt" type="datetime-local"
-                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                    <label class="mb-2 block text-sm font-medium text-main">{{ t('reservations.table.startAt') }}</label>
+                    <BaseDateTimePicker
+                      v-model="quickReservationForm.startAt"
+                      :config="quickStartPickerConfig"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    />
                   </div>
 
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-main">{{ t('reservations.table.endAt')
-                      }}</label>
-                    <input v-model="quickReservationForm.endAt" type="datetime-local"
-                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20">
+                    <label class="mb-2 block text-sm font-medium text-main">{{ t('reservations.table.endAt') }}</label>
+                    <BaseDateTimePicker
+                      v-model="quickReservationForm.endAt"
+                      :config="quickEndPickerConfig"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    />
                   </div>
                 </div>
               </div>
 
-              <div
-                class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-base-dark px-6 py-4 sm:flex-row sm:justify-end">
-                <BaseButton variant="secondary" :disabled="submittingQuickReservation"
-                  @click="closeQuickReservationModal">
+              <div class="flex flex-col-reverse gap-3 border-t border-default bg-base px-6 py-4 sm:flex-row sm:justify-end">
+                <BaseButton variant="secondary" :disabled="submittingQuickReservation" @click="closeQuickReservationModal">
                   {{ t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submittingQuickReservation" @click="submitQuickReservation">
-                  {{ t('reservations.actions.createReservation') }}
+                  Reservar y pagar
                 </BaseButton>
               </div>
             </div>
@@ -111,23 +150,34 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import BaseDateTimePicker from '@/components/base/BaseDateTimePicker.vue'
+import '@/styles/flatpickr.css'
 import { BaseButton } from '@/components/base'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { geofenceService } from '../services/geofence.service'
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service'
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service'
+import { createReservationCheckoutSession } from '@/modules/reservations/services/reservationCheckout.service'
 import { useUser } from '@/modules/auth/composables/useUser'
+import { authService } from '@/modules/auth/services/auth.service'
 import { useToast } from '@/shared/composables/useToast'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle } from '@/modules/vehicles/types/vehicle.types'
-import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types'
 import VehicleDetailsModal from '../components/VehicleDetailsModal.vue'
 import ReservationPage from '@/modules/reservations/views/ReservationPage.vue'
+import BusyDaysCalendar from '@/modules/reservations/components/BusyDaysCalendar.vue'
 
 const route = useRoute()
 const { t } = useI18n()
 const { user } = useUser()
 const toast = useToast()
+
+const isMapDebugEnabled = (() => {
+  if (!import.meta.env.DEV) return false
+  const queryFlag = String(route.query.debugMap ?? '').trim()
+  const storageFlag = String(localStorage.getItem('debugMap') ?? '').trim()
+  return queryFlag === '1' || queryFlag.toLowerCase() === 'true' || storageFlag === '1' || storageFlag.toLowerCase() === 'true'
+})()
 
 const pageTitle = computed(() => {
   const titleKey = route.meta.titleKey as string | undefined
@@ -137,6 +187,7 @@ const pageTitle = computed(() => {
 const mapEl = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let userMarker: L.Marker | null = null
+let markerLayer: L.LayerGroup | null = null
 const isReservationPanelOpen = ref(false)
 const isReservationCreateModalOpen = ref(false)
 const reservationPanelWidth = ref(0)
@@ -150,6 +201,7 @@ const reservationPageKey = ref(0)
 const quickReservationPayload = ref<Record<string, string> | null>(null)
 const showQuickReservationModal = ref(false)
 const submittingQuickReservation = ref(false)
+const mapVehicles = ref<Vehicle[]>([])
 const quickReservationForm = reactive({
   startAt: '',
   endAt: '',
@@ -179,6 +231,8 @@ const reservationPanelStyle = computed(() => {
     maxWidth: 'calc(100% - 1.5rem)'
   }
 })
+
+  // Capa para agrupar marcadores y permitir limpieza/re-dibujo (se inicializa en initMap)
 
 const syncPanelWidthToViewport = () => {
   const target = reservationPanelWidth.value || getDefaultPanelWidth()
@@ -213,11 +267,173 @@ const toDateTimeLocalInput = (value: Date): string => {
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`
 }
 
+const getNextReservableMinute = (): Date => {
+  const now = new Date()
+  now.setSeconds(0, 0)
+  now.setMinutes(now.getMinutes() + 1)
+  return now
+}
+
 const quickReservationVehicleName = computed(() => {
   const p = quickReservationPayload.value
   if (!p) return ''
   return [p.brand, p.model].filter(Boolean).join(' ').trim() || p.licensePlate || '—'
 })
+
+const quickReservationVehicle = computed<Vehicle | null>(() => {
+  const vehicleIdRaw = quickReservationPayload.value?.vehicleId
+  if (!vehicleIdRaw) return null
+  const vehicleId = Number(vehicleIdRaw)
+  if (!Number.isFinite(vehicleId)) return null
+  return mapVehicles.value.find((v) => Number(v.vehicle_id ?? v.id) === vehicleId) ?? null
+})
+
+type ReservationSlot = { startDate: string; endDate: string }
+const quickRuntimeConflictSlot = ref<ReservationSlot | null>(null)
+type DatePickerConfig = {
+  enableTime?: boolean
+  time_24hr?: boolean
+  minuteIncrement?: number
+  dateFormat?: string
+  disable?: Array<{ from: Date; to: Date }>
+  minDate?: Date
+}
+
+const parseDate = (value: string | null | undefined): Date | null => {
+  if (!value) return null
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+const isReservationStateBlocking = (status: unknown, calendarState: unknown): boolean => {
+  const statusKey = String(status ?? '').trim().toLowerCase()
+  const calendarStateKey = String(calendarState ?? '').trim().toLowerCase()
+
+  const nonBlockingStates = new Set([
+    'cancelled',
+    'canceled',
+    'completed',
+    'finished',
+    'expired',
+  ])
+
+  if (statusKey && nonBlockingStates.has(statusKey)) return false
+  if (calendarStateKey && nonBlockingStates.has(calendarStateKey)) return false
+  return true
+}
+
+const quickReservationBusySlots = computed<ReservationSlot[]>(() => {
+  const vehicle = quickReservationVehicle.value
+  if (!vehicle) {
+    return quickRuntimeConflictSlot.value ? [quickRuntimeConflictSlot.value] : []
+  }
+
+  const now = new Date()
+  const slots: ReservationSlot[] = []
+
+  for (const reservation of vehicle.calendar_reservations ?? []) {
+    const start = String(reservation.start_date ?? '').trim()
+    const end = String(reservation.end_date ?? '').trim()
+    const endDate = parseDate(end)
+    if (!start || !end || !endDate) continue
+    if (endDate < now) continue
+    slots.push({ startDate: start, endDate: end })
+  }
+
+  const nextStart = String(vehicle.next_reservation?.start_date ?? '').trim()
+  const nextEnd = String(vehicle.next_reservation?.end_date ?? '').trim()
+  if (nextStart && nextEnd) {
+    const alreadyIncluded = slots.some((slot) => slot.startDate === nextStart && slot.endDate === nextEnd)
+    const nextEndDate = parseDate(nextEnd)
+    if (!alreadyIncluded && nextEndDate && nextEndDate >= now) {
+      slots.push({ startDate: nextStart, endDate: nextEnd })
+    }
+  }
+
+  const nextAvailableAt = parseDate(vehicle.next_available_at)
+  if (nextAvailableAt && nextAvailableAt > now) {
+    const syntheticStart = toDateTimeLocalInput(now)
+    const syntheticEnd = toDateTimeLocalInput(nextAvailableAt)
+    const exists = slots.some((slot) => slot.startDate === syntheticStart && slot.endDate === syntheticEnd)
+    if (!exists) {
+      slots.push({ startDate: syntheticStart, endDate: syntheticEnd })
+    }
+  }
+
+  if (quickRuntimeConflictSlot.value) {
+    const exists = slots.some(
+      (slot) =>
+        slot.startDate === quickRuntimeConflictSlot.value?.startDate &&
+        slot.endDate === quickRuntimeConflictSlot.value?.endDate,
+    )
+    if (!exists) {
+      slots.push(quickRuntimeConflictSlot.value)
+    }
+  }
+
+  return slots.sort((a, b) => {
+    const aStart = parseDate(a.startDate)?.getTime() ?? 0
+    const bStart = parseDate(b.startDate)?.getTime() ?? 0
+    return aStart - bStart
+  })
+})
+
+const findOverlappingSlot = (
+  startDate: Date,
+  endDate: Date,
+  slots: ReservationSlot[],
+): { start: Date; end: Date } | null => {
+  for (const slot of slots) {
+    const slotStart = parseDate(slot.startDate)
+    const slotEnd = parseDate(slot.endDate)
+    if (!slotStart || !slotEnd) continue
+
+    if (startDate < slotEnd && slotStart < endDate) {
+      return { start: slotStart, end: slotEnd }
+    }
+  }
+
+  return null
+}
+
+const toDisabledRanges = (slots: ReservationSlot[]): Array<{ from: Date; to: Date }> => {
+  return slots
+    .map((slot) => {
+      const from = parseDate(slot.startDate)
+      const end = parseDate(slot.endDate)
+      if (!from || !end) return null
+
+      // Keep boundary behavior consistent with overlap checks: end moment can be used as next start.
+      const to = new Date(end.getTime() - 1)
+      if (to <= from) return null
+      return { from, to }
+    })
+    .filter((range): range is { from: Date; to: Date } => Boolean(range))
+}
+
+const quickReservationDisabledRanges = computed(() => toDisabledRanges(quickReservationBusySlots.value))
+
+const quickStartPickerConfig = computed<DatePickerConfig>(() => ({
+  enableTime: true,
+  time_24hr: true,
+  minuteIncrement: 1,
+  dateFormat: 'Y-m-d\\TH:i',
+  disable: quickReservationDisabledRanges.value,
+  minDate: getNextReservableMinute(),
+}))
+
+const quickEndPickerConfig = computed<DatePickerConfig>(() => {
+  const minEndDate = quickReservationForm.startAt ? parseDate(quickReservationForm.startAt) : null
+  return {
+    enableTime: true,
+    time_24hr: true,
+    minuteIncrement: 1,
+    dateFormat: 'Y-m-d\\TH:i',
+    disable: quickReservationDisabledRanges.value,
+    minDate: minEndDate ?? undefined,
+  }
+})
+
 
 const openReservationPanel = () => {
   reservationPageKey.value += 1
@@ -227,11 +443,12 @@ const openReservationPanel = () => {
 }
 
 const openReservationFromVehicle = (payload: Record<string, string>) => {
-  const now = new Date()
+  const now = getNextReservableMinute()
   const tomorrow = new Date(now)
   tomorrow.setDate(tomorrow.getDate() + 1)
 
   quickReservationPayload.value = payload
+  quickRuntimeConflictSlot.value = null
   quickReservationForm.startAt = payload.startAt || toDateTimeLocalInput(now)
   quickReservationForm.endAt = payload.endAt || toDateTimeLocalInput(tomorrow)
   isReservationPanelOpen.value = false
@@ -241,6 +458,7 @@ const openReservationFromVehicle = (payload: Record<string, string>) => {
 const closeQuickReservationModal = () => {
   showQuickReservationModal.value = false
   quickReservationPayload.value = null
+  quickRuntimeConflictSlot.value = null
   quickReservationForm.startAt = ''
   quickReservationForm.endAt = ''
 }
@@ -262,20 +480,65 @@ const closeVehicleModal = () => {
 
 const normalizeDateTime = (value: string): string => {
   const parsed = new Date(value)
-  return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString()
+  if (Number.isNaN(parsed.getTime())) return value
+
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const year = parsed.getFullYear()
+  const month = pad(parsed.getMonth() + 1)
+  const day = pad(parsed.getDate())
+  const hours = pad(parsed.getHours())
+  const minutes = pad(parsed.getMinutes())
+  const seconds = pad(parsed.getSeconds())
+
+  const offsetMinutes = -parsed.getTimezoneOffset()
+  const sign = offsetMinutes >= 0 ? '+' : '-'
+  const absOffset = Math.abs(offsetMinutes)
+  const offsetHours = pad(Math.floor(absOffset / 60))
+  const offsetMins = pad(absOffset % 60)
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`
+}
+
+const formatDateTimeWithOffset = (value: Date): string => {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const year = value.getFullYear()
+  const month = pad(value.getMonth() + 1)
+  const day = pad(value.getDate())
+  const hours = pad(value.getHours())
+  const minutes = pad(value.getMinutes())
+  const seconds = pad(value.getSeconds())
+
+  const offsetMinutes = -value.getTimezoneOffset()
+  const sign = offsetMinutes >= 0 ? '+' : '-'
+  const absOffset = Math.abs(offsetMinutes)
+  const offsetHours = pad(Math.floor(absOffset / 60))
+  const offsetMins = pad(absOffset % 60)
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`
+}
+
+const buildReservationLocationText = (vehicle: Vehicle | null, fallbackName: string): string => {
+  if (vehicle) {
+    const lat = Number(vehicle.current_latitude)
+    const lng = Number(vehicle.current_longitude)
+    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+      return `Lat ${lat.toFixed(5)}, Lng ${lng.toFixed(5)}`
+    }
+
+    if (vehicle.license_plate?.trim()) {
+      return `Vehiculo ${vehicle.license_plate.trim()}`
+    }
+  }
+
+  if (fallbackName.trim()) {
+    return `Vehiculo ${fallbackName.trim()}`
+  }
+
+  return 'Ubicacion por confirmar'
 }
 
 const submitQuickReservation = async () => {
   if (!quickReservationPayload.value || submittingQuickReservation.value) return
-
-  const statusKey = String(quickReservationPayload.value.status ?? '').trim().toLowerCase()
-  const availableRaw = String(quickReservationPayload.value.available ?? '').trim().toLowerCase()
-  const blockedByStatus = ['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)
-  const explicitlyUnavailable = availableRaw === 'false'
-  if (blockedByStatus || explicitlyUnavailable) {
-    toast.error(t('vehicles.errors.notAvailable'))
-    return
-  }
 
   if (!quickReservationForm.startAt || !quickReservationForm.endAt) {
     toast.error(t('reservations.errors.missingDates'))
@@ -289,21 +552,96 @@ const submitQuickReservation = async () => {
     return
   }
 
+  const minStartDate = getNextReservableMinute()
+  if (startDate < minStartDate) {
+    toast.error(t('reservations.errors.availableFrom', { date: minStartDate.toLocaleString() }))
+    return
+  }
+
+  const localOverlap = findOverlappingSlot(startDate, endDate, quickReservationBusySlots.value)
+  if (localOverlap) {
+    toast.error(t('reservations.errors.availableFrom', { date: localOverlap.end.toLocaleString() }))
+    return
+  }
+
   submittingQuickReservation.value = true
   try {
-    await reservationLogService.createLog({
-      user_id: user.value?.id ?? null,
-      user_name: user.value?.name ?? 'N/A',
-      vehicle_id: Number(quickReservationPayload.value.vehicleId) || 0,
-      vehicle_name: quickReservationVehicleName.value || quickReservationPayload.value.licensePlate || 'N/A',
-      license_plate: quickReservationPayload.value.licensePlate || '',
-      status: 'active',
-      start_at: normalizeDateTime(quickReservationForm.startAt),
-      end_at: normalizeDateTime(quickReservationForm.endAt),
-    })
+    const vehicleIdRaw = quickReservationPayload.value.vehicleId
+    if (!vehicleIdRaw) {
+      toast.error(t('vehicles.errors.notAvailable'))
+      return
+    }
 
-    toast.success(t('reservations.toast.created'))
-    closeQuickReservationModal()
+    const vehicleId = Number(vehicleIdRaw) || 0
+    const normalizedStart = normalizeDateTime(quickReservationForm.startAt)
+    const normalizedEnd = normalizeDateTime(quickReservationForm.endAt)
+
+    const availability = await reservationLogService.checkAvailability(
+      vehicleId,
+      normalizedStart,
+      normalizedEnd,
+    )
+
+    if (!availability.available) {
+      let errorMsg = availability.message || t('reservations.errors.notAvailable')
+
+      const conflictStartRaw = String(availability.conflicting_reservation?.start_date ?? '').trim()
+      const conflictEndRaw = String(availability.conflicting_reservation?.end_date ?? '').trim()
+      if (conflictStartRaw && conflictEndRaw) {
+        quickRuntimeConflictSlot.value = { startDate: conflictStartRaw, endDate: conflictEndRaw }
+      } else {
+        const backendAvailableAt = parseDate(availability.available_at)
+        if (backendAvailableAt) {
+          quickRuntimeConflictSlot.value = {
+            startDate: normalizedStart,
+            endDate: toDateTimeLocalInput(backendAvailableAt),
+          }
+        }
+      }
+
+      const conflictingStart = parseDate(availability.conflicting_reservation?.start_date)
+      const conflictingEnd = parseDate(availability.conflicting_reservation?.end_date)
+      const overlapsWithConflict = Boolean(
+        conflictingStart && conflictingEnd && startDate < conflictingEnd && conflictingStart < endDate,
+      )
+
+      if (overlapsWithConflict && conflictingEnd) {
+        const formatted = conflictingEnd.toLocaleString()
+        errorMsg = t('reservations.errors.availableFrom', { date: formatted })
+        toast.error(errorMsg)
+        return
+      } else {
+        const backendAvailableAt = parseDate(availability.available_at)
+        const formatted = backendAvailableAt?.toLocaleString()
+        if (formatted) {
+          errorMsg = t('reservations.errors.availableFrom', { date: formatted })
+        }
+      }
+
+      toast.error(errorMsg)
+      return
+    }
+
+    try {
+      const pickupLocation = buildReservationLocationText(
+        quickReservationVehicle.value,
+        quickReservationVehicleName.value,
+      )
+
+      const { checkoutUrl } = await createReservationCheckoutSession({
+        vehicleId,
+        startDate: normalizedStart,
+        endDate: normalizedEnd,
+        pickupLocation,
+        dropoffLocation: pickupLocation,
+      })
+      window.location.assign(checkoutUrl)
+    } catch (err: any) {
+      console.error('Checkout start failed (QuickReservation):', err)
+      const backendDetail = err?.responseData?.error || err?.responseData?.message || err?.message
+      toast.error(backendDetail || t('reservations.errors.checkoutFailed'))
+      return
+    }
   } finally {
     submittingQuickReservation.value = false
   }
@@ -357,49 +695,179 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-const selectUserReservedVehicleId = (reservations: ReservationLog[]): number | null => {
-  const now = new Date()
-  const activeNow = reservations.find((r) => {
-    if (r.status !== 'active') return false
-    const start = new Date(r.start_at)
-    const end = new Date(r.end_at)
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false
-    return start <= now && now < end
-  })
+// Mapa de usuario: ocultar solo coches ocupados AHORA.
+// Si hoy tiene reservas en otras horas, se mantiene visible para reservar huecos.
+const filterVehiclesForUserMap = async (
+  vehicles: Vehicle[],
+  myReservedVehicleIds: Set<number>,
+  currentUserId: number,
+  currentUserName: string,
+): Promise<Vehicle[]> => {
+  const now = Date.now()
+  const hasCurrentUserId = Number.isFinite(currentUserId) && currentUserId > 0
+  const hasCurrentUserName = Boolean(currentUserName)
+  const availabilityProbeStart = formatDateTimeWithOffset(new Date(now))
+  const availabilityProbeEnd = formatDateTimeWithOffset(new Date(now + 2 * 60 * 1000))
+  const visible: Vehicle[] = []
 
-  if (activeNow) return Number(activeNow.vehicle_id)
-  return null
-}
+  for (const orig of vehicles) {
+    const v = { ...orig } // evitar mutar objetos originales
+      const vehicleId = Number(v.vehicle_id ?? v.id)
+      if (!Number.isFinite(vehicleId)) continue
 
-const isVehicleAvailableNow = (vehicle: Vehicle): boolean => {
-  const statusKey = String(vehicle.status ?? '').trim().toLowerCase()
-  const now = new Date()
+      // Considerar solo reservas que estén activas AHORA (start <= now < end).
+      const activeNowReservations = (v.calendar_reservations ?? []).filter((cr) => {
+        const s = parseDate(cr.start_date)
+        const e = parseDate(cr.end_date)
+        if (!s || !e) return false
+        if (!isReservationStateBlocking(cr.status, cr.calendar_state)) return false
+        return s.getTime() <= now && now < e.getTime()
+      })
+      const hasActiveOrFutureReservation = activeNowReservations.length > 0
+      const hasMyActiveOrFutureReservation = activeNowReservations.some((cr) => {
+        const reservationUserId = Number(cr.user_id)
+        const reservationUserName = String(cr.user_name ?? '').trim().toLowerCase()
+        const byId = hasCurrentUserId && Number.isFinite(reservationUserId) && reservationUserId === currentUserId
+        const byName = hasCurrentUserName && reservationUserName === currentUserName
+        return byId || byName
+      })
 
-  if (statusKey === 'maintenance' || statusKey === 'inactive' || statusKey === 'out_of_service' || statusKey === 'rented') {
-    return false
+      // Fallback por si solo viene en next_reservation
+      // next_reservation puede venir para una reserva futura; considerarla solo si ocurre AHORA
+      const nextStart = parseDate(v.next_reservation?.start_date)
+      const nextEnd = parseDate(v.next_reservation?.end_date)
+      const nextStatus = (v.next_reservation as any)?.status
+      const hasNextReservationActiveOrFuture = Boolean(
+        nextStart && nextEnd && isReservationStateBlocking(nextStatus, null) && nextStart.getTime() <= now && now < nextEnd.getTime()
+      )
+      const nextReservationUserId = Number(v.next_reservation?.user_id)
+      const nextReservationUserName = String(v.next_reservation?.user_name ?? '').trim().toLowerCase()
+      const hasMyNextReservation = Boolean(
+        hasNextReservationActiveOrFuture && (
+          (hasCurrentUserId && Number.isFinite(nextReservationUserId) && nextReservationUserId === currentUserId)
+          || (hasCurrentUserName && nextReservationUserName === currentUserName)
+        ),
+      )
+
+      const nextAvailableAt = parseDate(v.next_available_at)
+      const blockedByNextAvailable = Boolean(nextAvailableAt && now < nextAvailableAt.getTime())
+      const statusKey = String(v.status ?? '').trim().toLowerCase()
+      // `reserved` o `next_available_at` pueden representar disponibilidad futura,
+      // no necesariamente ocupación en este instante. Para no ocultar todo,
+      // en el mapa de usuario solo bloqueamos por solape temporal "ahora".
+      const blockedByReservedStatus = statusKey === 'reserved' && (
+        hasActiveOrFutureReservation || hasNextReservationActiveOrFuture
+      )
+      const hasMyReservation = hasMyActiveOrFutureReservation || hasMyNextReservation
+      const hasMyReservationById = myReservedVehicleIds.has(vehicleId)
+
+      if (isMapDebugEnabled) {
+        console.info('[map-debug] vehicle visibility', {
+          vehicleId,
+          plate: v.license_plate,
+          status: v.status,
+          hasActiveOrFutureReservation,
+          hasMyActiveOrFutureReservation,
+          hasNextReservationActiveOrFuture,
+          hasMyNextReservation,
+          hasMyReservation,
+          hasMyReservationById,
+          blockedByNextAvailable,
+          nextAvailableAt: v.next_available_at,
+          blockedByReservedStatus,
+          available: v.available,
+        })
+      }
+
+      if (hasMyReservation || hasMyReservationById) {
+        v.status = 'reserved'
+        if (isMapDebugEnabled) {
+          console.info('[map-debug] visible own reserved vehicle', {
+            vehicleId,
+            plate: v.license_plate,
+          })
+        }
+        visible.push(v)
+        continue
+      }
+
+      const blockedByTemporalOverlap = hasActiveOrFutureReservation || hasNextReservationActiveOrFuture
+      if (blockedByTemporalOverlap || blockedByReservedStatus) {
+        if (isMapDebugEnabled) {
+          console.info('[map-debug] hidden vehicle', {
+            vehicleId,
+            plate: v.license_plate,
+            reason: {
+              hasActiveOrFutureReservation,
+              hasNextReservationActiveOrFuture,
+              blockedByNextAvailable,
+              blockedByReservedStatus,
+            },
+          })
+        }
+        continue
+      }
+
+      // Fallback robusto: cuando status/available/next_available_at sugieren bloqueo,
+      // validar disponibilidad real "ahora" con backend para evitar falsos positivos.
+      const needsAvailabilityProbe = v.available === false || statusKey === 'reserved' || blockedByNextAvailable
+      if (needsAvailabilityProbe) {
+        try {
+          const availability = await reservationLogService.checkAvailability(
+            vehicleId,
+            availabilityProbeStart,
+            availabilityProbeEnd,
+          )
+          if (!availability.available) {
+            if (isMapDebugEnabled) {
+              console.info('[map-debug] hidden by checkAvailability', {
+                vehicleId,
+                plate: v.license_plate,
+                availability,
+              })
+            }
+            continue
+          }
+        } catch (err) {
+          // Si falla el chequeo pero el backend ya marca potencialmente no disponible,
+          // ocultamos para evitar enseñar coches reservados por otros usuarios.
+          if (isMapDebugEnabled) {
+            console.warn('[map-debug] checkAvailability failed', {
+              vehicleId,
+              plate: v.license_plate,
+              error: err,
+              fallbackHidden: Boolean(v.available === false || statusKey === 'reserved' || blockedByNextAvailable),
+            })
+          }
+          if (v.available === false || statusKey === 'reserved' || blockedByNextAvailable) {
+            continue
+          }
+        }
+      }
+
+      // No está ocupado ahora: visible para reservar hoy u otro día.
+      v.status = 'available'
+      if (isMapDebugEnabled) {
+        console.info('[map-debug] visible vehicle', {
+          vehicleId,
+          plate: v.license_plate,
+        })
+      }
+      visible.push(v)
   }
 
-  if (statusKey === 'reserved' && vehicle.next_reservation?.start_date) {
-    const start = new Date(vehicle.next_reservation.start_date)
-    if (!Number.isNaN(start.getTime()) && start > now) return true
-  }
-
-  if (vehicle.available === true) return true
-  if (vehicle.available === false) return false
-  return statusKey === 'available' || statusKey === 'active'
-}
-
-const filterVehiclesForUserMap = (vehicles: Vehicle[], reservations: ReservationLog[]): Vehicle[] => {
-  const reservedVehicleId = selectUserReservedVehicleId(reservations)
-  if (reservedVehicleId !== null && Number.isFinite(reservedVehicleId)) {
-    return vehicles.filter((v) => Number(v.vehicle_id ?? v.id) === reservedVehicleId)
-  }
-
-  return vehicles.filter((v) => isVehicleAvailableNow(v))
+  return visible
 }
 
 const renderVehicles = (vehicles: Vehicle[]) => {
   if (!map) return
+
+  if (!markerLayer && map) {
+    markerLayer = L.layerGroup().addTo(map)
+  }
+
+  // Limpiar marcadores anteriores
+  markerLayer?.clearLayers()
 
   vehicles.forEach(vehicle => {
     const lat = parseCoordinate(vehicle.current_latitude)
@@ -410,7 +878,7 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       [lat, lng],
       {
         title: vehicle.license_plate,
-        icon: vehicleIcon
+        icon: vehicleIcon,
       }
     )
 
@@ -419,7 +887,7 @@ const renderVehicles = (vehicles: Vehicle[]) => {
       isModalOpen.value = true
     })
 
-    marker.addTo(map!)
+    markerLayer?.addLayer(marker)
   })
 }
 
@@ -437,7 +905,7 @@ const showUserLocation = () => {
         userMarker = L.marker(latlng, {
           icon: L.divIcon({
             className: 'user-location-marker',
-            html: '<div class="w-4 h-4 bg-base0 rounded-full border-2 border-white shadow-lg"></div>',
+            html: '<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg"></div>',
             iconSize: [16, 16],
             iconAnchor: [8, 8]
           })
@@ -469,6 +937,10 @@ const initMap = () => {
   })
 
   setTimeout(() => map?.invalidateSize(), 200)
+  // Inicializar layer para marcadores ahora que el mapa existe
+  if (map) {
+    markerLayer = L.layerGroup().addTo(map)
+  }
 }
 
 watch(isReservationPanelOpen, async () => {
@@ -484,17 +956,76 @@ onMounted(async () => {
   initMap()
 
   try {
-    const isAdminRole = user.value?.role === 'admin' || user.value?.role === 'superadmin'
+    const storedUser = authService.getUser()
+    const currentUser = storedUser ?? user.value
+    const isAdminRole = currentUser?.role === 'admin' || currentUser?.role === 'superadmin'
+    const currentUserId = Number(currentUser?.id ?? 0)
+    const currentUserName = String(currentUser?.name ?? '').trim().toLowerCase()
 
-    const [geofences, vehiclesResponse, reservations] = await Promise.all([
-      geofenceService.getGeofences(),
-      vehicleService.getVehiclesCalendar(1, 500),
-      isAdminRole ? Promise.resolve([]) : reservationLogService.getMyReservations(),
+    const geofencesPromise = geofenceService.getGeofences()
+    const vehiclesPromise = vehicleService.getVehiclesCalendar(1, 500)
+    const myReservationsPromise = isAdminRole ? Promise.resolve([]) : reservationLogService.getMyReservationsPages(3, 200)
+
+    const [geofencesResult, vehiclesResult, myReservationsResult] = await Promise.allSettled([
+      geofencesPromise,
+      vehiclesPromise,
+      myReservationsPromise,
     ])
 
+    const geofences = geofencesResult.status === 'fulfilled' ? geofencesResult.value : []
+    const vehiclesResponse = vehiclesResult.status === 'fulfilled' ? vehiclesResult.value : { data: [] }
+    let myReservations = myReservationsResult.status === 'fulfilled' ? myReservationsResult.value : []
+
+    if (geofencesResult.status === 'rejected') {
+      console.warn('Failed to load geofences:', geofencesResult.reason)
+    }
+    if (myReservationsResult.status === 'rejected') {
+      console.warn('Failed to load my reservations for user map filtering:', myReservationsResult.reason)
+      if (!isAdminRole) {
+        try {
+          myReservations = await reservationLogService.getMyReservations(1, 500)
+        } catch (fallbackErr) {
+          console.warn('Fallback failed while loading my reservations:', fallbackErr)
+        }
+      }
+    }
+
     const vehicles = Array.isArray(vehiclesResponse?.data) ? vehiclesResponse.data : []
+
+    if (vehiclesResult.status === 'rejected') {
+      console.warn('Failed to load vehicles:', vehiclesResult.reason)
+    }
+
+    if (vehicles.length === 0) {
+      if (isMapDebugEnabled) {
+        console.info('[map-debug] no vehicles returned to render')
+      }
+      // continuar: queremos que el mapa se inicialice aunque no haya vehículos
+    }
+
+    const now = Date.now()
+    const myReservedVehicleIds = new Set(
+      (myReservations ?? [])
+        .filter((reservation) => {
+          const end = parseDate(reservation.end_at)
+          if (!end) return false
+
+          const statusKey = String(reservation.status ?? '').trim().toLowerCase()
+          const isBlockingState = !['cancelled', 'canceled', 'completed', 'finished', 'expired'].includes(statusKey)
+
+          return isBlockingState && now < end.getTime()
+        })
+        .map((reservation) => Number(reservation.vehicle_id))
+        .filter((id) => Number.isFinite(id)),
+    )
+
+    const visibleVehicles = isAdminRole
+      ? vehicles
+      : await filterVehiclesForUserMap(vehicles, myReservedVehicleIds, currentUserId, currentUserName)
+    mapVehicles.value = visibleVehicles
+
     renderGeofences(geofences)
-    renderVehicles(isAdminRole ? vehicles : filterVehiclesForUserMap(vehicles, reservations))
+    renderVehicles(visibleVehicles)
   } catch (err) {
     console.warn('Failed to load map data:', err)
   }
@@ -505,7 +1036,23 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   stopPanelResize()
   window.removeEventListener('resize', syncPanelWidthToViewport)
+  // limpiar marcadores y referencias al desmontar
+  try {
+    markerLayer?.clearLayers()
+    markerLayer = null
+  } catch (e) {
+    // ignore
+  }
 })
+
+// Re-renderizar marcadores cuando cambie la lista de vehículos
+watch(mapVehicles, (v) => {
+  try {
+    renderVehicles(v)
+  } catch (e) {
+    if (isMapDebugEnabled) console.warn('[map-debug] renderVehicles failed on watch', e)
+  }
+}, { deep: true })
 </script>
 
 <style scoped>

@@ -22,10 +22,12 @@
     "view": "View",
     "actions": "Actions",
     "logout": "Sign out",
+    "send": "Send",
     "passwordMismatch": "Passwords do not match."
   },
   "language": {
     "label": "Language",
+    "_lang": "en",
     "ca": "Catalan",
     "es": "Spanish",
     "en": "English"
@@ -35,6 +37,7 @@
     "dashboard": "Dashboard",
     "map": "Map",
     "tickets": "Tickets",
+    "chat": "Chat",
     "bookings": "Bookings",
     "myReservations": "My Reservations",
     "reservationsAdmin": "Reservation log",
@@ -146,6 +149,14 @@
     "languageDesc": "Select the application language.",
     "logoutDesc": "Close your current session."
   },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total vehicles",
+      "availableVehicles": "Available vehicles",
+      "maintenanceVehicles": "Under maintenance",
+      "inactiveVehicles": "Inactive"
+    }
+  },
   "users": {
     "title": "User management",
     "description": "Manage system users",
@@ -253,7 +264,9 @@
       "gray": "Gray",
       "grey": "Grey",
       "silver": "Silver",
-      "green": "Green"
+      "green": "Green",
+      "yellow": "Yellow",
+      "groc": "Yellow"
     },
     "modal": {
       "deleteTitle": "Delete vehicle",
@@ -295,8 +308,8 @@
     "table": {
       "id": "ID",
       "logType": "Log type",
-      "userId": "User (ID)",
-      "vehicleId": "Vehicle (ID)",
+      "userId": "User",
+      "vehicleId": "Vehicle",
       "status": "Status",
       "startAt": "Start",
       "endAt": "End",
@@ -305,7 +318,8 @@
       "renewal": "Renewal status",
       "expired": "Expired",
       "renew": "Renew",
-      "actions": "Actions"
+      "actions": "Actions",
+      "deleteReservation": "Delete reservation"
     },
     "form": {
       "userId": "User ID",
@@ -366,6 +380,10 @@
       "renewal": "Failed to request renewal. Please try again.",
       "notAvailable": "This vehicle is not available for the selected period.",
       "availableFrom": "This vehicle will be available from {date}.",
+      "checkoutFailed": "Could not start payment. Please try again.",
+      "checkoutUnauthorized": "Your session has expired. Sign in again to continue.",
+      "checkoutConflict": "There is a reservation conflict. Check availability and try again.",
+      "checkoutServer": "Server could not start payment. Please try again in a few minutes.",
       "invalidDateRange": "The end date must be after the start date.",
       "checkAvailability": "Failed to check vehicle availability.",
       "updateFailed": "Failed to update the reservation."
@@ -413,9 +431,13 @@
       "edit": "Edit",
       "cancel": "Cancel",
       "extend": "Extend",
+      "expandReservation": "Extend Reservation",
+      "startDateLocked": "Start date cannot be modified",
       "vehicleColumn": "Vehicle",
       "viewVehicleDetails": "View vehicle details",
       "confirmCancel": "Are you sure you want to cancel this reservation?",
+      "confirmDeleteTitle": "Delete Reservation",
+      "confirmDeleteMessage": "Are you sure you want to delete the reservation for {vehicle}? This action cannot be undone.",
       "checkingAvailability": "Checking availability...",
       "reservationUpdated": "Reservation updated successfully"
     },
@@ -439,6 +461,7 @@
     "buttons": {
       "reserveButton": "Reserve",
       "preReserveButton": "Pre-book",
+      "expandButton": "Expand",
       "cancelButton": "Cancel reservation",
       "confirmButton": "Confirm reservation"
     },
@@ -767,6 +790,7 @@
     "edit": "Edit"
   },
   "errors": {
+    "error": "Error",
     "unexpected": "An unexpected error occurred.",
     "invalidLoginResponse": "Invalid login response: missing token.",
     "requestFailed": "Request failed",
@@ -884,5 +908,25 @@
       "save": "Failed to save company",
       "delete": "Failed to delete company"
     }
+  },
+  "chatbot": {
+    "title": "SIMS Assistant",
+    "openChat": "Open support chat",
+    "greeting": "👋 Hello {name}, how can I help you?",
+    "defaultGreeting": "User",
+    "typing": "⏳ Writing...",
+    "footer": "Powered by AI • {context}",
+    "contextMap": "Exploring vehicles",
+    "contextReservations": "Your reservations",
+    "contextTickets": "Your support tickets",
+    "contextDefault": "In SIMS",
+    "placeholderMap": "Is this vehicle good for me?",
+    "placeholderReservations": "How do I modify my reservation?",
+    "placeholderTickets": "Need help with your ticket?",
+    "placeholderDefault": "Do you have any questions?",
+    "welcomeMessage": "I'm your SIMS assistant. Tell me what you need help with and I'll do my best to assist you.",
+    "errorProcessing": "Error processing your question",
+    "errorServer": "Server error. Try again.",
+    "errorConnection": "Connection error. Try later."
   }
 }

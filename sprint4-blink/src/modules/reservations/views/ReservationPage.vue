@@ -1,22 +1,30 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, nextTick, onBeforeUnmount } from 'vue';
+import { computed, reactive, ref, watch, nextTick, onBeforeUnmount, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { BaseButton } from '@/components/base';
-import { useUser } from '@/modules/auth/composables/useUser';
 import FilterSidebar from '@/modules/reservations/components/FilterSidebar.vue';
 import VehicleList from '@/modules/reservations/components/VehicleList.vue';
 import { useReservationVehicles } from '@/modules/reservations/composables/useReservationVehicles';
+import { createReservationCheckoutSession } from '@/modules/reservations/services/reservationCheckout.service';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
+import { getPendingReservationCheckout, savePendingReservationCheckout } from '@/modules/reservations/utils/checkoutStorage';
+import {
+  getReservationDebugEventName,
+  getReservationDebugSnapshot,
+  isReservationDebugEnabled,
+} from '@/modules/reservations/utils/reservationDebug';
 import { useToast } from '@/shared/composables/useToast';
+import BaseDateTimePicker from '@/components/base/BaseDateTimePicker.vue';
+import BusyDaysCalendar from '@/modules/reservations/components/BusyDaysCalendar.vue';
+import '@/styles/flatpickr.css';
 
-const { vehicleCards, loading, filters, facets, resetFilters, error } = useReservationVehicles();
+const { vehicleCards, loading, filters, facets, resetFilters, error, reloadVehicles } = useReservationVehicles();
 const { t } = useI18n();
 const route = useRoute();
 const toast = useToast();
-const { user } = useUser();
 
 const props = defineProps<{
   prefill?: Record<string, string | undefined> | null
@@ -30,19 +38,58 @@ const emit = defineEmits<{
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
 const submitting = ref(false);
+let autoRefreshTimer: number | null = null;
+const debugEnabled = ref(false);
+const debugEntries = ref<any[]>([]);
 const fromMap = computed(() => route.query.fromMap === 'true');
 const reservationForm = reactive({
   startAt: '',
   endAt: '',
 });
+type ReservationSlot = { startDate: string; endDate: string };
+const runtimeConflictSlot = ref<ReservationSlot | null>(null);
 const hideAccessibilityClass = 'hide-userway-widget';
+type DatePickerConfig = {
+  enableTime?: boolean;
+  time_24hr?: boolean;
+  minuteIncrement?: number;
+  dateFormat?: string;
+  disable?: Array<{ from: Date; to: Date }>;
+  minDate?: Date;
+};
+
+const debugDump = computed(() =>
+  JSON.stringify(
+    {
+      pendingCheckout: getPendingReservationCheckout(),
+      selectedVehicleId: selectedVehicle.value?.id ?? null,
+      selectedVehicleSlots: selectedVehicle.value?.calendarReservations?.length ?? 0,
+      vehicleCardsCount: vehicleCards.value.length,
+      lastEntries: debugEntries.value.slice(-8),
+    },
+    null,
+    2,
+  ),
+);
+
+function refreshDebugEntries() {
+  debugEntries.value = getReservationDebugSnapshot();
+  void debugDump.value;
+}
 
 function toDateTimeLocalInput(value: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`;
 }
 
-const defaultStartAt = computed(() => toDateTimeLocalInput(new Date()));
+function getNextReservableMinute(): Date {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  now.setMinutes(now.getMinutes() + 1);
+  return now;
+}
+
+const defaultStartAt = computed(() => toDateTimeLocalInput(getNextReservableMinute()));
 const defaultEndAt = computed(() => {
   const d = new Date();
   d.setDate(d.getDate() + 1);
@@ -63,12 +110,24 @@ function getSuggestedStartForPreReservation(vehicle: ReservationVehicleCardModel
   const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
   if (!slots.length) return defaultStartAt.value;
 
-  const latestEnd = slots
-    .map((slot) => new Date(slot.endDate))
-    .filter((d) => !Number.isNaN(d.getTime()))
-    .sort((a, b) => b.getTime() - a.getTime())[0];
+  const sorted = slots
+    .map((slot) => ({
+      start: new Date(slot.startDate),
+      end: new Date(slot.endDate),
+    }))
+    .filter((slot) => !Number.isNaN(slot.start.getTime()) && !Number.isNaN(slot.end.getTime()))
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
 
-  return latestEnd ? toDateTimeLocalInput(latestEnd) : defaultStartAt.value;
+  let cursor = new Date();
+  for (const slot of sorted) {
+    if (slot.end <= cursor) continue;
+    if (slot.start > cursor) {
+      return toDateTimeLocalInput(cursor);
+    }
+    cursor = slot.end;
+  }
+
+  return toDateTimeLocalInput(cursor);
 }
 
 function getSuggestedEndFromStart(startAt: string): string {
@@ -93,6 +152,7 @@ function isVehicleReservedNow(vehicle: ReservationVehicleCardModel): boolean {
 
 function openReservationModal(vehicle: ReservationVehicleCardModel) {
   selectedVehicle.value = vehicle;
+  runtimeConflictSlot.value = null;
   if (isVehicleReservedNow(vehicle)) {
     const suggestedStart = getSuggestedStartForPreReservation(vehicle);
     reservationForm.startAt = suggestedStart;
@@ -107,6 +167,7 @@ function openReservationModal(vehicle: ReservationVehicleCardModel) {
 
 function openReservationModalPrefilled(vehicle: ReservationVehicleCardModel, startAt?: string, endAt?: string) {
   selectedVehicle.value = vehicle;
+  runtimeConflictSlot.value = null;
   reservationForm.startAt = startAt || defaultStartAt.value;
   reservationForm.endAt = endAt || defaultEndAt.value;
   showReservationModal.value = true;
@@ -116,6 +177,7 @@ function openReservationModalPrefilled(vehicle: ReservationVehicleCardModel, sta
 function closeReservationModal() {
   showReservationModal.value = false;
   selectedVehicle.value = null;
+  runtimeConflictSlot.value = null;
   reservationForm.startAt = '';
   reservationForm.endAt = '';
   emit('reservationModalVisibility', false)
@@ -185,7 +247,54 @@ watch(
 );
 
 onBeforeUnmount(() => {
+  if (autoRefreshTimer) {
+    window.clearInterval(autoRefreshTimer);
+    autoRefreshTimer = null;
+  }
+
+  window.removeEventListener('focus', handleWindowFocus);
+  document.removeEventListener('visibilitychange', handleVisibilityChange);
+  if (debugEnabled.value) {
+    window.removeEventListener(getReservationDebugEventName(), refreshDebugEntries);
+  }
   document.body.classList.remove(hideAccessibilityClass);
+});
+
+async function refreshAfterCheckout(): Promise<void> {
+  const pending = getPendingReservationCheckout();
+  if (!pending) return;
+
+  try {
+    await reloadVehicles();
+  } catch {
+    // Ignore transient refresh errors.
+  }
+}
+
+function handleWindowFocus() {
+  void refreshAfterCheckout();
+}
+
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    void refreshAfterCheckout();
+  }
+}
+
+onMounted(() => {
+  debugEnabled.value = isReservationDebugEnabled();
+  if (debugEnabled.value) {
+    refreshDebugEntries();
+    window.addEventListener(getReservationDebugEventName(), refreshDebugEntries);
+  }
+
+  void refreshAfterCheckout();
+  window.addEventListener('focus', handleWindowFocus);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  autoRefreshTimer = window.setInterval(() => {
+    void refreshAfterCheckout();
+  }, 4000);
 });
 
 watch(
@@ -235,25 +344,147 @@ watch(
 
 function normalizeDateTime(value: string): string {
   const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const year = parsed.getFullYear();
+  const month = pad(parsed.getMonth() + 1);
+  const day = pad(parsed.getDate());
+  const hours = pad(parsed.getHours());
+  const minutes = pad(parsed.getMinutes());
+  const seconds = pad(parsed.getSeconds());
+
+  const offsetMinutes = -parsed.getTimezoneOffset();
+  const sign = offsetMinutes >= 0 ? '+' : '-';
+  const absOffset = Math.abs(offsetMinutes);
+  const offsetHours = pad(Math.floor(absOffset / 60));
+  const offsetMins = pad(absOffset % 60);
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`;
 }
 
-function formatReservationSlot(value: string): string {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return parsed.toLocaleString();
+function getCheckoutErrorMessage(err: any, t: (key: string, params?: Record<string, unknown>) => string): string {
+  const status = Number(err?.status);
+
+  if (status === 401) {
+    return t('reservations.errors.checkoutUnauthorized');
+  }
+
+  if (status === 422) {
+    return t('reservations.errors.notAvailable');
+  }
+
+  if (status === 409) {
+    return t('reservations.errors.checkoutConflict');
+  }
+
+  if (status >= 500) {
+    return t('reservations.errors.checkoutServer');
+  }
+
+  const backendDetail = err?.responseData?.error || err?.responseData?.message || err?.message;
+  if (backendDetail) return String(backendDetail);
+
+  return t('reservations.errors.checkoutFailed');
 }
+
+
+
+function parseDate(value?: string | null): Date | null {
+  if (!value) return null;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function findOverlappingSlot(
+  startDate: Date,
+  endDate: Date,
+  slots: Array<{ startDate: string; endDate: string }> = [],
+): { start: Date; end: Date } | null {
+  for (const slot of slots) {
+    const slotStart = parseDate(slot.startDate);
+    const slotEnd = parseDate(slot.endDate);
+    if (!slotStart || !slotEnd) continue;
+
+    if (startDate < slotEnd && slotStart < endDate) {
+      return { start: slotStart, end: slotEnd };
+    }
+  }
+
+  return null;
+}
+
+function toDisabledRanges(slots: Array<{ startDate: string; endDate: string }> = []): Array<{ from: Date; to: Date }> {
+  return slots
+    .map((slot) => {
+      const from = parseDate(slot.startDate);
+      const end = parseDate(slot.endDate);
+      if (!from || !end) return null;
+
+      // Keep boundary behavior consistent with overlap checks: end moment can be used as next start.
+      const to = new Date(end.getTime() - 1);
+      if (to <= from) return null;
+      return { from, to };
+    })
+    .filter((range): range is { from: Date; to: Date } => Boolean(range));
+}
+
+const selectedVehicleCalendarSlots = computed<ReservationSlot[]>(() => {
+  const baseSlots = selectedVehicle.value?.calendarReservations ?? [];
+  const merged = [...baseSlots];
+
+  const nextAvailableAt = parseDate(selectedVehicle.value?.nextAvailableAt ?? null);
+  const now = new Date();
+  if (nextAvailableAt && nextAvailableAt > now) {
+    const syntheticStart = toDateTimeLocalInput(now);
+    const syntheticEnd = toDateTimeLocalInput(nextAvailableAt);
+    const hasSynthetic = merged.some((slot) => slot.startDate === syntheticStart && slot.endDate === syntheticEnd);
+    if (!hasSynthetic) {
+      merged.push({ startDate: syntheticStart, endDate: syntheticEnd });
+    }
+  }
+
+  if (runtimeConflictSlot.value) {
+    const exists = merged.some(
+      (slot) =>
+        slot.startDate === runtimeConflictSlot.value?.startDate &&
+        slot.endDate === runtimeConflictSlot.value?.endDate,
+    );
+    if (!exists) {
+      merged.push(runtimeConflictSlot.value);
+    }
+  }
+
+  return merged;
+});
+
+const reservationDisabledRanges = computed(() =>
+  toDisabledRanges(selectedVehicleCalendarSlots.value),
+);
+
+const startPickerConfig = computed<DatePickerConfig>(() => ({
+  enableTime: true,
+  time_24hr: true,
+  minuteIncrement: 1,
+  dateFormat: 'Y-m-d\\TH:i',
+  disable: reservationDisabledRanges.value,
+  minDate: getNextReservableMinute(),
+}));
+
+const endPickerConfig = computed<DatePickerConfig>(() => {
+  const minEndDate = reservationForm.startAt ? parseDate(reservationForm.startAt) : null;
+  return {
+    enableTime: true,
+    time_24hr: true,
+    minuteIncrement: 1,
+    dateFormat: 'Y-m-d\\TH:i',
+    disable: reservationDisabledRanges.value,
+    minDate: minEndDate ?? undefined,
+  };
+});
 
 async function createReservation() {
   if (!selectedVehicle.value || submitting.value) return;
-
-  const statusKey = String(selectedVehicle.value.category ?? '').trim().toLowerCase();
-  const blockedByStatus = ['reserved', 'maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey);
-  const explicitlyUnavailable = selectedVehicle.value.available === false;
-  if (blockedByStatus || explicitlyUnavailable) {
-    toast.error('Este coche no está disponible');
-    return;
-  }
 
   if (!reservationForm.startAt || !reservationForm.endAt) {
     toast.error(t('reservations.errors.missingDates'));
@@ -264,6 +495,22 @@ async function createReservation() {
   const endDate = new Date(reservationForm.endAt);
   if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || startDate >= endDate) {
     toast.error(t('reservations.errors.invalidDates'));
+    return;
+  }
+
+  const minStartDate = getNextReservableMinute();
+  if (startDate < minStartDate) {
+    toast.error(t('reservations.errors.availableFrom', { date: minStartDate.toLocaleString() }));
+    return;
+  }
+
+  const localOverlap = findOverlappingSlot(
+    startDate,
+    endDate,
+    selectedVehicleCalendarSlots.value,
+  );
+  if (localOverlap) {
+    toast.error(t('reservations.errors.availableFrom', { date: localOverlap.end.toLocaleString() }));
     return;
   }
 
@@ -279,31 +526,73 @@ async function createReservation() {
 
     if (!availability.available) {
       let errorMsg = availability.message || t('reservations.errors.notAvailable');
-      if (availability.available_at) {
-        const availDate = new Date(availability.available_at);
-        const formatted = availDate.toLocaleString();
-        errorMsg = t('reservations.errors.availableFrom', { date: formatted });
+
+      const conflictStartRaw = String(availability.conflicting_reservation?.start_date ?? '').trim();
+      const conflictEndRaw = String(availability.conflicting_reservation?.end_date ?? '').trim();
+      if (conflictStartRaw && conflictEndRaw) {
+        runtimeConflictSlot.value = { startDate: conflictStartRaw, endDate: conflictEndRaw };
+      } else {
+        const backendAvailableAt = parseDate(availability.available_at);
+        if (backendAvailableAt) {
+          runtimeConflictSlot.value = {
+            startDate: normalizeDateTime(reservationForm.startAt),
+            endDate: toDateTimeLocalInput(backendAvailableAt),
+          };
+        }
       }
+
+      const conflictingStart = parseDate(availability.conflicting_reservation?.start_date);
+      const conflictingEnd = parseDate(availability.conflicting_reservation?.end_date);
+      const overlapsWithConflict = Boolean(
+        conflictingStart && conflictingEnd && startDate < conflictingEnd && conflictingStart < endDate,
+      );
+
+      if (overlapsWithConflict && conflictingEnd) {
+        const formatted = conflictingEnd.toLocaleString();
+        errorMsg = t('reservations.errors.availableFrom', { date: formatted });
+        toast.error(errorMsg);
+        return;
+      } else {
+        const backendAvailableAt = parseDate(availability.available_at);
+        const formatted = backendAvailableAt?.toLocaleString();
+        if (formatted) {
+          errorMsg = t('reservations.errors.availableFrom', { date: formatted });
+        }
+      }
+
       toast.error(errorMsg);
       return;
     }
 
-    // Si está disponible, proceder a crear la reserva
-    const status = startDate > new Date() ? 'pending' : 'active';
+    const vehicleId = Number(selectedVehicle.value.id) || 0;
+    const normalizedStart = normalizeDateTime(reservationForm.startAt);
+    const normalizedEnd = normalizeDateTime(reservationForm.endAt);
 
-    await reservationLogService.createLog({
-      user_id: user.value?.id ?? null,
-      user_name: user.value?.name ?? 'N/A',
-      vehicle_id: Number(selectedVehicle.value.id) || 0,
-      vehicle_name: selectedVehicle.value.name,
-      license_plate: selectedVehicle.value.licensePlate ?? '',
-      status,
-      start_at: normalizeDateTime(reservationForm.startAt),
-      end_at: normalizeDateTime(reservationForm.endAt),
-    });
+    try {
+      const { checkoutUrl, stripeSessionId } = await createReservationCheckoutSession({
+        vehicleId,
+        startDate: normalizedStart,
+        endDate: normalizedEnd,
+        pickupLocation: 'Calle X',
+        dropoffLocation: 'Calle Y',
+      });
 
-    toast.success(t('reservations.toast.created'));
-    closeReservationModal();
+      savePendingReservationCheckout({
+        vehicleId,
+        startDate: normalizedStart,
+        endDate: normalizedEnd,
+        stripeSessionId,
+        createdAt: new Date().toISOString(),
+      });
+
+      window.location.assign(checkoutUrl);
+    } catch (err: any) {
+      // Log full error for debugging
+      // eslint-disable-next-line no-console
+      console.error('Checkout start failed (ReservationPage):', err);
+      toast.error(getCheckoutErrorMessage(err, t));
+      return;
+    }
   } finally {
     submitting.value = false;
   }
@@ -345,6 +634,17 @@ async function createReservation() {
           {{ error }}
         </div>
 
+        <div v-if="debugEnabled" class="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
+          <div class="mb-2 flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-amber-900">Reservation Debug Mode</h2>
+            <span class="text-xs text-amber-700">Activo via ?debugReservations=1</span>
+          </div>
+          <p class="mb-2 text-xs text-amber-800">
+            Muestra respuestas crudas/normalizadas de reservas y calendario para diagnostico.
+          </p>
+          <pre class="max-h-80 overflow-auto rounded bg-white p-3 text-[11px] leading-4 text-gray-800">{{ debugDump }}</pre>
+        </div>
+
         <VehicleList :vehicles="vehicleCards" :loading="loading" @reserve="openReservationModal">
           <template #empty>
             <div class="rounded-2xl border border-default bg-surface p-6 text-sm text-muted">
@@ -382,40 +682,29 @@ async function createReservation() {
                   {{ selectedVehicle?.name }} · {{ $t('reservations.selectDates') }}
                 </p>
 
-                <div
-                  v-if="selectedVehicle?.calendarReservations?.length"
-                  class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2"
-                >
-                  <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                    {{ $t('reservations.preReservation.busySlots') }}
-                  </p>
-                  <ul class="mt-2 space-y-1 text-sm text-amber-900">
-                    <li
-                      v-for="(slot, idx) in selectedVehicle.calendarReservations"
-                      :key="`${slot.startDate}-${slot.endDate}-${idx}`"
-                    >
-                      {{ formatReservationSlot(slot.startDate) }} - {{ formatReservationSlot(slot.endDate) }}
-                    </li>
-                  </ul>
-                </div>
+              
+                <BusyDaysCalendar
+                  :slots="selectedVehicleCalendarSlots"
+                  title="Calendario de ocupacion"
+                />
 
                 <div class="mt-6 space-y-4">
                   <div>
                     <label class="mb-2 block text-sm font-medium text-main">{{ $t('reservations.table.startAt') }}</label>
-                    <input
+                    <BaseDateTimePicker
                       v-model="reservationForm.startAt"
-                      type="datetime-local"
+                      :config="startPickerConfig"
                       class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    />
                   </div>
 
                   <div>
                     <label class="mb-2 block text-sm font-medium text-main">{{ $t('reservations.table.endAt') }}</label>
-                    <input
+                    <BaseDateTimePicker
                       v-model="reservationForm.endAt"
-                      type="datetime-local"
+                      :config="endPickerConfig"
                       class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                    >
+                    />
                   </div>
                 </div>
               </div>
@@ -425,7 +714,7 @@ async function createReservation() {
                   {{ $t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submitting" @click="createReservation">
-                  {{ $t('reservations.actions.createReservation') }}
+                  Reservar y pagar
                 </BaseButton>
               </div>
           </div>
