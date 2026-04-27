@@ -66,6 +66,18 @@
       @close="closeEditModal"
       @save="handleSaveEdit"
     />
+
+    <BaseModal
+      :show="showDeleteModal"
+      :title="$t('reservations.myReservations.confirmDeleteTitle')"
+      :message="$t('reservations.myReservations.confirmCancel')"
+      type="danger"
+      :confirm-text="$t('common.delete')"
+      :cancel-text="$t('common.cancel')"
+      :loading="deleting"
+      @confirm="confirmDeleteReservation"
+      @close="closeDeleteModal"
+    />
   </AppLayout>
 </template>
 
@@ -78,6 +90,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import MyReservationsTable from '@/modules/reservations/components/MyReservationsTable.vue';
 import VehicleDetailModal from '@/modules/reservations/components/VehicleDetailModal.vue';
 import EditReservationModal from '@/modules/reservations/components/EditReservationModal.vue';
+import BaseModal from '@/components/base/BaseModal.vue';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types';
 import { clearPendingReservationCheckout, getPendingReservationCheckout } from '@/modules/reservations/utils/checkoutStorage';
@@ -100,6 +113,9 @@ const selectedReservation = ref<ReservationLog | null>(null);
 const showVehicleModal = ref(false);
 const editingReservation = ref<ReservationLog | null>(null);
 const showEditModal = ref(false);
+const showDeleteModal = ref(false);
+const reservationToDelete = ref<ReservationLog | null>(null);
+const deleting = ref(false);
 let retryTimer: number | null = null;
 
 const debugEnabled = ref(false);
@@ -270,26 +286,37 @@ async function handleCancel(reservation?: ReservationLog) {
   const targetReservation = reservation || selectedReservation.value;
   if (!targetReservation) return;
 
-  if (!confirm(t('reservations.myReservations.confirmCancel'))) return;
+  reservationToDelete.value = targetReservation;
+  showDeleteModal.value = true;
+}
+
+function openDeleteModal(reservation: ReservationLog) {
+  void handleCancel(reservation);
+}
+
+function closeDeleteModal() {
+  showDeleteModal.value = false;
+  reservationToDelete.value = null;
+}
+
+async function confirmDeleteReservation() {
+  if (!reservationToDelete.value) return;
 
   try {
-    loading.value = true;
-    await reservationLogService.deleteReservation(targetReservation.id);
+    deleting.value = true;
+    await reservationLogService.deleteReservation(reservationToDelete.value.id);
     toast.success(t('reservations.toast.deleted'));
     if (showVehicleModal.value) {
       showVehicleModal.value = false;
     }
+    closeDeleteModal();
     await loadReservations();
   } catch (err: any) {
     const errorMessage = err?.response?.data?.message || err?.message || t('reservations.errors.delete');
     toast.error(errorMessage);
   } finally {
-    loading.value = false;
+    deleting.value = false;
   }
-}
-
-function openDeleteModal(reservation: ReservationLog) {
-  void handleCancel(reservation);
 }
 
 function handleRenew(reservation: ReservationLog) {
