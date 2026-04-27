@@ -40,7 +40,7 @@
           type="text"
           :placeholder="getPlaceholder()"
           :disabled="loading"
-          class="chat-input"
+          class="chat-input text-main bg-surface focus:ring-primary focus:border-primary"
         />
         <button
           @click="sendMessage"
@@ -312,7 +312,7 @@ watch(() => route.path, () => {
 .close-btn {
   background: none;
   border: none;
-  color: white;
+  color: rgb(var(--color-text-inverse));
   font-size: 28px;
   cursor: pointer;
   padding: 0;
@@ -388,7 +388,7 @@ watch(() => route.path, () => {
 
 .message.user p {
   background: rgb(var(--color-primary));
-  color: white !important;
+  color: rgb(var(--color-text-inverse));
   border-radius: 18px 18px 4px 18px;
 }
 
@@ -405,7 +405,7 @@ watch(() => route.path, () => {
 
 .message.error p {
   background: rgb(var(--color-danger));
-  color: white !important;
+  color: rgb(var(--color-text-inverse));
   border-radius: 18px 18px 18px 4px;
 }
 
@@ -436,8 +436,6 @@ watch(() => route.path, () => {
   outline: none;
   transition: all 0.2s;
   font-family: inherit;
-  background: rgb(var(--color-input-bg));
-  color: rgb(var(--color-text-main));
 }
 
 .chat-input:focus {
@@ -456,7 +454,7 @@ watch(() => route.path, () => {
   border-radius: 50%;
   background: rgb(var(--color-primary));
   border: none;
-  color: white;
+  color: rgb(var(--color-text-inverse));
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;

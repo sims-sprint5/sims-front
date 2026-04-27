@@ -57,7 +57,8 @@
             <ReservationPage
               :key="reservationPageKey"
               :prefill="reservationPrefill"
-              :hideAccessibility="true"
+              :is-embedded="true"
+              :hide-accessibility="true"
               @reservationModalVisibility="onReservationModalVisibility"
             />
           </div>

@@ -55,15 +55,16 @@
               type="text"
               :placeholder="getPlaceholder()"
               :disabled="loading"
-              class="flex-1 rounded-full border border-default px-4 py-3 text-base focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed bg-[rgb(var(--color-input-bg))] text-[rgb(var(--color-text-main))] chat-input-focus transition-all"
+              class="flex-1 rounded-full border border-default bg-surface px-4 py-3 text-base text-main transition-all focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 chat-input-focus"
             />
-            <button
+            <BaseButton
               @click="sendMessage"
+              :loading="loading"
               :disabled="loading || !userMessage.trim()"
-              class="chat-btn-send text-white rounded-full px-6 py-3 font-semibold text-base shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all flex-shrink-0 whitespace-nowrap"
+              class="flex-shrink-0 whitespace-nowrap rounded-full px-6 text-base"
             >
               {{ t('common.send') }}
-            </button>
+            </BaseButton>
           </div>
         </div>
       </div>
@@ -77,6 +78,7 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/modules/auth/composables/useUser';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { BaseButton } from '@/components/base';
 
 interface Message {
   id: number;
@@ -201,12 +203,6 @@ const sendMessage = async () => {
 .chat-msg-error, .chat-msg-error p {
   background: rgb(var(--color-danger));
   color: white !important;
-}
-.chat-btn-send {
-  background: rgb(var(--color-primary));
-}
-.chat-btn-send:hover:not(:disabled) {
-  background: rgb(var(--color-primary-hover));
 }
 .chat-input-focus:focus {
   border-color: rgb(var(--color-primary));

@@ -30,6 +30,7 @@ const toast = useToast();
 const props = defineProps<{
   prefill?: Record<string, string | undefined> | null
   hideAccessibility?: boolean
+  isEmbedded?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -600,8 +601,8 @@ async function createReservation() {
 </script>
 
 <template>
-  <AppLayout :title="$t('reservations.title')">
-    <div class="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <component :is="props.isEmbedded ? 'div' : AppLayout" :title="props.isEmbedded ? undefined : $t('reservations.title')">
+    <div :class="props.isEmbedded ? 'p-2 sm:p-4' : 'max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-8'">
       <div class="space-y-6">
       <aside v-if="showFilters" class="w-full">
         <div class="lg:sticky lg:top-6">
@@ -723,5 +724,5 @@ async function createReservation() {
       </div>
     </Transition>
   </Teleport>
-  </AppLayout>
+  </component>
 </template>
