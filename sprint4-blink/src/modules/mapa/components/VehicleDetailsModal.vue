@@ -224,24 +224,24 @@ function canPreReserve(car: Car): boolean {
 }
 
 function getSuggestedStartForPreReservation(car: Car): string {
+  const now = new Date()
+  const candidates: Date[] = [getNextReservableMinute()]
+
   const byNextAvailable = parseReservationDate(car.next_available_at)
-  if (byNextAvailable) return toDateTimeLocalInput(byNextAvailable)
-
-  const slots = getCalendarSlots(car)
-  if (!slots.length) return toDateTimeLocalInput(getNextReservableMinute())
-
-  const sorted = [...slots].sort((a, b) => a.start.getTime() - b.start.getTime())
-  let cursor = getNextReservableMinute()
-
-  for (const slot of sorted) {
-    if (slot.end <= cursor) continue
-    if (slot.start > cursor) {
-      return toDateTimeLocalInput(cursor)
-    }
-    cursor = slot.end
+  if (byNextAvailable && byNextAvailable > now) {
+    candidates.push(byNextAvailable)
   }
 
-  return toDateTimeLocalInput(cursor)
+  const slots = getCalendarSlots(car)
+  for (const slot of slots) {
+    if (slot.end > now) {
+      candidates.push(slot.end)
+    }
+  }
+
+  const first = candidates[0] ?? getNextReservableMinute()
+  const latest = candidates.reduce((max, d) => (d > max ? d : max), first)
+  return toDateTimeLocalInput(latest)
 }
 
 function getLatestReservationEnd(car: Car): Date | null {

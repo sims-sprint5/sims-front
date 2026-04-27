@@ -57,6 +57,7 @@ type DatePickerConfig = {
   disable?: Array<{ from: Date; to: Date }>;
   minDate?: Date;
 };
+const NON_BLOCKING_RESERVATION_STATES = new Set(['cancelled', 'canceled', 'completed', 'finished', 'expired']);
 
 const debugDump = computed(() =>
   JSON.stringify(
@@ -96,38 +97,28 @@ const defaultEndAt = computed(() => {
   return toDateTimeLocalInput(d);
 });
 
-function normalizeDateInput(value?: string | null): string | undefined {
-  if (!value) return undefined;
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return undefined;
-  return toDateTimeLocalInput(parsed);
-}
-
 function getSuggestedStartForPreReservation(vehicle: ReservationVehicleCardModel): string {
-  const byNextAvailable = normalizeDateInput(vehicle.nextAvailableAt);
-  if (byNextAvailable) return byNextAvailable;
+  const now = new Date();
+  const candidates: Date[] = [getNextReservableMinute()];
 
-  const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
-  if (!slots.length) return defaultStartAt.value;
-
-  const sorted = slots
-    .map((slot) => ({
-      start: new Date(slot.startDate),
-      end: new Date(slot.endDate),
-    }))
-    .filter((slot) => !Number.isNaN(slot.start.getTime()) && !Number.isNaN(slot.end.getTime()))
-    .sort((a, b) => a.start.getTime() - b.start.getTime());
-
-  let cursor = new Date();
-  for (const slot of sorted) {
-    if (slot.end <= cursor) continue;
-    if (slot.start > cursor) {
-      return toDateTimeLocalInput(cursor);
-    }
-    cursor = slot.end;
+  const byNextAvailable = parseDate(vehicle.nextAvailableAt ?? null);
+  if (byNextAvailable && byNextAvailable > now) {
+    candidates.push(byNextAvailable);
   }
 
-  return toDateTimeLocalInput(cursor);
+  const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
+  for (const slot of slots) {
+    const statusKey = String(slot.status ?? '').trim().toLowerCase();
+    if (NON_BLOCKING_RESERVATION_STATES.has(statusKey)) continue;
+    const end = parseDate(slot.endDate);
+    if (end && end > now) {
+      candidates.push(end);
+    }
+  }
+
+  const first = candidates[0] ?? getNextReservableMinute();
+  const latest = candidates.reduce((max, d) => (d > max ? d : max), first);
+  return toDateTimeLocalInput(latest);
 }
 
 function getSuggestedEndFromStart(startAt: string): string {
@@ -138,15 +129,23 @@ function getSuggestedEndFromStart(startAt: string): string {
 }
 
 function isVehicleReservedNow(vehicle: ReservationVehicleCardModel): boolean {
-  const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
-  if (!slots.length) return String(vehicle.status ?? vehicle.category ?? '').trim().toLowerCase() === 'reserved';
+  const statusKey = String(vehicle.category ?? vehicle.status ?? '').trim().toLowerCase();
+  if (statusKey === 'reserved') return true;
 
+  const nextAvailableAt = parseDate(vehicle.nextAvailableAt ?? null);
   const now = new Date();
+  if (nextAvailableAt && nextAvailableAt > now) return true;
+
+  const slots = Array.isArray(vehicle.calendarReservations) ? vehicle.calendarReservations : [];
+  if (!slots.length) return false;
+
   return slots.some((slot) => {
+    const slotStatus = String(slot.status ?? '').trim().toLowerCase();
+    if (NON_BLOCKING_RESERVATION_STATES.has(slotStatus)) return false;
     const start = new Date(slot.startDate);
     const end = new Date(slot.endDate);
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-    return start <= now && now < end;
+    return now < end;
   });
 }
 

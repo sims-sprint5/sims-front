@@ -65,13 +65,21 @@ const isAvailable = computed(() => {
 });
 
 const isReservedNow = computed(() => {
-  if (!props.vehicle?.calendarReservations?.length) return statusKey.value === 'reserved' && !isAvailable.value;
+  if (!props.vehicle?.calendarReservations?.length) {
+    const nextAvailableAt = props.vehicle?.nextAvailableAt ? new Date(props.vehicle.nextAvailableAt) : null;
+    const blockedByNextAvailable = Boolean(nextAvailableAt && !Number.isNaN(nextAvailableAt.getTime()) && new Date() < nextAvailableAt);
+    return statusKey.value === 'reserved' || blockedByNextAvailable;
+  }
   const now = new Date();
   return props.vehicle.calendarReservations.some((slot) => {
-    const start = new Date(slot.startDate);
-    const end = new Date(slot.endDate);
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-    return end > now;
+    const end = slot.endDate ? new Date(slot.endDate) : null;
+    if (!end || Number.isNaN(end.getTime())) return false;
+    if (slot.startDate) {
+      const start = new Date(slot.startDate);
+      if (Number.isNaN(start.getTime())) return false;
+    }
+    // Regla del módulo: se considera bloqueado hasta que termine la reserva.
+    return now < end;
   });
 });
 
