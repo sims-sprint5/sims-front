@@ -48,7 +48,7 @@
           <option value="user">{{ $t('roles.user') }}</option>
           <option value="admin">{{ $t('roles.admin') }}</option>
         </select>
-        <p v-if="(errors as any).role" class="text-sm text-red-600">{{ formatError((errors as any).role) }}</p>
+        <p v-if="(errors as any).role" class="text-sm text-danger">{{ formatError((errors as any).role) }}</p>
       </div>
 
       <div>

@@ -5,7 +5,7 @@
         <div class="absolute top-3 right-3 z-[1000]">
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-inverse shadow hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-inverse shadow hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             @click="openReservationPanel"
             :aria-label="t('mapa.openReservationPanel')"
           >
@@ -34,7 +34,7 @@
           :aria-label="t('mapa.reservationPanelTitle')"
         >
           <div
-            class="hidden sm:block absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-transparent hover:bg-primary-100/50"
+            class="hidden sm:block absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-transparent hover:bg-primary/50"
             @mousedown.prevent="startPanelResize"
             aria-hidden="true"
           />
@@ -45,7 +45,7 @@
             </h2>
             <button
               type="button"
-              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary"
               @click="closeReservationPanel"
               :aria-label="t('mapa.closeReservationPanel')"
             >
@@ -113,7 +113,7 @@
                     <BaseDateTimePicker
                       v-model="quickReservationForm.startAt"
                       :config="quickStartPickerConfig"
-                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
@@ -122,7 +122,7 @@
                     <BaseDateTimePicker
                       v-model="quickReservationForm.endAt"
                       :config="quickEndPickerConfig"
-                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
@@ -905,7 +905,7 @@ const showUserLocation = () => {
         userMarker = L.marker(latlng, {
           icon: L.divIcon({
             className: 'user-location-marker',
-            html: '<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg"></div>',
+            html: '<div class="w-4 h-4 bg-primary rounded-full border-2 border-white shadow-lg"></div>',
             iconSize: [16, 16],
             iconAnchor: [8, 8]
           })

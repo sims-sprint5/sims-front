@@ -6,13 +6,13 @@
 
   <!-- Mobile: Cards -->
   <div class="md:hidden space-y-4">
-    <div v-if="loading" class="text-center py-8 text-gray-500">
+    <div v-if="loading" class="text-center py-8 text-muted">
       {{ loadingText }}
     </div>
-    <div v-else-if="items.length === 0" class="text-center py-8 text-gray-500">
+    <div v-else-if="items.length === 0" class="text-center py-8 text-muted">
       {{ emptyText }}
     </div>
-    <div v-else v-for="item in items" :key="getItemKey(item)" class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+    <div v-else v-for="item in items" :key="getItemKey(item)" class="bg-surface rounded-lg border border-default p-4 shadow-sm">
       <slot name="card" :item="item" :getItemKey="getItemKey" />
     </div>
   </div>

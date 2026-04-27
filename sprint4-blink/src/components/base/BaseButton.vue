@@ -35,7 +35,7 @@ const buttonClasses = computed(() => {
   classes.push(sizeClasses[props.size]);
 
   const variantClasses = {
-    primary: 'bg-primary hover:bg-primary-hover text-inverse focus:ring-primary shadow-md',
+    primary: 'bg-primary hover:brightness-110 text-inverse focus:ring-primary shadow-md',
     secondary: 'bg-surface-inverse hover:opacity-80 text-inverse focus:ring-surface-inverse shadow-md',
     tertiary: 'bg-danger hover:opacity-90 text-inverse focus:ring-danger shadow-md',
     warning: 'bg-warning hover:opacity-90 text-main focus:ring-warning shadow-md',

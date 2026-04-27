@@ -1,21 +1,21 @@
 <template>
   <AppLayout :title="t('nav.chat')">
-    <div class="h-[calc(100vh-140px)] md:h-[calc(100vh-160px)] flex flex-col overflow-hidden bg-white">
+    <div class="h-[calc(100vh-140px)] md:h-[calc(100vh-160px)] flex flex-col overflow-hidden bg-surface">
       <!-- Header -->
-      <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-2 py-1 shadow-sm flex-shrink-0">
+      <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-inverse px-2 py-1 shadow-sm flex-shrink-0">
         <h1 class="text-sm font-bold">{{ t('nav.chat') }}</h1>
       </div>
 
       <!-- Chat Container -->
       <div class="flex-1 flex flex-col overflow-hidden">
-        <div class="flex-1 overflow-y-auto p-1.5 flex flex-col gap-1 bg-gray-50">
+        <div class="flex-1 overflow-y-auto p-1.5 flex flex-col gap-1 bg-base">
           <!-- Initial Message -->
           <div v-if="messages.length === 0" class="flex items-center justify-center h-full">
             <div class="text-center px-2">
-              <h2 class="text-sm font-bold text-gray-900 mb-0.5">
+              <h2 class="text-sm font-bold text-main mb-0.5">
                 {{ t('chatbot.greeting', { name: userFirstName }) }}
               </h2>
-              <p class="text-gray-600 text-xs max-w-sm">
+              <p class="text-muted text-xs max-w-sm">
                 {{ t('chatbot.welcomeMessage') }}
               </p>
             </div>
@@ -23,9 +23,9 @@
 
           <!-- Messages -->
           <div v-for="msg in messages" :key="msg.id" :class="['flex', msg.role === 'user' ? 'justify-end' : 'justify-start']">
-            <div :class="['px-2 py-1 rounded text-xs break-words', msg.role === 'user' ? 'bg-purple-500 text-white rounded-br-none max-w-xs' : msg.role === 'error' ? 'bg-red-50 text-red-900 border border-red-200 rounded-bl-none max-w-xs' : 'bg-white text-gray-900 border border-gray-200 rounded-bl-none max-w-xs']">
+            <div :class="['px-2 py-1 rounded text-xs break-words', msg.role === 'user' ? 'bg-purple-500 text-inverse rounded-br-none max-w-xs' : msg.role === 'error' ? 'bg-danger/10 text-red-900 border border-red-200 rounded-bl-none max-w-xs' : 'bg-surface text-main border border-default rounded-bl-none max-w-xs']">
               <p class="whitespace-pre-wrap m-0">{{ msg.content }}</p>
-              <span :class="['text-xs block opacity-60', msg.role === 'user' ? 'text-purple-100' : msg.role === 'error' ? 'text-red-600' : 'text-gray-400']">
+              <span :class="['text-xs block opacity-60', msg.role === 'user' ? 'text-purple-100' : msg.role === 'error' ? 'text-danger' : 'text-muted']">
                 {{ formatTime(msg.timestamp) }}
               </span>
             </div>
@@ -33,7 +33,7 @@
 
           <!-- Loading State -->
           <div v-if="loading" class="flex justify-start">
-            <div class="bg-white border border-gray-200 px-2 py-1 rounded rounded-bl-none">
+            <div class="bg-surface border border-default px-2 py-1 rounded rounded-bl-none">
               <div class="flex gap-0.5">
                 <div class="w-1 h-1 bg-gray-400 rounded-full animate-pulse"></div>
                 <div class="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Input Area -->
-        <div class="bg-white border-t border-gray-200 p-1 shadow-sm flex-shrink-0">
+        <div class="bg-surface border-t border-default p-1 shadow-sm flex-shrink-0">
           <div class="flex gap-1">
             <input
               v-model="userMessage"
@@ -55,12 +55,12 @@
               type="text"
               :placeholder="getPlaceholder()"
               :disabled="loading"
-              class="flex-1 rounded-full border border-gray-300 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+              class="flex-1 rounded-full border border-default px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-transparent disabled:bg-surface-muted disabled:cursor-not-allowed"
             />
             <button
               @click="sendMessage"
               :disabled="loading || !userMessage.trim()"
-              class="bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full px-3 py-1 font-semibold text-xs hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex-shrink-0 whitespace-nowrap"
+              class="bg-gradient-to-r from-purple-600 to-purple-700 text-inverse rounded-full px-3 py-1 font-semibold text-xs hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex-shrink-0 whitespace-nowrap"
             >
               {{ t('common.send') }}
             </button>

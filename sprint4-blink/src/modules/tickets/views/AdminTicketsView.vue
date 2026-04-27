@@ -89,7 +89,7 @@
                       <p class="text-sm font-medium text-muted mb-2">{{ $t('tickets.table.estado') }}</p>
                       <select
                         v-model="editingEstado"
-                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-blue-500"
+                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-primary"
                       >
                         <option v-for="option in statusOptions" :key="option.value" :value="option.value">
                           {{ option.label }}
@@ -104,7 +104,7 @@
                       <p class="text-sm font-medium text-muted mb-2">{{ $t('tickets.table.priority') }}</p>
                       <select
                         v-model="editingPriority"
-                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-blue-500"
+                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-primary"
                       >
                         <option v-for="option in priorityOptions" :key="option.value" :value="option.value">
                           {{ option.label }}

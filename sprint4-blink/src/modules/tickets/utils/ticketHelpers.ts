@@ -26,9 +26,9 @@ export function getPriorityClass(priority: string | undefined): string {
     low: 'bg-slate-100 text-slate-700',
     baja: 'bg-slate-100 text-slate-700',
     baixa: 'bg-slate-100 text-slate-700',
-    medium: 'bg-amber-100 text-amber-800',
-    media: 'bg-amber-100 text-amber-800',
-    mitjana: 'bg-amber-100 text-amber-800',
+    medium: 'bg-amber-100 text-warning-dark',
+    media: 'bg-amber-100 text-warning-dark',
+    mitjana: 'bg-amber-100 text-warning-dark',
     high: 'bg-red-100 text-red-800',
     alta: 'bg-red-100 text-red-800',
   };

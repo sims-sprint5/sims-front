@@ -33,7 +33,7 @@
           <div class="flex gap-2 justify-end">
             <button
               @click="$emit('view', item)"
-              class="p-2 bg-success text-inverse hover:bg-success/90 rounded-lg transition-colors"
+              class="p-2 bg-success text-inverse hover:brightness-110 rounded-lg transition-colors"
               :title="$t('common.view')"
             >
               <ChatBubbleLeftRightIcon class="w-5 h-5" />
@@ -48,29 +48,29 @@
       <div class="space-y-3">
         <!-- Asunto -->
         <div>
-          <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.asunto') }}</div>
-          <div class="text-sm font-semibold text-gray-900 mt-1">{{ item.asunto }}</div>
+          <div class="text-xs font-medium text-muted">{{ $t('tickets.table.asunto') }}</div>
+          <div class="text-sm font-semibold text-main mt-1">{{ item.asunto }}</div>
         </div>
 
         <!-- Estado y Fecha -->
-        <div class="grid grid-cols-2 gap-3 pb-3 border-b border-gray-200">
+        <div class="grid grid-cols-2 gap-3 pb-3 border-b border-default">
           <div>
-            <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.estado') }}</div>
+            <div class="text-xs font-medium text-muted">{{ $t('tickets.table.estado') }}</div>
             <span class="inline-flex px-2.5 py-1 text-xs leading-5 font-semibold rounded-full mt-1" 
               :class="getEstadoClass(item.estado)">
               {{ item.estado ? t(`tickets.estados.${item.estado}`) : t('tickets.estados.pendiente') }}
             </span>
           </div>
           <div>
-            <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.createdAt') }}</div>
-            <div class="text-sm font-medium text-gray-900 mt-1">{{ formatDate(item.created_at) }}</div>
+            <div class="text-xs font-medium text-muted">{{ $t('tickets.table.createdAt') }}</div>
+            <div class="text-sm font-medium text-main mt-1">{{ formatDate(item.created_at) }}</div>
           </div>
         </div>
 
         <!-- Acciones -->
         <button
           @click="$emit('view', item)"
-          class="w-full p-2 bg-success text-inverse text-sm font-medium hover:bg-success/90 rounded-lg transition-colors flex items-center justify-center gap-2"
+          class="w-full p-2 bg-success text-inverse text-sm font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           <ChatBubbleLeftRightIcon class="w-4 h-4" />
           {{ $t('common.view') }}

@@ -41,7 +41,7 @@
 
               <div v-if="reservation.minutes_remaining && reservation.minutes_remaining > 0" class="pt-2">
                 <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.renewal.timeRemaining') }}</p>
-                <p class="font-semibold text-green-600">{{ formatTimeRemaining(reservation.minutes_remaining) }}</p>
+                <p class="font-semibold text-success">{{ formatTimeRemaining(reservation.minutes_remaining) }}</p>
               </div>
             </div>
 

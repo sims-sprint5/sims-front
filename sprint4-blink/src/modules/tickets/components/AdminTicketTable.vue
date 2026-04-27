@@ -4,7 +4,7 @@
       <label class="mb-1 block text-xs font-medium text-muted">{{ t('tickets.table.priority') }}</label>
       <select
         v-model="selectedPriority"
-        class="w-full rounded-lg border border-default px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        class="w-full rounded-lg border border-default px-3 py-2 text-sm focus:border-primary focus:outline-none"
       >
         <option value="all">{{ t('adminTickets.filters.all') }}</option>
         <option value="high">{{ t('tickets.form.priorityHigh') }}</option>
@@ -17,7 +17,7 @@
       <label class="mb-1 block text-xs font-medium text-muted">{{ t('tickets.table.estado') }}</label>
       <select
         v-model="selectedStatus"
-        class="w-full rounded-lg border border-default px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        class="w-full rounded-lg border border-default px-3 py-2 text-sm focus:border-primary focus:outline-none"
       >
         <option value="all">{{ t('adminTickets.filters.all') }}</option>
         <option value="open">{{ t('tickets.estados.open') }}</option>
@@ -69,21 +69,21 @@
           <div class="flex gap-2 justify-end">
             <button
               @click="$emit('view', item)"
-              class="p-2 bg-primary text-inverse hover:bg-primary-hover rounded-lg transition-colors"
+              class="p-2 bg-primary text-inverse hover:brightness-110 rounded-lg transition-colors"
               :title="$t('common.view')"
             >
               <EyeIcon class="w-5 h-5" />
             </button>
             <button
               @click="$emit('chat', item)"
-              class="p-2 bg-success text-inverse hover:bg-success/90 rounded-lg transition-colors"
+              class="p-2 bg-success text-inverse hover:brightness-110 rounded-lg transition-colors"
               :title="$t('adminTickets.actions.reply')"
             >
               <ChatBubbleLeftRightIcon class="w-5 h-5" />
             </button>
             <button
               @click="$emit('delete', item)"
-              class="p-2 bg-danger text-inverse hover:bg-danger/90 rounded-lg transition-colors"
+              class="p-2 bg-danger text-inverse hover:brightness-110 rounded-lg transition-colors"
               :title="$t('common.delete')"
             >
               <TrashIcon class="w-5 h-5" />
@@ -138,21 +138,21 @@
         <div class="flex gap-2 pt-2">
           <button
             @click="$emit('view', item)"
-            class="flex-1 p-2 bg-primary text-inverse text-xs font-medium hover:bg-primary-hover rounded-lg transition-colors flex items-center justify-center gap-1"
+            class="flex-1 p-2 bg-primary text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <EyeIcon class="w-4 h-4" />
             Ver
           </button>
           <button
             @click="$emit('chat', item)"
-            class="flex-1 p-2 bg-success text-inverse text-xs font-medium hover:bg-success/90 rounded-lg transition-colors flex items-center justify-center gap-1"
+            class="flex-1 p-2 bg-success text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <ChatBubbleLeftRightIcon class="w-4 h-4" />
             Responder
           </button>
           <button
             @click="$emit('delete', item)"
-            class="flex-1 p-2 bg-danger text-inverse text-xs font-medium hover:bg-danger/90 rounded-lg transition-colors flex items-center justify-center gap-1"
+            class="flex-1 p-2 bg-danger text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <TrashIcon class="w-4 h-4" />
             Eliminar

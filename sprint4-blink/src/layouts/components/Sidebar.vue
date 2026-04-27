@@ -66,7 +66,7 @@
                 </span>
 
                 <span v-if="isCollapsed && item.count"
-                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary" />
               </button>
               
               <RouterLink
@@ -87,7 +87,7 @@
                 </span>
 
                 <span v-if="isCollapsed && item.count"
-                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary-500" />
+                  class="absolute right-1 top-1 block size-2 rounded-full bg-primary" />
               </RouterLink>
             </li>
           </ul>

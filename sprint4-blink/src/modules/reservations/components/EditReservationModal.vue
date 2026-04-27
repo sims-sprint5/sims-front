@@ -12,7 +12,7 @@
           disabled
           class="mt-1 block w-full rounded-md border border-default bg-base px-3 py-2 text-sm text-muted"
         />
-        <p class="mt-1 text-xs text-gray-500">{{ $t('reservations.myReservations.startDateLocked') }}</p>
+        <p class="mt-1 text-xs text-muted">{{ $t('reservations.myReservations.startDateLocked') }}</p>
       </div>
 
       <!-- End Date (Editable) -->
@@ -24,13 +24,13 @@
           v-model="formData.end_at"
           type="datetime-local"
           required
-          class="mt-1 block w-full rounded-md border border-default px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
+          class="mt-1 block w-full rounded-md border border-default px-3 py-2 text-sm focus:border-primary focus:ring-primary"
           :disabled="isLoading"
         />
       </div>
 
       <!-- Error Message -->
-      <div v-if="errorMessage" class="rounded-lg bg-red-50 p-3">
+      <div v-if="errorMessage" class="rounded-lg bg-danger/10 p-3">
         <p class="text-sm text-red-800">
           <strong>❌ {{ $t('errors.error') }}:</strong> {{ errorMessage }}
         </p>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
 import { computed, reactive, ref, watch, nextTick, onBeforeUnmount, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -600,8 +601,9 @@ async function createReservation() {
 </script>
 
 <template>
-  <div class="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="space-y-6">
+  <AppLayout :title="$t('reservations.title')">
+    <div class="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="space-y-6">
       <aside v-if="showFilters" class="w-full">
         <div class="lg:sticky lg:top-6">
           <FilterSidebar
@@ -630,19 +632,19 @@ async function createReservation() {
           </div>
         </div>
 
-        <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-danger/10 px-4 py-3 text-sm text-danger">
           {{ error }}
         </div>
 
-        <div v-if="debugEnabled" class="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
+        <div v-if="debugEnabled" class="mb-4 rounded-lg border border-warning bg-warning/10 p-4">
           <div class="mb-2 flex items-center justify-between">
-            <h2 class="text-sm font-semibold text-amber-900">Reservation Debug Mode</h2>
-            <span class="text-xs text-amber-700">Activo via ?debugReservations=1</span>
+            <h2 class="text-sm font-semibold text-warning-dark">Reservation Debug Mode</h2>
+            <span class="text-xs text-warning-dark">Activo via ?debugReservations=1</span>
           </div>
-          <p class="mb-2 text-xs text-amber-800">
+          <p class="mb-2 text-xs text-warning-dark">
             Muestra respuestas crudas/normalizadas de reservas y calendario para diagnostico.
           </p>
-          <pre class="max-h-80 overflow-auto rounded bg-white p-3 text-[11px] leading-4 text-gray-800">{{ debugDump }}</pre>
+          <pre class="max-h-80 overflow-auto rounded bg-surface p-3 text-[11px] leading-4 text-main">{{ debugDump }}</pre>
         </div>
 
         <VehicleList :vehicles="vehicleCards" :loading="loading" @reserve="openReservationModal">
@@ -694,7 +696,7 @@ async function createReservation() {
                     <BaseDateTimePicker
                       v-model="reservationForm.startAt"
                       :config="startPickerConfig"
-                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
@@ -703,13 +705,13 @@ async function createReservation() {
                     <BaseDateTimePicker
                       v-model="reservationForm.endAt"
                       :config="endPickerConfig"
-                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
               </div>
 
-              <div class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-surface px-6 py-4 sm:flex-row sm:justify-end">
+              <div class="flex flex-col-reverse gap-3 border-t border-default bg-surface px-6 py-4 sm:flex-row sm:justify-end">
                 <BaseButton v-if="!fromMap" variant="secondary" :disabled="submitting" @click="closeReservationModal">
                   {{ $t('common.cancel') }}
                 </BaseButton>
@@ -722,4 +724,5 @@ async function createReservation() {
       </div>
     </Transition>
   </Teleport>
+  </AppLayout>
 </template>

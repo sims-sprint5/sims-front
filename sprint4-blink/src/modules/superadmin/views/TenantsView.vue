@@ -90,7 +90,7 @@
                                         </svg>
                                     </button>
                                     <button @click="openDeleteModal(tenant)"
-                                        class="text-red-600 hover:text-red-900 transition-colors"
+                                        class="text-danger hover:text-red-900 transition-colors"
                                         :title="$t('common.delete')">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

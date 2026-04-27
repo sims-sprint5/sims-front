@@ -94,7 +94,7 @@ function handleReserve() {
 
 <template>
   <article
-    class="relative bg-surface rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+    class="relative bg-surface rounded-2xl shadow-md border border-default overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
     :aria-busy="skeleton ? 'true' : 'false'"
   >
     <div

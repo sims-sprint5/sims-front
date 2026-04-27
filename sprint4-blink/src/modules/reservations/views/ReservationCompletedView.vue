@@ -6,7 +6,7 @@
         <!-- Success Icon -->
         <div class="mb-6 flex justify-center">
           <div class="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-            <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-8 w-8 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -25,7 +25,7 @@
 
         <!-- Error State -->
         <div v-else-if="error" class="space-y-4">
-          <p class="text-center text-red-600">{{ error }}</p>
+          <p class="text-center text-danger">{{ error }}</p>
           <BaseButton block variant="secondary" @click="goBack">
             {{ $t('common.back') }}
           </BaseButton>
@@ -62,7 +62,7 @@
             class="rounded-lg bg-yellow-50 p-4"
           >
             <div class="flex items-start gap-3">
-              <svg class="h-5 w-5 shrink-0 text-yellow-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="h-5 w-5 shrink-0 text-warning mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
               </svg>
               <div>

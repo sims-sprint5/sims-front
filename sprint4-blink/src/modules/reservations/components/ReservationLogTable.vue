@@ -25,7 +25,7 @@
         class="min-w-0 text-left hover:underline focus:outline-none"
         @click="$emit('select-row', item)"
       >
-        <div class="font-medium text-blue-600">{{ item.vehicle_name }}</div>
+        <div class="font-medium text-primary">{{ item.vehicle_name }}</div>
         <div class="text-xs text-muted">{{ item.license_plate }}</div>
       </button>
     </template>
@@ -52,10 +52,10 @@
     </template>
 
     <template #cell-minutes_remaining="{ value, item }">
-      <div v-if="item.is_expired" class="text-xs font-semibold text-red-600">
+      <div v-if="item.is_expired" class="text-xs font-semibold text-danger">
         {{ $t('reservations.table.expired') }}
       </div>
-      <div v-else-if="value !== undefined && value >= 0" class="text-xs font-semibold text-blue-600">
+      <div v-else-if="value !== undefined && value >= 0" class="text-xs font-semibold text-primary">
         {{ formatTimeRemaining(value) }}
       </div>
       <div v-else class="text-xs text-muted">—</div>
@@ -75,7 +75,7 @@
       <div class="flex gap-2">
         <button
           @click="$emit('delete-reservation', item)"
-          class="inline-flex items-center gap-1 rounded-md bg-danger/10 px-2.5 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-100 transition-colors"
+          class="inline-flex items-center gap-1 rounded-md bg-danger/10 px-2.5 py-1.5 text-xs font-semibold text-danger hover:bg-danger/20 transition-colors"
           :title="$t('reservations.table.deleteReservation')"
         >
           <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">

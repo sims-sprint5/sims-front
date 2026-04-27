@@ -6,7 +6,7 @@
         <p class="mt-2 text-sm text-muted">{{ $t('reservations.myReservations.description') }}</p>
       </div>
 
-      <div v-if="error" class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <div v-if="error" class="mb-6 rounded-lg border border-red-200 bg-danger/10 px-4 py-3 text-sm text-danger">
         {{ error }}
       </div>
 
@@ -28,7 +28,7 @@
         <h3 class="mt-4 text-lg font-medium text-main">{{ $t('reservations.myReservations.empty') }}</h3>
         <p class="mt-2 text-sm text-muted">{{ $t('reservations.myReservations.emptyDesc') }}</p>
         <div class="mt-6">
-          <router-link to="/reservation" class="inline-flex items-center rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-inverse hover:bg-primary-700">
+          <router-link to="/reservation" class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-inverse hover:brightness-110 hover:text-inverse transition-all">
             {{ $t('reservations.myReservations.bookNow') }}
           </router-link>
         </div>

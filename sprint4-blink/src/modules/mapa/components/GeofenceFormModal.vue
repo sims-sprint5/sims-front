@@ -53,7 +53,7 @@
               </label>
               <select
                 v-model="form.formData.type"
-                class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 @blur="form.errors.type = form.validateType(form.formData.type)"
               >
                   <option
@@ -108,7 +108,7 @@
               </label>
               <select
                 v-model="form.formData.status"
-                class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="active">{{ $t('mapa.status.active') }}</option>
                 <option value="inactive">{{ $t('mapa.status.inactive') }}</option>
