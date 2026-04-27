@@ -912,7 +912,7 @@
   "chatbot": {
     "title": "SIMS Assistant",
     "openChat": "Open support chat",
-    "greeting": "👋 Hello {name}, how can I help you?",
+    "greeting": "Hello {name}, how can I help you?",
     "defaultGreeting": "User",
     "typing": "⏳ Writing...",
     "footer": "Powered by AI • {context}",

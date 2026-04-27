@@ -911,7 +911,7 @@
   "chatbot": {
     "title": "Asistente SIMS",
     "openChat": "Abrir chat de asistencia",
-    "greeting": "👋 Hola {name}, ¿En qué puedo ayudarte?",
+    "greeting": "Hola {name}, ¿En qué puedo ayudarte?",
     "defaultGreeting": "Usuario",
     "typing": "⏳ Escribiendo...",
     "footer": "Powered by AI • {context}",

@@ -904,7 +904,7 @@
   "chatbot": {
     "title": "Assistent SIMS",
     "openChat": "Obrir xat d'assistència",
-    "greeting": "👋 Hola {name}, ¿com puc ajudar-te?",
+    "greeting": "Hola {name}, ¿com puc ajudar-te?",
     "defaultGreeting": "Usuari",
     "typing": "⏳ Escrivint...",
     "footer": "Impulsat per IA • {context}",
