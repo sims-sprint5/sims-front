@@ -16,7 +16,7 @@
                 <img
                   :src="avatarUrl || userLogo"
                   :alt="$t('settings.userAvatarAlt')"
-                  class="h-14 w-14 flex-none rounded-full bg-surface-muted object-cover ring-1 ring-divider"
+                  class="h-14 w-14 flex-none rounded-full bg-surface-muted dark:bg-[#bebfc5] object-cover ring-1 ring-divider"
                 />
                 <div>
                   <input 
