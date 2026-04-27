@@ -102,7 +102,7 @@ onMounted(() => {
 
 <template>
     <nav class="sticky top-0 z-10 bg-navbar-bg shadow-sm border-b border-nav px-3 py-3 sm:px-6">
-        <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center justify-between gap-2 sm:gap-3">
             <!-- Menu button & Title -->
             <div class="flex min-w-0 items-center gap-2 sm:gap-4">
                 <button v-if="showMenuButton" @click="handleMenuClick"
@@ -119,20 +119,55 @@ onMounted(() => {
                 </h1>
             </div>
 
-            <!-- User name -->
-            <div v-if="user?.name" class="hidden md:flex items-center gap-3">
-                <!-- Avatar con gradiente o imagen -->
-                <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
-                    <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
+            <!-- User info & Statistics -->
+            <div v-if="user?.name" class="flex items-center gap-2 sm:gap-6">
+                <!-- Vehicle Statistics -->
+                <div class="flex items-center gap-1 sm:gap-4 px-2 sm:px-4 py-2 bg-base rounded-lg border border-nav">
+                    <!-- Total Vehicles -->
+                    <div class="flex items-center gap-1 sm:flex-col sm:text-center">
+                        <div class="text-xs font-medium text-muted">Vehículos:</div>
+                        <div class="text-xs sm:text-sm font-bold text-main">{{ totalVehicles }}</div>
+                    </div>
+                    <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
+                    
+                    <!-- Available Vehicles -->
+                    <div class="flex items-center gap-1 sm:flex-col sm:text-center">
+                        <div class="text-xs font-medium text-muted">Disponibles:</div>
+                        <div class="text-xs sm:text-sm font-bold text-success">{{ availableVehicles }}</div>
+                    </div>
+
+                    <!-- Maintenance Vehicles (admin only) -->
+                    <template v-if="isAdminUser">
+                        <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
+                        <div class="flex items-center gap-1 sm:flex-col sm:text-center">
+                            <div class="text-xs font-medium text-muted">Mantenimiento:</div>
+                            <div class="text-xs sm:text-sm font-bold text-warning">{{ maintenanceVehicles }}</div>
+                        </div>
+                        
+                        <!-- Inactive Vehicles (admin only) -->
+                        <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
+                        <div class="flex items-center gap-1 sm:flex-col sm:text-center">
+                            <div class="text-xs font-medium text-muted">Inactivos:</div>
+                            <div class="text-xs sm:text-sm font-bold text-danger">{{ inactiveVehicles }}</div>
+                        </div>
+                    </template>
                 </div>
-                <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-surface-inverse flex items-center justify-center shadow-md flex-shrink-0">
-                    <span class="text-sm font-bold text-inverse">{{ userInitials }}</span>
-                </div>
-                <!-- User name -->
-                <div class="flex flex-col">
-                    <span class="text-base font-bold text-main">
-                        {{ user?.name }}
-                    </span>
+
+                <!-- User Info -->
+                <div class="hidden sm:flex items-center gap-3">
+                    <!-- Avatar con gradiente o imagen -->
+                    <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
+                        <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
+                    </div>
+                    <div v-else class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-surface-inverse flex items-center justify-center shadow-md flex-shrink-0">
+                        <span class="text-sm font-bold text-inverse">{{ userInitials }}</span>
+                    </div>
+                    <!-- User name -->
+                    <div class="flex flex-col">
+                        <span class="text-base font-bold text-main">
+                            {{ user?.name }}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
