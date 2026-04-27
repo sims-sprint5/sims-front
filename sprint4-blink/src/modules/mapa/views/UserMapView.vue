@@ -4,7 +4,7 @@
       <div class="flex-1 min-h-0 flex gap-3 relative">
         <div class="absolute top-3 right-3 z-[1000]">
           <button type="button"
-            class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium bg-primary hover:bg-primary-hover text-inverse shadow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium bg-primary hover:brightness-110 text-inverse shadow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             @click="openReservationPanel" :aria-label="t('mapa.openReservationPanel')">
             {{ t('mapa.openReservationPanel') }}
           </button>
