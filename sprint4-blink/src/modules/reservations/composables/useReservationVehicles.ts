@@ -1,4 +1,4 @@
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service';
@@ -9,35 +9,32 @@ import { createDefaultReservationFilters } from '@/modules/reservations/types/re
 import { applyReservationFilters, getReservationFacets } from '@/modules/reservations/utils/reservationFilters';
 import { useTranslateError } from '@/shared/composables/useTranslateError';
 
-function isReservationBlockingNow(startDate: string, endDate: string, now: Date): boolean {
-  const start = new Date(startDate);
+const NON_BLOCKING_RESERVATION_STATES = new Set(['cancelled', 'canceled', 'completed', 'finished', 'expired']);
+
+function isReservationNotFinished(endDate: string, now: Date): boolean {
   const end = new Date(endDate);
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-  return start <= now && now < end;
+  if (Number.isNaN(end.getTime())) return false;
+  return now < end;
 }
 
 function isVehicleAvailableNow(v: Vehicle): boolean {
+  if (isVehicleReservedNow(v)) return false;
+
   const now = new Date();
   const statusKey = (v.status ?? '').trim().toLowerCase();
 
   if (Array.isArray(v.calendar_reservations) && v.calendar_reservations.length > 0) {
     const blocking = v.calendar_reservations.some((reservation) =>
-      isReservationBlockingNow(reservation.start_date, reservation.end_date, now),
+      isReservationNotFinished(reservation.end_date, now),
     );
     return !blocking;
   }
 
-  const nextReservationStart = v.next_reservation?.start_date ? new Date(v.next_reservation.start_date) : null;
   const nextReservationEnd = v.next_reservation?.end_date ? new Date(v.next_reservation.end_date) : null;
-  const hasNextReservationNow = Boolean(
-    nextReservationStart &&
-    nextReservationEnd &&
-    !Number.isNaN(nextReservationStart.getTime()) &&
-    !Number.isNaN(nextReservationEnd.getTime()) &&
-    nextReservationStart <= now &&
-    now < nextReservationEnd,
+  const hasNextReservationNotFinished = Boolean(
+    nextReservationEnd && !Number.isNaN(nextReservationEnd.getTime()) && now < nextReservationEnd,
   );
-  if (hasNextReservationNow) {
+  if (hasNextReservationNotFinished) {
     return false;
   }
 
@@ -49,10 +46,51 @@ function isVehicleAvailableNow(v: Vehicle): boolean {
   return true;
 }
 
+function isVehicleReservedNow(v: Vehicle): boolean {
+  const now = new Date();
+
+  if (Array.isArray(v.calendar_reservations) && v.calendar_reservations.length > 0) {
+    const blocking = v.calendar_reservations.some((reservation) => {
+      const statusKey = String(reservation.status ?? '').trim().toLowerCase();
+      const calendarStateKey = String(reservation.calendar_state ?? '').trim().toLowerCase();
+      if (NON_BLOCKING_RESERVATION_STATES.has(statusKey) || NON_BLOCKING_RESERVATION_STATES.has(calendarStateKey)) {
+        return false;
+      }
+
+      const end = reservation.end_date ? new Date(reservation.end_date) : null;
+      if (!end || Number.isNaN(end.getTime())) return false;
+      if (reservation.start_date) {
+        const start = new Date(reservation.start_date);
+        if (Number.isNaN(start.getTime())) return false;
+      }
+      // Repo rule: reservation blocks the vehicle until it ends.
+      return now < end;
+    });
+    if (blocking) return true;
+  }
+
+  const nextReservationEnd = v.next_reservation?.end_date ? new Date(v.next_reservation.end_date) : null;
+  const hasNextReservationNotFinished = Boolean(
+    nextReservationEnd && !Number.isNaN(nextReservationEnd.getTime()) && now < nextReservationEnd,
+  );
+  if (hasNextReservationNotFinished) return true;
+
+  const nextAvailableAt = v.next_available_at ? new Date(v.next_available_at) : null;
+  if (nextAvailableAt && !Number.isNaN(nextAvailableAt.getTime()) && now < nextAvailableAt) {
+    return true;
+  }
+
+  const statusKey = String(v.status ?? '').trim().toLowerCase();
+  if (statusKey === 'reserved') return true;
+
+  return false;
+}
+
 function toCardModel(v: Vehicle): ReservationVehicleCardModel {
   const name = [v.brand, v.model].filter(Boolean).join(' ').trim() || v.license_plate || '—';
-  const available = isVehicleAvailableNow(v);
-  const category = available ? 'available' : (v.status || '—');
+  const reservedNow = isVehicleReservedNow(v);
+  const available = !reservedNow && isVehicleAvailableNow(v);
+  const category = reservedNow ? 'reserved' : (available ? 'available' : (v.status || '—'));
 
   const description = v.color ? `Color: ${v.color}` : '';
 
@@ -144,7 +182,21 @@ export function useReservationVehicles() {
     filters.value = createDefaultReservationFilters();
   }
 
-  onMounted(loadVehicles);
+  let autoRefreshTimer: number | null = null;
+  onMounted(() => {
+    loadVehicles();
+    // Refrescar periódicamente para actualizar estados cuando finalicen reservas
+    autoRefreshTimer = window.setInterval(() => {
+      void loadVehicles();
+    }, 30000) as unknown as number;
+  });
+
+  onBeforeUnmount(() => {
+    if (autoRefreshTimer) {
+      window.clearInterval(autoRefreshTimer as number);
+      autoRefreshTimer = null;
+    }
+  });
 
   return {
     vehicleCards,
