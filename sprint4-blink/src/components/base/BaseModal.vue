@@ -21,7 +21,7 @@
           >
             <div
               v-if="show"
-              class="fixed inset-0 bg-base-dark0 bg-opacity-75 transition-opacity"
+              class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
               @click="$emit('close')"
             />
           </Transition>

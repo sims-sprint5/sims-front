@@ -668,7 +668,7 @@ async function createReservation() {
         aria-modal="true"
       >
         <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-          <div class="fixed inset-0 bg-base-dark0 bg-opacity-75 transition-opacity" @click="closeReservationModal" />
+          <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeReservationModal" />
           <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
           <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
