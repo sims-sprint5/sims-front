@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const cardClasses = computed(() => [
-  'bg-white rounded-2xl',
+  'bg-black/70 backdrop-blur-md  rounded-2xl border border-white/10',
   props.shadow ? 'shadow-lg' : '',
   props.padding === 'sm' ? 'p-4' : '',
   props.padding === 'md' ? 'p-8' : '',

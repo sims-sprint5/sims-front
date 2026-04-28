@@ -20,8 +20,8 @@ const goLogin = () => router.push({ name: 'Login' });
   <AppLayout v-if="isAuthenticated" :title="t('unauthorized.title')">
     <div class="max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <BaseCard>
-        <h1 class="text-2xl font-bold text-gray-900">{{ t('unauthorized.title') }}</h1>
-        <p class="mt-2 text-gray-600">{{ t('unauthorized.message') }}</p>
+        <h1 class="text-2xl font-bold text-main">{{ t('unauthorized.title') }}</h1>
+        <p class="mt-2 text-muted">{{ t('unauthorized.message') }}</p>
 
         <div class="mt-6 flex gap-3">
           <BaseButton variant="primary" @click="goDashboard">
@@ -35,8 +35,8 @@ const goLogin = () => router.push({ name: 'Login' });
   <div v-else class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-indigo-50/30 flex items-center justify-center p-6">
     <div class="max-w-md w-full">
       <BaseCard>
-        <h1 class="text-2xl font-bold text-gray-900">{{ t('unauthorized.title') }}</h1>
-        <p class="mt-2 text-gray-600">{{ t('unauthorized.message') }}</p>
+        <h1 class="text-2xl font-bold text-main">{{ t('unauthorized.title') }}</h1>
+        <p class="mt-2 text-muted">{{ t('unauthorized.message') }}</p>
 
         <div class="mt-6 flex gap-3">
           <BaseButton variant="primary" @click="goLogin">

@@ -5,7 +5,7 @@
       <div class="mb-8">
         <div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
           <div>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm text-muted">
               {{ $t('adminTickets.description') }}
             </p>
           </div>
@@ -13,7 +13,7 @@
       </div>
 
       <!-- Búsqueda y filtros -->
-      <div class="mb-6 bg-white p-4 rounded-lg shadow">
+      <div class="mb-6 bg-surface p-4 rounded-lg shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
             <BaseInput v-model="searchQuery" type="text" :placeholder="$t('adminTickets.searchPlaceholder')"
@@ -37,11 +37,11 @@
           <div v-if="showChatModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeChatModal" />
+              <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeChatModal" />
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <TicketChat v-if="chattingTicket" :ticket="chattingTicket" :loading="submitting" @send="handleSendMessage"
                     @close="closeChatModal" />
                 </div>
@@ -61,63 +61,63 @@
           <div v-if="showViewModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeViewModal" />
+              <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeViewModal" />
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <h3 class="text-lg leading-6 font-medium text-main mb-4">
                     {{ $t('adminTickets.modal.detailsTitle') }}
                   </h3>
                   <div v-if="viewingTicket" class="space-y-4">
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.usuario') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingTicket.usuario_nombre }}</p>
-                      <p class="text-sm text-gray-500">{{ viewingTicket.usuario_email }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.usuario') }}</p>
+                      <p class="text-base text-main">{{ viewingTicket.usuario_nombre }}</p>
+                      <p class="text-sm text-muted">{{ viewingTicket.usuario_email }}</p>
                     </div>
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.asunto') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingTicket.asunto }}</p>
-                    </div>
-
-                    <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.descripcion') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingTicket.descripcion }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.asunto') }}</p>
+                      <p class="text-base text-main">{{ viewingTicket.asunto }}</p>
                     </div>
 
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500 mb-2">{{ $t('tickets.table.estado') }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.descripcion') }}</p>
+                      <p class="text-base text-main">{{ viewingTicket.descripcion }}</p>
+                    </div>
+
+                    <div class="border-b pb-4">
+                      <p class="text-sm font-medium text-muted mb-2">{{ $t('tickets.table.estado') }}</p>
                       <select
                         v-model="editingEstado"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-primary"
                       >
                         <option v-for="option in statusOptions" :key="option.value" :value="option.value">
                           {{ option.label }}
                         </option>
                       </select>
-                      <p class="text-xs text-gray-500 mt-2">
+                      <p class="text-xs text-muted mt-2">
                         {{ $t('adminTickets.permissions.statusEditableByAdmin') }}
                       </p>
                     </div>
 
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500 mb-2">{{ $t('tickets.table.priority') }}</p>
+                      <p class="text-sm font-medium text-muted mb-2">{{ $t('tickets.table.priority') }}</p>
                       <select
                         v-model="editingPriority"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-primary"
                       >
                         <option v-for="option in priorityOptions" :key="option.value" :value="option.value">
                           {{ option.label }}
                         </option>
                       </select>
-                      <p class="text-xs text-gray-500 mt-2">
+                      <p class="text-xs text-muted mt-2">
                         {{ $t('adminTickets.permissions.priorityVisibleByAdmin') }}
                       </p>
                     </div>
 
                     <div>
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.createdAt') }}</p>
-                      <p class="text-base text-gray-900">{{ formatDate(viewingTicket.created_at) }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.createdAt') }}</p>
+                      <p class="text-base text-main">{{ formatDate(viewingTicket.created_at) }}</p>
                     </div>
                   </div>
                   <div class="flex justify-end space-x-3 pt-6 border-t mt-6">

@@ -1,10 +1,10 @@
 <template>
   <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end">
     <div class="w-full sm:w-56">
-      <label class="mb-1 block text-xs font-medium text-gray-600">{{ t('tickets.table.priority') }}</label>
+      <label class="mb-1 block text-xs font-medium text-muted">{{ t('tickets.table.priority') }}</label>
       <select
         v-model="selectedPriority"
-        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        class="w-full rounded-lg border border-default px-3 py-2 text-sm focus:border-primary focus:outline-none"
       >
         <option value="all">{{ t('adminTickets.filters.all') }}</option>
         <option value="high">{{ t('tickets.form.priorityHigh') }}</option>
@@ -14,10 +14,10 @@
     </div>
 
     <div class="w-full sm:w-56">
-      <label class="mb-1 block text-xs font-medium text-gray-600">{{ t('tickets.table.estado') }}</label>
+      <label class="mb-1 block text-xs font-medium text-muted">{{ t('tickets.table.estado') }}</label>
       <select
         v-model="selectedStatus"
-        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        class="w-full rounded-lg border border-default px-3 py-2 text-sm focus:border-primary focus:outline-none"
       >
         <option value="all">{{ t('adminTickets.filters.all') }}</option>
         <option value="open">{{ t('tickets.estados.open') }}</option>
@@ -39,13 +39,13 @@
       <BaseTable :columns="columns" :data="filteredAndSortedTickets" :loading="loading" :loadingText="$t('tickets.loading')"
         :emptyText="$t('tickets.empty')">
         <template #cell-asunto="{ value }">
-          <div class="text-sm font-medium text-gray-900">{{ value }}</div>
+          <div class="text-sm font-medium text-main">{{ value }}</div>
         </template>
 
         <template #cell-usuario="{ item }">
-          <div class="text-sm text-gray-900">
+          <div class="text-sm text-main">
             <div class="font-medium">{{ item.usuario_nombre }}</div>
-            <div class="text-gray-500">{{ item.usuario_email }}</div>
+            <div class="text-muted">{{ item.usuario_email }}</div>
           </div>
         </template>
 
@@ -69,21 +69,21 @@
           <div class="flex gap-2 justify-end">
             <button
               @click="$emit('view', item)"
-              class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+              class="p-2 bg-primary text-inverse hover:brightness-110 rounded-lg transition-colors"
               :title="$t('common.view')"
             >
               <EyeIcon class="w-5 h-5" />
             </button>
             <button
               @click="$emit('chat', item)"
-              class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+              class="p-2 bg-success text-inverse hover:brightness-110 rounded-lg transition-colors"
               :title="$t('adminTickets.actions.reply')"
             >
               <ChatBubbleLeftRightIcon class="w-5 h-5" />
             </button>
             <button
               @click="$emit('delete', item)"
-              class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+              class="p-2 bg-danger text-inverse hover:brightness-110 rounded-lg transition-colors"
               :title="$t('common.delete')"
             >
               <TrashIcon class="w-5 h-5" />
@@ -98,30 +98,30 @@
       <div class="space-y-3">
         <!-- Asunto -->
         <div>
-          <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.asunto') }}</div>
-          <div class="text-sm font-semibold text-gray-900 mt-1">{{ item.asunto }}</div>
+          <div class="text-xs font-medium text-muted">{{ $t('tickets.table.asunto') }}</div>
+          <div class="text-sm font-semibold text-main mt-1">{{ item.asunto }}</div>
         </div>
 
         <!-- Usuario -->
-        <div class="pb-3 border-b border-gray-200">
-          <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.usuario') }}</div>
-          <div class="text-sm text-gray-900 mt-1">
+        <div class="pb-3 border-b border-default">
+          <div class="text-xs font-medium text-muted">{{ $t('tickets.table.usuario') }}</div>
+          <div class="text-sm text-main mt-1">
             <div class="font-medium">{{ item.usuario_nombre }}</div>
-            <div class="text-xs text-gray-500">{{ item.usuario_email }}</div>
+            <div class="text-xs text-muted">{{ item.usuario_email }}</div>
           </div>
         </div>
 
         <!-- Estado, Prioridad y Fecha -->
-        <div class="grid grid-cols-2 gap-3 pb-3 border-b border-gray-200">
+        <div class="grid grid-cols-2 gap-3 pb-3 border-b border-default">
           <div>
-            <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.estado') }}</div>
+            <div class="text-xs font-medium text-muted">{{ $t('tickets.table.estado') }}</div>
             <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full mt-1" 
               :class="getEstadoClass(item.estado)">
               {{ item.estado ? t(`tickets.estados.${item.estado}`) : t('tickets.estados.pendiente') }}
             </span>
           </div>
           <div>
-            <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.priority') }}</div>
+            <div class="text-xs font-medium text-muted">{{ $t('tickets.table.priority') }}</div>
             <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full mt-1" 
               :class="getPriorityClass(item.priority)">
               {{ item.priority ? displayPriority(item.priority) : '-' }}
@@ -130,29 +130,29 @@
         </div>
 
         <div>
-          <div class="text-xs font-medium text-gray-600">{{ $t('tickets.table.createdAt') }}</div>
-          <div class="text-sm font-medium text-gray-900 mt-1">{{ formatDate(item.created_at) }}</div>
+          <div class="text-xs font-medium text-muted">{{ $t('tickets.table.createdAt') }}</div>
+          <div class="text-sm font-medium text-main mt-1">{{ formatDate(item.created_at) }}</div>
         </div>
 
         <!-- Acciones -->
         <div class="flex gap-2 pt-2">
           <button
             @click="$emit('view', item)"
-            class="flex-1 p-2 bg-blue-600 text-white text-xs font-medium hover:bg-blue-700 rounded-lg transition-colors flex items-center justify-center gap-1"
+            class="flex-1 p-2 bg-primary text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <EyeIcon class="w-4 h-4" />
             Ver
           </button>
           <button
             @click="$emit('chat', item)"
-            class="flex-1 p-2 bg-green-600 text-white text-xs font-medium hover:bg-green-700 rounded-lg transition-colors flex items-center justify-center gap-1"
+            class="flex-1 p-2 bg-success text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <ChatBubbleLeftRightIcon class="w-4 h-4" />
             Responder
           </button>
           <button
             @click="$emit('delete', item)"
-            class="flex-1 p-2 bg-red-600 text-white text-xs font-medium hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-1"
+            class="flex-1 p-2 bg-danger text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <TrashIcon class="w-4 h-4" />
             Eliminar

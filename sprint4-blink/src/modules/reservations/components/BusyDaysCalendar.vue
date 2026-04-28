@@ -104,25 +104,25 @@ function nextMonth() {
 </script>
 
 <template>
-  <div class="mt-3 rounded-lg border border-gray-200 bg-white px-3 py-3">
+  <div class="mt-3 rounded-lg border border-default bg-surface px-3 py-3">
     <div class="mb-2 flex items-center justify-between">
-      <p class="text-xs font-semibold uppercase tracking-wide text-gray-600">
+      <p class="text-xs font-semibold uppercase tracking-wide text-muted">
         {{ title }}
       </p>
       <div class="flex items-center gap-2">
         <button
           type="button"
-          class="rounded border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
+          class="rounded border border-default px-2 py-1 text-xs text-main hover:bg-base"
           @click="previousMonth"
         >
           {{ '<' }}
         </button>
-        <span class="min-w-[8.5rem] text-center text-xs font-medium text-gray-700">
+        <span class="min-w-[8.5rem] text-center text-xs font-medium text-main">
           {{ monthLabel }}
         </span>
         <button
           type="button"
-          class="rounded border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
+          class="rounded border border-default px-2 py-1 text-xs text-main hover:bg-base"
           @click="nextMonth"
         >
           {{ '>' }}
@@ -130,7 +130,7 @@ function nextMonth() {
       </div>
     </div>
 
-    <div class="grid grid-cols-7 gap-1 text-center text-[11px] text-gray-500">
+    <div class="grid grid-cols-7 gap-1 text-center text-[11px] text-muted">
       <div v-for="label in weekDayLabels" :key="label" class="py-1 font-semibold">
         {{ label }}
       </div>
@@ -142,19 +142,19 @@ function nextMonth() {
         :key="day.toISOString()"
         class="flex h-8 items-center justify-center rounded text-xs"
         :class="[
-          isCurrentMonth(day) ? 'text-gray-800' : 'text-gray-300',
-          isReserved(day) ? 'bg-red-100 text-red-700 font-semibold ring-1 ring-red-200' : 'bg-gray-50'
+          isCurrentMonth(day) ? 'text-main' : 'text-gray-300',
+          isReserved(day) ? 'bg-red-100 text-danger font-semibold ring-1 ring-red-200' : 'bg-base'
         ]"
       >
         {{ day.getDate() }}
       </div>
     </div>
 
-    <div class="mt-3 flex items-center gap-2 text-xs text-gray-600">
+    <div class="mt-3 flex items-center gap-2 text-xs text-muted">
       <span class="inline-block h-3 w-3 rounded bg-red-100 ring-1 ring-red-200" />
       <span>Dias reservados</span>
     </div>
-    <p v-if="!hasSlots" class="mt-2 text-xs text-gray-500">
+    <p v-if="!hasSlots" class="mt-2 text-xs text-muted">
       No hay reservas registradas para este coche.
     </p>
   </div>

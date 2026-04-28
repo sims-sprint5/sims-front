@@ -40,7 +40,7 @@
           type="text"
           :placeholder="getPlaceholder()"
           :disabled="loading"
-          class="chat-input"
+          class="chat-input text-main bg-surface focus:ring-primary focus:border-primary"
         />
         <button
           @click="sendMessage"
@@ -219,18 +219,19 @@ watch(() => route.path, () => {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-main, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
   z-index: 1000;
 }
 
 .chatbot-toggle {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: rgb(var(--color-primary));
   color: white;
   border: none;
-  font-size: 24px;
+  font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
@@ -242,6 +243,7 @@ watch(() => route.path, () => {
 .chatbot-toggle:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background: rgb(var(--color-primary-hover));
 }
 
 .chatbot-toggle:active {
@@ -250,13 +252,14 @@ watch(() => route.path, () => {
 
 .chatbot-window {
   position: fixed;
-  bottom: 90px;
+  bottom: 100px;
   right: 20px;
-  width: 380px;
-  height: 600px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+  width: 420px;
+  height: 700px;
+  background: rgb(var(--color-surface));
+  border: 1px solid rgb(var(--color-border-default));
+  border-radius: 16px;
+  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   animation: slideUp 0.3s ease;
@@ -277,10 +280,10 @@ watch(() => route.path, () => {
 @media (max-width: 480px) {
   .chatbot-window {
     width: calc(100% - 20px);
-    height: 100%;
+    height: calc(100% - 120px);
     right: 10px;
-    bottom: 10px;
-    border-radius: 0;
+    bottom: 15px;
+    border-radius: 12px;
   }
 
   .chatbot-toggle {
@@ -291,9 +294,9 @@ watch(() => route.path, () => {
 }
 
 .chat-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: rgb(var(--color-primary));
   color: white;
-  padding: 10px;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -302,19 +305,19 @@ watch(() => route.path, () => {
 
 .chat-header h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: white;
-  font-size: 24px;
+  color: rgb(var(--color-text-inverse));
+  font-size: 28px;
   cursor: pointer;
   padding: 0;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -328,33 +331,33 @@ watch(() => route.path, () => {
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 8px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  background: #f8f9fa;
+  gap: 12px;
+  background: rgb(var(--color-bg-base));
 }
 
 .chat-messages::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .chat-messages::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: rgb(var(--color-surface));
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
+  background: rgb(var(--color-border-default));
+  border-radius: 4px;
 }
 
 .chat-messages::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgb(var(--color-text-ps));
 }
 
 .message {
   display: flex;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   animation: fadeIn 0.3s ease;
 }
 
@@ -371,12 +374,12 @@ watch(() => route.path, () => {
 
 .message p {
   margin: 0;
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
   max-width: 85%;
   word-wrap: break-word;
-  font-size: 12px;
-  line-height: 1.3;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
 .message.user {
@@ -384,8 +387,8 @@ watch(() => route.path, () => {
 }
 
 .message.user p {
-  background: #667eea;
-  color: white;
+  background: rgb(var(--color-primary));
+  color: rgb(var(--color-text-inverse));
   border-radius: 18px 18px 4px 18px;
 }
 
@@ -394,15 +397,15 @@ watch(() => route.path, () => {
 }
 
 .message.assistant p {
-  background: white;
-  color: #333;
-  border: 1px solid #e0e0e0;
+  background: rgb(var(--color-surface));
+  color: rgb(var(--color-text-main));
+  border: 1px solid rgb(var(--color-border-default));
   border-radius: 18px 18px 18px 4px;
 }
 
 .message.error p {
-  background: #ffebee;
-  color: #c62828;
+  background: rgb(var(--color-danger));
+  color: rgb(var(--color-text-inverse));
   border-radius: 18px 18px 18px 4px;
 }
 
@@ -412,47 +415,48 @@ watch(() => route.path, () => {
 }
 
 .error-text {
-  color: #d32f2f;
+  color: rgb(var(--color-danger));
 }
 
 .chat-input-area {
   display: flex;
-  gap: 6px;
-  padding: 8px;
-  background: white;
-  border-top: 1px solid #e0e0e0;
+  gap: 10px;
+  padding: 16px;
+  background: rgb(var(--color-surface));
+  border-top: 1px solid rgb(var(--color-border-default));
   flex-shrink: 0;
 }
 
 .chat-input {
   flex: 1;
-  padding: 6px 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 12px 16px;
+  border: 1px solid rgb(var(--color-input-border));
+  border-radius: 24px;
+  font-size: 15px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   font-family: inherit;
 }
 
 .chat-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: rgb(var(--color-input-focus));
+  box-shadow: 0 0 0 3px rgb(var(--color-input-focus) / 20%);
 }
 
 .chat-input:disabled {
-  background: #f5f5f5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .send-btn {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: rgb(var(--color-primary));
   border: none;
-  color: white;
-  font-size: 14px;
+  color: rgb(var(--color-text-inverse));
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -463,7 +467,8 @@ watch(() => route.path, () => {
 
 .send-btn:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgb(var(--color-primary) / 40%);
+  background: rgb(var(--color-primary-hover));
 }
 
 .send-btn:active:not(:disabled) {
@@ -473,15 +478,15 @@ watch(() => route.path, () => {
 .send-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  background: rgb(var(--color-border-default));
 }
 
 .chat-footer {
   text-align: center;
-  padding: 4px;
-  font-size: 10px;
-  color: #999;
-  border-top: 1px solid #e0e0e0;
-  background: #f8f9fa;
-  flex-shrink: 0;
+  padding: 10px;
+  font-size: 12px;
+  color: rgb(var(--color-text-muted));
+  border-top: 1px solid rgb(var(--color-border-default));
+  background: rgb(var(--color-surface-muted));
 }
 </style>

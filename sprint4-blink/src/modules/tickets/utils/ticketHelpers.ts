@@ -10,14 +10,14 @@ export function getEstadoClass(estado: string | undefined): string {
     confirmado: 'bg-green-100 text-green-800',
     confirmed:  'bg-green-100 text-green-800',
     resolved:   'bg-emerald-100 text-emerald-800',
-    closed:     'bg-gray-100 text-gray-800',
-    finalitzat: 'bg-gray-100 text-gray-800',
+    closed:     'bg-surface-muted text-main',
+    finalitzat: 'bg-surface-muted text-main',
     cancelado:  'bg-red-100 text-red-800',
     cancelled:  'bg-red-100 text-red-800',
-    usado:      'bg-gray-100 text-gray-800',
-    used:       'bg-gray-100 text-gray-800',
+    usado:      'bg-surface-muted text-main',
+    used:       'bg-surface-muted text-main',
   };
-  return classes[String(estado ?? '')] || 'bg-gray-100 text-gray-800';
+  return classes[String(estado ?? '')] || 'bg-surface-muted text-main';
 }
 
 /** Returns Tailwind color classes for a given ticket priority. */
@@ -26,12 +26,12 @@ export function getPriorityClass(priority: string | undefined): string {
     low: 'bg-slate-100 text-slate-700',
     baja: 'bg-slate-100 text-slate-700',
     baixa: 'bg-slate-100 text-slate-700',
-    medium: 'bg-amber-100 text-amber-800',
-    media: 'bg-amber-100 text-amber-800',
-    mitjana: 'bg-amber-100 text-amber-800',
+    medium: 'bg-amber-100 text-warning-dark',
+    media: 'bg-amber-100 text-warning-dark',
+    mitjana: 'bg-amber-100 text-warning-dark',
     high: 'bg-red-100 text-red-800',
     alta: 'bg-red-100 text-red-800',
   };
 
-  return classes[String(priority ?? '').toLowerCase()] || 'bg-gray-100 text-gray-700';
+  return classes[String(priority ?? '').toLowerCase()] || 'bg-surface-muted text-muted';
 }

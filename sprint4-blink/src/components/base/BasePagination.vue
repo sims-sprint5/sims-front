@@ -49,7 +49,7 @@ function go(page: number) {
 <template>
   <div
     v-if="pagination.last_page > 1"
-    class="bg-white px-4 py-3 flex items-center border-t border-gray-200 sm:px-6"
+    class="bg-surface px-4 py-3 flex items-center border-t border-default sm:px-6"
   >
     <!-- Móvil -->
     <div class="flex-1 flex justify-end gap-3 sm:hidden">
@@ -72,7 +72,7 @@ function go(page: number) {
     <!-- Desktop -->
     <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-end sm:gap-4">
       <div class="mr-auto">
-        <p class="text-sm text-gray-700">
+        <p class="text-sm text-main">
           {{ t('table.showing', { from: pagination.from, to: pagination.to, total: pagination.total }) }}
         </p>
       </div>

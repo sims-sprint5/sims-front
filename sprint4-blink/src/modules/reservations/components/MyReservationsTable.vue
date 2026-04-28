@@ -11,8 +11,8 @@
     >
       <template #cell-vehicle_id="{ item }">
         <div class="space-y-1">
-          <div class="font-medium text-gray-900">{{ item.vehicle_name }}</div>
-          <div class="text-xs text-gray-500">{{ item.license_plate }}</div>
+          <div class="font-medium text-main">{{ item.vehicle_name }}</div>
+          <div class="text-xs text-muted">{{ item.license_plate }}</div>
         </div>
       </template>
 
@@ -28,7 +28,7 @@
         <span
           class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
           :class="{
-            'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending',
+            'bg-amber-100 text-warning-dark': getReservationDisplayStatus(item) === 'pending',
             'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
             'bg-emerald-100 text-emerald-800': item.status === 'active',
             'bg-blue-100 text-blue-800': item.status === 'completed',
@@ -40,20 +40,20 @@
       </template>
 
       <template #cell-minutes_remaining="{ value, item }">
-        <div v-if="item.is_expired" class="text-xs font-semibold text-red-600">
+        <div v-if="item.is_expired" class="text-xs font-semibold text-danger">
           {{ $t('reservations.table.expired') }}
         </div>
         <div v-else-if="value !== undefined && value >= 0" class="text-xs font-semibold">
-          <span class="text-blue-600">{{ formatTimeRemaining(value) }}</span>
+          <span class="text-primary">{{ formatTimeRemaining(value) }}</span>
         </div>
-        <div v-else class="text-xs text-gray-500">—</div>
+        <div v-else class="text-xs text-muted">—</div>
       </template>
 
       <template #cell-actions="{ item }">
         <div class="flex gap-2 justify-end">
           <button
             @click="$emit('view-vehicle', item)"
-            class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+            class="p-2 bg-primary text-inverse hover:brightness-110 rounded-lg transition-colors"
             :title="$t('common.view')"
           >
             <EyeIcon class="w-5 h-5" />
@@ -61,7 +61,7 @@
           <button
             v-if="!item.is_expired && getReservationDisplayStatus(item) !== 'completed'"
             @click="$emit('edit', item)"
-            class="px-3 py-2 bg-green-600 text-white text-sm font-medium hover:bg-green-700 rounded-lg transition-colors"
+            class="px-3 py-2 bg-success text-inverse text-sm font-medium hover:brightness-110 rounded-lg transition-colors"
             :title="$t('reservations.buttons.expandButton')"
           >
             {{ $t('reservations.buttons.expandButton') }}
@@ -69,7 +69,7 @@
           <button
             v-if="canCancelReservation(item)"
             @click="$emit('delete', item)"
-            class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+            class="p-2 bg-danger text-inverse hover:brightness-110 rounded-lg transition-colors"
             :title="$t('reservations.myReservations.cancel')"
           >
             <TrashIcon class="w-5 h-5" />
@@ -81,39 +81,39 @@
 
   <!-- Mobile: Cards -->
   <div class="md:hidden space-y-4">
-    <div v-if="loading" class="text-center py-8 text-gray-500">
+    <div v-if="loading" class="text-center py-8 text-muted">
       {{ $t('reservations.loading') }}
     </div>
-    <div v-else-if="reservations.length === 0" class="text-center py-8 text-gray-500">
+    <div v-else-if="reservations.length === 0" class="text-center py-8 text-muted">
       {{ $t('reservations.empty') }}
     </div>
-    <div v-else v-for="item in reservations" :key="item.id" class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+    <div v-else v-for="item in reservations" :key="item.id" class="bg-surface rounded-lg border border-default p-4 shadow-sm">
       <!-- Vehicle Info -->
-      <div class="mb-3 pb-3 border-b border-gray-200">
-        <div class="font-semibold text-gray-900">{{ item.vehicle_name }}</div>
-        <div class="text-xs text-gray-500">{{ item.license_plate }}</div>
+      <div class="mb-3 pb-3 border-b border-default">
+        <div class="font-semibold text-main">{{ item.vehicle_name }}</div>
+        <div class="text-xs text-muted">{{ item.license_plate }}</div>
       </div>
 
       <!-- Reservation Dates -->
-      <div class="grid grid-cols-2 gap-3 mb-3 pb-3 border-b border-gray-200">
+      <div class="grid grid-cols-2 gap-3 mb-3 pb-3 border-b border-default">
         <div>
-          <div class="text-xs font-medium text-gray-600">{{ $t('reservations.table.startAt') }}</div>
-          <div class="text-sm font-medium text-gray-900">{{ formatDateCustom(item.start_at) }}</div>
+          <div class="text-xs font-medium text-muted">{{ $t('reservations.table.startAt') }}</div>
+          <div class="text-sm font-medium text-main">{{ formatDateCustom(item.start_at) }}</div>
         </div>
         <div>
-          <div class="text-xs font-medium text-gray-600">{{ $t('reservations.table.endAt') }}</div>
-          <div class="text-sm font-medium text-gray-900">{{ formatDateCustom(item.end_at) }}</div>
+          <div class="text-xs font-medium text-muted">{{ $t('reservations.table.endAt') }}</div>
+          <div class="text-sm font-medium text-main">{{ formatDateCustom(item.end_at) }}</div>
         </div>
       </div>
 
       <!-- Status & Time -->
-      <div class="grid grid-cols-2 gap-3 mb-4 pb-4 border-b border-gray-200">
+      <div class="grid grid-cols-2 gap-3 mb-4 pb-4 border-b border-default">
         <div>
-          <div class="text-xs font-medium text-gray-600">{{ $t('reservations.table.status') }}</div>
+          <div class="text-xs font-medium text-muted">{{ $t('reservations.table.status') }}</div>
           <span
             class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold mt-1"
             :class="{
-              'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending',
+              'bg-amber-100 text-warning-dark': getReservationDisplayStatus(item) === 'pending',
               'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
               'bg-emerald-100 text-emerald-800': item.status === 'active',
               'bg-blue-100 text-blue-800': item.status === 'completed',
@@ -124,14 +124,14 @@
           </span>
         </div>
         <div>
-          <div class="text-xs font-medium text-gray-600">{{ $t('reservations.table.timeRemaining') }}</div>
-          <div v-if="item.is_expired" class="text-sm font-semibold text-red-600 mt-1">
+          <div class="text-xs font-medium text-muted">{{ $t('reservations.table.timeRemaining') }}</div>
+          <div v-if="item.is_expired" class="text-sm font-semibold text-danger mt-1">
             {{ $t('reservations.table.expired') }}
           </div>
-          <div v-else-if="item.minutes_remaining !== undefined && item.minutes_remaining >= 0" class="text-sm font-semibold text-blue-600 mt-1">
+          <div v-else-if="item.minutes_remaining !== undefined && item.minutes_remaining >= 0" class="text-sm font-semibold text-primary mt-1">
             {{ formatTimeRemaining(item.minutes_remaining) }}
           </div>
-          <div v-else class="text-sm text-gray-500 mt-1">—</div>
+          <div v-else class="text-sm text-muted mt-1">—</div>
         </div>
       </div>
 
@@ -139,7 +139,7 @@
       <div class="flex gap-2">
         <button
           @click="$emit('view-vehicle', item)"
-          class="flex-1 p-2 bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 rounded-lg transition-colors flex items-center justify-center gap-2"
+          class="flex-1 p-2 bg-primary text-inverse text-sm font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-2"
           :title="$t('common.view')"
         >
           <EyeIcon class="w-4 h-4" />
@@ -148,14 +148,14 @@
         <button
           v-if="!item.is_expired && getReservationDisplayStatus(item) !== 'completed'"
           @click="$emit('edit', item)"
-          class="flex-1 p-2 bg-green-600 text-white text-sm font-medium hover:bg-green-700 rounded-lg transition-colors"
+          class="flex-1 p-2 bg-success text-inverse text-sm font-medium hover:brightness-110 rounded-lg transition-colors"
         >
           {{ $t('reservations.buttons.expandButton') }}
         </button>
         <button
           v-if="canCancelReservation(item)"
           @click="$emit('delete', item)"
-          class="flex-1 p-2 bg-red-600 text-white text-sm font-medium hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2"
+          class="flex-1 p-2 bg-danger text-inverse text-sm font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-2"
           :title="$t('reservations.myReservations.cancel')"
         >
           <TrashIcon class="w-4 h-4" />

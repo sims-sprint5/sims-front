@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
 import { computed, reactive, ref, watch, nextTick, onBeforeUnmount, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -29,6 +30,7 @@ const toast = useToast();
 const props = defineProps<{
   prefill?: Record<string, string | undefined> | null
   hideAccessibility?: boolean
+  isEmbedded?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -599,8 +601,9 @@ async function createReservation() {
 </script>
 
 <template>
-  <div class="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="space-y-6">
+  <component :is="props.isEmbedded ? 'div' : AppLayout" :title="props.isEmbedded ? undefined : $t('reservations.title')">
+    <div :class="props.isEmbedded ? 'p-2 sm:p-4' : 'max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-8'">
+      <div class="space-y-6">
       <aside v-if="showFilters" class="w-full">
         <div class="lg:sticky lg:top-6">
           <FilterSidebar
@@ -618,35 +621,35 @@ async function createReservation() {
       <section class="min-w-0">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div class="flex items-center gap-3">
-            <BaseButton size="sm" variant="muted" @click="toggleFilters">
+            <BaseButton size="sm" variant="primary" @click="toggleFilters">
               {{ showFilters ? t('reservations.filters.hide') : t('reservations.filters.show') }}
             </BaseButton>
           </div>
 
-          <div class="text-sm text-gray-600">
-            <span class="font-medium text-gray-900">Ordenar por:</span>
+          <div class="text-sm text-muted">
+            <span class="font-medium text-main">Ordenar por:</span>
             <span class="ml-2">Recomendado</span>
           </div>
         </div>
 
-        <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-danger/10 px-4 py-3 text-sm text-danger">
           {{ error }}
         </div>
 
-        <div v-if="debugEnabled" class="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
+        <div v-if="debugEnabled" class="mb-4 rounded-lg border border-warning bg-warning/10 p-4">
           <div class="mb-2 flex items-center justify-between">
-            <h2 class="text-sm font-semibold text-amber-900">Reservation Debug Mode</h2>
-            <span class="text-xs text-amber-700">Activo via ?debugReservations=1</span>
+            <h2 class="text-sm font-semibold text-warning-dark">Reservation Debug Mode</h2>
+            <span class="text-xs text-warning-dark">Activo via ?debugReservations=1</span>
           </div>
-          <p class="mb-2 text-xs text-amber-800">
+          <p class="mb-2 text-xs text-warning-dark">
             Muestra respuestas crudas/normalizadas de reservas y calendario para diagnostico.
           </p>
-          <pre class="max-h-80 overflow-auto rounded bg-white p-3 text-[11px] leading-4 text-gray-800">{{ debugDump }}</pre>
+          <pre class="max-h-80 overflow-auto rounded bg-surface p-3 text-[11px] leading-4 text-main">{{ debugDump }}</pre>
         </div>
 
         <VehicleList :vehicles="vehicleCards" :loading="loading" @reserve="openReservationModal">
           <template #empty>
-            <div class="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">
+            <div class="rounded-2xl border border-default bg-surface p-6 text-sm text-muted">
               No hay vehículos que coincidan con los filtros.
             </div>
           </template>
@@ -665,19 +668,19 @@ async function createReservation() {
         aria-modal="true"
       >
         <div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeReservationModal" />
+          <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeReservationModal" />
           <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
-          <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
+          <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
             <div class="px-6 py-5">
-              <h2 id="reservation-modal-title" class="text-xl font-semibold text-gray-900">
+              <h2 id="reservation-modal-title" class="text-xl font-semibold text-main">
                 {{ $t('reservations.createTitle') }}
               </h2>
-              <p class="mt-1 text-sm text-gray-500">
+              <p class="mt-1 text-sm text-muted">
                 {{ $t('reservations.createDescription') }}
               </p>
 
-                <p class="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600">
+                <p class="mt-3 rounded-lg bg-base-dark px-3 py-2 text-sm text-muted">
                   {{ selectedVehicle?.name }} · {{ $t('reservations.selectDates') }}
                 </p>
 
@@ -689,26 +692,26 @@ async function createReservation() {
 
                 <div class="mt-6 space-y-4">
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ $t('reservations.table.startAt') }}</label>
+                    <label class="mb-2 block text-sm font-medium text-main">{{ $t('reservations.table.startAt') }}</label>
                     <BaseDateTimePicker
                       v-model="reservationForm.startAt"
                       :config="startPickerConfig"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ $t('reservations.table.endAt') }}</label>
+                    <label class="mb-2 block text-sm font-medium text-main">{{ $t('reservations.table.endAt') }}</label>
                     <BaseDateTimePicker
                       v-model="reservationForm.endAt"
                       :config="endPickerConfig"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
               </div>
 
-              <div class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 sm:flex-row sm:justify-end">
+              <div class="flex flex-col-reverse gap-3 border-t border-default bg-surface px-6 py-4 sm:flex-row sm:justify-end">
                 <BaseButton v-if="!fromMap" variant="secondary" :disabled="submitting" @click="closeReservationModal">
                   {{ $t('common.cancel') }}
                 </BaseButton>
@@ -721,4 +724,5 @@ async function createReservation() {
       </div>
     </Transition>
   </Teleport>
+  </component>
 </template>
