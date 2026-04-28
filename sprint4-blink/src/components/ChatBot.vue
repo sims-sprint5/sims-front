@@ -2,12 +2,15 @@
   <div class="chatbot-wrapper">
     <!-- Toggle Button -->
     <BaseTooltip :text="t('chatbot.openChat')" v-if="!isOpen">
-      <button
-        class="chatbot-toggle"
+      <BaseButton
+        type="button"
+        variant="primary"
+        size="sm"
+        class="chatbot-toggle !p-0 !rounded-full !shadow-none"
         @click="isOpen = !isOpen"
       >
         Chat
-      </button>
+      </BaseButton>
     </BaseTooltip>
 
     <!-- Chat Window -->
@@ -15,7 +18,15 @@
       <div class="chat-header">
         <h3>{{ t('chatbot.title') }}</h3>
         <BaseTooltip :text="t('common.close')">
-          <button class="close-btn" @click="isOpen = false">✕</button>
+          <BaseButton
+            type="button"
+            variant="muted"
+            size="sm"
+            class="close-btn !p-0 bg-transparent hover:bg-transparent !shadow-none"
+            @click="isOpen = false"
+          >
+            ✕
+          </BaseButton>
         </BaseTooltip>
       </div>
 
@@ -44,13 +55,16 @@
           :disabled="loading"
           class="chat-input text-main bg-surface focus:ring-primary focus:border-primary"
         />
-        <button
-          @click="sendMessage"
+        <BaseButton
+          type="button"
+          variant="primary"
+          size="sm"
+          class="send-btn !p-0 !rounded-full !shadow-none"
           :disabled="loading || !userMessage.trim()"
-          class="send-btn"
+          @click="sendMessage"
         >
           Send
-        </button>
+        </BaseButton>
       </div>
 
       <div class="chat-footer">
@@ -65,7 +79,7 @@ import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/modules/auth/composables/useUser';
-import { BaseTooltip } from '@/components/base';
+import { BaseButton, BaseTooltip } from '@/components/base';
 
 interface Message {
   id: number;

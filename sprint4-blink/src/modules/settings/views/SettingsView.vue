@@ -26,13 +26,15 @@
                     style="display: none"
                     @change="handleAvatarChange"
                   />
-                  <button 
+                  <BaseButton
                     type="button"
+                    variant="muted"
+                    size="sm"
+                    class="border border-divider bg-surface text-main hover:bg-surface-muted !shadow-none"
                     @click="handleAvatarClick"
-                    class="rounded-md bg-surface px-3 py-2 text-sm font-semibold text-main shadow hover:bg-surface-muted border border-divider"
                   >
                     {{ $t('settings.changeAvatar') }}
-                  </button>
+                  </BaseButton>
                   <p class="mt-2 text-xs/5 text-muted">{{ $t('settings.avatarHelp') }}</p>
                 </div>
               </div>

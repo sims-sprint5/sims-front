@@ -13,7 +13,15 @@
             <h2 class="text-lg font-semibold">
               {{ isEditMode ? $t('mapa.editZone') : $t('mapa.createZone') }}
             </h2>
-            <button @click="onClose" class="text-muted hover:text-muted">✕</button>
+            <BaseButton
+              type="button"
+              variant="muted"
+              size="sm"
+              class="!p-1 bg-transparent text-muted hover:text-main !shadow-none"
+              @click="onClose"
+            >
+              ✕
+            </BaseButton>
           </div>
 
           <!-- Body -->

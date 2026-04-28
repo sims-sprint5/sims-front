@@ -3,7 +3,7 @@ import { computed, ref, onMounted } from 'vue';
 import { useUser } from '@/modules/auth/composables/useUser';
 import { useI18n } from 'vue-i18n';
 import { vehicleService } from '@/modules/vehicles/services/vehicle.service';
-import { BaseTooltip } from '@/components/base';
+import { BaseButton, BaseTooltip } from '@/components/base';
 
 interface Props {
     title?: string;
@@ -107,14 +107,20 @@ onMounted(() => {
             <!-- Menu button & Title -->
             <div class="flex min-w-0 items-center gap-2 sm:gap-4">
                 <BaseTooltip :text="t('nav.menu')" :disabled="!showMenuButton">
-                    <button v-if="showMenuButton" @click="handleMenuClick"
-                        class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-                        :aria-label="t('nav.menu')">
+                    <BaseButton
+                        v-if="showMenuButton"
+                        type="button"
+                        variant="muted"
+                        size="sm"
+                        class="!p-2 !rounded-md bg-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100 !shadow-none"
+                        :aria-label="t('nav.menu')"
+                        @click="handleMenuClick"
+                    >
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                    </button>
+                    </BaseButton>
                 </BaseTooltip>
 
                 <h1 class="truncate text-base font-medium text-main sm:text-xl">
