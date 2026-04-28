@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { setLocale, type SupportedLocale, SUPPORTED_LOCALES } from '@/i18n';
+import { BaseTooltip } from '@/components/base';
 
 const open = ref(false);
 
@@ -82,25 +83,27 @@ const select = (value: SupportedLocale) => {
 
 <template>
   <div class="relative">
-    <button
-      type="button"
-      class="inline-flex items-center gap-2 rounded-md border border-default bg-surface px-3 py-2 text-sm font-medium text-main hover:bg-base-dark"
-      :aria-label="t('language.label')"
-      @click="toggle"
-      @blur="close"
-    >
-      <span class="inline-flex items-center gap-2">
-        <span class="h-6 w-6 rounded-full overflow-hidden bg-surface flag-svg" aria-hidden="true" v-html="flagFor(currentLocale)"></span>
-      </span>
-      <span class="hidden sm:inline">{{ t(`language.${currentLocale}`) }}</span>
-      <svg class="h-4 w-4 text-muted" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path
-          fill-rule="evenodd"
-          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    </button>
+    <BaseTooltip :text="t('language.label')">
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        :aria-label="t('language.label')"
+        @click="toggle"
+        @blur="close"
+      >
+        <span class="inline-flex items-center gap-2">
+          <span class="h-6 w-6 rounded-full overflow-hidden bg-white flag-svg" aria-hidden="true" v-html="flagFor(currentLocale)"></span>
+        </span>
+        <span class="hidden sm:inline">{{ t(`language.${currentLocale}`) }}</span>
+        <svg class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </BaseTooltip>
 
     <div
       v-if="open"

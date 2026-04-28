@@ -18,34 +18,37 @@
 
     <template #cell-actions="{ item }">
       <div class="flex gap-2 justify-end">
-        <button
-          @click="$emit('view', item)"
-          class="p-2 bg-primary text-inverse hover:brightness-110 rounded-lg transition-colors"
-          :title="$t('common.view')"
-        >
-          <EyeIcon class="w-5 h-5" />
-        </button>
-        <button
-          @click="$emit('edit', item)"
-          class="p-2 bg-success text-inverse hover:brightness-110 rounded-lg transition-colors"
-          :title="$t('common.edit')"
-        >
-          <PencilIcon class="w-5 h-5" />
-        </button>
-        <button
-          @click="$emit('delete', item)"
-          class="p-2 bg-danger text-inverse hover:brightness-110 rounded-lg transition-colors"
-          :title="$t('common.delete')"
-        >
-          <TrashIcon class="w-5 h-5" />
-        </button>
+        <BaseTooltip :text="$t('common.view')">
+          <button
+            @click="$emit('view', item)"
+            class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+          >
+            <EyeIcon class="w-5 h-5" />
+          </button>
+        </BaseTooltip>
+        <BaseTooltip :text="$t('common.edit')">
+          <button
+            @click="$emit('edit', item)"
+            class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors"
+          >
+            <PencilIcon class="w-5 h-5" />
+          </button>
+        </BaseTooltip>
+        <BaseTooltip :text="$t('common.delete')">
+          <button
+            @click="$emit('delete', item)"
+            class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+          >
+            <TrashIcon class="w-5 h-5" />
+          </button>
+        </BaseTooltip>
       </div>
     </template>
   </BaseTable>
 </template>
 
 <script setup lang="ts">
-import { BaseTable } from '@/components/base';
+import { BaseTable, BaseTooltip } from '@/components/base';
 import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import type { User } from '@/modules/users/types/user.types';
 import type { TableColumn } from '@/components/base/BaseTable.vue';

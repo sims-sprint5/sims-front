@@ -51,13 +51,14 @@
 
       <template #cell-actions="{ item }">
         <div class="flex gap-2 justify-end">
-          <button
-            @click="$emit('view-vehicle', item)"
-            class="p-2 bg-primary text-inverse hover:brightness-110 rounded-lg transition-colors"
-            :title="$t('common.view')"
-          >
-            <EyeIcon class="w-5 h-5" />
-          </button>
+          <BaseTooltip :text="$t('common.view')">
+            <button
+              @click="$emit('view-vehicle', item)"
+              class="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+            >
+              <EyeIcon class="w-5 h-5" />
+            </button>
+          </BaseTooltip>
           <button
             v-if="!item.is_expired && getReservationDisplayStatus(item) !== 'completed'"
             @click="$emit('edit', item)"
@@ -66,14 +67,14 @@
           >
             {{ $t('reservations.buttons.expandButton') }}
           </button>
-          <button
-            v-if="canCancelReservation(item)"
-            @click="$emit('delete', item)"
-            class="p-2 bg-danger text-inverse hover:brightness-110 rounded-lg transition-colors"
-            :title="$t('reservations.myReservations.cancel')"
-          >
-            <TrashIcon class="w-5 h-5" />
-          </button>
+          <BaseTooltip :text="$t('reservations.myReservations.cancel')" v-if="canCancelReservation(item)">
+            <button
+              @click="$emit('delete', item)"
+              class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+            >
+              <TrashIcon class="w-5 h-5" />
+            </button>
+          </BaseTooltip>
         </div>
       </template>
     </BaseTable>
@@ -137,14 +138,15 @@
 
       <!-- Actions -->
       <div class="flex gap-2">
-        <button
-          @click="$emit('view-vehicle', item)"
-          class="flex-1 p-2 bg-primary text-inverse text-sm font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-2"
-          :title="$t('common.view')"
-        >
-          <EyeIcon class="w-4 h-4" />
-          {{ $t('common.view') }}
-        </button>
+        <BaseTooltip :text="$t('common.view')" :full-width="true">
+          <button
+            @click="$emit('view-vehicle', item)"
+            class="flex-1 p-2 bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <EyeIcon class="w-4 h-4" />
+            {{ $t('common.view') }}
+          </button>
+        </BaseTooltip>
         <button
           v-if="!item.is_expired && getReservationDisplayStatus(item) !== 'completed'"
           @click="$emit('edit', item)"
@@ -152,15 +154,15 @@
         >
           {{ $t('reservations.buttons.expandButton') }}
         </button>
-        <button
-          v-if="canCancelReservation(item)"
-          @click="$emit('delete', item)"
-          class="flex-1 p-2 bg-danger text-inverse text-sm font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-2"
-          :title="$t('reservations.myReservations.cancel')"
-        >
-          <TrashIcon class="w-4 h-4" />
-          {{ $t('common.delete') }}
-        </button>
+        <BaseTooltip :text="$t('reservations.myReservations.cancel')" :full-width="true" v-if="canCancelReservation(item)">
+          <button
+            @click="$emit('delete', item)"
+            class="flex-1 p-2 bg-red-600 text-white text-sm font-medium hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <TrashIcon class="w-4 h-4" />
+            {{ $t('common.delete') }}
+          </button>
+        </BaseTooltip>
       </div>
     </div>
   </div>
@@ -171,7 +173,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { EyeIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
-import { BaseTable } from '@/components/base';
+import { BaseTable, BaseTooltip } from '@/components/base';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types';
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
