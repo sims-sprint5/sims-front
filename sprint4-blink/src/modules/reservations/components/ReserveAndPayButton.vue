@@ -11,7 +11,7 @@
       Reserve and Pay
     </BaseButton>
 
-    <p v-if="errorMessage" class="text-sm text-red-600" role="alert">
+    <p v-if="errorMessage" class="text-sm text-danger" role="alert">
       {{ errorMessage }}
     </p>
   </div>

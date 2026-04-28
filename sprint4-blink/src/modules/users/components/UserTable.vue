@@ -2,7 +2,7 @@
   <BaseTable :columns="columns" :data="users" :loading="loading" :loadingText="$t('users.loading')"
     :emptyText="$t('users.empty')">
     <template #cell-name="{ value }">
-      <div class="text-sm font-medium text-gray-900">{{ value }}</div>
+      <div class="text-sm font-medium text-main">{{ value }}</div>
     </template>
 
     <template #cell-role="{ value }">

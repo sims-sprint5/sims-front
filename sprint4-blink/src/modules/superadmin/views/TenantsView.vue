@@ -6,8 +6,8 @@
             <div class="mb-8">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">{{ $t('tenants.title') }}</h2>
-                        <p class="mt-2 text-sm text-gray-600">{{ $t('tenants.description') }}</p>
+                        <h2 class="text-2xl font-bold text-main">{{ $t('tenants.title') }}</h2>
+                        <p class="mt-2 text-sm text-muted">{{ $t('tenants.description') }}</p>
                     </div>
                     <BaseButton @click="openCreateModal" variant="primary">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -19,19 +19,19 @@
             </div>
 
             <!-- Taula de Tenants -->
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-surface shadow rounded-lg overflow-hidden">
                 <!-- Loading -->
                 <div v-if="loading" class="flex items-center justify-center py-16">
-                    <svg class="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+                    <svg class="animate-spin h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                         <path class="opacity-75" fill="currentColor"
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    <span class="ml-3 text-gray-600">{{ $t('common.loading') }}</span>
+                    <span class="ml-3 text-muted">{{ $t('common.loading') }}</span>
                 </div>
 
                 <!-- Empty -->
-                <div v-else-if="tenants.length === 0" class="text-center py-16 text-gray-500">
+                <div v-else-if="tenants.length === 0" class="text-center py-16 text-muted">
                     <svg class="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -42,41 +42,41 @@
 
                 <!-- Taula -->
                 <table v-else class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                    <thead class="bg-surface">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">
                                 {{ $t('tenants.table.name') }}
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">
                                 {{ $t('tenants.table.domain') }}
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">
                                 {{ $t('tenants.table.createdAt') }}
                             </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">
                                 {{ $t('common.actions') }}
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="tenant in tenants" :key="tenant.id" class="hover:bg-gray-50 transition-colors">
+                    <tbody class="bg-surface divide-y divide-gray-200">
+                        <tr v-for="tenant in tenants" :key="tenant.id" class="hover:bg-base-dark transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div
-                                        class="flex-shrink-0 h-9 w-9 rounded-full bg-indigo-100 flex items-center justify-center">
+                                        class="flex-shrink-0 h-9 w-9 rounded-full bg-[rgb(var(--color-bg-base-dark))] flex items-center justify-center">
                                         <span class="text-indigo-700 font-bold text-sm">{{
                                             tenant.name.charAt(0).toUpperCase() }}</span>
                                     </div>
                                     <div class="ml-3">
-                                        <p class="text-sm font-medium text-gray-900">{{ tenant.name }}</p>
-                                        <p class="text-xs text-gray-500">{{ tenant.admin_email }}</p>
+                                        <p class="text-sm font-medium text-main">{{ tenant.name }}</p>
+                                        <p class="text-xs text-muted">{{ tenant.admin_email }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-muted">
                                 {{ tenant.domain }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-muted">
                                 {{ formatDate(tenant.created_at) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -111,11 +111,11 @@
                 <Transition name="modal">
                     <div v-if="showFormModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeFormModal" aria-hidden="true"></div>
+                            <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeFormModal" aria-hidden="true"></div>
                             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                     <h3 id="modal-title" class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                            <div class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                     <h3 id="modal-title" class="text-lg leading-6 font-medium text-main mb-4">
                                         {{ editingTenant ? $t('tenants.modal.editTitle') : $t('tenants.modal.createTitle') }}
                                     </h3>
                                     <TenantForm

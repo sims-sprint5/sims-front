@@ -2,33 +2,33 @@
   <AppLayout :title="$t('reservations.myReservations.title')">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">{{ $t('reservations.myReservations.title') }}</h1>
-        <p class="mt-2 text-sm text-gray-600">{{ $t('reservations.myReservations.description') }}</p>
+        <h1 class="text-3xl font-bold text-main">{{ $t('reservations.myReservations.title') }}</h1>
+        <p class="mt-2 text-sm text-muted">{{ $t('reservations.myReservations.description') }}</p>
       </div>
 
-      <div v-if="error" class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <div v-if="error" class="mb-6 rounded-lg border border-red-200 bg-danger/10 px-4 py-3 text-sm text-danger">
         {{ error }}
       </div>
 
-      <div v-if="debugEnabled" class="mb-6 rounded-lg border border-amber-300 bg-amber-50 p-4">
+      <div v-if="debugEnabled" class="mb-6 rounded-lg border border-warning bg-warning/10 p-4">
         <div class="mb-2 flex items-center justify-between">
-          <h2 class="text-sm font-semibold text-amber-900">Reservation Debug Mode</h2>
-          <span class="text-xs text-amber-700">Activo via ?debugReservations=1</span>
+          <h2 class="text-sm font-semibold text-warning-dark">Reservation Debug Mode</h2>
+          <span class="text-xs text-warning-dark">Activo via ?debugReservations=1</span>
         </div>
-        <p class="mb-2 text-xs text-amber-800">
+        <p class="mb-2 text-xs text-warning-dark">
           Revisa payload crudo y normalizado para diagnosticar por que no aparecen reservas.
         </p>
-        <pre class="max-h-80 overflow-auto rounded bg-white p-3 text-[11px] leading-4 text-gray-800">{{ debugDump }}</pre>
+        <pre class="max-h-80 overflow-auto rounded bg-surface p-3 text-[11px] leading-4 text-main">{{ debugDump }}</pre>
       </div>
 
-      <div v-if="!loading && reservations.length === 0" class="rounded-lg border border-gray-200 bg-white p-12 text-center">
-        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div v-if="!loading && reservations.length === 0" class="rounded-lg border border-default bg-surface p-12 text-center">
+        <svg class="mx-auto h-12 w-12 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">{{ $t('reservations.myReservations.empty') }}</h3>
-        <p class="mt-2 text-sm text-gray-600">{{ $t('reservations.myReservations.emptyDesc') }}</p>
+        <h3 class="mt-4 text-lg font-medium text-main">{{ $t('reservations.myReservations.empty') }}</h3>
+        <p class="mt-2 text-sm text-muted">{{ $t('reservations.myReservations.emptyDesc') }}</p>
         <div class="mt-6">
-          <router-link to="/reservation" class="inline-flex items-center rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700">
+          <router-link to="/reservation" class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-inverse hover:brightness-110 hover:text-inverse transition-all">
             {{ $t('reservations.myReservations.bookNow') }}
           </router-link>
         </div>
@@ -46,8 +46,8 @@
       </div>
 
       <div v-if="loading" class="space-y-4">
-        <div class="h-12 w-full animate-pulse rounded bg-gray-200" />
-        <div class="h-12 w-full animate-pulse rounded bg-gray-200" />
+        <div class="h-12 w-full animate-pulse rounded bg-surface-dark" />
+        <div class="h-12 w-full animate-pulse rounded bg-surface-dark" />
       </div>
     </div>
 

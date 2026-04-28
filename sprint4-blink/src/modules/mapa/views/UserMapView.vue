@@ -5,7 +5,7 @@
         <div class="absolute top-3 right-3 z-[1000]">
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-inverse shadow hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             @click="openReservationPanel"
             :aria-label="t('mapa.openReservationPanel')"
           >
@@ -28,24 +28,24 @@
         <aside
           v-if="isReservationPanelOpen"
           v-show="!isReservationCreateModalOpen"
-          class="absolute right-3 top-16 bottom-3 z-[1200] w-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] rounded-2xl bg-white/95 shadow-2xl border border-gray-200 overflow-hidden flex flex-col backdrop-blur-sm"
+          class="absolute right-3 top-16 bottom-3 z-[1200] w-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] rounded-2xl bg-surface/95 shadow-2xl border border-default overflow-hidden flex flex-col backdrop-blur-sm"
           :style="reservationPanelStyle"
           role="complementary"
           :aria-label="t('mapa.reservationPanelTitle')"
         >
           <div
-            class="hidden sm:block absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-transparent hover:bg-primary-100/50"
+            class="hidden sm:block absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize bg-transparent hover:bg-primary/50"
             @mousedown.prevent="startPanelResize"
             aria-hidden="true"
           />
 
-          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200/80 bg-gray-50/90">
-            <h2 class="text-sm sm:text-base font-semibold text-gray-800">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-default/80 bg-base/90">
+            <h2 class="text-sm sm:text-base font-semibold text-main">
               {{ t('mapa.reservationPanelTitle') }}
             </h2>
             <button
               type="button"
-              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary"
               @click="closeReservationPanel"
               :aria-label="t('mapa.closeReservationPanel')"
             >
@@ -57,7 +57,8 @@
             <ReservationPage
               :key="reservationPageKey"
               :prefill="reservationPrefill"
-              :hideAccessibility="true"
+              :is-embedded="true"
+              :hide-accessibility="true"
               @reservationModalVisibility="onReservationModalVisibility"
             />
           </div>
@@ -85,16 +86,16 @@
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeQuickReservationModal" />
             <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
-            <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
+            <div class="inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-surface text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle">
               <div class="px-6 py-5">
-                <h2 id="quick-reservation-title" class="text-xl font-semibold text-gray-900">
+                <h2 id="quick-reservation-title" class="text-xl font-semibold text-main">
                   {{ t('reservations.createTitle') }}
                 </h2>
-                <p class="mt-1 text-sm text-gray-500">
+                <p class="mt-1 text-sm text-muted">
                   {{ t('reservations.createDescription') }}
                 </p>
 
-                <p class="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600">
+                <p class="mt-3 rounded-lg bg-base px-3 py-2 text-sm text-muted">
                   {{ quickReservationVehicleName }} · {{ t('reservations.selectDates') }}
                 </p>
 
@@ -109,26 +110,26 @@
 
                 <div class="mt-6 space-y-4">
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.startAt') }}</label>
+                    <label class="mb-2 block text-sm font-medium text-main">{{ t('reservations.table.startAt') }}</label>
                     <BaseDateTimePicker
                       v-model="quickReservationForm.startAt"
                       :config="quickStartPickerConfig"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
 
                   <div>
-                    <label class="mb-2 block text-sm font-medium text-gray-700">{{ t('reservations.table.endAt') }}</label>
+                    <label class="mb-2 block text-sm font-medium text-main">{{ t('reservations.table.endAt') }}</label>
                     <BaseDateTimePicker
                       v-model="quickReservationForm.endAt"
                       :config="quickEndPickerConfig"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="w-full rounded-lg border border-default px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
               </div>
 
-              <div class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 sm:flex-row sm:justify-end">
+              <div class="flex flex-col-reverse gap-3 border-t border-default bg-base px-6 py-4 sm:flex-row sm:justify-end">
                 <BaseButton variant="secondary" :disabled="submittingQuickReservation" @click="closeQuickReservationModal">
                   {{ t('common.cancel') }}
                 </BaseButton>
@@ -921,7 +922,7 @@ const showUserLocation = () => {
         userMarker = L.marker(latlng, {
           icon: L.divIcon({
             className: 'user-location-marker',
-            html: '<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg"></div>',
+            html: '<div class="w-4 h-4 bg-primary rounded-full border-2 border-white shadow-lg"></div>',
             iconSize: [16, 16],
             iconAnchor: [8, 8]
           })

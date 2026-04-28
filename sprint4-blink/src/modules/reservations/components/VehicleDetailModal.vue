@@ -4,12 +4,12 @@
       <!-- Vehicle Info -->
       <div class="space-y-3 border-b pb-4">
         <div>
-          <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.vehicle') }}</p>
-          <h3 class="text-lg font-semibold text-gray-900">{{ reservation.vehicle_name || `Vehicle #${reservation.vehicle_id}` }}</h3>
+          <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.vehicle') }}</p>
+          <h3 class="text-lg font-semibold text-main">{{ reservation.vehicle_name || `Vehicle #${reservation.vehicle_id}` }}</h3>
         </div>
         <div>
-          <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.licensePlate') }}</p>
-          <p class="font-mono text-gray-900">{{ reservation.license_plate || '—' }}</p>
+          <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.licensePlate') }}</p>
+          <p class="font-mono text-main">{{ reservation.license_plate || '—' }}</p>
         </div>
       </div>
 
@@ -17,12 +17,12 @@
       <div class="space-y-2">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.startDate') }}</p>
-            <p class="text-sm text-gray-900">{{ formatDateCustom(reservation.start_at) }}</p>
+            <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.startDate') }}</p>
+            <p class="text-sm text-main">{{ formatDateCustom(reservation.start_at) }}</p>
           </div>
           <div>
-            <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.endDate') }}</p>
-            <p class="text-sm text-gray-900">{{ formatDateCustom(reservation.end_at) }}</p>
+            <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.endDate') }}</p>
+            <p class="text-sm text-main">{{ formatDateCustom(reservation.end_at) }}</p>
           </div>
         </div>
       </div>
@@ -30,27 +30,21 @@
       <!-- Locations -->
       <div v-if="reservation.pickup_location || reservation.dropoff_location" class="space-y-2 border-t border-b py-3">
         <div v-if="reservation.pickup_location">
-          <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.pickupLocation') }}</p>
-          <p class="text-sm text-gray-900">📍 {{ reservation.pickup_location }}</p>
+          <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.pickupLocation') }}</p>
+          <p class="text-sm text-main">📍 {{ reservation.pickup_location }}</p>
         </div>
         <div v-if="reservation.dropoff_location">
-          <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.dropoffLocation') }}</p>
-          <p class="text-sm text-gray-900">📍 {{ reservation.dropoff_location }}</p>
+          <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.dropoffLocation') }}</p>
+          <p class="text-sm text-main">📍 {{ reservation.dropoff_location }}</p>
         </div>
       </div>
 
       <!-- Status -->
       <div class="space-y-2">
-        <p class="text-xs font-medium uppercase text-gray-500">{{ $t('reservations.myReservations.status') }}</p>
+        <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.status') }}</p>
         <span
           class="inline-flex rounded-full px-3 py-1 text-xs font-semibold"
-          :class="{
-            'bg-amber-100 text-amber-800': getReservationDisplayStatus(reservation) === 'pending',
-            'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(reservation) === 'in_progress',
-            'bg-emerald-100 text-emerald-800': reservation.status === 'active',
-            'bg-blue-100 text-blue-800': reservation.status === 'completed',
-            'bg-red-100 text-red-800': reservation.status === 'cancelled',
-          }"
+          :class="`bg-status-${getReservationDisplayStatus(reservation)}-bg text-status-${getReservationDisplayStatus(reservation)}-text`"
         >
           {{ $t(`reservations.status.${getReservationDisplayStatus(reservation)}`) }}
         </span>

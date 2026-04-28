@@ -4,11 +4,6 @@ import { useI18n } from 'vue-i18n';
 import { BaseButton } from '@/components/base';
 import { useToast } from '@/shared/composables/useToast';
 import type { ReservationVehicleCardModel } from '@/modules/reservations/types/reservationUi.types';
-import {
-  IdentificationIcon,
-  SwatchIcon,
-  CalendarIcon,
-} from '@heroicons/vue/24/outline';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'warning' | 'info' | 'muted';
 
@@ -39,18 +34,18 @@ function statusLabel(raw: string | undefined): string {
 }
 
 const STATUS_STYLES: Record<string, { badge: string; bar: string }> = {
-  available:      { badge: 'bg-blue-100 text-blue-700 ring-1 ring-blue-300',  bar: 'bg-blue-400' },
-  active:         { badge: 'bg-blue-100   text-blue-700   ring-1 ring-blue-300',       bar: 'bg-blue-400'    },
-  maintenance:    { badge: 'bg-yellow-100 text-yellow-800 ring-1 ring-yellow-300',     bar: 'bg-yellow-400'  },
-  reserved:       { badge: 'bg-red-100    text-red-800    ring-1 ring-red-300',        bar: 'bg-red-400'     },
-  rented:         { badge: 'bg-indigo-100 text-indigo-700 ring-1 ring-indigo-300',     bar: 'bg-indigo-400'  },
-  inactive:       { badge: 'bg-gray-100   text-gray-800   ring-1 ring-gray-300',       bar: 'bg-gray-400'    },
-  out_of_service: { badge: 'bg-red-100    text-red-700    ring-1 ring-red-300',        bar: 'bg-red-400'     },
+  available:      { badge: 'bg-vehicle-available-bg text-vehicle-available-text ring-1 ring-vehicle-available-ring',  bar: 'bg-vehicle-available-bar' },
+  active:         { badge: 'bg-vehicle-available-bg text-vehicle-available-text ring-1 ring-vehicle-available-ring',       bar: 'bg-vehicle-available-bar'    },
+  maintenance:    { badge: 'bg-vehicle-maintenance-bg text-vehicle-maintenance-text ring-1 ring-vehicle-maintenance-ring',     bar: 'bg-vehicle-maintenance-bar'  },
+  reserved:       { badge: 'bg-vehicle-reserved-bg text-vehicle-reserved-text ring-1 ring-vehicle-reserved-ring',        bar: 'bg-vehicle-reserved-bar'     },
+  rented:         { badge: 'bg-[rgb(var(--color-bg-base-dark))] text-indigo-700 ring-1 ring-indigo-300',     bar: 'bg-indigo-400'  },
+  inactive:       { badge: 'bg-surface-muted text-main ring-1 ring-default',       bar: 'bg-muted'    },
+  out_of_service: { badge: 'bg-vehicle-reserved-bg text-vehicle-reserved-text ring-1 ring-vehicle-reserved-ring',        bar: 'bg-vehicle-reserved-bar'     },
 };
 
 const statusStyle = computed(() => {
   const key = (props.vehicle?.category ?? '').trim().toLowerCase();
-  return STATUS_STYLES[key] ?? { badge: 'bg-gray-100 text-gray-500 ring-1 ring-gray-300', bar: 'bg-gray-300' };
+  return STATUS_STYLES[key] ?? { badge: 'bg-surface-muted text-muted ring-1 ring-gray-300', bar: 'bg-gray-300' };
 });
 
 const statusKey = computed(() => (props.vehicle?.category ?? '').trim().toLowerCase());
@@ -107,28 +102,28 @@ function handleReserve() {
 
 <template>
   <article
-    class="relative bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+    class="relative bg-surface rounded-2xl shadow-md border border-default overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
     :aria-busy="skeleton ? 'true' : 'false'"
   >
     <div
       class="absolute left-0 inset-y-0 w-1.5 rounded-l-2xl"
-      :class="skeleton ? 'bg-gray-200' : statusStyle.bar"
+      :class="skeleton ? 'bg-surface-dark' : statusStyle.bar"
     />
 
     <div :class="[props.largeView ? 'pl-8 pr-8 py-8 md:pr-10 md:py-10' : 'pl-6 pr-6 py-4 md:pr-8 md:py-4']">
       <div class="flex flex-col gap-3 lg:grid lg:grid-cols-[minmax(0,1fr)_180px] lg:items-start lg:gap-4">
         <div class="min-w-0 flex-1">
           <div v-if="skeleton" class="space-y-3">
-            <div class="h-6 w-56 max-w-full rounded-lg bg-gray-200 animate-pulse" />
-            <div class="h-4 w-32 rounded-full bg-gray-200 animate-pulse" />
+            <div class="h-6 w-56 max-w-full rounded-lg bg-surface-dark animate-pulse" />
+            <div class="h-4 w-32 rounded-full bg-surface-dark animate-pulse" />
             <div class="mt-4 grid grid-cols-2 gap-3">
-              <div v-for="i in 4" :key="i" class="h-4 rounded bg-gray-200 animate-pulse" />
+              <div v-for="i in 4" :key="i" class="h-4 rounded bg-surface-dark animate-pulse" />
             </div>
           </div>
 
           <template v-else>
             <div class="flex flex-wrap items-center gap-3">
-              <h3 :class="[props.largeView ? 'text-xl md:text-2xl' : 'text-lg md:text-xl', 'font-bold text-gray-900 whitespace-normal lg:truncate']">
+              <h3 :class="[props.largeView ? 'text-xl md:text-2xl' : 'text-lg md:text-xl', 'font-bold text-main whitespace-normal lg:truncate']">
                 {{ vehicle?.name ?? '—' }}
               </h3>
               <span
@@ -140,20 +135,18 @@ function handleReserve() {
             </div>
 
             <div class="mt-3 flex gap-2.5 overflow-x-auto pb-1 pr-1">
-              <div class="rounded-lg px-2.5 py-2 bg-blue-50 border border-blue-100 min-w-[150px] shrink-0">
+              <div class="rounded-lg px-2.5 py-2 bg-base border border-default min-w-[150px] shrink-0">
                 <div class="flex items-center gap-1.5">
-                  <IdentificationIcon class="h-3.5 w-3.5 shrink-0 text-blue-600" />
-                  <span class="font-semibold text-blue-900 text-xs">Matrícula</span>
+                  <span class="font-semibold text-main text-xs">Matrícula</span>
                 </div>
-                <p class="mt-1 text-blue-700 text-sm font-bold truncate">{{ vehicle?.licensePlate ?? '—' }}</p>
+                <p class="mt-1 text-main text-sm font-bold truncate">{{ vehicle?.licensePlate ?? '—' }}</p>
               </div>
 
-              <div class="rounded-lg px-2.5 py-2 bg-pink-50 border border-pink-100 min-w-[150px] shrink-0">
+              <div class="rounded-lg px-2.5 py-2 bg-base border border-default min-w-[150px] shrink-0">
                 <div class="flex items-center gap-1.5">
-                  <SwatchIcon class="h-3.5 w-3.5 shrink-0 text-pink-600" />
-                  <span class="font-semibold text-pink-900 text-xs">Color</span>
+                  <span class="font-semibold text-main text-xs">Color</span>
                 </div>
-                <p class="mt-1 text-pink-700 text-sm font-bold truncate">{{ vehicle?.description ?? '—' }}</p>
+                <p class="mt-1 text-main text-sm font-bold truncate">{{ vehicle?.description ?? '—' }}</p>
               </div>
 
             </div>
@@ -162,8 +155,8 @@ function handleReserve() {
 
         <div :class="[props.largeView ? 'lg:w-56' : 'lg:w-[180px]', 'w-full lg:shrink-0 flex flex-col justify-end gap-2 pt-2 lg:pt-0']">
           <template v-if="skeleton">
-            <div class="h-4 w-20 rounded bg-gray-200 animate-pulse md:ml-auto" />
-            <div class="h-9 w-full rounded-lg bg-gray-200 animate-pulse mt-auto" />
+            <div class="h-4 w-20 rounded bg-surface-dark animate-pulse md:ml-auto" />
+            <div class="h-9 w-full rounded-lg bg-surface-dark animate-pulse mt-auto" />
           </template>
           <template v-else>
             <BaseButton
@@ -171,7 +164,6 @@ function handleReserve() {
               full-width
               @click="handleReserve"
             >
-              <CalendarIcon class="h-4 w-4 mr-1.5" />
               {{ isAvailable ? $t('reservations.buttons.reserveButton') : canPreReserve ? $t('reservations.buttons.preReserveButton') : statusLabel(vehicle?.category) }}
             </BaseButton>
           </template>

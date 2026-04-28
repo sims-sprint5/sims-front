@@ -3,7 +3,7 @@
   <!-- CREATION MODE -->
     <template v-if="!isEditing">
       <div class="space-y-4 border-b pb-4 mb-4">
-        <p class="text-sm text-gray-600">{{ $t('tenants.form.creationInfo') }}</p>
+        <p class="text-sm text-muted">{{ $t('tenants.form.creationInfo') }}</p>
         
         <BaseInput
           v-model="formData.id"
@@ -53,7 +53,7 @@
           required
         />
 
-        <p class="text-xs text-gray-500 bg-blue-50 px-3 py-2 rounded">
+        <p class="text-xs text-muted bg-base px-3 py-2 rounded">
           {{ $t('tenants.form.creationNote') }}
         </p>
       </div>
@@ -63,11 +63,11 @@
     <template v-else>
       <div class="space-y-4">
         <!-- Company ID (read-only) -->
-        <div class="bg-gray-50 px-3 py-2 border border-gray-300 rounded-lg">
-          <label class="block text-sm font-medium text-gray-700 mb-1">
+        <div class="bg-base-dark px-3 py-2 border border-default rounded-lg">
+          <label class="block text-sm font-medium text-main mb-1">
             {{ $t('tenants.form.id') }}
           </label>
-          <p class="text-gray-900 font-mono">{{ formData.id }}</p>
+          <p class="text-main font-mono">{{ formData.id }}</p>
         </div>
 
         <!-- Name -->
@@ -89,7 +89,7 @@
 
         <!-- Change Password -->
         <div class="pt-2 border-t">
-          <p class="text-sm font-medium text-gray-700 mb-3">
+          <p class="text-sm font-medium text-main mb-3">
             {{ $t('tenants.form.changePasswordLabel') }}
           </p>
 
@@ -114,7 +114,7 @@
             class="mt-3"
           />
 
-          <p class="text-xs text-gray-500 mt-2">
+          <p class="text-xs text-muted mt-2">
             {{ $t('tenants.form.changePasswordHint') }}
           </p>
 

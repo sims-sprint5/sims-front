@@ -8,6 +8,9 @@
     "save": "Guardar",
     "cancel": "Cancel·lar",
     "close": "Tancar",
+    "lightMode": "Mode Clar",
+    "darkMode": "Mode Fosc",
+    "themeToggle": "Canviar aparença",
     "back": "Enrere",
     "avatar": "Avatar",
     "search": "Buscar",
@@ -901,7 +904,7 @@
   "chatbot": {
     "title": "Assistent SIMS",
     "openChat": "Obrir xat d'assistència",
-    "greeting": "👋 Hola {name}, ¿com puc ajudar-te?",
+    "greeting": "Hola {name}, ¿com puc ajudar-te?",
     "defaultGreeting": "Usuari",
     "typing": "⏳ Escrivint...",
     "footer": "Impulsat per IA • {context}",

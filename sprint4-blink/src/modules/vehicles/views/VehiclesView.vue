@@ -5,7 +5,7 @@
       <div class="mb-8">
         <div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
           <div>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm text-muted">
               {{ $t('vehicles.description') }}
             </p>
           </div>
@@ -19,7 +19,7 @@
       </div>
 
       <!-- Búsqueda y filtros -->
-      <div class="mb-6 bg-white p-4 rounded-lg shadow">
+      <div class="mb-6 bg-surface p-4 rounded-lg shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
             <BaseInput
@@ -64,17 +64,17 @@
           >
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
               <!-- Overlay -->
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeVehicleModal" />
+              <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeVehicleModal" />
 
               <!-- Center modal -->
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
               <!-- Modal panel -->
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
               >
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <h3 class="text-lg leading-6 font-medium text-main mb-4">
                     {{ editingVehicle ? $t('vehicles.actions.editVehicle') : $t('vehicles.actions.createNewVehicle') }}
                   </h3>
                   <VehicleForm
@@ -115,58 +115,58 @@
             aria-modal="true"
           >
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeViewModal" />
+              <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeViewModal" />
 
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
               >
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <h3 class="text-lg leading-6 font-medium text-main mb-4">
                     {{ $t('vehicles.modal.detailsTitle') }}
                   </h3> 
 
                   <div v-if="viewingVehicle" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.licensePlate') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingVehicle.license_plate }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.licensePlate') }}</p>
+                      <p class="text-base text-main">{{ viewingVehicle.license_plate }}</p>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.status') }}</p>
-                      <p class="text-base text-gray-900">{{ statusLabel(viewingVehicle.status) }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.status') }}</p>
+                      <p class="text-base text-main">{{ statusLabel(viewingVehicle.status) }}</p>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.brand') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingVehicle.brand }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.brand') }}</p>
+                      <p class="text-base text-main">{{ viewingVehicle.brand }}</p>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.model') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingVehicle.model }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.model') }}</p>
+                      <p class="text-base text-main">{{ viewingVehicle.model }}</p>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.year') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingVehicle.year ?? '-' }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.year') }}</p>
+                      <p class="text-base text-main">{{ viewingVehicle.year ?? '-' }}</p>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.color') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingVehicle.color }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.color') }}</p>
+                      <p class="text-base text-main">{{ viewingVehicle.color }}</p>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.currentLatitude') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingVehicle.current_latitude ?? '-' }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.currentLatitude') }}</p>
+                      <p class="text-base text-main">{{ viewingVehicle.current_latitude ?? '-' }}</p>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 p-3">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('vehicles.form.currentLongitude') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingVehicle.current_longitude ?? '-' }}</p>
+                    <div class="rounded-lg border border-default p-3">
+                      <p class="text-sm font-medium text-muted">{{ $t('vehicles.form.currentLongitude') }}</p>
+                      <p class="text-base text-main">{{ viewingVehicle.current_longitude ?? '-' }}</p>
                     </div>
                     </div>
                   </div>

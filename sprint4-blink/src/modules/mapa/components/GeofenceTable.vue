@@ -25,7 +25,7 @@
       <template #cell-status="{ item }">
         <span
           class="px-2 py-1 rounded text-sm font-medium"
-          :class="item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+          :class="item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-surface-muted text-main'"
         >
           {{ $t(`mapa.status.${item.status}`) }}
         </span>
@@ -116,6 +116,6 @@ const getTypeColorClass = (type: string): string => {
     parking: 'bg-blue-100 text-blue-800',
     service_area: 'bg-orange-100 text-orange-800'
   }
-  return classes[type] || 'bg-gray-100 text-gray-800'
+  return classes[type] || 'bg-surface-muted text-main'
 }
 </script>

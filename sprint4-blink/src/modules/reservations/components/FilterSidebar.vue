@@ -44,9 +44,9 @@ function onReset() {
 </script>
 
 <template>
-  <div class="w-full min-w-0 bg-gray-50 rounded-2xl shadow-lg border border-gray-100 p-6 max-h-none lg:max-h-[calc(100vh-8.5rem)] overflow-visible lg:overflow-auto">
+  <div class="w-full min-w-0 bg-base rounded-2xl shadow-lg border border-default p-6 max-h-none lg:max-h-[calc(100vh-8.5rem)] overflow-visible lg:overflow-auto">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
-      <h2 class="text-base font-bold text-gray-900">{{ t('reservations.filters.title') }}</h2>
+      <h2 class="text-base font-bold text-main">{{ t('reservations.filters.title') }}</h2>
       <BaseButton size="sm" variant="secondary" class="w-full sm:w-auto justify-center" :disabled="disabled" @click="onReset">
         {{ t('reservations.filters.reset') }}
       </BaseButton>
@@ -66,9 +66,9 @@ function onReset() {
       </section>
 
       <section>
-        <h3 class="text-sm font-semibold text-gray-900 mb-2">{{ t('reservations.filters.statusLabel') }}</h3>
+        <h3 class="text-sm font-semibold text-main mb-2">{{ t('reservations.filters.statusLabel') }}</h3>
         <select
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+          class="w-full px-4 py-3 border border-default rounded-lg bg-surface disabled:bg-surface-muted disabled:cursor-not-allowed"
           :disabled="disabled"
           :value="modelValue.status ?? ''"
           @change="patchFilters({ status: ($event.target as HTMLSelectElement).value || null })"
@@ -81,9 +81,9 @@ function onReset() {
       </section>
 
       <section>
-        <h3 class="text-sm font-semibold text-gray-900 mb-2">{{ t('reservations.filters.brandLabel') }}</h3>
+        <h3 class="text-sm font-semibold text-main mb-2">{{ t('reservations.filters.brandLabel') }}</h3>
         <select
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+          class="w-full px-4 py-3 border border-default rounded-lg bg-surface disabled:bg-surface-muted disabled:cursor-not-allowed"
           :disabled="disabled"
           :value="modelValue.brand ?? ''"
           @change="patchFilters({ brand: ($event.target as HTMLSelectElement).value || null })"
@@ -94,7 +94,7 @@ function onReset() {
       </section>
 
       <section>
-        <h3 class="text-sm font-semibold text-gray-900 mb-2">{{ t('reservations.filters.yearLabel') }}</h3>
+        <h3 class="text-sm font-semibold text-main mb-2">{{ t('reservations.filters.yearLabel') }}</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <BaseInput
             :model-value="modelValue.yearFrom ?? ''"

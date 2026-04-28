@@ -1,43 +1,43 @@
-<template>
+ <template>
   <CustomModal :show="show" :title="$t('reservations.myReservations.expandReservation')" @close="handleClose">
     <form @submit.prevent="handleSave" class="space-y-4">
       <!-- Start Date (Read-only) -->
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="block text-sm font-medium text-main">
           {{ $t('reservations.myReservations.startDate') }}
         </label>
         <input
           :value="formData.start_at"
           type="datetime-local"
           disabled
-          class="mt-1 block w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-500"
+          class="mt-1 block w-full rounded-md border border-default bg-base px-3 py-2 text-sm text-muted"
         />
-        <p class="mt-1 text-xs text-gray-500">{{ $t('reservations.myReservations.startDateLocked') }}</p>
+        <p class="mt-1 text-xs text-muted">{{ $t('reservations.myReservations.startDateLocked') }}</p>
       </div>
 
       <!-- End Date (Editable) -->
       <div>
-        <label class="block text-sm font-medium text-gray-700">
+        <label class="block text-sm font-medium text-main">
           {{ $t('reservations.myReservations.endDate') }}
         </label>
         <input
           v-model="formData.end_at"
           type="datetime-local"
           required
-          class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+          class="mt-1 block w-full rounded-md border border-default px-3 py-2 text-sm focus:border-primary focus:ring-primary"
           :disabled="isLoading"
         />
       </div>
 
       <!-- Error Message -->
-      <div v-if="errorMessage" class="rounded-lg bg-red-50 p-3">
+      <div v-if="errorMessage" class="rounded-lg bg-danger/10 p-3">
         <p class="text-sm text-red-800">
           <strong>❌ {{ $t('errors.error') }}:</strong> {{ errorMessage }}
         </p>
       </div>
 
       <!-- Info Message -->
-      <div v-if="infoMessage" class="rounded-lg bg-blue-50 p-3">
+      <div v-if="infoMessage" class="rounded-lg bg-base p-3">
         <p class="text-sm text-blue-800">
           ℹ️ {{ infoMessage }}
         </p>

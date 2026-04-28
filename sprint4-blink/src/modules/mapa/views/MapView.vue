@@ -55,28 +55,28 @@
       <div class="space-y-4" v-if="selectedGeofence">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <p class="text-sm text-gray-600">{{ $t('mapa.form.type') }}</p>
+            <p class="text-sm text-muted">{{ $t('mapa.form.type') }}</p>
             <p class="font-semibold">{{ $t(`mapa.types.${selectedGeofence.type}`) }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-600">{{ $t('mapa.form.status') }}</p>
+            <p class="text-sm text-muted">{{ $t('mapa.form.status') }}</p>
             <p class="font-semibold">{{ $t(`mapa.status.${selectedGeofence.status}`) }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-600">{{ $t('mapa.form.latitude') }}</p>
+            <p class="text-sm text-muted">{{ $t('mapa.form.latitude') }}</p>
             <p class="font-semibold">{{ selectedGeofence.center_latitude }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-600">{{ $t('mapa.form.longitude') }}</p>
+            <p class="text-sm text-muted">{{ $t('mapa.form.longitude') }}</p>
             <p class="font-semibold">{{ selectedGeofence.center_longitude }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-600">{{ $t('mapa.form.radius') }}</p>
+            <p class="text-sm text-muted">{{ $t('mapa.form.radius') }}</p>
             <p class="font-semibold">{{ selectedGeofence.radius }}m</p>
           </div>
         </div>
         <div v-if="selectedGeofence.description">
-          <p class="text-sm text-gray-600">{{ $t('mapa.form.description') }}</p>
+          <p class="text-sm text-muted">{{ $t('mapa.form.description') }}</p>
           <p>{{ selectedGeofence.description }}</p>
         </div>
         <div class="flex gap-3 justify-end pt-4">

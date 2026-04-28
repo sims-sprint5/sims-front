@@ -107,21 +107,21 @@ const select = (value: SupportedLocale) => {
 
     <div
       v-if="open"
-      class="absolute left-0 mt-2 w-44 z-50 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg"
+      class="absolute left-0 mt-2 w-44 z-50 overflow-hidden rounded-md border border-default bg-surface shadow-lg"
       role="menu"
     >
       <button
         v-for="opt in options"
         :key="opt.value"
         type="button"
-        class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50"
-        :class="opt.value === currentLocale ? 'bg-gray-50 font-semibold text-gray-900' : 'text-gray-700'"
+        class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-base-dark"
+        :class="opt.value === currentLocale ? 'bg-base-dark font-semibold text-main' : 'text-main'"
         role="menuitem"
         @mousedown.prevent
         @click="select(opt.value)"
       >
         <span class="inline-flex items-center gap-2">
-          <span class="h-6 w-6 rounded-full overflow-hidden bg-white flag-svg" aria-hidden="true" v-html="flagFor(opt.value)"></span>
+          <span class="h-6 w-6 rounded-full overflow-hidden bg-surface flag-svg" aria-hidden="true" v-html="flagFor(opt.value)"></span>
         </span>
         <span class="ml-2">{{ t(opt.labelKey) }}</span>
       </button>
