@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Blink"
+    "name": "Fleetly"
   },
   "common": {
     "loading": "Cargando...",
@@ -8,6 +8,10 @@
     "save": "Guardar",
     "cancel": "Cancelar",
     "close": "Cerrar",
+    "lightMode": "Modo Claro",
+    "darkMode": "Modo Oscuro",
+    "themeToggle": "Cambiar tema",
+    "back": "Atrás",
     "avatar": "Avatar",
     "search": "Buscar",
     "refresh": "Actualizar",
@@ -18,10 +22,12 @@
     "view": "Ver",
     "actions": "Acciones",
     "logout": "Cerrar sesión",
+    "send": "Enviar",
     "passwordMismatch": "Las contraseñas no coinciden."
   },
   "language": {
     "label": "Idioma",
+    "_lang": "es",
     "ca": "Catalán",
     "es": "Español",
     "en": "Inglés"
@@ -31,7 +37,9 @@
     "dashboard": "Dashboard",
     "map": "Mapa",
     "tickets": "Tickets",
+    "chat": "Chat",
     "bookings": "Reservas",
+    "myReservations": "Mis Reservas",
     "reservationsAdmin": "Log de reservas",
     "users": "Usuarios",
     "vehicles": "Vehículos",
@@ -62,7 +70,7 @@
       "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
     },
     "register": {
-      "title": "Crea tu cuenta en Blink",
+      "title": "Crea tu cuenta en Fleetly",
       "cta": "Crear cuenta",
       "loading": "Cargando...",
       "haveAccount": "¿Ya tienes cuenta?",
@@ -136,7 +144,18 @@
     "saveChanges": "Guardar cambios",
     "deleteAccount": "Eliminar cuenta",
     "deleteAccountDesc": "¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción no es reversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.",
-    "deleteAccountCta": "Sí, eliminar mi cuenta"
+    "deleteAccountCta": "Sí, eliminar mi cuenta",
+    "language": "Idioma",
+    "languageDesc": "Selecciona el idioma de la aplicación.",
+    "logoutDesc": "Cerrar tu sesión actual."
+  },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total de vehículos",
+      "availableVehicles": "Vehículos disponibles",
+      "maintenanceVehicles": "En mantenimiento",
+      "inactiveVehicles": "Inactivos"
+    }
   },
   "users": {
     "title": "Gestión de usuarios",
@@ -244,7 +263,9 @@
       "gray": "Gris",
       "grey": "Gris",
       "silver": "Plateado",
-      "green": "Verde"
+      "green": "Verde",
+      "yellow": "Amarillo",
+      "groc": "Amarillo"
     },
     "modal": {
       "deleteTitle": "Eliminar vehículo",
@@ -286,13 +307,18 @@
     "table": {
       "id": "ID",
       "logType": "Tipo de log",
-      "userId": "Usuario (ID)",
-      "vehicleId": "Vehículo (ID)",
+      "userId": "Usuario",
+      "vehicleId": "Vehículo",
       "status": "Estado",
       "startAt": "Inicio",
       "endAt": "Fin",
       "createdAt": "Creado",
-      "actions": "Acciones"
+      "timeRemaining": "Tiempo restante",
+      "renewal": "Estado de renovación",
+      "expired": "Vencido",
+      "renew": "Renovar",
+      "actions": "Acciones",
+      "deleteReservation": "Eliminar reserva"
     },
     "form": {
       "userId": "ID de usuario",
@@ -308,6 +334,7 @@
     },
     "status": {
       "pending": "Pendiente",
+      "in_progress": "En curso",
       "active": "Confirmada",
       "completed": "Completada",
       "cancelled": "Cancelada",
@@ -348,11 +375,76 @@
       "invalidId": "ID de reserva inválido",
       "missingDates": "Indica fecha de inicio y fin para la reserva.",
       "create": "Error al crear la reserva. Por favor, inténtalo de nuevo.",
-      "invalidDates": "La fecha de fin debe ser posterior a la de inicio."
+      "invalidDates": "La fecha de fin debe ser posterior a la de inicio.",
+      "renewal": "Error al solicitar renovación. Por favor, inténtalo de nuevo.",
+      "notAvailable": "Este vehículo no está disponible para el período seleccionado.",
+      "availableFrom": "Este vehículo estará disponible desde {date}.",
+      "checkoutFailed": "No se pudo iniciar el pago. Inténtalo de nuevo.",
+      "checkoutUnauthorized": "Tu sesión ha caducado. Inicia sesión de nuevo para continuar.",
+      "checkoutConflict": "Existe un conflicto con esta reserva. Revisa disponibilidad y vuelve a intentar.",
+      "checkoutServer": "El servidor no pudo iniciar el pago. Inténtalo en unos minutos.",
+      "invalidDateRange": "La fecha de fin debe ser posterior a la fecha de inicio.",
+      "checkAvailability": "No se pudo verificar la disponibilidad del vehículo.",
+      "updateFailed": "No se pudo actualizar la reserva."
+    },
+    "completed": {
+      "title": "Reserva Completada",
+      "vehicleInfo": "Información del Vehículo",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Fin",
+      "notice": "Aviso",
+      "extendReservation": "Ampliar tu Reserva",
+      "extendDescription": "Te quedan {minutes} minutos en esta reserva. ¿Deseas ampliarla?",
+      "proceedToPayment": "Proceder al Pago",
+      "noRenewal": "Esta reserva ya no está disponible para ampliación."
+    },
+    "renewal": {
+      "title": "Renovar Reserva",
+      "description": "Amplía tu reserva de {vehicleName}",
+      "vehicle": "Vehículo",
+      "currentEnd": "Hora de Finalización Actual",
+      "timeRemaining": "Tiempo Restante",
+      "notice": "Aviso",
+      "proceedInfo": "Haz clic abajo para proceder con el pago de la renovación.",
+      "paymentInfo": "Serás redirigido a nuestra página de pago segura.",
+      "proceed": "Proceder al Pago",
+      "minutesRemaining": "{count} minuto | {count} minutos",
+      "hoursMinutesRemaining": "{hours}h {minutes}m restantes"
+    },
+    "myReservations": {
+      "title": "Mis Reservas",
+      "description": "Ver, editar y gestionar tus reservas de vehículos",
+      "empty": "Sin reservas aún",
+      "emptyDesc": "No tienes ninguna reserva. Reserva un vehículo para comenzar.",
+      "bookNow": "Reservar Ahora",
+      "vehicle": "Vehículo",
+      "licensePlate": "Matrícula",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Término",
+      "pickupLocation": "Ubicación de Recogida",
+      "dropoffLocation": "Ubicación de Devolución",
+      "status": "Estado",
+      "notice": "Aviso",
+      "vehicleDetails": "Detalles del Vehículo",
+      "editReservation": "Editar Reserva",
+      "edit": "Editar",
+      "cancel": "Cancelar",
+      "extend": "Extender",
+      "expandReservation": "Extender Reserva",
+      "startDateLocked": "La fecha de inicio no puede ser modificada",
+      "vehicleColumn": "Vehículo",
+      "viewVehicleDetails": "Ver detalles del vehículo",
+      "confirmCancel": "¿Estás seguro de que deseas cancelar esta reserva?",
+      "confirmDeleteTitle": "Eliminar Reserva",
+      "confirmDeleteMessage": "¿Estás seguro de que deseas eliminar la reserva de {vehicle}? Esta acción no se puede deshacer.",
+      "checkingAvailability": "Comprobando disponibilidad...",
+      "reservationUpdated": "Reserva actualizada correctamente"
     },
     "filters": {
       "title": "Filtros",
       "reset": "Restablecer",
+      "show": "Ver filtros",
+      "hide": "Ocultar filtros",
       "searchLabel": "Buscar",
       "searchPlaceholder": "Matrícula, marca o modelo",
       "statusLabel": "Estado",
@@ -367,8 +459,18 @@
     },
     "buttons": {
       "reserveButton": "Reservar",
+      "preReserveButton": "Prereservar",
+      "expandButton": "Aumentar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
+    },
+    "preReservation": {
+      "busySlots": "Franja(s) ya reservada(s)"
+    }
+    ,
+    "view": {
+      "large": "Vista ampliada",
+      "compact": "Vista compacta"
     }
   },
   "table": {
@@ -395,6 +497,7 @@
       "descripcion": "Descripción",
       "precio": "Precio",
       "estado": "Estado",
+      "priority": "Prioridad",
       "usuario": "Usuario",
       "fechaUsuario": "Fecha",
       "fechaCompra": "Fecha de compra",
@@ -424,16 +527,18 @@
       "prioritySelect": "Selecciona prioridad",
       "priorityLow": "Baja",
       "priorityMedium": "Media",
-      "priorityHigh": "Alta",
-      "priorityUrgent": "Urgente"
+      "priorityHigh": "Alta"
     },
     "estados": {
       "pendiente": "Pendiente",
       "pending": "Pendiente",
       "open": "Abierto",
+      "obert": "Abierto",
       "in_progress": "En progreso",
+      "en_progres": "En progreso",
       "resolved": "Resuelto",
       "closed": "Cerrado",
+      "finalitzat": "Finalizado",
       "confirmado": "Confirmado",
       "confirmed": "Confirmado",
       "cancelado": "Cancelado",
@@ -473,6 +578,9 @@
     "title": "Gestión de Tickets",
     "description": "Administra todos los tickets del sistema",
     "searchPlaceholder": "Buscar por asunto, descripción o usuario...",
+    "filters": {
+      "all": "Todos"
+    },
     "actions": {
       "editTicket": "Editar ticket",
       "reply": "Responder"
@@ -489,6 +597,10 @@
       "messagePlaceholder": "Escribe tu respuesta...",
       "replyAs": "Responder como",
       "send": "Enviar"
+    },
+    "permissions": {
+      "statusEditableByAdmin": "Solo los administradores pueden modificar el estado.",
+      "priorityVisibleByAdmin": "La prioridad solo es visible y editable para administradores."
     },
     "toast": {
       "updated": "Ticket actualizado correctamente",
@@ -598,6 +710,10 @@
   "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
+    "openReservationPanel": "¡Reserva ahora!",
+    "closeReservationPanel": "Cerrar panel de reservas",
+    "reservationPanelTitle": "Reservas de coches",
+    "reservationIframeTitle": "Panel de reservas",
     "geofences": "Geofences",
     "createZone": "Nueva Zona",
     "editZone": "Editar Zona",
@@ -673,6 +789,7 @@
     "edit": "Editar"
   },
   "errors": {
+    "error": "Error",
     "unexpected": "Ha ocurrido un error inesperado.",
     "invalidLoginResponse": "Respuesta de login inválida: falta token.",
     "requestFailed": "Error en la petición",
@@ -749,7 +866,7 @@
       "name": "Nombre",
       "namePlaceholder": "Nombre de la compañía",
       "domain": "Dominio",
-      "domainPlaceholder": "ej: empresa.blink.com",
+      "domainPlaceholder": "ej: empresa.Fleetly.com",
       "email": "Email de contacto",
       "emailPlaceholder": "contacto{'@'}empresa.com",
       "admin_email": "Email del Administrador",
@@ -790,5 +907,25 @@
       "save": "Error al guardar la compañía",
       "delete": "Error al eliminar la compañía"
     }
+  },
+  "chatbot": {
+    "title": "Asistente SIMS",
+    "openChat": "Abrir chat de asistencia",
+    "greeting": "Hola {name}, ¿En qué puedo ayudarte?",
+    "defaultGreeting": "Usuario",
+    "typing": "⏳ Escribiendo...",
+    "footer": "Powered by AI • {context}",
+    "contextMap": "Explorando vehículos",
+    "contextReservations": "Tus reservas",
+    "contextTickets": "Tus tickets de soporte",
+    "contextDefault": "En SIMS",
+    "placeholderMap": "¿Es este vehículo bueno para mí?",
+    "placeholderReservations": "¿Cómo modifico mi reserva?",
+    "placeholderTickets": "¿Necesitas ayuda con tu ticket?",
+    "placeholderDefault": "¿Tienes alguna duda?",
+    "welcomeMessage": "Soy tu asistente de SIMS. Cuéntame qué necesitas ayuda y haré mi mejor esfuerzo para asistirte.",
+    "errorProcessing": "Error al procesar tu pregunta",
+    "errorServer": "Error del servidor. Intenta nuevamente.",
+    "errorConnection": "Error de conexión. Intenta más tarde."
   }
 }

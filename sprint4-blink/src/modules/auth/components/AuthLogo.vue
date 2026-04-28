@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import blinkLogo from '@/assets/blink-logo.png';
+import blinkLogo from '@/assets/fleetly_isotip_blanc.svg';  
 import { useI18n } from 'vue-i18n';
 
 defineProps<{
@@ -20,7 +20,7 @@ const { t } = useI18n();
     <img 
       :src="blinkLogo" 
       :alt="t('common.logoAlt', { app: t('app.name') })" 
-      :class="[sizeClasses[size || 'md'], 'w-auto object-contain', 'shadow-none']"
+      :class="[sizeClasses[size || 'lg'], 'w-auto object-contain', 'shadow-none']"
     />
   </div>
 </template>

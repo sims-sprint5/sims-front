@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Blink"
+    "name": "Fleetly"
   },
   "common": {
     "loading": "Loading...",
@@ -8,6 +8,10 @@
     "save": "Save",
     "cancel": "Cancel",
     "close": "Close",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "themeToggle": "Toggle theme",
+    "back": "Back",
     "avatar": "Avatar",
     "search": "Search",
     "refresh": "Refresh",
@@ -18,10 +22,12 @@
     "view": "View",
     "actions": "Actions",
     "logout": "Sign out",
+    "send": "Send",
     "passwordMismatch": "Passwords do not match."
   },
   "language": {
     "label": "Language",
+    "_lang": "en",
     "ca": "Catalan",
     "es": "Spanish",
     "en": "English"
@@ -31,7 +37,9 @@
     "dashboard": "Dashboard",
     "map": "Map",
     "tickets": "Tickets",
+    "chat": "Chat",
     "bookings": "Bookings",
+    "myReservations": "My Reservations",
     "reservationsAdmin": "Reservation log",
     "users": "Users",
     "vehicles": "Vehicles",
@@ -62,7 +70,7 @@
       "genericError": "Could not sign in. Please try again."
     },
     "register": {
-      "title": "Create your Blink account",
+      "title": "Create your Fleetly account",
       "cta": "Create account",
       "loading": "Loading...",
       "haveAccount": "Already have an account?",
@@ -136,7 +144,18 @@
     "saveChanges": "Save changes",
     "deleteAccount": "Delete account",
     "deleteAccountDesc": "No longer want to use our service? You can delete your account here. This action cannot be undone. All information related to this account will be permanently deleted.",
-    "deleteAccountCta": "Yes, delete my account"
+    "deleteAccountCta": "Yes, delete my account",
+    "language": "Language",
+    "languageDesc": "Select the application language.",
+    "logoutDesc": "Close your current session."
+  },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total vehicles",
+      "availableVehicles": "Available vehicles",
+      "maintenanceVehicles": "Under maintenance",
+      "inactiveVehicles": "Inactive"
+    }
   },
   "users": {
     "title": "User management",
@@ -245,7 +264,9 @@
       "gray": "Gray",
       "grey": "Grey",
       "silver": "Silver",
-      "green": "Green"
+      "green": "Green",
+      "yellow": "Yellow",
+      "groc": "Yellow"
     },
     "modal": {
       "deleteTitle": "Delete vehicle",
@@ -287,13 +308,18 @@
     "table": {
       "id": "ID",
       "logType": "Log type",
-      "userId": "User (ID)",
-      "vehicleId": "Vehicle (ID)",
+      "userId": "User",
+      "vehicleId": "Vehicle",
       "status": "Status",
       "startAt": "Start",
       "endAt": "End",
       "createdAt": "Created",
-      "actions": "Actions"
+      "timeRemaining": "Time remaining",
+      "renewal": "Renewal status",
+      "expired": "Expired",
+      "renew": "Renew",
+      "actions": "Actions",
+      "deleteReservation": "Delete reservation"
     },
     "form": {
       "userId": "User ID",
@@ -309,6 +335,7 @@
     },
     "status": {
       "pending": "Pending",
+      "in_progress": "In Progress",
       "active": "Confirmed",
       "completed": "Completed",
       "cancelled": "Cancelled",
@@ -349,11 +376,76 @@
       "invalidId": "Invalid reservation ID",
       "missingDates": "Provide start and end dates for the reservation.",
       "invalidDates": "The end date must be later than the start date.",
-      "create": "Failed to create the reservation. Please try again."
+      "create": "Failed to create the reservation. Please try again.",
+      "renewal": "Failed to request renewal. Please try again.",
+      "notAvailable": "This vehicle is not available for the selected period.",
+      "availableFrom": "This vehicle will be available from {date}.",
+      "checkoutFailed": "Could not start payment. Please try again.",
+      "checkoutUnauthorized": "Your session has expired. Sign in again to continue.",
+      "checkoutConflict": "There is a reservation conflict. Check availability and try again.",
+      "checkoutServer": "Server could not start payment. Please try again in a few minutes.",
+      "invalidDateRange": "The end date must be after the start date.",
+      "checkAvailability": "Failed to check vehicle availability.",
+      "updateFailed": "Failed to update the reservation."
+    },
+    "completed": {
+      "title": "Reservation Completed",
+      "vehicleInfo": "Vehicle Information",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "notice": "Notice",
+      "extendReservation": "Extend Your Reservation",
+      "extendDescription": "You have {minutes} minutes remaining on this reservation. Would you like to extend it?",
+      "proceedToPayment": "Proceed to Payment",
+      "noRenewal": "This reservation is no longer available for extension."
+    },
+    "renewal": {
+      "title": "Renew Reservation",
+      "description": "Extend your {vehicleName} reservation",
+      "vehicle": "Vehicle",
+      "currentEnd": "Current End Time",
+      "timeRemaining": "Time Remaining",
+      "notice": "Notice",
+      "proceedInfo": "Click below to proceed with the renewal payment.",
+      "paymentInfo": "You will be redirected to our secure payment page.",
+      "proceed": "Proceed to Payment",
+      "minutesRemaining": "{count} minute | {count} minutes",
+      "hoursMinutesRemaining": "{hours}h {minutes}m remaining"
+    },
+    "myReservations": {
+      "title": "My Reservations",
+      "description": "View, edit, and manage your vehicle reservations",
+      "empty": "No reservations yet",
+      "emptyDesc": "You don't have any reservations. Book a vehicle to get started.",
+      "bookNow": "Book Now",
+      "vehicle": "Vehicle",
+      "licensePlate": "License Plate",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "pickupLocation": "Pickup Location",
+      "dropoffLocation": "Dropoff Location",
+      "status": "Status",
+      "notice": "Notice",
+      "vehicleDetails": "Vehicle Details",
+      "editReservation": "Edit Reservation",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "extend": "Extend",
+      "expandReservation": "Extend Reservation",
+      "startDateLocked": "Start date cannot be modified",
+      "vehicleColumn": "Vehicle",
+      "viewVehicleDetails": "View vehicle details",
+      "confirmCancel": "Are you sure you want to cancel this reservation?",
+      "confirmDeleteTitle": "Delete Reservation",
+      "confirmDeleteMessage": "Are you sure you want to delete the reservation for {vehicle}? This action cannot be undone.",
+      "checkingAvailability": "Checking availability...",
+      "reservationUpdated": "Reservation updated successfully"
     },
     "filters": {
       "title": "Filters",
       "reset": "Reset",
+      "show": "Show filters",
+      "hide": "Hide filters",
       "searchLabel": "Search",
       "searchPlaceholder": "License plate, brand or model",
       "statusLabel": "Status",
@@ -368,8 +460,18 @@
     },
     "buttons": {
       "reserveButton": "Reserve",
+      "preReserveButton": "Pre-book",
+      "expandButton": "Expand",
       "cancelButton": "Cancel reservation",
       "confirmButton": "Confirm reservation"
+    },
+    "preReservation": {
+      "busySlots": "Already reserved time slots"
+    }
+    ,
+    "view": {
+      "large": "Large view",
+      "compact": "Compact view"
     }
   },
   "table": {
@@ -396,6 +498,7 @@
       "descripcion": "Description",
       "precio": "Price",
       "estado": "Status",
+      "priority": "Priority",
       "usuario": "User",
       "fechaUsuario": "Date",
       "fechaCompra": "Purchase date",
@@ -425,16 +528,18 @@
       "prioritySelect": "Select priority",
       "priorityLow": "Low",
       "priorityMedium": "Medium",
-      "priorityHigh": "High",
-      "priorityUrgent": "Urgent"
+      "priorityHigh": "High"
     },
     "estados": {
       "pendiente": "Pending",
       "pending": "Pending",
       "open": "Open",
+      "obert": "Open",
       "in_progress": "In Progress",
+      "en_progres": "In Progress",
       "resolved": "Resolved",
       "closed": "Closed",
+      "finalitzat": "Completed",
       "confirmado": "Confirmed",
       "confirmed": "Confirmed",
       "cancelado": "Cancelled",
@@ -474,6 +579,9 @@
     "title": "Ticket Management",
     "description": "Manage all system tickets",
     "searchPlaceholder": "Search by subject, description or user...",
+    "filters": {
+      "all": "All"
+    },
     "actions": {
       "editTicket": "Edit ticket",
       "reply": "Reply"
@@ -490,6 +598,10 @@
       "messagePlaceholder": "Write your reply...",
       "replyAs": "Reply as",
       "send": "Send"
+    },
+    "permissions": {
+      "statusEditableByAdmin": "Only administrators can modify the status.",
+      "priorityVisibleByAdmin": "Priority is visible and editable only for administrators."
     },
     "toast": {
       "updated": "Ticket updated successfully",
@@ -599,6 +711,10 @@
   "mapa": {
     "title": "Geofencing Map",
     "userTitle": "Map",
+    "openReservationPanel": "Reserve now!",
+    "closeReservationPanel": "Close reservation panel",
+    "reservationPanelTitle": "Car reservations",
+    "reservationIframeTitle": "Reservation panel",
     "geofences": "Geofences",
     "createZone": "New Zone",
     "editZone": "Edit Zone",
@@ -674,6 +790,7 @@
     "edit": "Edit"
   },
   "errors": {
+    "error": "Error",
     "unexpected": "An unexpected error occurred.",
     "invalidLoginResponse": "Invalid login response: missing token.",
     "requestFailed": "Request failed",
@@ -750,7 +867,7 @@
       "name": "Name",
       "namePlaceholder": "Company name",
       "domain": "Domain",
-      "domainPlaceholder": "e.g. company.blink.com",
+      "domainPlaceholder": "e.g. company.Fleetly.com",
       "email": "Contact email",
       "emailPlaceholder": "contact{'@'}company.com",
       "admin_email": "Admin Email",
@@ -791,5 +908,25 @@
       "save": "Failed to save company",
       "delete": "Failed to delete company"
     }
+  },
+  "chatbot": {
+    "title": "SIMS Assistant",
+    "openChat": "Open support chat",
+    "greeting": "Hello {name}, how can I help you?",
+    "defaultGreeting": "User",
+    "typing": "⏳ Writing...",
+    "footer": "Powered by AI • {context}",
+    "contextMap": "Exploring vehicles",
+    "contextReservations": "Your reservations",
+    "contextTickets": "Your support tickets",
+    "contextDefault": "In SIMS",
+    "placeholderMap": "Is this vehicle good for me?",
+    "placeholderReservations": "How do I modify my reservation?",
+    "placeholderTickets": "Need help with your ticket?",
+    "placeholderDefault": "Do you have any questions?",
+    "welcomeMessage": "I'm your SIMS assistant. Tell me what you need help with and I'll do my best to assist you.",
+    "errorProcessing": "Error processing your question",
+    "errorServer": "Server error. Try again.",
+    "errorConnection": "Connection error. Try later."
   }
 }

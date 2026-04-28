@@ -5,7 +5,7 @@
       <div class="mb-8">
         <div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
           <div>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm text-muted">
               {{ $t('adminTickets.description') }}
             </p>
           </div>
@@ -13,7 +13,7 @@
       </div>
 
       <!-- Búsqueda y filtros -->
-      <div class="mb-6 bg-white p-4 rounded-lg shadow">
+      <div class="mb-6 bg-surface p-4 rounded-lg shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
             <BaseInput v-model="searchQuery" type="text" :placeholder="$t('adminTickets.searchPlaceholder')"
@@ -37,11 +37,11 @@
           <div v-if="showChatModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeChatModal" />
+              <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeChatModal" />
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <TicketChat v-if="chattingTicket" :ticket="chattingTicket" :loading="submitting" @send="handleSendMessage"
                     @close="closeChatModal" />
                 </div>
@@ -61,45 +61,77 @@
           <div v-if="showViewModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
             role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeViewModal" />
+              <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeViewModal" />
               <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
               <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                class="inline-block align-bottom bg-surface rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-surface px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <h3 class="text-lg leading-6 font-medium text-main mb-4">
                     {{ $t('adminTickets.modal.detailsTitle') }}
                   </h3>
                   <div v-if="viewingTicket" class="space-y-4">
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.usuario') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingTicket.usuario_nombre }}</p>
-                      <p class="text-sm text-gray-500">{{ viewingTicket.usuario_email }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.usuario') }}</p>
+                      <p class="text-base text-main">{{ viewingTicket.usuario_nombre }}</p>
+                      <p class="text-sm text-muted">{{ viewingTicket.usuario_email }}</p>
                     </div>
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.asunto') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingTicket.asunto }}</p>
-                    </div>
-
-                    <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.descripcion') }}</p>
-                      <p class="text-base text-gray-900">{{ viewingTicket.descripcion }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.asunto') }}</p>
+                      <p class="text-base text-main">{{ viewingTicket.asunto }}</p>
                     </div>
 
                     <div class="border-b pb-4">
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.estado') }}</p>
-                      <span class="inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full" :class="getEstadoClass(viewingTicket.estado)">
-                        {{ viewingTicket.estado ? t(`tickets.estados.${viewingTicket.estado}`) : t('tickets.estados.pendiente') }}
-                      </span>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.descripcion') }}</p>
+                      <p class="text-base text-main">{{ viewingTicket.descripcion }}</p>
+                    </div>
+
+                    <div class="border-b pb-4">
+                      <p class="text-sm font-medium text-muted mb-2">{{ $t('tickets.table.estado') }}</p>
+                      <select
+                        v-model="editingEstado"
+                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-primary"
+                      >
+                        <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+                          {{ option.label }}
+                        </option>
+                      </select>
+                      <p class="text-xs text-muted mt-2">
+                        {{ $t('adminTickets.permissions.statusEditableByAdmin') }}
+                      </p>
+                    </div>
+
+                    <div class="border-b pb-4">
+                      <p class="text-sm font-medium text-muted mb-2">{{ $t('tickets.table.priority') }}</p>
+                      <select
+                        v-model="editingPriority"
+                        class="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-primary"
+                      >
+                        <option v-for="option in priorityOptions" :key="option.value" :value="option.value">
+                          {{ option.label }}
+                        </option>
+                      </select>
+                      <p class="text-xs text-muted mt-2">
+                        {{ $t('adminTickets.permissions.priorityVisibleByAdmin') }}
+                      </p>
                     </div>
 
                     <div>
-                      <p class="text-sm font-medium text-gray-500">{{ $t('tickets.table.createdAt') }}</p>
-                      <p class="text-base text-gray-900">{{ formatDate(viewingTicket.created_at) }}</p>
+                      <p class="text-sm font-medium text-muted">{{ $t('tickets.table.createdAt') }}</p>
+                      <p class="text-base text-main">{{ formatDate(viewingTicket.created_at) }}</p>
                     </div>
                   </div>
                   <div class="flex justify-end space-x-3 pt-6 border-t mt-6">
                     <BaseButton type="button" variant="secondary" @click="closeViewModal">
                       {{ $t('common.close') }}
+                    </BaseButton>
+                    <BaseButton
+                      type="button"
+                      variant="primary"
+                      :loading="updatingMetadata"
+                      :disabled="!hasMetadataChanges"
+                      @click="handleUpdateMetadata"
+                    >
+                      {{ $t('common.save') }}
                     </BaseButton>
                     <BaseButton type="button" variant="primary" @click="switchToChat">
                       {{ $t('adminTickets.actions.reply') }}
@@ -116,7 +148,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AdminTicketTable from '@/modules/tickets/components/AdminTicketTable.vue';
@@ -126,12 +158,13 @@ import type { AdminTicket } from '@/modules/tickets/types/adminTicket.types';
 import { useToast } from '@/shared/composables/useToast';
 import { useI18n } from 'vue-i18n';
 import { useTranslateError } from '@/shared/composables/useTranslateError';
-import { getEstadoClass } from '@/modules/tickets/utils/ticketHelpers';
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
 import { useDebouncedSearch } from '@/shared/composables/useDebouncedSearch';
+import { useRouter } from 'vue-router';
 
 const toast = useToast();
 const { t } = useI18n();
+const router = useRouter();
 const { translateErrorMessage } = useTranslateError();
 const { formatDate } = useDateFormatter();
 const { run: runDebouncedSearch } = useDebouncedSearch(300);
@@ -140,6 +173,7 @@ const tickets = ref<AdminTicket[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
 const deleting = ref(false);
+const updatingMetadata = ref(false);
 const searchQuery = ref('');
 
 const showChatModal = ref(false);
@@ -148,6 +182,30 @@ const showDeleteModal = ref(false);
 const viewingTicket = ref<AdminTicket | null>(null);
 const chattingTicket = ref<AdminTicket | null>(null);
 const ticketToDelete = ref<AdminTicket | null>(null);
+const editingEstado = ref('open');
+const editingPriority = ref('medium');
+
+type SelectOption = { value: string; label: string };
+
+const statusOptions = computed<SelectOption[]>(() => [
+  { value: 'open', label: t('tickets.estados.open') },
+  { value: 'in_progress', label: t('tickets.estados.in_progress') },
+  { value: 'finalitzat', label: t('tickets.estados.finalitzat') },
+]);
+
+const priorityOptions = computed<SelectOption[]>(() => [
+  { value: 'high', label: t('tickets.form.priorityHigh') },
+  { value: 'medium', label: t('tickets.form.priorityMedium') },
+  { value: 'low', label: t('tickets.form.priorityLow') },
+]);
+
+const hasMetadataChanges = computed(() => {
+  if (!viewingTicket.value) return false;
+  return (
+    normalizeStatusValue(viewingTicket.value.estado) !== editingEstado.value ||
+    normalizePriorityValue(viewingTicket.value.priority) !== editingPriority.value
+  );
+});
 
 const loadTickets = async () => {
   loading.value = true;
@@ -198,12 +256,68 @@ const handleRefresh = async () => {
 
 const openViewModal = (ticket: AdminTicket) => {
   viewingTicket.value = ticket;
+  editingEstado.value = normalizeStatusValue(ticket.estado);
+  editingPriority.value = normalizePriorityValue(ticket.priority);
   showViewModal.value = true;
 };
 
 const closeViewModal = () => {
   showViewModal.value = false;
   viewingTicket.value = null;
+  editingEstado.value = 'open';
+  editingPriority.value = 'medium';
+};
+
+function normalizeStatusValue(value: string | undefined): string {
+  const normalized = String(value ?? '').toLowerCase();
+  if (normalized === 'obert') return 'open';
+  if (normalized === 'en_progres') return 'in_progress';
+  if (normalized === 'finalitzat') return 'finalitzat';
+  if (normalized === 'closed') return 'finalitzat';
+  if (normalized === 'in_progress') return 'in_progress';
+  return 'open';
+}
+
+function normalizePriorityValue(value: string | undefined): string {
+  const normalized = String(value ?? '').toLowerCase();
+  if (normalized === 'alta' || normalized === 'high') return 'high';
+  if (normalized === 'mitjana' || normalized === 'media' || normalized === 'medium') return 'medium';
+  if (normalized === 'baixa' || normalized === 'baja' || normalized === 'low') return 'low';
+  return 'medium';
+}
+
+const handleUpdateMetadata = async () => {
+  if (!viewingTicket.value) return;
+
+  updatingMetadata.value = true;
+  try {
+    const id = (viewingTicket.value.id ?? viewingTicket.value.ticket_id) as number | undefined;
+    if (!id) throw { message: 'tickets.errors.invalidId' };
+
+    const updated = await adminTicketService.updateTicket(id, {
+      estado: editingEstado.value,
+      priority: editingPriority.value,
+    });
+
+    viewingTicket.value = updated;
+
+    if (chattingTicket.value && (chattingTicket.value.id ?? chattingTicket.value.ticket_id) === id) {
+      chattingTicket.value = updated;
+    }
+
+    tickets.value = tickets.value.map((ticket) =>
+      (ticket.id ?? ticket.ticket_id) === id ? { ...ticket, ...updated } : ticket,
+    );
+
+    toast.success(t('adminTickets.toast.updated'));
+    closeViewModal();
+    await router.push({ name: 'AdminTickets' });
+
+  } catch (error: any) {
+    toast.error(translateErrorMessage(error?.message, t('tickets.errors.save')));
+  } finally {
+    updatingMetadata.value = false;
+  }
 };
 
 const switchToChat = () => {

@@ -25,14 +25,6 @@ export function validateTicketForm(
   if (!formData.type || typeof formData.type !== 'string' || formData.type.trim().length === 0) {
     errors.type = 'validation.ticket.typeRequired';
   }
-
-  if (formData.priority) {
-    if (typeof formData.priority !== 'string' || formData.priority.trim().length === 0) {
-      errors.priority = 'validation.ticket.priorityInvalid';
-    } else if (formData.priority.length > 20) {
-      errors.priority = 'validation.ticket.priorityMax';
-    }
-  }
   
   return errors;
 }

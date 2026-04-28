@@ -48,10 +48,10 @@ const handleLogin = async () => {
             <AuthLogo />
 
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                <h1 class="text-3xl font-bold mb-2 color-text-inverse">
                     Superadmin
                 </h1>
-                <p class="text-gray-600">{{ $t('superadmin.description') }}</p>
+                <p>{{ $t('superadmin.description') }}</p>
             </div>
 
             <form @submit.prevent="handleLogin" class="space-y-5">

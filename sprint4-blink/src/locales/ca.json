@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Blink"
+    "name": "Fleetly"
   },
   "common": {
     "loading": "Carregant...",
@@ -8,6 +8,10 @@
     "save": "Guardar",
     "cancel": "Cancel·lar",
     "close": "Tancar",
+    "lightMode": "Mode Clar",
+    "darkMode": "Mode Fosc",
+    "themeToggle": "Canviar aparença",
+    "back": "Enrere",
     "avatar": "Avatar",
     "search": "Buscar",
     "refresh": "Actualitzar",
@@ -18,10 +22,12 @@
     "view": "Veure",
     "actions": "Accions",
     "logout": "Tancar sessió",
+    "send": "Enviar",
     "passwordMismatch": "Les contrasenyes no coincideixen."
   },
   "language": {
     "label": "Idioma",
+    "_lang": "ca",
     "ca": "Català",
     "es": "Espanyol",
     "en": "Anglés"
@@ -30,8 +36,8 @@
     "menu": "Menú",
     "dashboard": "Tauler",
     "map": "Mapa",
-    "tickets": "Tickets",
-    "bookings": "Reserves",
+    "tickets": "Tickets",    "chat": "Xat",    "bookings": "Reserves",
+    "myReservations": "Les Meves Reserves",
     "reservationsAdmin": "Log de reserves",
     "users": "Usuaris",
     "vehicles": "Vehicles",
@@ -63,7 +69,7 @@
       "genericError": "Error en iniciar sessió. Torna-ho a intentar."
     },
     "register": {
-      "title": "Crea el teu compte a Blink",
+      "title": "Crea el teu compte a Fleetly",
       "cta": "Crear compte",
       "loading": "Carregant...",
       "haveAccount": "Ja tens compte?",
@@ -137,7 +143,18 @@
     "saveChanges": "Guardar canvis",
     "deleteAccount": "Eliminar compte",
     "deleteAccountDesc": "Ja no vols utilitzar el nostre servei? Pots eliminar el teu compte ací. Aquesta acció no és reversible. Tota la informació relacionada amb aquest compte s’eliminarà permanentment.",
-    "deleteAccountCta": "Sí, eliminar el meu compte"
+    "deleteAccountCta": "Sí, eliminar el meu compte",
+    "language": "Idioma",
+    "languageDesc": "Selecciona l'idioma de l'aplicació.",
+    "logoutDesc": "Tanca la teua sessió actual."
+  },
+  "admin": {
+    "stats": {
+      "totalVehicles": "Total de vehicles",
+      "availableVehicles": "Vehicles disponibles",
+      "maintenanceVehicles": "En manteniment",
+      "inactiveVehicles": "Inactius"
+    }
   },
   "users": {
     "title": "Gestió d’usuaris",
@@ -245,7 +262,9 @@
       "gray": "Gris",
       "grey": "Gris",
       "silver": "Plata",
-      "green": "Verd"
+      "green": "Verd",
+      "yellow": "Groc",
+      "groc": "Groc"
     },
     "modal": {
       "deleteTitle": "Eliminar vehicle",
@@ -287,13 +306,18 @@
     "table": {
       "id": "ID",
       "logType": "Tipus de log",
-      "userId": "Usuari (ID)",
-      "vehicleId": "Vehicle (ID)",
+      "userId": "Usuari",
+      "vehicleId": "Vehicle",
       "status": "Estat",
       "startAt": "Inici",
       "endAt": "Fi",
       "createdAt": "Creat",
-      "actions": "Accions"
+      "timeRemaining": "Temps restant",
+      "renewal": "Estat de renovació",
+      "expired": "Vençut",
+      "renew": "Renovar",
+      "actions": "Accions",
+      "deleteReservation": "Eliminar reserva"
     },
     "form": {
       "userId": "ID d’usuari",
@@ -308,8 +332,7 @@
       "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
     },
     "status": {
-      "pending": "Pendent",
-      "active": "Confirmada",
+      "pending": "Pendent",      "in_progress": "En curs",      "active": "Confirmada",
       "completed": "Completada",
       "cancelled": "Cancel·lada",
       "available": "Disponible",
@@ -349,11 +372,76 @@
       "invalidId": "ID de reserva invàlid",
       "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
       "create": "Error en crear la reserva. Torna-ho a intentar.",
-      "invalidDates": "La data de fi ha de ser posterior a la d'inici."
+      "invalidDates": "La data de fi ha de ser posterior a la d'inici.",
+      "renewal": "Error al sol·licitar la renovació. Torna-ho a intentar.",
+      "notAvailable": "Aquest vehicle no està disponible per al període seleccionat.",
+      "availableFrom": "Aquest vehicle estarà disponible des de {date}.",
+      "checkoutFailed": "No s'ha pogut iniciar el pagament. Torna-ho a provar.",
+      "checkoutUnauthorized": "La teva sessió ha caducat. Inicia sessió de nou per continuar.",
+      "checkoutConflict": "Hi ha un conflicte amb aquesta reserva. Revisa disponibilitat i torna-ho a provar.",
+      "checkoutServer": "El servidor no ha pogut iniciar el pagament. Torna-ho a provar d'aquí uns minuts.",
+      "invalidDateRange": "La data de fi ha de ser posterior a la data d'inici.",
+      "checkAvailability": "No s'ha pogut verificar la disponibilitat del vehicle.",
+      "updateFailed": "No s'ha pogut actualitzar la reserva."
+    },
+    "completed": {
+      "title": "Reserva Completada",
+      "vehicleInfo": "Informació del Vehicle",
+      "startDate": "Data d'Inici",
+      "endDate": "Data de Fi",
+      "notice": "Avís",
+      "extendReservation": "Ampliar la teva Reserva",
+      "extendDescription": "Et resten {minutes} minuts en aquesta reserva. Vols ampliar-la?",
+      "proceedToPayment": "Procedir al Pagament",
+      "noRenewal": "Aquesta reserva ja no està disponible per a ampliació."
+    },
+    "renewal": {
+      "title": "Renovar Reserva",
+      "description": "Ampliar la teva reserva de {vehicleName}",
+      "vehicle": "Vehicle",
+      "currentEnd": "Hora de Finalització Actual",
+      "timeRemaining": "Temps Restant",
+      "notice": "Avís",
+      "proceedInfo": "Fes clic a sota per procedir amb el pagament de la renovació.",
+      "paymentInfo": "Serà redirigit a la nostra pàgina de pagament segura.",
+      "proceed": "Procedir al Pagament",
+      "minutesRemaining": "{count} minut | {count} minuts",
+      "hoursMinutesRemaining": "{hours}h {minutes}m restants"
+    },
+    "myReservations": {
+      "title": "Les Meves Reserves",
+      "description": "Visualitza, edita i gestiona les teves reserves de vehicles",
+      "empty": "Cap reserva sense fer",
+      "emptyDesc": "No tens cap reserva. Reserva un vehicle per començar.",
+      "bookNow": "Reservar Ara",
+      "vehicle": "Vehicle",
+      "licensePlate": "Matrícula",
+      "startDate": "Data d'Inici",
+      "endDate": "Data de Finalització",
+      "pickupLocation": "Ubicació de Recollida",
+      "dropoffLocation": "Ubicació de Devolució",
+      "status": "Estat",
+      "notice": "Avís",
+      "vehicleDetails": "Detalls del Vehicle",
+      "editReservation": "Editar Reserva",
+      "edit": "Editar",
+      "cancel": "Cancel·lar",
+      "extend": "Ampliar",
+      "expandReservation": "Ampliar Reserva",
+      "startDateLocked": "La data d'inici no pot ser modificada",
+      "vehicleColumn": "Vehicle",
+      "viewVehicleDetails": "Veure detalls del vehicle",
+      "confirmCancel": "Estàs segur que vols cancel·lar aquesta reserva?",
+      "confirmDeleteTitle": "Eliminar Reserva",
+      "confirmDeleteMessage": "Estàs segur que vols eliminar la reserva de {vehicle}? Aquesta acció no es pot desfer.",
+      "checkingAvailability": "Comprovant disponibilitat...",
+      "reservationUpdated": "Reserva actualitzada correctament"
     },
     "filters": {
       "title": "Filtres",
       "reset": "Restablir",
+      "show": "Veure filtres",
+      "hide": "Ocultar filtres",
       "searchLabel": "Buscar",
       "searchPlaceholder": "Matrícula, marca o model",
       "statusLabel": "Estat",
@@ -368,8 +456,18 @@
     },
     "buttons": {
       "reserveButton": "Reservar",
+      "preReserveButton": "Prereservar",
+      "expandButton": "Ampliar",
       "cancelButton": "Cancelar reserva",
       "confirmButton": "Confirmar reserva"
+    },
+    "preReservation": {
+      "busySlots": "Franja(es) ja reservada(es)"
+    }
+    ,
+    "view": {
+      "large": "Vista ampliada",
+      "compact": "Vista compacta"
     }
   },
   "table": {
@@ -396,6 +494,7 @@
       "descripcion": "Descripció",
       "precio": "Preu",
       "estado": "Estat",
+      "priority": "Prioritat",
       "usuario": "Usuari",
       "fechaUsuario": "Data",
       "fechaCompra": "Data de compra",
@@ -425,16 +524,18 @@
       "prioritySelect": "Selecciona prioritat",
       "priorityLow": "Baixa",
       "priorityMedium": "Mitjana",
-      "priorityHigh": "Alta",
-      "priorityUrgent": "Urgent"
+      "priorityHigh": "Alta"
     },
     "estados": {
       "pendiente": "Pendent",
       "pending": "Pendent",
       "open": "Obert",
+      "obert": "Obert",
       "in_progress": "En progrés",
+      "en_progres": "En progrés",
       "resolved": "Resolt",
       "closed": "Tancat",
+      "finalitzat": "Finalitzat",
       "confirmado": "Confirmat",
       "confirmed": "Confirmat",
       "cancelado": "Cancel·lat",
@@ -474,6 +575,9 @@
     "title": "Gestió de Tickets",
     "description": "Administra tots els tickets del sistema",
     "searchPlaceholder": "Cercar per assumpte, descripció o usuari...",
+    "filters": {
+      "all": "Tots"
+    },
     "actions": {
       "editTicket": "Editar ticket",
       "reply": "Respondre"
@@ -490,6 +594,10 @@
       "messagePlaceholder": "Escriu la teva resposta...",
       "replyAs": "Respondre com",
       "send": "Enviar"
+    },
+    "permissions": {
+      "statusEditableByAdmin": "Només els administradors poden modificar l'estat.",
+      "priorityVisibleByAdmin": "La prioritat només és visible i editable per administradors."
     },
     "toast": {
       "updated": "Ticket actualitzat correctament",
@@ -598,6 +706,10 @@
   },  "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
+    "openReservationPanel": "Reserva ara!",
+    "closeReservationPanel": "Tancar panell de reserves",
+    "reservationPanelTitle": "Reserves de cotxes",
+    "reservationIframeTitle": "Panell de reserves",
     "geofences": "Geofences",
     "createZone": "Nova Zona",
     "editZone": "Editar Zona",
@@ -671,8 +783,7 @@
   },
   "actions": {
     "edit": "Editar"
-  },  "errors": {
-    "unexpected": "S’ha produït un error inesperat.",
+  },  "errors": {    "error": "Error",    "unexpected": "S’ha produït un error inesperat.",
     "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
     "requestFailed": "Error en la petició",
     "serverConnection": "Error de connexió amb el servidor",
@@ -748,7 +859,7 @@
       "name": "Nom",
       "namePlaceholder": "Nom de la companyia",
       "domain": "Domini",
-      "domainPlaceholder": "ex: empresa.blink.com",
+      "domainPlaceholder": "ex: empresa.Fleetly.com",
       "email": "Email de contacte",
       "emailPlaceholder": "contacte{'@'}empresa.com",
       "admin_email": "Email de l'Administrador",
@@ -789,5 +900,25 @@
       "save": "Error en guardar la companyia",
       "delete": "Error en eliminar la companyia"
     }
+  },
+  "chatbot": {
+    "title": "Assistent SIMS",
+    "openChat": "Obrir xat d'assistència",
+    "greeting": "Hola {name}, ¿com puc ajudar-te?",
+    "defaultGreeting": "Usuari",
+    "typing": "⏳ Escrivint...",
+    "footer": "Impulsat per IA • {context}",
+    "contextMap": "Explorant vehícles",
+    "contextReservations": "Les teves reserves",
+    "contextTickets": "Els teus tickets de suport",
+    "contextDefault": "A SIMS",
+    "placeholderMap": "¿És aquest vehícle bo per a mi?",
+    "placeholderReservations": "¿Com modifico la meva reserva?",
+    "placeholderTickets": "¿Necessites ajuda amb el teu ticket?",
+    "placeholderDefault": "¿Tens alguna pregunta?",
+    "welcomeMessage": "Sóc el teu assistent de SIMS. Explica'm amb què necessites ajuda i faré el meu millor esforç per assistir-te.",
+    "errorProcessing": "Error en processar la teva pregunta",
+    "errorServer": "Error del servidor. Intenta novament.",
+    "errorConnection": "Error de connexió. Intenta més tard."
   }
 }

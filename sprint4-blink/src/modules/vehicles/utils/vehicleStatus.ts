@@ -35,5 +35,5 @@ export function getVehicleStatusClass(status: unknown): string {
     maintenance: 'bg-yellow-100 text-yellow-800',
     inactive: 'bg-red-100 text-red-800',
   };
-  return classes[key] || 'bg-gray-100 text-gray-800';
+  return classes[key] || 'bg-surface-muted text-main';
 }

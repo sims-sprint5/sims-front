@@ -106,12 +106,12 @@ const getFieldError = (field: string): string => {
 
             <!-- Header -->
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                <h1 class="text-3xl mb-2">
                     {{ $t('auth.login.header', { app: $t('app.name') }) }}
                 </h1>
-                <p v-if="!isCentralLogin" class="text-gray-600">
+                <p v-if="!isCentralLogin">
                     {{ $t('auth.login.noAccount') }}
-                    <router-link to="/register" class="text-green-600 hover:text-green-700 font-medium">
+                    <router-link to="/register" class="font-medium">
                         {{ $t('auth.login.goRegister') }}
                     </router-link>
                 </p>
@@ -128,7 +128,7 @@ const getFieldError = (field: string): string => {
                     @toggle-password="togglePasswordVisibility" />
 
                 <div class="flex items-center justify-end">
-                    <a href="#" class="text-sm text-green-600 hover:text-green-700 font-medium">
+                    <a href="#" class="text-sm font-medium">
                         {{ $t('auth.login.forgotPassword') }}
                     </a>
                 </div>

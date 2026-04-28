@@ -16,9 +16,6 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
-import markerIcon from 'leaflet/dist/images/marker-icon.png'
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
-import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import type { Geofence } from '../types/geofence.types'
 import type { Vehicle as Car } from '@/modules/vehicles/types/vehicle.types'
 import VehicleDetailsModal from './VehicleDetailsModal.vue'
@@ -57,36 +54,18 @@ const logMapWarning = (message: string, details?: unknown) => {
   }
 }
 
-const defaultMarkerIcon = L.icon({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+const vehicleIcon = L.divIcon({
+  html: '<i class="fas fa-car" style="color: #000000; font-size: 24px;"></i>',
+  iconSize: [30, 30],
+  iconAnchor: [15, 15],
+  popupAnchor: [0, -15],
+  className: 'vehicle-marker'
 })
 
 const createPopupRow = (label: string, value: string) => {
   const row = document.createElement('div')
   row.textContent = `${label}: ${value}`
   return row
-}
-
-const createGeofencePopup = (geofence: Geofence) => {
-  const container = document.createElement('div')
-  container.className = 'p-2'
-
-  const title = document.createElement('b')
-  title.textContent = geofence.name
-  container.appendChild(title)
-  container.appendChild(document.createElement('br'))
-
-  container.appendChild(createPopupRow('Type', String(geofence.type)))
-  container.appendChild(createPopupRow('Radius', `${geofence.radius}m`))
-  container.appendChild(createPopupRow('Status', String(geofence.status)))
-
-  return container
 }
 
 const initMap = () => {
@@ -228,8 +207,6 @@ const renderGeofences = () => {
       }
     )
 
-    circle.bindPopup(createGeofencePopup(geofence))
-
     // Click event to select geofence
     circle.on('click', () => {
       emit('geofence-click', geofence)
@@ -260,10 +237,26 @@ const renderVehicles = () => {
       const marker = L.marker(
         [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
         {
-          title: vehicle.license_plate,
-          icon: defaultMarkerIcon
+          title: String(vehicle.brand ?? '').trim() || 'Vehiculo',
+          icon: vehicleIcon
         }
       )
+
+      const vehicleBrandTooltip = String(vehicle.brand ?? '').trim() || 'Vehiculo'
+      marker.bindTooltip(vehicleBrandTooltip, {
+        direction: 'top',
+        offset: [0, -12],
+        opacity: 0.95,
+        sticky: true,
+      })
+
+      marker.on('mouseover', () => {
+        marker.openTooltip()
+      })
+
+      marker.on('mouseout', () => {
+        marker.closeTooltip()
+      })
 
       marker.on('click', () => {
         selectedCar.value = vehicle
@@ -272,6 +265,19 @@ const renderVehicles = () => {
 
       marker.addTo(map!)
       vehicleMarkersMap.set(vehicleId, marker)
+      
+      // Ensure hover works reliably by attaching listeners to the marker DOM element
+      const el = (marker as any).getElement && (marker as any).getElement()
+      if (el) {
+        el.style.pointerEvents = 'auto'
+        el.style.cursor = 'pointer'
+        el.addEventListener('mouseenter', () => {
+          marker.openTooltip()
+        })
+        el.addEventListener('mouseleave', () => {
+          marker.closeTooltip()
+        })
+      }
     }
   })
 }
@@ -328,5 +334,12 @@ defineExpose({
 <style scoped>
 :deep(.leaflet-container) {
   font-family: inherit;
+}
+:deep(.vehicle-marker) {
+  pointer-events: auto;
+  cursor: pointer;
+}
+:deep(.leaflet-tooltip) {
+  z-index: 9999;
 }
 </style>

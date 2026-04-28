@@ -8,14 +8,14 @@
         aria-modal="true"
         @click.self="emit('close')"
       >
-        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-          <div class="p-6 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+        <div class="bg-surface rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+          <div class="p-6 border-b border-default flex items-center justify-between sticky top-0 bg-surface">
             <h2 class="text-lg font-semibold">
             {{ $t('vehicles.modal.detailsTitle') }}
             </h2>
             <button
               type="button"
-              class="text-gray-400 hover:text-gray-600"
+              class="text-muted hover:text-muted"
               aria-label="Cerrar"
               @click="emit('close')"
             >
@@ -26,29 +26,26 @@
           <div class="p-6" v-if="car">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.brandLabel') }}</p>
-                <p class="font-semibold">{{ car.brand || '—' }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.brandLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ car.brand || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.modelLabel') }}</p>
-                <p class="font-semibold">{{ car.model || '—' }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.modelLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ car.model || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.matrixLabel') }}</p>
-                <p class="font-semibold">{{ car.license_plate || '—' }}</p>
-              </div>
-                          <div>
-                            <p class="text-sm text-gray-600">{{ $t('reservations.filters.statusLabel') }}</p>
-                            <p class="font-semibold">{{ statusLabel(car.status) }}</p>
-                          </div>
-              <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.colorsLabel') }}</p>
-                            <p class="font-semibold">{{ colorLabel(car.color) }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.matrixLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ car.license_plate || '—' }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">{{ $t('reservations.filters.yearLabel') }}</p>
-                <p class="font-semibold">{{ car.year ?? '—' }}</p>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.statusLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ statusLabel(car.status) }}</p>
               </div>
+              <div>
+                <p class="text-xs font-semibold text-muted uppercase tracking-wide">{{ $t('reservations.filters.colorsLabel') }}</p>
+                <p class="text-base font-bold text-main mt-1">{{ colorLabel(car.color) }}</p>
+              </div>
+              <!-- Year removed as per UI request -->
             </div>
 
             <div class="mt-6 space-y-3">
@@ -58,17 +55,15 @@
                 :full-width="true"
                 @click="goToReservation(car)"
               >
-                {{ $t('reservations.buttons.reserveButton') }}
+                {{ canPreReserve(car)
+                    ? $t('reservations.buttons.preReserveButton')
+                  : isCarAvailable(car)
+                    ? $t('reservations.buttons.reserveButton')
+                    : statusLabel(car.status)
+                }}
               </BaseButton>
 
-              <BaseButton
-                size="md"
-                variant="secondary"
-                :full-width="true"
-                @click="emit('close')"
-              >
-                {{ $t('reservations.buttons.cancelButton') }}
-              </BaseButton>
+              
             </div>
           </div>
         </div>
@@ -80,7 +75,6 @@
 <script setup lang="ts">
 import { BaseButton } from '@/components/base'
 import type { Vehicle as Car } from '@/modules/vehicles/types/vehicle.types'
-import { useRouter } from 'vue-router'
 import { useToast } from '@/shared/composables/useToast'
 import { useI18n } from 'vue-i18n'
 
@@ -90,10 +84,19 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  close: []
+  (e: 'close'): void
+  (e: 'openReservation', payload: {
+    vehicleId: string
+    brand: string
+    model: string
+    licensePlate: string
+    status?: string
+    available?: string
+    startAt: string
+    endAt: string
+  }): void
 }>()
 
-const router = useRouter()
 const toast = useToast()
 const { t } = useI18n()
 
@@ -132,35 +135,156 @@ function toDateTimeLocalInput(value: Date): string {
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`
 }
 
-function isCarAvailable(car: Car): boolean {
-  if (car.available === true) return true
-  if (car.available === false) return false
-  const statusKey = String(car.status ?? '').trim().toLowerCase()
-  return statusKey === 'available' || statusKey === 'active'
+function getNextReservableMinute(): Date {
+  const now = new Date()
+  now.setSeconds(0, 0)
+  now.setMinutes(now.getMinutes() + 1)
+  return now
 }
 
-async function goToReservation(car: Car) {
-  if (!isCarAvailable(car)) {
+function parseReservationDate(value: unknown): Date | null {
+  if (typeof value !== 'string' || !value.trim()) return null
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+function isBlockingReservationState(status: unknown, calendarState: unknown): boolean {
+  const statusKey = String(status ?? '').trim().toLowerCase()
+  const calendarStateKey = String(calendarState ?? '').trim().toLowerCase()
+  const nonBlockingStates = new Set(['cancelled', 'canceled', 'completed', 'finished', 'expired'])
+
+  if (statusKey && nonBlockingStates.has(statusKey)) return false
+  if (calendarStateKey && nonBlockingStates.has(calendarStateKey)) return false
+  return true
+}
+
+function getCalendarSlots(car: Car): Array<{ start: Date; end: Date }> {
+  const rawSlots = Array.isArray(car.calendar_reservations) ? car.calendar_reservations : []
+  return rawSlots
+    .map((slot) => {
+      const start = parseReservationDate((slot as any)?.start_date ?? (slot as any)?.startDate)
+      const end = parseReservationDate((slot as any)?.end_date ?? (slot as any)?.endDate)
+      if (!start || !end) return null
+      return { start, end }
+    })
+    .filter((slot): slot is { start: Date; end: Date } => Boolean(slot))
+}
+
+function hasBlockingReservation(car: Car): boolean {
+  const now = new Date()
+
+  const rawSlots = Array.isArray(car.calendar_reservations) ? car.calendar_reservations : []
+  for (const rawSlot of rawSlots) {
+    const start = parseReservationDate((rawSlot as any)?.start_date ?? (rawSlot as any)?.startDate)
+    const end = parseReservationDate((rawSlot as any)?.end_date ?? (rawSlot as any)?.endDate)
+    if (!start || !end) continue
+    if (!isBlockingReservationState((rawSlot as any)?.status, (rawSlot as any)?.calendar_state)) continue
+    if (now < end) return true
+  }
+
+  const nextReservationStart = parseReservationDate(car.next_reservation?.start_date)
+  const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
+  const nextReservationStatus = (car.next_reservation as any)?.status
+  if (
+    nextReservationStart &&
+    nextReservationEnd &&
+    isBlockingReservationState(nextReservationStatus, null) &&
+    now < nextReservationEnd
+  ) {
+    return true
+  }
+
+  return false
+}
+
+function getEffectiveStatus(car: Car): string {
+  return isCarReservedNow(car) ? 'reserved' : String(car.status ?? '')
+}
+
+function isCarReservedNow(car: Car): boolean {
+  const now = new Date()
+  const slots = getCalendarSlots(car)
+
+  if (slots.some((slot) => slot.start <= now && now < slot.end)) return true
+
+  const nextReservationStart = parseReservationDate(car.next_reservation?.start_date)
+  const nextReservationEnd = parseReservationDate(car.next_reservation?.end_date)
+  if (nextReservationStart && nextReservationEnd && nextReservationStart <= now && now < nextReservationEnd) return true
+  return false
+}
+
+function canPreReserve(car: Car): boolean {
+  const statusKey = String(car.status ?? '').trim().toLowerCase()
+  if (['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  return hasBlockingReservation(car)
+}
+
+function getSuggestedStartForPreReservation(car: Car): string {
+  const now = new Date()
+  const candidates: Date[] = [getNextReservableMinute()]
+
+  const byNextAvailable = parseReservationDate(car.next_available_at)
+  if (byNextAvailable && byNextAvailable > now) {
+    candidates.push(byNextAvailable)
+  }
+
+  const slots = getCalendarSlots(car)
+  for (const slot of slots) {
+    if (slot.end > now) {
+      candidates.push(slot.end)
+    }
+  }
+
+  const first = candidates[0] ?? getNextReservableMinute()
+  const latest = candidates.reduce((max, d) => (d > max ? d : max), first)
+  return toDateTimeLocalInput(latest)
+}
+
+function isCarAvailable(car: Car): boolean {
+  const statusKey = String(car.status ?? '').trim().toLowerCase()
+  if (isCarReservedNow(car)) return false
+  if (['maintenance', 'inactive', 'out_of_service', 'rented'].includes(statusKey)) return false
+  if (statusKey === 'available' || statusKey === 'active') return true
+  if (car.available === false) return false
+  if (car.available === true) return true
+  return true
+}
+
+
+
+function goToReservation(car: Car) {
+  const canReserveNow = isCarAvailable(car)
+  const canPreReserveNow = canPreReserve(car)
+
+  if (!canReserveNow && !canPreReserveNow) {
     toast.error(t('vehicles.errors.notAvailable'))
     return
   }
 
   const vehicleId = Number(car.vehicle_id ?? car.id)
-  const startAt = toDateTimeLocalInput(new Date())
-  const end = new Date()
-  end.setDate(end.getDate() + 1)
+
+  let startAt = toDateTimeLocalInput(getNextReservableMinute())
+  if (canPreReserveNow) {
+    startAt = getSuggestedStartForPreReservation(car)
+  }
+
+  const end = new Date(startAt)
+  if (Number.isNaN(end.getTime())) {
+    end.setDate(end.getDate() + 1)
+  } else {
+    end.setDate(end.getDate() + 1)
+  }
   const endAt = toDateTimeLocalInput(end)
 
-  await router.push({
-    name: 'ReservationPage',
-    query: {
-      vehicleId: String(vehicleId),
-      brand: car.brand ?? '',
-      model: car.model ?? '',
-      licensePlate: car.license_plate ?? '',
-      startAt,
-      endAt,
-    },
+  emit('openReservation', {
+    vehicleId: String(vehicleId),
+    brand: car.brand ?? '',
+    model: car.model ?? '',
+    licensePlate: car.license_plate ?? '',
+    status: getEffectiveStatus(car),
+    available: String(canReserveNow),
+    startAt,
+    endAt,
   })
 
   emit('close')

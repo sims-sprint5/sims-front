@@ -2,12 +2,12 @@
   <AppLayout :title="$t('reservations.title')">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div class="mb-8">
-        <p class="mt-2 text-sm text-gray-600">
+        <p class="mt-2 text-sm text-muted">
           {{ $t('reservations.description') }}
         </p>
       </div>
 
-      <div class="mb-6 rounded-lg bg-white p-4 shadow">
+      <div class="mb-6 rounded-lg bg-surface p-4 shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
             <BaseInput
@@ -24,8 +24,21 @@
         </div>
       </div>
 
-      <ReservationLogTable :logs="logs" :loading="loading" />
+      <ReservationLogTable :logs="logs" :loading="loading" @delete-reservation="handleDeleteReservation" />
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <BaseModal
+      :show="showDeleteConfirm"
+      type="danger"
+      :title="$t('reservations.myReservations.confirmDeleteTitle')"
+      :message="$t('reservations.myReservations.confirmDeleteMessage', { vehicle: reservationToDelete?.vehicle_name })"
+      :confirm-text="$t('common.delete')"
+      :cancel-text="$t('common.cancel')"
+      :loading="isDeleting"
+      @confirm="confirmDelete"
+      @close="cancelDelete"
+    />
   </AppLayout>
 </template>
 
@@ -33,7 +46,7 @@
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { BaseButton, BaseInput } from '@/components/base';
+import { BaseButton, BaseInput, BaseModal } from '@/components/base';
 import AppLayout from '@/layouts/AppLayout.vue';
 import ReservationLogTable from '@/modules/reservations/components/ReservationLogTable.vue';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
@@ -48,6 +61,11 @@ const { run: runDebouncedSearch } = useDebouncedSearch(200);
 const logs = ref<ReservationLog[]>([]);
 const loading = ref(false);
 const searchQuery = ref('');
+
+// Delete confirmation modal state
+const showDeleteConfirm = ref(false);
+const reservationToDelete = ref<ReservationLog | null>(null);
+const isDeleting = ref(false);
 
 async function loadLogs() {
   loading.value = true;
@@ -78,6 +96,34 @@ function handleSearch() {
 function handleRefresh() {
   searchQuery.value = '';
   loadLogs();
+}
+
+function handleDeleteReservation(reservation: ReservationLog) {
+  reservationToDelete.value = reservation;
+  showDeleteConfirm.value = true;
+}
+
+function cancelDelete() {
+  showDeleteConfirm.value = false;
+  reservationToDelete.value = null;
+}
+
+async function confirmDelete() {
+  if (!reservationToDelete.value) return;
+
+  try {
+    isDeleting.value = true;
+    await reservationLogService.deleteReservation(reservationToDelete.value.id);
+    toast.success(t('reservations.toast.deleted'));
+    showDeleteConfirm.value = false;
+    reservationToDelete.value = null;
+    await loadLogs();
+  } catch (err: any) {
+    const errorMessage = err?.response?.data?.message || err?.message || t('reservations.errors.delete');
+    toast.error(errorMessage);
+  } finally {
+    isDeleting.value = false;
+  }
 }
 
 onMounted(() => {
