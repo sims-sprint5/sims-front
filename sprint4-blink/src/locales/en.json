@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Blink"
+    "name": "Fleetly"
   },
   "common": {
     "loading": "Loading...",
@@ -70,7 +70,7 @@
       "genericError": "Could not sign in. Please try again."
     },
     "register": {
-      "title": "Create your Blink account",
+      "title": "Create your Fleetly account",
       "cta": "Create account",
       "loading": "Loading...",
       "haveAccount": "Already have an account?",
@@ -867,7 +867,7 @@
       "name": "Name",
       "namePlaceholder": "Company name",
       "domain": "Domain",
-      "domainPlaceholder": "e.g. company.blink.com",
+      "domainPlaceholder": "e.g. company.Fleetly.com",
       "email": "Contact email",
       "emailPlaceholder": "contact{'@'}company.com",
       "admin_email": "Admin Email",

@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Blink"
+    "name": "Fleetly"
   },
   "common": {
     "loading": "Cargando...",
@@ -70,7 +70,7 @@
       "genericError": "Error al iniciar sesión. Por favor, inténtalo de nuevo."
     },
     "register": {
-      "title": "Crea tu cuenta en Blink",
+      "title": "Crea tu cuenta en Fleetly",
       "cta": "Crear cuenta",
       "loading": "Cargando...",
       "haveAccount": "¿Ya tienes cuenta?",
@@ -866,7 +866,7 @@
       "name": "Nombre",
       "namePlaceholder": "Nombre de la compañía",
       "domain": "Dominio",
-      "domainPlaceholder": "ej: empresa.blink.com",
+      "domainPlaceholder": "ej: empresa.Fleetly.com",
       "email": "Email de contacto",
       "emailPlaceholder": "contacto{'@'}empresa.com",
       "admin_email": "Email del Administrador",
