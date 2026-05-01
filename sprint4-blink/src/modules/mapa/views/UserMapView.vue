@@ -103,7 +103,7 @@
 
                 <BusyDaysCalendar
                   :slots="quickReservationBusySlots"
-                  title="Calendario de ocupacion"
+                  title="Occupancy calendar"
                 />
 
                 
@@ -134,7 +134,7 @@
                   {{ t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submittingQuickReservation" @click="submitQuickReservation">
-                  Reservar y pagar
+                  Reserve and pay
                 </BaseButton>
               </div>
             </div>
@@ -233,7 +233,7 @@ const reservationPanelStyle = computed(() => {
   }
 })
 
-  // Capa para agrupar marcadores y permitir limpieza/re-dibujo (se inicializa en initMap)
+  // Layer to group markers and allow clearing/re-drawing (initialized in initMap)
 
 const syncPanelWidthToViewport = () => {
   const target = reservationPanelWidth.value || getDefaultPanelWidth()
@@ -527,15 +527,15 @@ const buildReservationLocationText = (vehicle: Vehicle | null, fallbackName: str
     }
 
     if (vehicle.license_plate?.trim()) {
-      return `Vehiculo ${vehicle.license_plate.trim()}`
+      return `Vehicle ${vehicle.license_plate.trim()}`
     }
   }
 
   if (fallbackName.trim()) {
-    return `Vehiculo ${fallbackName.trim()}`
+    return `Vehicle ${fallbackName.trim()}`
   }
 
-  return 'Ubicacion por confirmar'
+  return 'Location to be confirmed'
 }
 
 const submitQuickReservation = async () => {
@@ -696,8 +696,8 @@ const renderGeofences = (geofences: Geofence[]) => {
   })
 }
 
-// Mapa de usuario: ocultar solo coches ocupados AHORA.
-// Si hoy tiene reservas en otras horas, se mantiene visible para reservar huecos.
+// User map: hide only cars occupied NOW.
+// If it has reservations at other times today, it remains visible to reserve available slots.
 const filterVehiclesForUserMap = async (
   vehicles: Vehicle[],
   myReservedVehicleIds: Set<number>,
@@ -712,11 +712,11 @@ const filterVehiclesForUserMap = async (
   const visible: Vehicle[] = []
 
   for (const orig of vehicles) {
-    const v = { ...orig } // evitar mutar objetos originales
+    const v = { ...orig } // avoid mutating original objects
       const vehicleId = Number(v.vehicle_id ?? v.id)
       if (!Number.isFinite(vehicleId)) continue
 
-      // Considerar solo reservas que estén activas AHORA (start <= now < end).
+      // Consider only reservations that are active NOW (start <= now < end).
       const activeNowReservations = (v.calendar_reservations ?? []).filter((cr) => {
         const s = parseDate(cr.start_date)
         const e = parseDate(cr.end_date)
@@ -733,8 +733,8 @@ const filterVehiclesForUserMap = async (
         return byId || byName
       })
 
-      // Fallback por si solo viene en next_reservation
-      // next_reservation puede venir para una reserva futura; considerarla solo si ocurre AHORA
+      // Fallback in case it only comes in next_reservation
+      // next_reservation can come for a future reservation; consider it only if it happens NOW
       const nextStart = parseDate(v.next_reservation?.start_date)
       const nextEnd = parseDate(v.next_reservation?.end_date)
       const nextStatus = (v.next_reservation as any)?.status
@@ -753,9 +753,9 @@ const filterVehiclesForUserMap = async (
       const nextAvailableAt = parseDate(v.next_available_at)
       const blockedByNextAvailable = Boolean(nextAvailableAt && now < nextAvailableAt.getTime())
       const statusKey = String(v.status ?? '').trim().toLowerCase()
-      // `reserved` o `next_available_at` pueden representar disponibilidad futura,
-      // no necesariamente ocupación en este instante. Para no ocultar todo,
-      // en el mapa de usuario solo bloqueamos por solape temporal "ahora".
+      // `reserved` or `next_available_at` can represent future availability,
+      // not necessarily occupation at this moment. To not hide everything,
+      // on the user map we only block by temporal overlap "now".
       const blockedByReservedStatus = statusKey === 'reserved' && (
         hasActiveOrFutureReservation || hasNextReservationActiveOrFuture
       )

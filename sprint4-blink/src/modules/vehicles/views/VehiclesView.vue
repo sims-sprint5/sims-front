@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <!-- Búsqueda y filtros -->
+      <!-- Search and filters -->
       <div class="mb-6 bg-surface p-4 rounded-lg shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <!-- Tabla de vehículos -->
+      <!-- Vehicles table -->
       <VehicleTable
         :vehicles="vehicles"
         :loading="loading"
@@ -52,7 +52,7 @@
         @delete="openDeleteModal"
       />
 
-      <!-- Modal de Crear/Editar Vehículo -->
+      <!-- Create/Edit Vehicle Modal -->
       <Teleport to="body">
         <Transition name="modal">
           <div
@@ -92,7 +92,7 @@
         </Transition>
       </Teleport>
 
-      <!-- Modal de Confirmación de Eliminación -->
+      <!-- Delete Confirmation Modal -->
       <BaseModal
         :show="showDeleteModal"
         :title="$t('vehicles.modal.deleteTitle')"
@@ -213,14 +213,14 @@ const statusLabel = (status: unknown) => {
   return getVehicleStatusLabel(t, status);
 };
 
-// Estado
+// State
 const vehicles = ref<Vehicle[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
 const deleting = ref(false);
 const searchQuery = ref('');
 
-// Modales
+// Modals
 const showVehicleModal = ref(false);
 const showDeleteModal = ref(false);
 const showViewModal = ref(false);
@@ -232,8 +232,8 @@ const statusOptions = computed<string[]>(() => {
   const base = [...VEHICLE_STATUS_OPTIONS];
   const baseLower = new Set(base.map((s) => s.toLowerCase()));
 
-  // Si el backend devolviese algún estado nuevo, lo mostramos también
-  // sin romper el formulario.
+  // If the backend returns a new status, we show it too
+  // without breaking the form.
   const extras = vehicles.value
     .map((v) => String(v.status ?? '').trim())
     .filter((s) => s.length > 0)
@@ -243,10 +243,10 @@ const statusOptions = computed<string[]>(() => {
   return [...base, ...extraUnique];
 });
 
-// Errores del formulario
+// Form errors
 const formErrors = ref<ValidationErrors>({});
 
-// Cargar vehículos
+// Load vehicles
 const loadVehicles = async () => {
   loading.value = true;
   try {
@@ -288,33 +288,33 @@ const handleSearch = () => {
   });
 };
 
-// Refrescar
+// Refresh
 const handleRefresh = () => {
   searchQuery.value = '';
   loadVehicles();
 };
 
-// Abrir modal de crear
+// Open create modal
 const openCreateModal = () => {
   editingVehicle.value = null;
   formErrors.value = {};
   showVehicleModal.value = true;
 };
 
-// Abrir modal de editar
+// Open edit modal
 const openEditModal = (vehicle: Vehicle) => {
   editingVehicle.value = vehicle;
   formErrors.value = {};
   showVehicleModal.value = true;
 };
 
-// Abrir modal de visualización
+// Open view modal
 const openViewModal = (vehicle: Vehicle) => {
   viewingVehicle.value = vehicle;
   showViewModal.value = true;
 };
 
-// Cerrar modal de visualización
+// Close view modal
 const closeViewModal = () => {
   showViewModal.value = false;
   viewingVehicle.value = null;
@@ -327,26 +327,26 @@ const switchToEdit = () => {
   openEditModal(vehicle);
 };
 
-// Cerrar modal
+// Close modal
 const closeVehicleModal = () => {
   showVehicleModal.value = false;
   editingVehicle.value = null;
   formErrors.value = {};
 };
 
-// Abrir modal de eliminar
+// Open delete modal
 const openDeleteModal = (vehicle: Vehicle) => {
   vehicleToDelete.value = vehicle;
   showDeleteModal.value = true;
 };
 
-// Cerrar modal de eliminar
+// Close delete modal
 const closeDeleteModal = () => {
   showDeleteModal.value = false;
   vehicleToDelete.value = null;
 };
 
-// Manejar envío del formulario con validación
+// Handle form submission with validation
 const handleSubmit = async (data: CreateVehicleData | UpdateVehicleData) => {
   submitting.value = true;
   formErrors.value = {};
@@ -384,7 +384,7 @@ const handleSubmit = async (data: CreateVehicleData | UpdateVehicleData) => {
   }
 };
 
-// Manejar eliminación
+// Handle delete
 const handleDelete = async () => {
   if (!vehicleToDelete.value) return;
 

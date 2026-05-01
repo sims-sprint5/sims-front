@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <!-- Búsqueda y filtros -->
+      <!-- Search and filters -->
       <div class="mb-6 bg-surface p-4 rounded-lg shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
@@ -35,13 +35,13 @@
         </div>
       </div>
 
-      <!-- Alertas: se muestran como toasts -->
+      <!-- Alerts: displayed as toasts -->
 
-      <!-- Tabla de usuarios -->
+      <!-- Users table -->
       <UserTable :users="users" :loading="loading" @view="openViewModal" @edit="openEditModal"
         @delete="openDeleteModal" />
 
-      <!-- Modal de Crear/Editar Usuario -->
+      <!-- Create/Edit User Modal -->
       <Teleport to="body">
         <Transition name="modal">
           <div v-if="showUserModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
@@ -69,13 +69,13 @@
         </Transition>
       </Teleport>
 
-      <!-- Modal de Confirmación de Eliminación -->
+      <!-- Delete Confirmation Modal -->
       <BaseModal :show="showDeleteModal" :title="$t('users.modal.deleteTitle')"
         :message="$t('users.modal.deleteMessage', { name: userToDelete?.name ?? '' })" type="danger"
         :confirm-text="$t('common.delete')" :cancel-text="$t('common.cancel')" :loading="deleting"
         @confirm="handleDelete" @close="closeDeleteModal" />
 
-      <!-- Modal de Visualización de Usuario -->
+      <!-- View User Modal -->
       <Teleport to="body">
         <Transition name="modal">
           <div v-if="showViewModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
@@ -159,14 +159,14 @@ const { translateErrorMessage } = useTranslateError();
 const { formatDate } = useDateFormatter({ year: 'numeric', month: 'short', day: 'numeric' });
 const { run: runDebouncedSearch } = useDebouncedSearch(300);
 
-// Estado
+// State
 const users = ref<User[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
 const deleting = ref(false);
 const searchQuery = ref('');
 
-// Modales
+// Modals
 const showUserModal = ref(false);
 const showDeleteModal = ref(false);
 const showViewModal = ref(false);
@@ -174,10 +174,10 @@ const editingUser = ref<User | null>(null);
 const viewingUser = ref<User | null>(null);
 const userToDelete = ref<User | null>(null);
 
-// Errores del formulario
+// Form errors
 const formErrors = ref<ValidationErrors>({});
 
-// Cargar usuarios
+// Load users
 const loadUsers = async () => {
   loading.value = true;
   try {
@@ -219,39 +219,39 @@ const handleSearch = () => {
   });
 };
 
-// Refrescar usuarios
+// Refresh users
 const handleRefresh = () => {
   searchQuery.value = '';
   loadUsers();
 };
 
-// Abrir modal de crear
+// Open create modal
 const openCreateModal = () => {
   editingUser.value = null;
   formErrors.value = {};
   showUserModal.value = true;
 };
 
-// Abrir modal de editar
+// Open edit modal
 const openEditModal = (user: User) => {
   editingUser.value = user;
   formErrors.value = {};
   showUserModal.value = true;
 };
 
-// Abrir modal de visualización
+// Open view modal
 const openViewModal = (user: User) => {
   viewingUser.value = user;
   showViewModal.value = true;
 };
 
-// Cerrar modal de visualización
+// Close view modal
 const closeViewModal = () => {
   showViewModal.value = false;
   viewingUser.value = null;
 };
 
-// Cambiar a edición desde visualización
+// Switch to edit from view
 const switchToEdit = () => {
   const user = viewingUser.value;
   if (!user) return;
@@ -259,31 +259,31 @@ const switchToEdit = () => {
   openEditModal(user);
 };
 
-// Cerrar modal de usuario
+// Close user modal
 const closeUserModal = () => {
   showUserModal.value = false;
   editingUser.value = null;
   formErrors.value = {};
 };
 
-// Abrir modal de eliminar
+// Open delete modal
 const openDeleteModal = (user: User) => {
   userToDelete.value = user;
   showDeleteModal.value = true;
 };
 
-// Cerrar modal de eliminar
+// Close delete modal
 const closeDeleteModal = () => {
   showDeleteModal.value = false;
   userToDelete.value = null;
 };
 
-// Manejar envío del formulario con validación
+// Handle form submission with validation
 const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
   submitting.value = true;
   formErrors.value = {};
 
-  // Validar datos antes de enviar
+  // Validate data before sending
   const validationErrors = validateUserForm(data, !!editingUser.value);
   if (Object.keys(validationErrors).length > 0) {
     formErrors.value = validationErrors;
@@ -317,7 +317,7 @@ const handleSubmit = async (data: CreateUserData | UpdateUserData) => {
   }
 };
 
-// Manejar eliminación
+// Handle delete
 const handleDelete = async () => {
   if (!userToDelete.value) return;
 

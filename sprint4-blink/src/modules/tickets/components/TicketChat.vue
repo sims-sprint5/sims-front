@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-[70vh] sm:h-[55vh] md:h-[480px] w-full">
-    <!-- Header del ticket -->
+    <!-- Ticket Header -->
     <div class="border-b pb-3 mb-3 px-4 sm:px-0">
       <div class="flex items-start justify-between gap-2 sm:gap-3">
         <div class="flex-1 min-w-0">
@@ -14,7 +14,7 @@
       <p class="text-xs sm:text-sm text-muted mt-2 leading-relaxed line-clamp-2 sm:line-clamp-3">{{ ticket.descripcion }}</p>
     </div>
 
-    <!-- Àrea de missatges -->
+    <!-- Messages Area -->
     <div class="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-3 sm:mb-4 px-2 sm:px-1" ref="messagesContainer">
       <div v-if="!messages || messages.length === 0" class="flex flex-col items-center justify-center h-full text-muted gap-2 py-8">
         <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,14 +28,14 @@
         :key="message.id"
         :class="['flex items-end gap-1 sm:gap-2', isAdminMessage(message) ? 'justify-end' : 'justify-start']"
       >
-        <!-- Avatar usuari (esquerra) -->
+        <!-- User Avatar (left) -->
         <div v-if="!isAdminMessage(message)" class="shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-surface-dark border border-default flex items-center justify-center flex-shrink-0">
           <svg class="w-3 h-3 sm:w-4 sm:h-4 text-muted" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
           </svg>
         </div>
 
-        <!-- Bombolla missatge -->
+        <!-- Message Bubble -->
         <div :class="['w-full max-w-[92%] sm:max-w-[70%] md:max-w-[60%] flex flex-col', isAdminMessage(message) ? 'items-end' : 'items-start']">
           <span class="text-xs font-medium mb-0.5 sm:mb-1 px-1 line-clamp-1" :class="isAdminMessage(message) ? 'text-primary' : 'text-muted'">
             {{ isAdminMessage(message) ? $t('adminTickets.chat.admin') : (message.usuario_nombre || ticket.usuario_nombre || $t('tickets.table.usuario')) }}

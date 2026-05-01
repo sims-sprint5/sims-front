@@ -153,7 +153,7 @@ const getUserLocation = () => {
         const popupContainer = document.createElement('div')
         popupContainer.className = 'p-2'
         const title = document.createElement('b')
-        title.textContent = 'Tu ubicación'
+        title.textContent = 'Your location'
         popupContainer.appendChild(title)
         popupContainer.appendChild(document.createElement('br'))
         popupContainer.appendChild(createPopupRow('Lat', latitude.toFixed(4)))
@@ -237,12 +237,12 @@ const renderVehicles = () => {
       const marker = L.marker(
         [Number(vehicle.current_latitude), Number(vehicle.current_longitude)],
         {
-          title: String(vehicle.brand ?? '').trim() || 'Vehiculo',
+          title: String(vehicle.brand ?? '').trim() || 'Vehicle',
           icon: vehicleIcon
         }
       )
 
-      const vehicleBrandTooltip = String(vehicle.brand ?? '').trim() || 'Vehiculo'
+      const vehicleBrandTooltip = String(vehicle.brand ?? '').trim() || 'Vehicle'
       marker.bindTooltip(vehicleBrandTooltip, {
         direction: 'top',
         offset: [0, -12],

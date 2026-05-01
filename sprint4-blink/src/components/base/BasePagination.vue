@@ -51,7 +51,7 @@ function go(page: number) {
     v-if="pagination.last_page > 1"
     class="bg-surface px-4 py-3 flex items-center border-t border-default sm:px-6"
   >
-    <!-- Móvil -->
+    <!-- Mobile -->
     <div class="flex-1 flex justify-end gap-3 sm:hidden">
       <BaseButton
         variant="secondary"

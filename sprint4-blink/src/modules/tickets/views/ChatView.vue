@@ -108,11 +108,11 @@ const getPlaceholder = () => {
 
 const buildContext = () => {
   const baseContext = `
-PROYECTO: SIMS - Sistema de Gestión de Reserva de Vehículos
-USUARIO: ${user.value?.name || 'Usuario'}
-IDIOMA: ${t('_lang')}
-EMAIL: ${user.value?.email || 'no disponible'}
-PÁGINA: chat
+PROJECT: SIMS - Vehicle Reservation Management System
+USER: ${user.value?.name || 'User'}
+LANGUAGE: ${t('_lang')}
+EMAIL: ${user.value?.email || 'not available'}
+PAGE: chat
   `.trim();
   return baseContext;
 };
@@ -145,7 +145,7 @@ const sendMessage = async () => {
 
   try {
     const context = buildContext();
-    const enrichedMessage = `${context}\n\nPREGUNTA DEL USUARIO:\n${msg}`;
+    const enrichedMessage = `${context}\n\nUSER QUESTION:\n${msg}`;
 
     const response = await fetch('/api/v1/chat/ask', {
       method: 'POST',

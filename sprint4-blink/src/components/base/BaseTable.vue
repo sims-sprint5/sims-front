@@ -115,7 +115,7 @@ const pagination = computed((): TablePagination | undefined => {
   };
 });
 
-// Datos paginados
+// Paginated data
 const paginatedData = computed(() => {
   if (!props.enablePagination || !pagination.value) {
     return props.data;
@@ -126,12 +126,12 @@ const paginatedData = computed(() => {
   return props.data.slice(start, end);
 });
 
-// Manejar cambio de página
+// Handle page change
 const handlePageChange = (page: number) => {
   currentPage.value = page;
 };
 
-// Resetear a página 1 cuando cambian los datos
+// Reset to page 1 when data changes
 watch(() => props.data, () => {
   currentPage.value = 1;
 });

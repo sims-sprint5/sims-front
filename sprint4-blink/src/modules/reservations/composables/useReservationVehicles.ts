@@ -114,14 +114,14 @@ function toCardModel(v: Vehicle): ReservationVehicleCardModel {
       : [],
     description,
     specs: {
-      seatsLabel: v.license_plate ? `Matrícula: ${v.license_plate}` : undefined,
+      seatsLabel: v.license_plate ? `License: ${v.license_plate}` : undefined,
       transmissionLabel: undefined,
       acLabel: v.color ? `Color: ${v.color}` : undefined,
       minAgeLabel: undefined,
     },
     features: description ? [description] : [],
     pricing: {
-      fromLabel: 'ESTADO',
+      fromLabel: 'STATUS',
       pricePerDay: v.status || '—',
       totalLabel: 'ID',
       total: String(v.vehicle_id ?? v.id),
@@ -185,7 +185,7 @@ export function useReservationVehicles() {
   let autoRefreshTimer: number | null = null;
   onMounted(() => {
     loadVehicles();
-    // Refrescar periódicamente para actualizar estados cuando finalicen reservas
+    // Refresh periodically to update statuses when reservations end
     autoRefreshTimer = window.setInterval(() => {
       void loadVehicles();
     }, 30000) as unknown as number;

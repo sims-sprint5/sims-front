@@ -1,5 +1,5 @@
 /**
- * Exportación centralizada de componentes base
+ * Centralized export of base components
  */
 
 export { default as BaseButton } from './BaseButton.vue';

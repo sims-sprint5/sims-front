@@ -1,8 +1,8 @@
 import type { ComposerTranslation } from 'vue-i18n';
 
 /**
- * Estados soportados por el backend.
- * Mantener alineado con la API para evitar opciones inválidas en el formulario.
+ * Statuses supported by the backend.
+ * Keep aligned with the API to avoid invalid options in the form.
  */
 export const VEHICLE_STATUS_OPTIONS = [
   'available',
@@ -14,8 +14,8 @@ export const VEHICLE_STATUS_OPTIONS = [
 export type VehicleStatus = (typeof VEHICLE_STATUS_OPTIONS)[number];
 
 /**
- * Retorna l'etiqueta traduïda per a un status de vehicle.
- * Fa servir i18n (vehicles.status.*) i, si no hi ha traducció, retorna el valor original.
+ * Returns the translated label for a vehicle status.
+ * Uses i18n (vehicles.status.*) and, if there is no translation, returns the original value.
  */
 export function getVehicleStatusLabel(t: ComposerTranslation, status: unknown): string {
   const raw = String(status ?? '').trim();

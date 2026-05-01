@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <!-- Taula d'admins -->
+            <!-- Admins table -->
             <div class="bg-surface shadow rounded-lg overflow-hidden">
                 <!-- Loading -->
                 <div v-if="loading" class="flex items-center justify-center py-16">
@@ -40,7 +40,7 @@
                     <p>{{ $t('superadmin.admins.empty') }}</p>
                 </div>
 
-                <!-- Taula -->
+                <!-- Table -->
                 <table v-else class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-surface">
                         <tr>
@@ -191,7 +191,7 @@
                 </Transition>
             </Teleport>
 
-            <!-- Modal Confirmació Eliminació -->
+            <!-- Delete Confirmation Modal -->
             <BaseModal :show="showDeleteModal" :title="$t('superadmin.admins.modal.deleteTitle')"
                 :message="$t('superadmin.admins.modal.deleteMessage', { name: adminToDelete?.name ?? '' })" type="danger"
                 :confirm-text="$t('common.delete')" :cancel-text="$t('common.cancel')" :loading="deleting"
@@ -217,7 +217,7 @@ const toast = useToast();
 const { translateErrorMessage } = useTranslateError();
 const { formatDate } = useDateFormatter({ year: 'numeric', month: 'short', day: 'numeric' });
 
-// Estat
+// State
 const admins = ref<Superadmin[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
@@ -236,7 +236,7 @@ const formData = reactive({
     password_confirmation: ''
 });
 
-// ─── Càrrega ─────────────────────────────────────────────────────────────────
+// ─── Loading ─────────────────────────────────────────────────────────────────
 
 const loadAdmins = async () => {
     loading.value = true;
@@ -289,7 +289,7 @@ const closeDeleteModal = () => {
 
 const handleSubmit = async () => {
     if (formData.password && formData.password !== formData.password_confirmation) {
-        toast.error(t('common.passwordMismatch') || 'Les contrasenyes no coincideixen');
+        toast.error(t('common.passwordMismatch') || 'Passwords do not match');
         return;
     }
 

@@ -9,7 +9,7 @@
         </div>
 
         <div class="md:col-span-2 space-y-10">
-          <!-- Perfil de usuario -->
+          <!-- User profile -->
           <form @submit.prevent="handlePersonalInfoSubmit">
             <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
               <div class="col-span-full flex items-center gap-x-8">

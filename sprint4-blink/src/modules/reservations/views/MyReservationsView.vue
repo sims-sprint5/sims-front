@@ -13,10 +13,10 @@
       <div v-if="debugEnabled" class="mb-6 rounded-lg border border-warning bg-warning/10 p-4">
         <div class="mb-2 flex items-center justify-between">
           <h2 class="text-sm font-semibold text-warning-dark">Reservation Debug Mode</h2>
-          <span class="text-xs text-warning-dark">Activo via ?debugReservations=1</span>
+          <span class="text-xs text-warning-dark">Active via ?debugReservations=1</span>
         </div>
         <p class="mb-2 text-xs text-warning-dark">
-          Revisa payload crudo y normalizado para diagnosticar por que no aparecen reservas.
+          Review raw and normalized payload to diagnose why reservations are not appearing.
         </p>
         <pre class="max-h-80 overflow-auto rounded bg-surface p-3 text-[11px] leading-4 text-main">{{ debugDump }}</pre>
       </div>

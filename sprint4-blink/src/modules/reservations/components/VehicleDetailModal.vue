@@ -105,15 +105,15 @@ const formatDateCustom = (dateStr: string): string => {
 };
 
 const canCancelReservation = (reservation: ReservationLog): boolean => {
-  // No se puede cancelar si ya está expirada
+  // Cannot be cancelled if it has already expired
   if (reservation.is_expired) return false;
   
-  // No se puede cancelar si ya ha comenzado
+  // Cannot be cancelled if it has already started
   const now = new Date();
   const startDate = new Date(reservation.start_at);
   if (Number.isNaN(startDate.getTime())) return false;
   
-  // Solo se puede cancelar si aún no ha comenzado
+  // Can only be cancelled if it hasn't started yet
   return startDate > now;
 };
 
@@ -126,7 +126,7 @@ const getReservationDisplayStatus = (reservation: ReservationLog): string => {
     return reservation.status;
   }
   
-  // Si ya ha comenzado y aún no ha terminado, está en curso
+  // If it has already started and hasn't finished, it is in progress
   if (startDate <= now && now < endDate) {
     return 'in_progress';
   }

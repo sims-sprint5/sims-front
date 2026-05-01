@@ -34,7 +34,7 @@
     :emptyText="$t('tickets.empty')"
     keyField="id"
   >
-    <!-- Desktop: Tabla completa -->
+    <!-- Desktop: Full table -->
     <template #desktop>
       <BaseTable :columns="columns" :data="filteredAndSortedTickets" :loading="loading" :loadingText="$t('tickets.loading')"
         :emptyText="$t('tickets.empty')">
@@ -99,13 +99,13 @@
     <!-- Mobile: Cards -->
     <template #card="{ item }">
       <div class="space-y-3">
-        <!-- Asunto -->
+        <!-- Subject -->
         <div>
           <div class="text-xs font-medium text-muted">{{ $t('tickets.table.asunto') }}</div>
           <div class="text-sm font-semibold text-main mt-1">{{ item.asunto }}</div>
         </div>
 
-        <!-- Usuario -->
+        <!-- User -->
         <div class="pb-3 border-b border-default">
           <div class="text-xs font-medium text-muted">{{ $t('tickets.table.usuario') }}</div>
           <div class="text-sm text-main mt-1">
@@ -114,7 +114,7 @@
           </div>
         </div>
 
-        <!-- Estado, Prioridad y Fecha -->
+        <!-- Status, Priority and Date -->
         <div class="grid grid-cols-2 gap-3 pb-3 border-b border-default">
           <div>
             <div class="text-xs font-medium text-muted">{{ $t('tickets.table.estado') }}</div>
@@ -137,28 +137,28 @@
           <div class="text-sm font-medium text-main mt-1">{{ formatDate(item.created_at) }}</div>
         </div>
 
-        <!-- Acciones -->
+        <!-- Actions -->
         <div class="flex gap-2 pt-2">
           <button
             @click="$emit('view', item)"
             class="flex-1 p-2 bg-primary text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <EyeIcon class="w-4 h-4" />
-            Ver
+            View
           </button>
           <button
             @click="$emit('chat', item)"
             class="flex-1 p-2 bg-success text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <ChatBubbleLeftRightIcon class="w-4 h-4" />
-            Responder
+            Reply
           </button>
           <button
             @click="$emit('delete', item)"
             class="flex-1 p-2 bg-danger text-inverse text-xs font-medium hover:brightness-110 rounded-lg transition-colors flex items-center justify-center gap-1"
           >
             <TrashIcon class="w-4 h-4" />
-            Eliminar
+            Delete
           </button>
         </div>
       </div>

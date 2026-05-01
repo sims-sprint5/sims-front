@@ -48,40 +48,40 @@ async function loadVehicleStats() {
         isAdminUser.value = isAdmin;
 
         if (isAdmin) {
-            // Admin: obtener TODOS los vehículos
+            // Admin: get ALL vehicles
             const allVehicles = await vehicleService.getVehiclesList();
             totalVehicles.value = allVehicles.length;
             
-            // Disponibles: solo available o active
+            // Available: only available or active
             availableVehicles.value = allVehicles.filter((v) => {
                 const statusKey = (v.status ?? '').trim().toLowerCase();
                 return statusKey === 'available' || statusKey === 'active';
             }).length;
 
-            // En mantenimiento: solo maintenance
+            // In maintenance: only maintenance
             maintenanceVehicles.value = allVehicles.filter((v) => {
                 const statusKey = (v.status ?? '').trim().toLowerCase();
                 return statusKey === 'maintenance';
             }).length;
 
-            // Inactivos: solo inactive
+            // Inactive: only inactive
             inactiveVehicles.value = allVehicles.filter((v) => {
                 const statusKey = (v.status ?? '').trim().toLowerCase();
                 return statusKey === 'inactive';
             }).length;
         } else {
-            // Usuario normal: solo ver vehículos disponibles + reservados
+            // Normal user: only see available + reserved vehicles
             const response = await vehicleService.getVehiclesCalendar(1, 200);
             const vehicles = Array.isArray(response?.data) ? response.data : [];
             
-            // Total: solo available y reserved (excluye maintenance, inactive, out_of_service, rented)
+            // Total: only available and reserved (excludes maintenance, inactive, out_of_service, rented)
             const validStatuses = vehicles.filter((v) => {
                 const statusKey = (v.status ?? '').trim().toLowerCase();
                 return statusKey === 'available' || statusKey === 'reserved' || statusKey === 'active';
             });
             totalVehicles.value = validStatuses.length;
             
-            // Disponibles: solo available o active
+            // Available: only available or active
             availableVehicles.value = validStatuses.filter((v) => {
                 const statusKey = (v.status ?? '').trim().toLowerCase();
                 return statusKey === 'available' || statusKey === 'active';
@@ -134,14 +134,14 @@ onMounted(() => {
                 <div class="flex items-center gap-1 sm:gap-4 px-2 sm:px-4 py-2 bg-base rounded-lg border border-nav">
                     <!-- Total Vehicles -->
                     <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                        <div class="text-xs font-medium text-muted">Vehículos:</div>
+                        <div class="text-xs font-medium text-muted">Vehicles:</div>
                         <div class="text-xs sm:text-sm font-bold text-main">{{ totalVehicles }}</div>
                     </div>
                     <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
                     
                     <!-- Available Vehicles -->
                     <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                        <div class="text-xs font-medium text-muted">Disponibles:</div>
+                        <div class="text-xs font-medium text-muted">Available:</div>
                         <div class="text-xs sm:text-sm font-bold text-success">{{ availableVehicles }}</div>
                     </div>
 
@@ -149,14 +149,14 @@ onMounted(() => {
                     <template v-if="isAdminUser">
                         <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
                         <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                            <div class="text-xs font-medium text-muted">Mantenimiento:</div>
+                            <div class="text-xs font-medium text-muted">Maintenance:</div>
                             <div class="text-xs sm:text-sm font-bold text-warning">{{ maintenanceVehicles }}</div>
                         </div>
                         
                         <!-- Inactive Vehicles (admin only) -->
                         <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
                         <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                            <div class="text-xs font-medium text-muted">Inactivos:</div>
+                            <div class="text-xs font-medium text-muted">Inactive:</div>
                             <div class="text-xs sm:text-sm font-bold text-danger">{{ inactiveVehicles }}</div>
                         </div>
                     </template>
@@ -164,7 +164,7 @@ onMounted(() => {
 
                 <!-- User Info -->
                 <div class="hidden sm:flex items-center gap-3">
-                    <!-- Avatar con gradiente o imagen -->
+                    <!-- Avatar with gradient or image -->
                     <div v-if="avatarUrl" class="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0">
                         <img :src="avatarUrl" :alt="t('common.avatar')" class="w-full h-full object-cover" />
                     </div>
