@@ -134,14 +134,14 @@ onMounted(() => {
                 <div class="flex items-center gap-1 sm:gap-4 px-2 sm:px-4 py-2 bg-base rounded-lg border border-nav">
                     <!-- Total Vehicles -->
                     <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                        <div class="text-xs font-medium text-muted">Vehicles:</div>
+                        <div class="text-xs font-medium text-muted">{{ t('nav.stats.totalVehicles') }}</div>
                         <div class="text-xs sm:text-sm font-bold text-main">{{ totalVehicles }}</div>
                     </div>
                     <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
                     
                     <!-- Available Vehicles -->
                     <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                        <div class="text-xs font-medium text-muted">Available:</div>
+                        <div class="text-xs font-medium text-muted">{{ t('nav.stats.availableVehicles') }}</div>
                         <div class="text-xs sm:text-sm font-bold text-success">{{ availableVehicles }}</div>
                     </div>
 
@@ -149,14 +149,14 @@ onMounted(() => {
                     <template v-if="isAdminUser">
                         <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
                         <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                            <div class="text-xs font-medium text-muted">Maintenance:</div>
+                            <div class="text-xs font-medium text-muted">{{ t('nav.stats.maintenanceVehicles') }}</div>
                             <div class="text-xs sm:text-sm font-bold text-warning">{{ maintenanceVehicles }}</div>
                         </div>
                         
                         <!-- Inactive Vehicles (admin only) -->
                         <div class="w-px h-6 sm:h-8 bg-gray-300"></div>
                         <div class="flex items-center gap-1 sm:flex-col sm:text-center">
-                            <div class="text-xs font-medium text-muted">Inactive:</div>
+                            <div class="text-xs font-medium text-muted">{{ t('nav.stats.inactiveVehicles') }}</div>
                             <div class="text-xs sm:text-sm font-bold text-danger">{{ inactiveVehicles }}</div>
                         </div>
                     </template>

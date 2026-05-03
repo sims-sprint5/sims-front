@@ -50,6 +50,12 @@
     "sections": {
       "client": "Client",
       "admin": "Admin"
+    },
+    "stats": {
+      "totalVehicles": "Vehicles:",
+      "availableVehicles": "Available:",
+      "maintenanceVehicles": "Maintenance:",
+      "inactiveVehicles": "Inactive:"
     }
   },
   "auth": {
