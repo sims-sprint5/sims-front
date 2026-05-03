@@ -93,6 +93,7 @@
           :label="$t('vehicles.form.currentLatitude')"
           type="number"
           :placeholder="$t('vehicles.form.currentLatitudePlaceholder')"
+          :tooltip="$t('vehicles.form.currentLatitudeTooltip')"
           :error="formatError((errors as any).current_latitude)"
           :required="!isEditing"
         />
@@ -104,6 +105,7 @@
           :label="$t('vehicles.form.currentLongitude')"
           type="number"
           :placeholder="$t('vehicles.form.currentLongitudePlaceholder')"
+          :tooltip="$t('vehicles.form.currentLongitudeTooltip')"
           :error="formatError((errors as any).current_longitude)"
           :required="!isEditing"
         />

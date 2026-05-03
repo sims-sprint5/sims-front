@@ -28,8 +28,16 @@
           <div class="p-6 space-y-4">
             <!-- Mini map for coordinate selection (only on create) -->
             <div v-if="!isEditMode">
-              <label class="block text-sm font-medium text-main mb-1">
-                {{ $t('mapa.form.clickToSelect') }}
+              <label class="flex items-center gap-2 text-sm font-medium text-main mb-1">
+                <span>{{ $t('mapa.form.clickToSelect') }}</span>
+                <BaseTooltip :text="$t('mapa.form.clickToSelectTooltip')" position="right">
+                  <span
+                    class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[10px] font-bold text-muted"
+                    aria-hidden="true"
+                  >
+                    i
+                  </span>
+                </BaseTooltip>
               </label>
               <div class="w-full h-72 rounded-lg overflow-hidden border border-default shadow">
                 <div ref="miniMapEl" class="w-full h-full"></div>
@@ -56,13 +64,22 @@
 
             <!-- Type -->
             <div>
-              <label class="block text-sm font-medium text-main mb-1">
-                {{ $t('mapa.form.type') }}
+              <label class="flex items-center gap-2 text-sm font-medium text-main mb-1">
+                <span>{{ $t('mapa.form.type') }}</span>
+                <BaseTooltip :text="$t('mapa.form.typeTooltip')" position="right">
+                  <span
+                    class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[10px] font-bold text-muted"
+                    aria-hidden="true"
+                  >
+                    i
+                  </span>
+                </BaseTooltip>
               </label>
               <select
                 v-model="form.formData.type"
                 class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 @blur="form.errors.type = form.validateType(form.formData.type)"
+                :title="$t('mapa.form.typeTooltip')"
               >
                   <option
                     v-for="option in geofenceTypeOptions"
@@ -84,6 +101,8 @@
               :label="$t('mapa.form.latitude')"
               step="0.0001"
               :placeholder="$t('mapa.form.latitudePlaceholder')"
+              :tooltip="$t('mapa.form.latitudeTooltip')"
+              tooltip-position="right"
               :error="form.errors.center_latitude ? $t(form.errors.center_latitude) : undefined"
               @blur="form.errors.center_latitude = form.validateLatitude(form.formData.center_latitude)"
             />
@@ -95,6 +114,8 @@
               :label="$t('mapa.form.longitude')"
               step="0.0001"
               :placeholder="$t('mapa.form.longitudePlaceholder')"
+              :tooltip="$t('mapa.form.longitudeTooltip')"
+              tooltip-position="right"
               :error="form.errors.center_longitude ? $t(form.errors.center_longitude) : undefined"
               @blur="form.errors.center_longitude = form.validateLongitude(form.formData.center_longitude)"
             />
@@ -105,18 +126,22 @@
               type="number"
               :label="$t('mapa.form.radius')"
               :placeholder="$t('mapa.form.radiusPlaceholder')"
+              :tooltip="$t('mapa.form.radiusTooltip')"
+              tooltip-position="right"
               :error="form.errors.radius ? $t(form.errors.radius) : undefined"
               @blur="form.errors.radius = form.validateRadius(form.formData.radius)"
             />
 
             <!-- Status -->
             <div>
-              <label class="block text-sm font-medium text-main mb-1">
-                {{ $t('mapa.form.status') }}
+              <label class="flex items-center gap-2 text-sm font-medium text-main mb-1">
+                <span>{{ $t('mapa.form.status') }}</span>
+               
               </label>
               <select
                 v-model="form.formData.status"
                 class="w-full px-3 py-2 border border-default rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                :title="$t('mapa.form.statusTooltip')"
               >
                 <option value="active">{{ $t('mapa.status.active') }}</option>
                 <option value="inactive">{{ $t('mapa.status.inactive') }}</option>
@@ -147,7 +172,7 @@
 import { watch, ref, nextTick, computed } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { BaseInput, BaseButton } from '@/components/base'
+import { BaseInput, BaseButton, BaseTooltip } from '@/components/base'
 import { useGeofenceForm } from '../composables/useGeofenceForm'
 import type { Geofence } from '../types/geofence.types'
 

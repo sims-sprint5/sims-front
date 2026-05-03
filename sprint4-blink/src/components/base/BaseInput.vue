@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
 import BaseButton from './BaseButton.vue';
+import BaseTooltip from './BaseTooltip.vue';
 
 interface Props {
   modelValue: string | number;
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
   label?: string;
   placeholder?: string;
+  tooltip?: string;
+  tooltipPosition?: 'top' | 'right';
   required?: boolean;
   disabled?: boolean;
   error?: string;
@@ -16,6 +19,8 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
+  tooltip: '',
+  tooltipPosition: 'top',
   required: false,
   disabled: false,
   showPasswordToggle: false,
@@ -72,9 +77,17 @@ const updateValue = (event: Event) => {
 <template>
   <div class="w-full">
     <!-- Label -->
-    <label v-if="label" :for="inputId" class="block text-sm font-medium text-main mb-2">
-      {{ label }}
+    <label v-if="label" :for="inputId" class="flex items-center gap-2 text-sm font-medium text-main mb-2">
+      <span>{{ label }}</span>
       <span v-if="required" class="text-danger">*</span>
+      <BaseTooltip v-if="tooltip" :text="tooltip" :position="tooltipPosition">
+        <span
+          class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[10px] font-bold text-muted"
+          aria-hidden="true"
+        >
+          i
+        </span>
+      </BaseTooltip>
     </label>
 
     <!-- Input container -->
@@ -87,8 +100,19 @@ const updateValue = (event: Event) => {
       </div>
 
       <!-- Input -->
-      <input :id="inputId" :type="type" :value="modelValue" :placeholder="placeholder" :required="required"
-        :disabled="disabled" :class="inputClasses" @input="updateValue" @change="updateValue" v-on="$attrs" />
+      <input
+        :id="inputId"
+        :type="type"
+        :value="modelValue"
+        :placeholder="placeholder"
+        :required="required"
+        :disabled="disabled"
+        :title="tooltip"
+        :class="inputClasses"
+        @input="updateValue"
+        @change="updateValue"
+        v-on="$attrs"
+      />
 
       <!-- Toggle password visibility -->
       <BaseButton
