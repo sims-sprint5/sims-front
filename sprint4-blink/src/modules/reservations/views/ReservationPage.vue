@@ -665,7 +665,7 @@ async function createReservation() {
               
                 <BusyDaysCalendar
                   :slots="selectedVehicleCalendarSlots"
-                  title="Occupancy calendar"
+                  :title="$t('reservations.occupancyCalendar')"
                 />
 
                 <div class="mt-6 space-y-4">
