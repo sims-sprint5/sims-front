@@ -106,7 +106,7 @@ jobs:
 
             docker rm -f sprint4-blink-prod >/dev/null 2>&1 || true
             sh -c "$COMPOSE_CMD down --remove-orphans" || true
-            docker network create sprint4-blink_default >/dev/null 2>&1 || true
+            docker network rm sprint4-blink_default >/dev/null 2>&1 || true
             sh -c "$COMPOSE_CMD up -d --build --force-recreate --remove-orphans frontend-prod"
             docker ps --filter "name=sprint4-blink-prod"
 
