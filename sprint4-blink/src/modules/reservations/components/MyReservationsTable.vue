@@ -1,5 +1,5 @@
 <template>
-  <!-- Desktop: Tabla normal -->
+  <!-- Desktop: Normal table -->
   <div class="hidden md:block">
     <BaseTable
       :columns="columns"
@@ -210,7 +210,7 @@ const formatDateCustom = (dateStr: string): string => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-// Format time remaining as "Xh Ym" (horas y minutos, sin decimales ni segundos)
+// Format time remaining as "Xh Ym" (hours and minutes, no decimals or seconds)
 const formatTimeRemaining = (minutes: number): string => {
   const hours = Math.floor(minutes / 60);
   const mins = Math.floor(minutes % 60);
@@ -222,15 +222,15 @@ const formatTimeRemaining = (minutes: number): string => {
 };
 
 const canCancelReservation = (item: ReservationLog): boolean => {
-  // No se puede cancelar si ya está expirada
+  // Cannot be cancelled if it has already expired
   if (item.is_expired) return false;
   
-  // No se puede cancelar si ya ha comenzado
+  // Cannot be cancelled if it has already started
   const now = new Date();
   const startDate = new Date(item.start_at);
   if (Number.isNaN(startDate.getTime())) return false;
   
-  // Solo se puede cancelar si aún no ha comenzado
+  // Can only be cancelled if it hasn't started yet
   return startDate > now;
 };
 
@@ -243,7 +243,7 @@ const getReservationDisplayStatus = (item: ReservationLog): string => {
     return item.status;
   }
   
-  // Si ya ha comenzado y aún no ha terminado, está en curso
+  // If it has already started and hasn't finished, it is in progress
   if (startDate <= now && now < endDate) {
     return 'in_progress';
   }

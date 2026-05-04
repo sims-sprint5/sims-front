@@ -9,7 +9,7 @@
         </div>
 
         <div class="md:col-span-2 space-y-10">
-          <!-- Perfil de usuario -->
+          <!-- User profile -->
           <form @submit.prevent="handlePersonalInfoSubmit">
             <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
               <div class="col-span-full flex items-center gap-x-8">
@@ -40,7 +40,17 @@
               </div>
 
               <div class="sm:col-span-3">
-                <label for="first-name" class="block text-sm/6 font-medium text-main">{{ $t('settings.firstName') }}</label>
+                <label for="first-name" class="flex items-center gap-2 text-sm/6 font-medium text-main">
+                  <span>{{ $t('settings.firstName') }}</span>
+                  <BaseTooltip :text="$t('settings.firstNameTooltip')">
+                    <span
+                      class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[10px] font-bold text-muted"
+                      aria-hidden="true"
+                    >
+                      i
+                    </span>
+                  </BaseTooltip>
+                </label>
                 <div class="mt-2">
                   <input 
                     v-model="firstName"
@@ -48,13 +58,24 @@
                     name="first-name" 
                     id="first-name" 
                     autocomplete="given-name" 
+                    :title="$t('settings.firstNameTooltip')"
                     class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-main border border-divider outline-none placeholder:text-muted focus:ring-1 focus:ring-input-focus sm:text-sm/6" 
                   />
                 </div>
               </div>
 
               <div class="sm:col-span-3">
-                <label for="last-name" class="block text-sm/6 font-medium text-main">{{ $t('settings.lastName') }}</label>
+                <label for="last-name" class="flex items-center gap-2 text-sm/6 font-medium text-main">
+                  <span>{{ $t('settings.lastName') }}</span>
+                  <BaseTooltip :text="$t('settings.lastNameTooltip')">
+                    <span
+                      class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[10px] font-bold text-muted"
+                      aria-hidden="true"
+                    >
+                      i
+                    </span>
+                  </BaseTooltip>
+                </label>
                 <div class="mt-2">
                   <input 
                     v-model="lastName"
@@ -62,13 +83,24 @@
                     name="last-name" 
                     id="last-name" 
                     autocomplete="family-name" 
+                    :title="$t('settings.lastNameTooltip')"
                     class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-main border border-divider outline-none placeholder:text-muted focus:ring-1 focus:ring-input-focus sm:text-sm/6" 
                   />
                 </div>
               </div>
 
               <div class="col-span-full">
-                <label for="email" class="block text-sm/6 font-medium text-main">{{ $t('settings.email') }}</label>
+                <label for="email" class="flex items-center gap-2 text-sm/6 font-medium text-main">
+                  <span>{{ $t('settings.email') }}</span>
+                  <BaseTooltip :text="$t('settings.emailTooltip')">
+                    <span
+                      class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-border text-[10px] font-bold text-muted"
+                      aria-hidden="true"
+                    >
+                      i
+                    </span>
+                  </BaseTooltip>
+                </label>
                 <div class="mt-2">
                   <input 
                     v-model="email"
@@ -76,6 +108,7 @@
                     name="email" 
                     type="email" 
                     autocomplete="email" 
+                    :title="$t('settings.emailTooltip')"
                     class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-main border border-divider outline-none placeholder:text-muted focus:ring-1 focus:ring-input-focus sm:text-sm/6" 
                   />
                 </div>
@@ -119,6 +152,7 @@ import { useSettings } from '@/modules/settings/composables/useSettings';
 import AppLayout from '@/layouts/AppLayout.vue';
 import LanguageSelector from '@/components/LanguageSelector.vue';
 import BaseButton from '@/components/base/BaseButton.vue';
+import BaseTooltip from '@/components/base/BaseTooltip.vue';
 import userLogo from '@/assets/user_logo.png';
 
 const {

@@ -40,7 +40,6 @@ const emit = defineEmits<{
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
 const submitting = ref(false);
-let autoRefreshTimer: number | null = null;
 const debugEnabled = ref(false);
 const debugEntries = ref<any[]>([]);
 const fromMap = computed(() => route.query.fromMap === 'true');
@@ -147,7 +146,7 @@ function isVehicleReservedNow(vehicle: ReservationVehicleCardModel): boolean {
     const start = new Date(slot.startDate);
     const end = new Date(slot.endDate);
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-    return now < end;
+    return start <= now && now < end;
   });
 }
 
@@ -248,13 +247,6 @@ watch(
 );
 
 onBeforeUnmount(() => {
-  if (autoRefreshTimer) {
-    window.clearInterval(autoRefreshTimer);
-    autoRefreshTimer = null;
-  }
-
-  window.removeEventListener('focus', handleWindowFocus);
-  document.removeEventListener('visibilitychange', handleVisibilityChange);
   if (debugEnabled.value) {
     window.removeEventListener(getReservationDebugEventName(), refreshDebugEntries);
   }
@@ -272,15 +264,7 @@ async function refreshAfterCheckout(): Promise<void> {
   }
 }
 
-function handleWindowFocus() {
-  void refreshAfterCheckout();
-}
 
-function handleVisibilityChange() {
-  if (document.visibilityState === 'visible') {
-    void refreshAfterCheckout();
-  }
-}
 
 onMounted(() => {
   debugEnabled.value = isReservationDebugEnabled();
@@ -290,12 +274,6 @@ onMounted(() => {
   }
 
   void refreshAfterCheckout();
-  window.addEventListener('focus', handleWindowFocus);
-  document.addEventListener('visibilitychange', handleVisibilityChange);
-
-  autoRefreshTimer = window.setInterval(() => {
-    void refreshAfterCheckout();
-  }, 4000);
 });
 
 watch(
@@ -311,7 +289,7 @@ watch(
     const prefillKey = [prefill.vehicleId, prefill.startAt ?? '', prefill.endAt ?? ''].join('|');
     if (lastAppliedPrefillKey.value === prefillKey) return;
 
-    // Asegura que el coche se encuentre aunque el usuario tuviese filtros activos.
+    // Ensure the car is found even if the user had active filters.
     resetFilters();
     await nextTick();
 
@@ -518,7 +496,7 @@ async function createReservation() {
   submitting.value = true;
 
   try {
-    // Validar disponibilidad ANTES de crear la reserva
+    // Validate availability BEFORE creating the reservation
     const availability = await reservationLogService.checkAvailability(
       Number(selectedVehicle.value.id) || 0,
       normalizeDateTime(reservationForm.startAt),
@@ -627,8 +605,8 @@ async function createReservation() {
           </div>
 
           <div class="text-sm text-muted">
-            <span class="font-medium text-main">Ordenar por:</span>
-            <span class="ml-2">Recomendado</span>
+            <span class="font-medium text-main">Order by:</span>
+            <span class="ml-2">Recommended</span>
           </div>
         </div>
 
@@ -639,10 +617,10 @@ async function createReservation() {
         <div v-if="debugEnabled" class="mb-4 rounded-lg border border-warning bg-warning/10 p-4">
           <div class="mb-2 flex items-center justify-between">
             <h2 class="text-sm font-semibold text-warning-dark">Reservation Debug Mode</h2>
-            <span class="text-xs text-warning-dark">Activo via ?debugReservations=1</span>
+            <span class="text-xs text-warning-dark">Active via ?debugReservations=1</span>
           </div>
           <p class="mb-2 text-xs text-warning-dark">
-            Muestra respuestas crudas/normalizadas de reservas y calendario para diagnostico.
+            Shows raw/normalized reservation and calendar responses for diagnostics.
           </p>
           <pre class="max-h-80 overflow-auto rounded bg-surface p-3 text-[11px] leading-4 text-main">{{ debugDump }}</pre>
         </div>
@@ -650,7 +628,7 @@ async function createReservation() {
         <VehicleList :vehicles="vehicleCards" :loading="loading" @reserve="openReservationModal">
           <template #empty>
             <div class="rounded-2xl border border-default bg-surface p-6 text-sm text-muted">
-              No hay vehículos que coincidan con los filtros.
+              No vehicles match the filters.
             </div>
           </template>
         </VehicleList>
@@ -687,7 +665,7 @@ async function createReservation() {
               
                 <BusyDaysCalendar
                   :slots="selectedVehicleCalendarSlots"
-                  title="Calendario de ocupacion"
+                  :title="$t('reservations.occupancyCalendar')"
                 />
 
                 <div class="mt-6 space-y-4">
@@ -711,12 +689,12 @@ async function createReservation() {
                 </div>
               </div>
 
-              <div class="flex flex-col-reverse gap-3 border-t border-default bg-surface px-6 py-4 sm:flex-row sm:justify-end">
+                <div class="flex flex-col-reverse gap-3 border-t border-default bg-surface px-6 py-4 sm:flex-row sm:justify-end">
                 <BaseButton v-if="!fromMap" variant="secondary" :disabled="submitting" @click="closeReservationModal">
                   {{ $t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submitting" @click="createReservation">
-                  Reservar y pagar
+                  {{ $t('reservations.reserveAndPay') }}
                 </BaseButton>
               </div>
           </div>

@@ -18,11 +18,11 @@ function normalizeStatus(value: unknown): ReservationStatus {
 }
 
 function normalizeLog(raw: any): ReservationLog {
-  // Extraer datos del objeto vehicle anidado si existe
+  // Extract data from the nested vehicle object if it exists
   const vehicleData = typeof raw?.vehicle === 'object' ? raw.vehicle : {}
   const userData = typeof raw?.user === 'object' ? raw.user : {}
   
-  // Construir vehicle_name de brand + model
+  // Build vehicle_name from brand + model
   const vehicleName = (vehicleData.brand && vehicleData.model)
     ? `${vehicleData.brand} ${vehicleData.model}`.trim()
     : vehicleData.name || vehicleData.vehicle_name || ''
@@ -254,11 +254,11 @@ export const reservationLogService = {
     endDate: string,
     excludeReservationId?: number,
   ): Promise<AvailabilityCheckResponse> {
-    // Normalizar startDate/endDate a ISO 8601 UTC antes de enviarlos al backend.
-    // Evitar concatenar ".000Z" sobre cadenas que ya contienen offset (+02:00) o Z.
+    // Normalize startDate/endDate to ISO 8601 UTC before sending them to the backend.
+    // Avoid concatenating ".000Z" on strings that already contain an offset (+02:00) or Z.
     const normalizeToISOString = (value: string): string => {
       if (!value) return value
-      // Si ya termina en Z o tiene offset +/-HH:MM, convertir a Date y usar toISOString()
+      // If it already ends in Z or has an offset +/-HH:MM, convert to Date and use toISOString()
       try {
         const parsed = new Date(value)
         if (!Number.isNaN(parsed.getTime())) {
@@ -267,7 +267,7 @@ export const reservationLogService = {
       } catch (e) {
         // ignore
       }
-      // Fallback: devolver tal cual (backend validará)
+      // Fallback: return as-is (backend will validate)
       return value
     }
 
@@ -330,7 +330,7 @@ export const reservationLogService = {
 
   async updateReservation(reservationId: number, endDate: string): Promise<ReservationLog> {
     const payload = {
-      end_date: endDate, // Formato esperado: 2026-04-26T18:00:00
+      end_date: endDate, // Expected format: 2026-04-26T18:00:00
     };
     const raw = await apiClient.patch<any>(`/v1/reservations/${reservationId}`, payload);
     return normalizeLog(raw?.data ?? raw);

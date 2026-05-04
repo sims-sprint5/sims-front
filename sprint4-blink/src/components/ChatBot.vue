@@ -139,11 +139,11 @@ const buildContext = () => {
   const routeName = route.name?.toString() || 'inicio';
   
   const baseContext = `
-PROYECTO: SIMS - Sistema de Gestión de Reserva de Vehículos
-USUARIO: ${user.value?.name || 'Usuario'}
-IDIOMA: ${t('_lang')}
-PÁGINA ACTUAL: ${routeName}
-EMAIL: ${user.value?.email || 'no disponible'}
+PROJECT: Fleetly - Vehicle Reservation Management System
+USER: ${user.value?.name || 'User'}
+LANGUAGE: ${t('_lang')}
+CURRENT PAGE: ${routeName}
+EMAIL: ${user.value?.email || 'not available'}
   `.trim();
 
   return baseContext;
@@ -177,7 +177,7 @@ const sendMessage = async () => {
   try {
     // Build enriched message with context
     const context = buildContext();
-    const enrichedMessage = `${context}\n\nPREGUNTA DEL USUARIO:\n${msg}`;
+    const enrichedMessage = `${context}\n\nUSER QUESTION:\n${msg}`;
 
     const response = await fetch('/api/v1/chat/ask', {
       method: 'POST',

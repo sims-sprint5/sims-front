@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <!-- Búsqueda y filtros -->
+      <!-- Search and filters -->
       <div class="mb-6 bg-surface p-4 rounded-lg shadow">
         <div class="flex flex-col gap-4 sm:flex-row">
           <div class="flex-1">
@@ -376,7 +376,7 @@ const closeDeleteModal = () => {
   ticketToDelete.value = null;
 };
 
-// Eliminar ticket
+// Delete ticket
 const handleDelete = async () => {
   if (!ticketToDelete.value) return;
 
@@ -393,7 +393,7 @@ const handleDelete = async () => {
   }
 };
 
-// Cargar datos al montar el componente
+// Load data on component mount
 onMounted(() => {
   loadTickets();
 });

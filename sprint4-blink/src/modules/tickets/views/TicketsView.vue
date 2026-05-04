@@ -107,7 +107,7 @@ const { run: runDebouncedSearch } = useDebouncedSearch(300);
 
 type SelectOption = { label: string; value: string };
 
-// Estado
+// State
 const tickets = ref<Ticket[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
@@ -133,7 +133,7 @@ const typeOptions = computed<SelectOption[]>(() =>
   ALL_TICKET_TYPES.map((v) => ({ value: v, label: labelType(v) }))
 );
 
-// Cargar tickets
+// Load tickets
 const loadTickets = async () => {
   loading.value = true;
   try {
@@ -181,7 +181,7 @@ const handleRefresh = async () => {
   await loadTickets();
 };
 
-// Modales
+// Modals
 const openCreateModal = () => {
   formErrors.value = {};
   showTicketModal.value = true;
@@ -193,7 +193,7 @@ const closeTicketModal = () => {
 };
 
 const openViewModal = async (ticket: Ticket) => {
-  // Recargar el ticket para obtener los mensajes más recientes
+  // Reload the ticket to get the latest messages
   try {
     const id = (ticket.id ?? ticket.ticket_id) as number;
     if (!id) throw { message: 'tickets.errors.invalidId' };

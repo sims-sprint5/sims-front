@@ -7,7 +7,7 @@ export function validateTicketForm(
   formData: CreateTicketData
 ): ValidationErrors {
   const errors: ValidationErrors = {};
-  // Validar descripcion
+  // Validate description
   if (formData.descripcion) {
     if (typeof formData.descripcion !== 'string' || formData.descripcion.trim().length === 0) {
       errors.descripcion = 'validation.ticket.descripcionInvalid';
@@ -21,7 +21,7 @@ export function validateTicketForm(
     errors.asunto = 'validation.ticket.asuntoMax';
   }
 
-  // Type és requerit pel backend
+  // Type is required by the backend
   if (!formData.type || typeof formData.type !== 'string' || formData.type.trim().length === 0) {
     errors.type = 'validation.ticket.typeRequired';
   }

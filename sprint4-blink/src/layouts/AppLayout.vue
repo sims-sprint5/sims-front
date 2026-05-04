@@ -71,10 +71,10 @@ watch(() => route.fullPath, () => {
 });
 
 onMounted(async () => {
-  // Els superadmins usen un endpoint d'auth diferenciat (/v1/superadmin/auth/me).
-  // Cridar /v1/auth/me amb el token de superadmin retornaria 401 i l'interceptor
-  // d'axios faria un redirect forçat a /login, ignorant el try/catch.
-  // Per als superadmins, les dades ja estan al localStorage des del login, és suficient.
+  // Superadmins use a distinct auth endpoint (/v1/superadmin/auth/me).
+  // Calling /v1/auth/me with a superadmin token would return 401 and the axios
+  // interceptor would force a redirect to /login, ignoring the try/catch.
+  // For superadmins, data is already in localStorage since login, which is sufficient.
   const storedUser = authService.getUser();
   if (storedUser?.role === 'superadmin') return;
 

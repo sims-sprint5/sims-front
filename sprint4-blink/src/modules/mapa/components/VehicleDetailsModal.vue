@@ -16,7 +16,7 @@
             <button
               type="button"
               class="text-muted hover:text-muted"
-              aria-label="Cerrar"
+              aria-label="Close"
               @click="emit('close')"
             >
               ✕

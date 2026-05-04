@@ -1,5 +1,5 @@
 /**
- * Tipos relacionados con vehículos
+ * Types related to vehicles
  */
 
 export interface NextReservation {
@@ -20,7 +20,7 @@ export interface CalendarReservation {
 
 export interface Vehicle {
   id: number;
-  vehicle_id?: number; // Alias del backend (PK real)
+  vehicle_id?: number; // Backend alias (real PK)
   license_plate: string;
   brand: string;
   model: string;

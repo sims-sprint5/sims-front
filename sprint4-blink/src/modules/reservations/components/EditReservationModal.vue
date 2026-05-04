@@ -109,8 +109,8 @@ const formatToLocal = (isoDate: string): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-// Convert datetime-local back to ISO format para enviar al backend
-// Backend espera: 2026-04-26T18:00:00 (sin milisegundos ni Z)
+// Convert datetime-local back to ISO format to send to the backend
+// Backend expects: 2026-04-26T18:00:00 (no milliseconds or Z)
 const formatToISO = (localDate: string): string => {
   if (!localDate) return '';
   const date = new Date(localDate);

@@ -50,6 +50,12 @@
     "sections": {
       "client": "Cliente",
       "admin": "Admin"
+    },
+    "stats": {
+      "totalVehicles": "Vehículos:",
+      "availableVehicles": "Disponibles:",
+      "maintenanceVehicles": "Mantenimiento:",
+      "inactiveVehicles": "Inactivos:"
     }
   },
   "auth": {
@@ -138,6 +144,9 @@
     "firstName": "Nombre",
     "lastName": "Apellidos",
     "email": "Correo electrónico",
+    "firstNameTooltip": "Tu nombre. Se mostrara en tu perfil.",
+    "lastNameTooltip": "Tus apellidos. Se mostraran en tu perfil.",
+    "emailTooltip": "Correo de contacto y acceso. Debe ser valido.",
     "currentPassword": "Contraseña actual",
     "newPassword": "Nueva contraseña",
     "passwordConfirmation": "Confirmar nueva contraseña",
@@ -172,14 +181,20 @@
     "form": {
       "name": "Nombre",
       "namePlaceholder": "Nombre completo",
+      "nameTooltip": "Nombre completo del usuario. Requerido.",
       "email": "Email",
       "emailPlaceholder": "correo.ejemplo.com",
+      "emailTooltip": "Correo valido (ej: nombre@dominio.com). Requerido.",
       "phone": "Teléfono",
       "phonePlaceholder": "+34 600 000 000",
+      "phoneTooltip": "Telefono con prefijo internacional si aplica. Requerido.",
       "role": "Rol",
+      "roleTooltip": "Rol del usuario. Admin puede gestionar el sistema.",
       "password": "Contraseña",
       "passwordPlaceholder": "••••••••",
+      "passwordTooltip": "Minimo 8 caracteres. Requerida al crear.",
       "passwordConfirmation": "Confirmar contraseña",
+      "passwordConfirmationTooltip": "Repite la contrasena para confirmar.",
       "roleUser": "Usuario",
       "roleAdmin": "Administrador"
     },
@@ -229,20 +244,28 @@
     "form": {
       "licensePlate": "Matrícula",
       "licensePlatePlaceholder": "ABC-1234",
+      "licensePlateTooltip": "Formato de matricula, ej: ABC-1234. Requerida.",
       "brand": "Marca",
       "brandPlaceholder": "Marca",
+      "brandTooltip": "Marca del vehiculo (ej: Toyota). Requerida.",
       "model": "Modelo",
       "modelPlaceholder": "Modelo",
+      "modelTooltip": "Modelo del vehiculo (ej: Corolla). Requerido.",
       "year": "Año",
       "yearPlaceholder": "2024",
+      "yearTooltip": "Anio de fabricacion (YYYY). Requerido.",
       "color": "Color",
       "colorPlaceholder": "Color",
+      "colorTooltip": "Color principal del vehiculo. Requerido.",
       "status": "Estado",
       "statusPlaceholder": "Selecciona estado",
+      "statusTooltip": "Estado actual del vehiculo. Requerido.",
       "currentLatitude": "Latitud actual",
       "currentLatitudePlaceholder": "0.00000000",
+      "currentLatitudeTooltip": "Latitud GPS en decimal (ej: 41.3879).",
       "currentLongitude": "Longitud actual",
       "currentLongitudePlaceholder": "0.00000000",
+      "currentLongitudeTooltip": "Longitud GPS en decimal (ej: 2.1699).",
       "lastLocationUpdate": "Última actualización de ubicación",
       "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
     },
@@ -365,6 +388,8 @@
       "updated": "Reserva actualizada correctamente",
       "deleted": "Reserva eliminada correctamente"
     },
+    "reserveAndPay": "Reservar y pagar",
+    "occupancyCalendar": "Calendario de ocupación",
     "errors": {
       "load": "Error al cargar reservas",
       "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todas las reservas.",
@@ -373,7 +398,9 @@
       "delete": "Error al eliminar reserva",
       "notFound": "Reserva no encontrada. Puede que ya haya sido eliminada.",
       "invalidId": "ID de reserva inválido",
+      "invalidVehicle": "Vehículo seleccionado inválido.",
       "missingDates": "Indica fecha de inicio y fin para la reserva.",
+      "missingLocations": "Indica los puntos de recogida y devolución antes de proceder al pago.",
       "create": "Error al crear la reserva. Por favor, inténtalo de nuevo.",
       "invalidDates": "La fecha de fin debe ser posterior a la de inicio.",
       "renewal": "Error al solicitar renovación. Por favor, inténtalo de nuevo.",
@@ -755,17 +782,25 @@
     "form": {
       "name": "Nombre",
       "namePlaceholder": "p.ej., Downtown Zona Restringida",
+      "nameTooltip": "Nombre corto y claro de la zona. Requerido.",
       "description": "Descripción",
       "descriptionPlaceholder": "p.ej., Sin estacionamiento después de las 6pm",
+      "descriptionTooltip": "Describe la regla o uso de la zona (opcional).",
       "type": "Tipo",
+      "typeTooltip": "Define el comportamiento de la zona.",
       "latitude": "Latitud",
       "latitudePlaceholder": "41.3851",
+      "latitudeTooltip": "Latitud del centro en formato decimal.",
       "longitude": "Longitud",
       "longitudePlaceholder": "2.1734",
+      "longitudeTooltip": "Longitud del centro en formato decimal.",
       "radius": "Radio (metros)",
       "radiusPlaceholder": "p.ej., 250",
+      "radiusTooltip": "Radio de la zona en metros.",
       "clickToSelect": "Haz clic en el mapa para seleccionar el centro de la zona",
-      "status": "Estado"
+      "clickToSelectTooltip": "Haz clic en el mapa para fijar latitud y longitud.",
+      "status": "Estado",
+      "statusTooltip": "Define si la zona esta activa o inactiva."
     },
     "logs": {
       "vehicle": "Vehículo",
@@ -909,7 +944,7 @@
     }
   },
   "chatbot": {
-    "title": "Asistente SIMS",
+    "title": "Asistente Fleetly",
     "openChat": "Abrir chat de asistencia",
     "greeting": "Hola {name}, ¿En qué puedo ayudarte?",
     "defaultGreeting": "Usuario",
@@ -918,12 +953,12 @@
     "contextMap": "Explorando vehículos",
     "contextReservations": "Tus reservas",
     "contextTickets": "Tus tickets de soporte",
-    "contextDefault": "En SIMS",
+    "contextDefault": "En Fleetly",
     "placeholderMap": "¿Es este vehículo bueno para mí?",
     "placeholderReservations": "¿Cómo modifico mi reserva?",
     "placeholderTickets": "¿Necesitas ayuda con tu ticket?",
     "placeholderDefault": "¿Tienes alguna duda?",
-    "welcomeMessage": "Soy tu asistente de SIMS. Cuéntame qué necesitas ayuda y haré mi mejor esfuerzo para asistirte.",
+    "welcomeMessage": "Soy tu asistente de Fleetly. Cuéntame qué necesitas ayuda y haré mi mejor esfuerzo para asistirte.",
     "errorProcessing": "Error al procesar tu pregunta",
     "errorServer": "Error del servidor. Intenta nuevamente.",
     "errorConnection": "Error de conexión. Intenta más tarde."

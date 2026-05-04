@@ -73,7 +73,7 @@ const isReservedNow = computed(() => {
       const start = new Date(slot.startDate);
       if (Number.isNaN(start.getTime())) return false;
     }
-    // Regla del módulo: se considera bloqueado hasta que termine la reserva.
+    // Module rule: considered blocked until the reservation ends.
     return now < end;
   });
 });
@@ -93,7 +93,7 @@ const actionButtonVariant = computed<ButtonVariant>(() => {
 function handleReserve() {
   if (!props.vehicle) return;
   if (!isAvailable.value && !canPreReserve.value) {
-    toast.error('Este coche no está disponible');
+    toast.error('This car is not available');
     return;
   }
   emit('reserve', props.vehicle);
@@ -137,7 +137,7 @@ function handleReserve() {
             <div class="mt-3 flex gap-2.5 overflow-x-auto pb-1 pr-1">
               <div class="rounded-lg px-2.5 py-2 bg-base border border-default min-w-[150px] shrink-0">
                 <div class="flex items-center gap-1.5">
-                  <span class="font-semibold text-main text-xs">Matrícula</span>
+                  <span class="font-semibold text-main text-xs">License</span>
                 </div>
                 <p class="mt-1 text-main text-sm font-bold truncate">{{ vehicle?.licensePlate ?? '—' }}</p>
               </div>

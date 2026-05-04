@@ -48,6 +48,12 @@
     "sections": {
       "client": "Client",
       "admin": "Admin"
+    },
+    "stats": {
+      "totalVehicles": "Vehicles:",
+      "availableVehicles": "Disponibles:",
+      "maintenanceVehicles": "Manteniment:",
+      "inactiveVehicles": "Inactius:"
     }
   },
   "auth": {
@@ -137,6 +143,9 @@
     "firstName": "Nom",
     "lastName": "Cognoms",
     "email": "Correu electrònic",
+    "firstNameTooltip": "El teu nom. Es mostrara al teu perfil.",
+    "lastNameTooltip": "Els teus cognoms. Es mostraran al teu perfil.",
+    "emailTooltip": "Correu de contacte i accés. Ha de ser vàlid.",
     "currentPassword": "Contrasenya actual",
     "newPassword": "Contrasenya nova",
     "passwordConfirmation": "Confirmar contrasenya nova",
@@ -171,14 +180,20 @@
     "form": {
       "name": "Nom",
       "namePlaceholder": "Nom complet",
+      "nameTooltip": "Nom complet de l'usuari. Requerit.",
       "email": "Email",
       "emailPlaceholder": "correu.exemple.com",
+      "emailTooltip": "Correu valid (ex: nom@domini.com). Requerit.",
       "phone": "Telèfon",
       "phonePlaceholder": "+34 600 000 000",
+      "phoneTooltip": "Telefon amb prefix internacional si cal. Requerit.",
       "role": "Rol",
+      "roleTooltip": "Rol de l'usuari. Admin pot gestionar el sistema.",
       "password": "Contrasenya",
       "passwordPlaceholder": "••••••••",
+      "passwordTooltip": "Minim 8 caracters. Requerida en crear.",
       "passwordConfirmation": "Confirma la contrasenya",
+      "passwordConfirmationTooltip": "Repetix la contrasenya per confirmar.",
       "roleUser": "Usuari",
       "roleAdmin": "Administrador"
     },
@@ -228,20 +243,28 @@
     "form": {
       "licensePlate": "Matrícula",
       "licensePlatePlaceholder": "ABC-1234",
+      "licensePlateTooltip": "Format de matricula (ex: ABC-1234). Requerida.",
       "brand": "Marca",
       "brandPlaceholder": "Marca",
+      "brandTooltip": "Marca del vehicle (ex: Toyota). Requerida.",
       "model": "Model",
       "modelPlaceholder": "Model",
+      "modelTooltip": "Model del vehicle (ex: Corolla). Requerit.",
       "year": "Any",
       "yearPlaceholder": "2024",
+      "yearTooltip": "Any de fabricacio (YYYY). Requerit.",
       "color": "Color",
       "colorPlaceholder": "Color",
+      "colorTooltip": "Color principal del vehicle. Requerit.",
       "status": "Estat",
       "statusPlaceholder": "Selecciona estat",
+      "statusTooltip": "Estat actual del vehicle. Requerit.",
       "currentLatitude": "Latitud actual",
       "currentLatitudePlaceholder": "0.00000000",
+      "currentLatitudeTooltip": "Latitud GPS en decimal (ex: 41.3879).",
       "currentLongitude": "Longitud actual",
       "currentLongitudePlaceholder": "0.00000000",
+      "currentLongitudeTooltip": "Longitud GPS en decimal (ex: 2.1699).",
       "lastLocationUpdate": "Última actualització d'ubicació",
       "lastLocationUpdatePlaceholder": "YYYY-MM-DD HH:mm:ss"
     },
@@ -362,6 +385,8 @@
       "updated": "Reserva actualitzada correctament",
       "deleted": "Reserva eliminada correctament"
     },
+    "reserveAndPay": "Reserva i paga",
+    "occupancyCalendar": "Calendari d'ocupació",
     "errors": {
       "load": "Error en carregar reserves",
       "searchEndpointUnavailable": "L’endpoint de cerca no està disponible. Recarrega per veure totes les reserves.",
@@ -370,7 +395,9 @@
       "delete": "Error en eliminar la reserva",
       "notFound": "Reserva no trobada. Potser ja ha sigut eliminada.",
       "invalidId": "ID de reserva invàlid",
+      "invalidVehicle": "Vehicle seleccionat invàlid.",
       "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
+      "missingLocations": "Indica els punts de recollida i devolució abans de procedir al pagament.",
       "create": "Error en crear la reserva. Torna-ho a intentar.",
       "invalidDates": "La data de fi ha de ser posterior a la d'inici.",
       "renewal": "Error al sol·licitar la renovació. Torna-ho a intentar.",
@@ -751,17 +778,25 @@
     "form": {
       "name": "Nom",
       "namePlaceholder": "p.ex., Downtown Zona Restringida",
+      "nameTooltip": "Nom curt i clar de la zona. Requerit.",
       "description": "Descripció",
       "descriptionPlaceholder": "p.ex., Sense estacionament després de les 6pm",
+      "descriptionTooltip": "Descriu la regla o us de la zona (opcional).",
       "type": "Tipus",
+      "typeTooltip": "Defineix el comportament de la zona.",
       "latitude": "Latitud",
       "latitudePlaceholder": "41.3851",
+      "latitudeTooltip": "Latitud del centre en format decimal.",
       "longitude": "Longitud",
       "longitudePlaceholder": "2.1734",
+      "longitudeTooltip": "Longitud del centre en format decimal.",
       "radius": "Radi (metres)",
       "radiusPlaceholder": "p.ex., 250",
+      "radiusTooltip": "Radi de la zona en metres.",
       "clickToSelect": "Feu clic al mapa per seleccionar el centre de la zona",
-      "status": "Estat"
+      "clickToSelectTooltip": "Feu clic al mapa per fixar latitud i longitud.",
+      "status": "Estat",
+      "statusTooltip": "Defineix si la zona esta activa o inactiva."
     },
     "logs": {
       "vehicle": "Vehicle",
@@ -902,7 +937,7 @@
     }
   },
   "chatbot": {
-    "title": "Assistent SIMS",
+    "title": "Assistent Fleetly",
     "openChat": "Obrir xat d'assistència",
     "greeting": "Hola {name}, ¿com puc ajudar-te?",
     "defaultGreeting": "Usuari",
@@ -911,12 +946,12 @@
     "contextMap": "Explorant vehícles",
     "contextReservations": "Les teves reserves",
     "contextTickets": "Els teus tickets de suport",
-    "contextDefault": "A SIMS",
+    "contextDefault": "A Fleetly",
     "placeholderMap": "¿És aquest vehícle bo per a mi?",
     "placeholderReservations": "¿Com modifico la meva reserva?",
     "placeholderTickets": "¿Necessites ajuda amb el teu ticket?",
     "placeholderDefault": "¿Tens alguna pregunta?",
-    "welcomeMessage": "Sóc el teu assistent de SIMS. Explica'm amb què necessites ajuda i faré el meu millor esforç per assistir-te.",
+    "welcomeMessage": "Sóc el teu assistent de Fleetly. Explica'm amb què necessites ajuda i faré el meu millor esforç per assistir-te.",
     "errorProcessing": "Error en processar la teva pregunta",
     "errorServer": "Error del servidor. Intenta novament.",
     "errorConnection": "Error de connexió. Intenta més tard."
