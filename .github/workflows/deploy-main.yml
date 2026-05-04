@@ -7,19 +7,12 @@ on:
   workflow_dispatch:
 
 env:
-  SSH_PORT: 22
+  SSH_PORT: ${{ secrets.DEPLOY_PORT }}
   HEALTHCHECK_URL: https://simsgrup2.app/login
   FRONTEND_DIR: sprint4-blink
   REMOTE_DIR: /opt/sims-front-2/sprint4-blink
 
 jobs:
-  # ---------------------------------------------
-  # TEST JOB
-  # - Instala dependencias
-  # - Ejecuta tests obligatorios (si fallan, se detiene el pipeline)
-  # - Compila frontend
-  # - Valida build Docker de producción
-  # ---------------------------------------------
   test:
     runs-on: ubuntu-latest
     name: Test and Validate Docker Build
@@ -50,14 +43,6 @@ jobs:
       - name: Validate Docker production image build
         run: docker build --target production -t sims-front:ci "${FRONTEND_DIR}"
 
-  # ---------------------------------------------
-  # DEPLOY JOB
-  # - Depende de test: si test/build falla, no despliega
-  # - Sincroniza código al servidor
-  # - Construye y levanta frontend-prod con docker compose
-  # - Limpia imágenes huérfanas
-  # - Ejecuta healthcheck final
-  # ---------------------------------------------
   deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -71,6 +56,7 @@ jobs:
 
       - name: Embed build metadata
         run: |
+          mkdir -p "${FRONTEND_DIR}/public"
           printf 'commit=%s\nbuild_date=%s\n' "${GITHUB_SHA}" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "${FRONTEND_DIR}/public/build.txt"
 
       - name: Setup SSH key
@@ -83,15 +69,6 @@ jobs:
           echo "$SSH_KEY_B64" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "${SSH_PORT}" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          cat >> ~/.ssh/config << EOF
-          Host deploy
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/deploy_key
-            StrictHostKeyChecking no
-            Port ${SSH_PORT}
-          EOF
-          chmod 600 ~/.ssh/config
 
       - name: Upload frontend source to droplet
         env:
@@ -108,30 +85,6 @@ jobs:
             --exclude 'dist' \
             "${FRONTEND_DIR}/" \
             "$SSH_USER@$SSH_HOST:${REMOTE_DIR}/"
-
-      - name: Create .env file on server
-        env:
-          SSH_USER: ${{ secrets.DEPLOY_USER }}
-          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
-          VITE_CENTRAL_API_URL: ${{ secrets.VITE_CENTRAL_API_URL }}
-          VITE_TENANT_BASE_URL: ${{ secrets.VITE_TENANT_BASE_URL }}
-          VITE_TENANT_DOMAIN_SUFFIX: ${{ secrets.VITE_TENANT_DOMAIN_SUFFIX }}
-          VITE_API_PORT: ${{ secrets.VITE_API_PORT }}
-          VITE_APP_BASE_DOMAIN: ${{ secrets.VITE_APP_BASE_DOMAIN }}
-          VITE_CENTRAL_BLADE_URL: ${{ secrets.VITE_CENTRAL_BLADE_URL }}
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key -p "${SSH_PORT}" "$SSH_USER@$SSH_HOST" "REMOTE_DIR='${REMOTE_DIR}' bash -s" << 'ENV_EOF'
-            cat > "${REMOTE_DIR}/.env" << 'DOTENV_EOF'
-            VITE_CENTRAL_API_URL=${{ secrets.VITE_CENTRAL_API_URL }}
-            VITE_TENANT_BASE_URL=${{ secrets.VITE_TENANT_BASE_URL }}
-            VITE_TENANT_DOMAIN_SUFFIX=${{ secrets.VITE_TENANT_DOMAIN_SUFFIX }}
-            VITE_API_PORT=${{ secrets.VITE_API_PORT }}
-            VITE_APP_BASE_DOMAIN=${{ secrets.VITE_APP_BASE_DOMAIN }}
-            VITE_CENTRAL_BLADE_URL=${{ secrets.VITE_CENTRAL_BLADE_URL }}
-            DOTENV_EOF
-            chmod 600 "${REMOTE_DIR}/.env"
-            echo "✓ .env file created on server"
-          ENV_EOF
 
       - name: Build and run frontend Docker container
         env:
