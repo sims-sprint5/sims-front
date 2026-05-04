@@ -139,7 +139,7 @@ const buildContext = () => {
   const routeName = route.name?.toString() || 'inicio';
   
   const baseContext = `
-PROJECT: SIMS - Vehicle Reservation Management System
+PROJECT: Fleetly - Vehicle Reservation Management System
 USER: ${user.value?.name || 'User'}
 LANGUAGE: ${t('_lang')}
 CURRENT PAGE: ${routeName}

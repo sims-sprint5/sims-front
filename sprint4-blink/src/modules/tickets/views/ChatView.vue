@@ -108,7 +108,7 @@ const getPlaceholder = () => {
 
 const buildContext = () => {
   const baseContext = `
-PROJECT: SIMS - Vehicle Reservation Management System
+PROJECT: Fleetly - Vehicle Reservation Management System
 USER: ${user.value?.name || 'User'}
 LANGUAGE: ${t('_lang')}
 EMAIL: ${user.value?.email || 'not available'}
