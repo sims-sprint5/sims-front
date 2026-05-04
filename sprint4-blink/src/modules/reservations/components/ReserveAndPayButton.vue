@@ -8,7 +8,7 @@
       :disabled="isLoading || disabled"
       @click="handleCheckout"
     >
-      Reserve and Pay
+      {{ t('reservations.reserveAndPay') }}
     </BaseButton>
 
     <p v-if="errorMessage" class="text-sm text-danger" role="alert">
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { BaseButton } from '@/components/base'
 import { createReservationCheckoutSession } from '@/modules/reservations/services/reservationCheckout.service'
 
@@ -35,6 +36,8 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
 })
 
+const { t } = useI18n()
+
 const isLoading = ref(false)
 const errorMessage = ref('')
 
@@ -46,7 +49,7 @@ async function handleCheckout() {
 
   try {
     if (!props.startDate || !props.endDate) {
-      errorMessage.value = 'Select dates before proceeding to payment.'
+      errorMessage.value = t('reservations.errors.missingDates') as string
       return
     }
 
@@ -59,23 +62,21 @@ async function handleCheckout() {
     })
     window.location.assign(checkoutUrl)
   } catch (error: unknown) {
-    const fallback = 'Could not start checkout. Please try again.'
-
     const anyErr: any = error
     // eslint-disable-next-line no-console
     console.error('ReserveAndPay checkout failed:', anyErr)
     const backendDetail = anyErr?.responseData?.error || anyErr?.responseData?.message || anyErr?.message
 
     if (anyErr?.message === 'Invalid vehicle id') {
-      errorMessage.value = 'Invalid vehicle selected.'
+      errorMessage.value = t('reservations.errors.invalidVehicle') as string
     } else if (anyErr?.message === 'Missing reservation dates') {
-      errorMessage.value = 'Select dates before proceeding to payment.'
+      errorMessage.value = t('reservations.errors.missingDates') as string
     } else if (anyErr?.message === 'Missing reservation locations') {
-      errorMessage.value = 'Set pickup and dropoff locations before proceeding to payment.'
+      errorMessage.value = t('reservations.errors.missingLocations') as string
     } else if (backendDetail) {
       errorMessage.value = String(backendDetail)
     } else {
-      errorMessage.value = fallback
+      errorMessage.value = t('reservations.errors.checkoutFailed') as string
     }
   } finally {
     isLoading.value = false

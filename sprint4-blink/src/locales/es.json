@@ -388,6 +388,8 @@
       "updated": "Reserva actualizada correctamente",
       "deleted": "Reserva eliminada correctamente"
     },
+    "reserveAndPay": "Reservar y pagar",
+    "occupancyCalendar": "Calendario de ocupación",
     "errors": {
       "load": "Error al cargar reservas",
       "searchEndpointUnavailable": "Endpoint de búsqueda no disponible. Recarga para ver todas las reservas.",
@@ -396,7 +398,9 @@
       "delete": "Error al eliminar reserva",
       "notFound": "Reserva no encontrada. Puede que ya haya sido eliminada.",
       "invalidId": "ID de reserva inválido",
+      "invalidVehicle": "Vehículo seleccionado inválido.",
       "missingDates": "Indica fecha de inicio y fin para la reserva.",
+      "missingLocations": "Indica los puntos de recogida y devolución antes de proceder al pago.",
       "create": "Error al crear la reserva. Por favor, inténtalo de nuevo.",
       "invalidDates": "La fecha de fin debe ser posterior a la de inicio.",
       "renewal": "Error al solicitar renovación. Por favor, inténtalo de nuevo.",

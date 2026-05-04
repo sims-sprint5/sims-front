@@ -40,7 +40,6 @@ const emit = defineEmits<{
 const showReservationModal = ref(false);
 const selectedVehicle = ref<ReservationVehicleCardModel | null>(null);
 const submitting = ref(false);
-let autoRefreshTimer: number | null = null;
 const debugEnabled = ref(false);
 const debugEntries = ref<any[]>([]);
 const fromMap = computed(() => route.query.fromMap === 'true');
@@ -147,7 +146,7 @@ function isVehicleReservedNow(vehicle: ReservationVehicleCardModel): boolean {
     const start = new Date(slot.startDate);
     const end = new Date(slot.endDate);
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false;
-    return now < end;
+    return start <= now && now < end;
   });
 }
 
@@ -248,13 +247,6 @@ watch(
 );
 
 onBeforeUnmount(() => {
-  if (autoRefreshTimer) {
-    window.clearInterval(autoRefreshTimer);
-    autoRefreshTimer = null;
-  }
-
-  window.removeEventListener('focus', handleWindowFocus);
-  document.removeEventListener('visibilitychange', handleVisibilityChange);
   if (debugEnabled.value) {
     window.removeEventListener(getReservationDebugEventName(), refreshDebugEntries);
   }
@@ -272,15 +264,7 @@ async function refreshAfterCheckout(): Promise<void> {
   }
 }
 
-function handleWindowFocus() {
-  void refreshAfterCheckout();
-}
 
-function handleVisibilityChange() {
-  if (document.visibilityState === 'visible') {
-    void refreshAfterCheckout();
-  }
-}
 
 onMounted(() => {
   debugEnabled.value = isReservationDebugEnabled();
@@ -290,12 +274,6 @@ onMounted(() => {
   }
 
   void refreshAfterCheckout();
-  window.addEventListener('focus', handleWindowFocus);
-  document.addEventListener('visibilitychange', handleVisibilityChange);
-
-  autoRefreshTimer = window.setInterval(() => {
-    void refreshAfterCheckout();
-  }, 4000);
 });
 
 watch(
@@ -711,12 +689,12 @@ async function createReservation() {
                 </div>
               </div>
 
-              <div class="flex flex-col-reverse gap-3 border-t border-default bg-surface px-6 py-4 sm:flex-row sm:justify-end">
+                <div class="flex flex-col-reverse gap-3 border-t border-default bg-surface px-6 py-4 sm:flex-row sm:justify-end">
                 <BaseButton v-if="!fromMap" variant="secondary" :disabled="submitting" @click="closeReservationModal">
                   {{ $t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submitting" @click="createReservation">
-                  Reserve and pay
+                  {{ $t('reservations.reserveAndPay') }}
                 </BaseButton>
               </div>
           </div>

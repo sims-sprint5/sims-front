@@ -103,7 +103,7 @@
 
                 <BusyDaysCalendar
                   :slots="quickReservationBusySlots"
-                  title="Occupancy calendar"
+                  :title="t('reservations.occupancyCalendar')"
                 />
 
                 
@@ -134,7 +134,7 @@
                   {{ t('common.cancel') }}
                 </BaseButton>
                 <BaseButton :loading="submittingQuickReservation" @click="submitQuickReservation">
-                  Reserve and pay
+                  {{ t('reservations.reserveAndPay') }}
                 </BaseButton>
               </div>
             </div>

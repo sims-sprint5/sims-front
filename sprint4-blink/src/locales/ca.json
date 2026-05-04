@@ -385,6 +385,8 @@
       "updated": "Reserva actualitzada correctament",
       "deleted": "Reserva eliminada correctament"
     },
+    "reserveAndPay": "Reserva i paga",
+    "occupancyCalendar": "Calendari d'ocupació",
     "errors": {
       "load": "Error en carregar reserves",
       "searchEndpointUnavailable": "L’endpoint de cerca no està disponible. Recarrega per veure totes les reserves.",
@@ -393,7 +395,9 @@
       "delete": "Error en eliminar la reserva",
       "notFound": "Reserva no trobada. Potser ja ha sigut eliminada.",
       "invalidId": "ID de reserva invàlid",
+      "invalidVehicle": "Vehicle seleccionat invàlid.",
       "missingDates": "Indica una data d'inici i una de fi per a la reserva.",
+      "missingLocations": "Indica els punts de recollida i devolució abans de procedir al pagament.",
       "create": "Error en crear la reserva. Torna-ho a intentar.",
       "invalidDates": "La data de fi ha de ser posterior a la d'inici.",
       "renewal": "Error al sol·licitar la renovació. Torna-ho a intentar.",

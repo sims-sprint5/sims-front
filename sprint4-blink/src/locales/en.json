@@ -389,6 +389,8 @@
       "updated": "Reservation updated successfully",
       "deleted": "Reservation deleted successfully"
     },
+    "reserveAndPay": "Reserve and pay",
+    "occupancyCalendar": "Occupancy calendar",
     "errors": {
       "load": "Failed to load reservations",
       "searchEndpointUnavailable": "Search endpoint is not available. Refresh to see all reservations.",
@@ -397,7 +399,9 @@
       "delete": "Failed to delete reservation",
       "notFound": "Reservation not found. It may have already been deleted.",
       "invalidId": "Invalid reservation ID",
+      "invalidVehicle": "Invalid vehicle selected.",
       "missingDates": "Provide start and end dates for the reservation.",
+      "missingLocations": "Set pickup and dropoff locations before proceeding to payment.",
       "invalidDates": "The end date must be later than the start date.",
       "create": "Failed to create the reservation. Please try again.",
       "renewal": "Failed to request renewal. Please try again.",
