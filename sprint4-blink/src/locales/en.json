@@ -945,7 +945,7 @@
     }
   },
   "chatbot": {
-    "title": "SIMS Assistant",
+    "title": "Fleetly Assistant",
     "openChat": "Open support chat",
     "greeting": "Hello {name}, how can I help you?",
     "defaultGreeting": "User",
@@ -954,12 +954,12 @@
     "contextMap": "Exploring vehicles",
     "contextReservations": "Your reservations",
     "contextTickets": "Your support tickets",
-    "contextDefault": "In SIMS",
+    "contextDefault": "In Fleetly",
     "placeholderMap": "Is this vehicle good for me?",
     "placeholderReservations": "How do I modify my reservation?",
     "placeholderTickets": "Need help with your ticket?",
     "placeholderDefault": "Do you have any questions?",
-    "welcomeMessage": "I'm your SIMS assistant. Tell me what you need help with and I'll do my best to assist you.",
+    "welcomeMessage": "I'm your Fleetly assistant. Tell me what you need help with and I'll do my best to assist you.",
     "errorProcessing": "Error processing your question",
     "errorServer": "Server error. Try again.",
     "errorConnection": "Connection error. Try later."
