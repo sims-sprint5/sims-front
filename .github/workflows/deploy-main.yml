@@ -10,7 +10,7 @@ env:
   SSH_PORT: ${{ secrets.DEPLOY_PORT }}
   HEALTHCHECK_URL: https://simsgrup2.app/login
   FRONTEND_DIR: sprint4-blink
-  REMOTE_DIR: /opt/sims-front-2/sprint4-blink
+  REMOTE_DIR: /var/www/sims-front/sims-front/sprint4-blink
 
 jobs:
   test:
