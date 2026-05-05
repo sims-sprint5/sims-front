@@ -326,6 +326,7 @@
     "createTitle": "Crear reserva",
     "createDescription": "Selecciona les dates per registrar la nova reserva.",
     "selectDates": "Indica una data d'inici i una de fi per guardar la reserva.",
+    "pricePerHour": "Preu: 5€ per hora",
     "table": {
       "id": "ID",
       "logType": "Tipus de log",

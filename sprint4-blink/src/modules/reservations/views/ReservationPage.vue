@@ -659,7 +659,7 @@ async function createReservation() {
               </p>
 
                 <p class="mt-3 rounded-lg bg-base-dark px-3 py-2 text-sm text-muted">
-                  {{ selectedVehicle?.name }} · {{ $t('reservations.selectDates') }}
+                  {{ selectedVehicle?.name }} · {{ $t('reservations.selectDates') }} · {{ $t('reservations.pricePerHour') }}
                 </p>
 
               
