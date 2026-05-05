@@ -61,11 +61,7 @@ export function isSuperadminHost(): boolean {
   return isLocalLikeHost(hostname) || isBaseDomainHost(hostname);
 }
 
-function normalizeBaseUrl(url: string): string {
-  return url.replace(/\/+$/, '');
-}
-
-function getLocalApiPort(): string {
+function getApiPort(): string {
   if (window.location.port) {
     return `:${window.location.port}`;
   }
@@ -79,20 +75,15 @@ function getLocalApiPort(): string {
 }
 
 export function getTenantApiBaseUrl(): string {
-  const explicitBaseUrl = (import.meta.env.VITE_API_URL as string | undefined)?.trim();
-  if (explicitBaseUrl) {
-    return normalizeBaseUrl(explicitBaseUrl);
-  }
-
   const hostname = window.location.hostname;
   const protocol = window.location.protocol;
+  const port = getApiPort();
 
   if (isLocalLikeHost(hostname)) {
-    const port = getLocalApiPort();
     return `${protocol}//localhost${port}/api`;
   }
 
-  return `${protocol}//${hostname}/api`;
+  return `${protocol}//${hostname}${port}/api`;
 }
 
 export function buildTenantApiUrl(endpoint: string): string {
