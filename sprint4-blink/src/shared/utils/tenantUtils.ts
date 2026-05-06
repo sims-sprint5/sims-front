@@ -1,5 +1,32 @@
 const LOCAL_IP_PATTERN = /^\d+\.\d+\.\d+\.\d+$/;
 
+function normalizeHost(value: string | null | undefined): string | null {
+  if (!value) return null;
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  try {
+    return new URL(trimmed).hostname.toLowerCase();
+  } catch {
+    return trimmed.replace(/^www\./i, '').toLowerCase();
+  }
+}
+
+function getConfiguredBaseDomain(): string | null {
+  return normalizeHost(
+    (import.meta.env.VITE_APP_URL as string | undefined) ??
+      (import.meta.env.VITE_APP_BASE_DOMAIN as string | undefined)
+  );
+}
+
+function getConfiguredTenantDomainSuffix(): string | null {
+  const suffix = (import.meta.env.VITE_TENANT_DOMAIN_SUFFIX as string | undefined)?.trim();
+  if (!suffix) return null;
+
+  return suffix.replace(/^https?:\/\//i, '').toLowerCase();
+}
+
 function isIpLikeHost(hostname: string): boolean {
   return LOCAL_IP_PATTERN.test(hostname);
 }
@@ -10,22 +37,23 @@ function isLocalLikeHost(hostname: string): boolean {
 
 function isBaseDomainHost(hostname: string): boolean {
   const normalized = hostname.toLowerCase();
+  const configuredBaseDomain = getConfiguredBaseDomain();
 
-  if (normalized === 'simsgrup2.app' || normalized === 'www.simsgrup2.app') {
-    return true;
+  if (!configuredBaseDomain) {
+    return normalized === 'simsgrup2.app' || normalized === 'www.simsgrup2.app';
   }
 
-  const customBaseDomain = (import.meta.env.VITE_APP_BASE_DOMAIN as string | undefined)?.toLowerCase();
-  if (!customBaseDomain) {
-    return false;
-  }
-
-  return normalized === customBaseDomain || normalized === `www.${customBaseDomain}`;
+  return normalized === configuredBaseDomain || normalized === `www.${configuredBaseDomain}`;
 }
 
 export function hasTenantSubdomain(hostname = window.location.hostname): boolean {
   if (isLocalLikeHost(hostname) || isBaseDomainHost(hostname)) {
     return false;
+  }
+
+  const configuredTenantSuffix = getConfiguredTenantDomainSuffix();
+  if (configuredTenantSuffix) {
+    return hostname.toLowerCase().endsWith(configuredTenantSuffix);
   }
 
   const parts = hostname.split('.').filter(Boolean);
@@ -50,6 +78,13 @@ export function getCurrentTenant(): string {
   }
 
   if (hasTenantSubdomain(hostname)) {
+    const configuredTenantSuffix = getConfiguredTenantDomainSuffix();
+
+    if (configuredTenantSuffix && hostname.toLowerCase().endsWith(configuredTenantSuffix)) {
+      const tenantPart = hostname.slice(0, hostname.length - configuredTenantSuffix.length).replace(/\.$/, '');
+      return tenantPart.split('.')[0] || 'localhost';
+    }
+
     return hostname.split('.')[0] || 'localhost';
   }
 
