@@ -24,11 +24,17 @@
         {{ formatDateCustom(value) }}
       </template>
 
-      <template #cell-status>
+      <template #cell-status="{ item }">
         <span
-          class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold bg-emerald-100 text-emerald-800"
+          class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
+          :class="{
+            'bg-emerald-100 text-emerald-800': getReservationDisplayStatus(item) === 'completed',
+            'bg-blue-100 text-blue-800': getReservationDisplayStatus(item) === 'in_progress',
+            'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending' || getReservationDisplayStatus(item) === 'active',
+            'bg-red-100 text-red-800': getReservationDisplayStatus(item) === 'cancelled'
+          }"
         >
-          Completat
+          {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
         </span>
       </template>
 
@@ -44,7 +50,7 @@
 
       <template #cell-actions="{ item }">
         <div class="flex gap-2 justify-end">
-          <template v-if="!item.is_expired && getReservationDisplayStatus(item) === 'in_progress'">
+          <template v-if="isActionAllowed(item)">
             <BaseTooltip :text="$t('reservations.table.startVehicle')">
               <button
                 @click="toggleVehicle(item, 'on')"
@@ -125,9 +131,15 @@
         <div>
           <div class="text-xs font-medium text-muted">{{ $t('reservations.table.status') }}</div>
           <span
-            class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold mt-1 bg-emerald-100 text-emerald-800"
+            class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold mt-1"
+            :class="{
+              'bg-emerald-100 text-emerald-800': getReservationDisplayStatus(item) === 'completed',
+              'bg-blue-100 text-blue-800': getReservationDisplayStatus(item) === 'in_progress',
+              'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending' || getReservationDisplayStatus(item) === 'active',
+              'bg-red-100 text-red-800': getReservationDisplayStatus(item) === 'cancelled'
+            }"
           >
-            Completat
+            {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
           </span>
         </div>
         <div>
@@ -143,7 +155,7 @@
       </div>
 
       <!-- Actions -->
-      <div v-if="!item.is_expired && getReservationDisplayStatus(item) === 'in_progress'" class="flex gap-2 mb-2">
+      <div v-if="isActionAllowed(item)" class="flex gap-2 mb-2">
         <button
           @click="toggleVehicle(item, 'on')"
           :disabled="isVehicleLoading"
@@ -239,9 +251,22 @@ defineEmits<{
 const { t } = useI18n();
 const { formatDateTime: _ } = useDateFormatter();
 
+// Parse string dates robustly (Safari compatibility and UTC enforcement)
+const parseApiDate = (dateStr: string): Date => {
+  if (!dateStr) return new Date(NaN);
+  let iso = dateStr.trim();
+  if (iso.includes(' ') && !iso.includes('T')) {
+    iso = iso.replace(' ', 'T');
+    if (!iso.endsWith('Z') && !/[+-]\d{2}(:?\d{2})?$/.test(iso)) {
+      iso += 'Z';
+    }
+  }
+  return new Date(iso);
+};
+
 const formatDateCustom = (dateStr: string): string => {
   if (!dateStr) return '';
-  const date = new Date(dateStr);
+  const date = parseApiDate(dateStr);
   if (Number.isNaN(date.getTime())) return '';
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -268,17 +293,29 @@ const canCancelReservation = (item: ReservationLog): boolean => {
   
   // Cannot be cancelled if it has already started
   const now = new Date();
-  const startDate = new Date(item.start_at);
+  const startDate = parseApiDate(item.start_at);
   if (Number.isNaN(startDate.getTime())) return false;
   
   // Can only be cancelled if it hasn't started yet
   return startDate > now;
 };
 
+const isActionAllowed = (item: ReservationLog): boolean => {
+  const now = new Date();
+  const startDate = parseApiDate(item.start_at);
+  const endDate = parseApiDate(item.end_at);
+  
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return false;
+  }
+  
+  return startDate <= now && now <= endDate;
+};
+
 const getReservationDisplayStatus = (item: ReservationLog): string => {
   const now = new Date();
-  const startDate = new Date(item.start_at);
-  const endDate = new Date(item.end_at);
+  const startDate = parseApiDate(item.start_at);
+  const endDate = parseApiDate(item.end_at);
   
   if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
     return item.status;

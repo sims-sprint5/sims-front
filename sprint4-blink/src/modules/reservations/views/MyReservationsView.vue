@@ -141,7 +141,6 @@ onMounted(async () => {
   const pending = getPendingReservationCheckout();
   if (pending) {
     await router.replace({ name: 'MyReservations' });
-    return;
   }
 
   debugEnabled.value = isReservationDebugEnabled();

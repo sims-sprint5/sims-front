@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
-import BaseButton from './BaseButton.vue';
 import BaseTooltip from './BaseTooltip.vue';
 
 interface Props {
