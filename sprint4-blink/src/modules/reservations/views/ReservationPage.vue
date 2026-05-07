@@ -586,7 +586,6 @@ async function createReservation() {
         <div class="lg:sticky lg:top-6">
           <FilterSidebar
             v-model="filters"
-            :statuses="facets.statuses"
             :brands="facets.brands"
             :year-min="facets.yearMin"
             :year-max="facets.yearMax"

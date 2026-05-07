@@ -24,18 +24,11 @@
         {{ formatDateCustom(value) }}
       </template>
 
-      <template #cell-status="{ item }">
+      <template #cell-status>
         <span
-          class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
-          :class="{
-            'bg-amber-100 text-warning-dark': getReservationDisplayStatus(item) === 'pending',
-            'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
-            'bg-emerald-100 text-emerald-800': item.status === 'active',
-            'bg-blue-100 text-blue-800': item.status === 'completed',
-            'bg-red-100 text-red-800': item.status === 'cancelled',
-          }"
+          class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold bg-emerald-100 text-emerald-800"
         >
-          {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
+          Completat
         </span>
       </template>
 
@@ -132,16 +125,9 @@
         <div>
           <div class="text-xs font-medium text-muted">{{ $t('reservations.table.status') }}</div>
           <span
-            class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold mt-1"
-            :class="{
-              'bg-amber-100 text-warning-dark': getReservationDisplayStatus(item) === 'pending',
-              'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
-              'bg-emerald-100 text-emerald-800': item.status === 'active',
-              'bg-blue-100 text-blue-800': item.status === 'completed',
-              'bg-red-100 text-red-800': item.status === 'cancelled',
-            }"
+            class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold mt-1 bg-emerald-100 text-emerald-800"
           >
-            {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
+            Completat
           </span>
         </div>
         <div>

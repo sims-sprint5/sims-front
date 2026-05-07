@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n';
 
 interface Props {
   modelValue: ReservationFilters;
-  statuses?: string[];
   brands?: string[];
   yearMin?: number | null;
   yearMax?: number | null;
@@ -13,7 +12,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  statuses: () => [],
   brands: () => [],
   yearMin: null,
   yearMax: null,
@@ -25,7 +23,7 @@ const emit = defineEmits<{
   reset: [];
 }>();
 
-const { t, te } = useI18n();
+const { t } = useI18n();
 
 function patchFilters(partial: Partial<ReservationFilters>) {
   emit('update:modelValue', { ...props.modelValue, ...partial });
@@ -63,21 +61,6 @@ function onReset() {
           :disabled="disabled"
           @update:model-value="(v) => patchFilters({ search: String(v ?? '') })"
         />
-      </section>
-
-      <section>
-        <h3 class="text-sm font-semibold text-main mb-2">{{ t('reservations.filters.statusLabel') }}</h3>
-        <select
-          class="w-full px-4 py-3 border border-default rounded-lg bg-surface disabled:bg-surface-muted disabled:cursor-not-allowed"
-          :disabled="disabled"
-          :value="modelValue.status ?? ''"
-          @change="patchFilters({ status: ($event.target as HTMLSelectElement).value || null })"
-        >
-          <option value="">{{ t('reservations.filters.all') }}</option>
-          <option v-for="s in statuses" :key="s" :value="s">
-            {{ te(`reservations.status.${s}`) ? t(`reservations.status.${s}`) : s }}
-          </option>
-        </select>
       </section>
 
       <section>
