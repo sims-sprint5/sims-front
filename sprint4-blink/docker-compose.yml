@@ -30,6 +30,8 @@ services:
         VITE_CENTRAL_BLADE_URL: ${VITE_CENTRAL_BLADE_URL}
     container_name: sprint4-blink-prod
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "8080:80"
     healthcheck:

@@ -1,0 +1,11 @@
+Options -MultiViews
+RewriteEngine On
+
+# Proxeja / i /welcome al backend de Laravel (landing page Blade)
+RewriteRule ^$ http://localhost:8000/ [P,L]
+RewriteRule ^welcome/?$ http://localhost:8000/welcome [P,L]
+
+# SPA fallback per tota la resta de rutes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
