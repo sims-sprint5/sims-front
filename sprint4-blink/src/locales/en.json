@@ -343,7 +343,9 @@
       "expired": "Expired",
       "renew": "Renew",
       "actions": "Actions",
-      "deleteReservation": "Delete reservation"
+      "deleteReservation": "Delete Reservation",
+      "startVehicle": "Start Vehicle",
+      "stopVehicle": "Stop Vehicle"
     },
     "form": {
       "userId": "User ID",
@@ -388,7 +390,11 @@
     "toast": {
       "created": "Reservation created successfully",
       "updated": "Reservation updated successfully",
-      "deleted": "Reservation deleted successfully"
+      "deleted": "Reservation deleted successfully",
+      "startSuccess": "Vehicle started successfully!",
+      "stopSuccess": "Vehicle stopped successfully!",
+      "startError": "Failed to start the vehicle.",
+      "stopError": "Failed to stop the vehicle."
     },
     "reserveAndPay": "Reserve and pay",
     "occupancyCalendar": "Occupancy calendar",

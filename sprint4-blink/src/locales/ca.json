@@ -341,7 +341,9 @@
       "expired": "Vençut",
       "renew": "Renovar",
       "actions": "Accions",
-      "deleteReservation": "Eliminar reserva"
+      "deleteReservation": "Eliminar reserva",
+      "startVehicle": "Arrancar",
+      "stopVehicle": "Parar"
     },
     "form": {
       "userId": "ID d’usuari",
@@ -384,7 +386,11 @@
     "toast": {
       "created": "Reserva creada correctament",
       "updated": "Reserva actualitzada correctament",
-      "deleted": "Reserva eliminada correctament"
+      "deleted": "Reserva eliminada correctament",
+      "startSuccess": "Vehicle arrancat correctament!",
+      "stopSuccess": "Vehicle parat correctament!",
+      "startError": "Error al arrancar el vehicle.",
+      "stopError": "Error al parar el vehicle."
     },
     "reserveAndPay": "Reserva i paga",
     "occupancyCalendar": "Calendari d'ocupació",

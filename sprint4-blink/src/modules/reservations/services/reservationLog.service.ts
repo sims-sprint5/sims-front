@@ -234,6 +234,11 @@ export const reservationLogService = {
     return normalizeLog(raw?.data ?? raw);
   },
 
+  async toggleVehicle(reservationId: number, action: 'on' | 'off'): Promise<any> {
+    const raw = await apiClient.post<any>(`/v1/reservations/${reservationId}/vehicle/${action}`, {});
+    return raw;
+  },
+
   async updateReservationStatus(reservationId: number, status: ReservationStatus): Promise<ReservationLog> {
     const raw = await apiClient.patch<any>(`/v1/reservations/${reservationId}/status`, { status });
     return normalizeLog(raw?.data ?? raw);
