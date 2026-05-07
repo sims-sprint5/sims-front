@@ -114,19 +114,20 @@ function getLocalApiPort(): string {
 }
 
 export function getTenantApiBaseUrl(): string {
-  const explicitBaseUrl = (import.meta.env.VITE_API_URL as string | undefined)?.trim();
-  if (explicitBaseUrl) {
-    return normalizeBaseUrl(explicitBaseUrl);
-  }
-
   const hostname = window.location.hostname;
   const protocol = window.location.protocol;
 
+  // En desarrollo local VITE_API_URL puede apuntar a un puerto distinto
   if (isLocalLikeHost(hostname)) {
+    const explicitBaseUrl = (import.meta.env.VITE_API_URL as string | undefined)?.trim();
+    if (explicitBaseUrl) {
+      return normalizeBaseUrl(explicitBaseUrl);
+    }
     const port = getLocalApiPort();
     return `${protocol}//localhost${port}/api`;
   }
 
+  // En producción siempre mismo origen: aaa.dominio.com → aaa.dominio.com/api
   return `${protocol}//${hostname}/api`;
 }
 
