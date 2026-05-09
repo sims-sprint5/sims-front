@@ -500,11 +500,20 @@
     },
     "preReservation": {
       "busySlots": "Franja(s) ya reservada(s)"
-    }
-    ,
+    },
     "view": {
       "large": "Vista ampliada",
       "compact": "Vista compacta"
+    },
+    "actuator": {
+      "title": "Control del Vehículo",
+      "start": "Iniciar",
+      "stop": "Detener",
+      "success": {
+        "on": "Vehículo iniciado correctamente.",
+        "off": "Vehículo detenido correctamente."
+      },
+      "error": "Error al comunicarse con el vehículo."
     }
   },
   "table": {

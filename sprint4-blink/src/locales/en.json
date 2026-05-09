@@ -232,7 +232,6 @@
     "loading": "Loading vehicles...",
     "empty": "No vehicles to display",
     "table": {
-
       "licensePlate": "License plate",
       "brand": "Brand",
       "model": "Model",
@@ -501,11 +500,20 @@
     },
     "preReservation": {
       "busySlots": "Already reserved time slots"
-    }
-    ,
+    },
     "view": {
       "large": "Large view",
       "compact": "Compact view"
+    },
+    "actuator": {
+      "title": "Vehicle Control",
+      "start": "Start",
+      "stop": "Stop",
+      "success": {
+        "on": "Vehicle started successfully.",
+        "off": "Vehicle stopped successfully."
+      },
+      "error": "Error communicating with the vehicle."
     }
   },
   "table": {

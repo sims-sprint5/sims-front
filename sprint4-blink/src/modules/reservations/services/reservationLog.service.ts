@@ -327,6 +327,11 @@ export const reservationLogService = {
     });
   },
 
+  async sendVehicleAction(reservationId: number, action: 'on' | 'off'): Promise<{ message: string }> {
+    const raw = await apiClient.post<any>(`/v1/reservations/${reservationId}/vehicle/${action}`, {});
+    return { message: raw?.message ?? '' };
+  },
+
   async deleteReservation(reservationId: number): Promise<{ message: string; vehicle_id: number }> {
     const raw = await apiClient.delete<any>(`/v1/reservations/${reservationId}`);
     return {

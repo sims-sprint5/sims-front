@@ -36,7 +36,9 @@
     "menu": "Menú",
     "dashboard": "Tauler",
     "map": "Mapa",
-    "tickets": "Tickets",    "chat": "Xat",    "bookings": "Reserves",
+    "tickets": "Tickets",
+    "chat": "Xat",
+    "bookings": "Reserves",
     "myReservations": "Les Meves Reserves",
     "reservationsAdmin": "Log de reserves",
     "users": "Usuaris",
@@ -68,8 +70,7 @@
       "passwordLabel": "Contrasenya",
       "passwordPlaceholder": "••••••••",
       "noAccount": "Encara no tens compte?",
-      "goRegister": "Crear compte"
-      ,
+      "goRegister": "Crear compte",
       "forgotPassword": "Has oblidat la contrasenya?",
       "welcome": "Benvingut/da {name}!",
       "genericError": "Error en iniciar sessió. Torna-ho a intentar."
@@ -358,7 +359,9 @@
       "endAtPlaceholder": "YYYY-MM-DD HH:mm:ss"
     },
     "status": {
-      "pending": "Pendent",      "in_progress": "En curs",      "active": "Confirmada",
+      "pending": "Pendent",
+      "in_progress": "En curs",
+      "active": "Confirmada",
       "completed": "Completada",
       "cancelled": "Cancel·lada",
       "available": "Disponible",
@@ -497,11 +500,20 @@
     },
     "preReservation": {
       "busySlots": "Franja(es) ja reservada(es)"
-    }
-    ,
+    },
     "view": {
       "large": "Vista ampliada",
       "compact": "Vista compacta"
+    },
+    "actuator": {
+      "title": "Control del Vehicle",
+      "start": "Iniciar",
+      "stop": "Aturar",
+      "success": {
+        "on": "Vehicle iniciat correctament.",
+        "off": "Vehicle aturat correctament."
+      },
+      "error": "Error en comunicar-se amb el vehicle."
     }
   },
   "table": {
@@ -737,7 +749,8 @@
         "required": "La data de fi és obligatòria."
       }
     }
-  },  "mapa": {
+  },
+  "mapa": {
     "title": "Mapa de Geofencing",
     "userTitle": "Mapa",
     "openReservationPanel": "Reserva ara!",
@@ -825,7 +838,10 @@
   },
   "actions": {
     "edit": "Editar"
-  },  "errors": {    "error": "Error",    "unexpected": "S’ha produït un error inesperat.",
+  },
+  "errors": {
+    "error": "Error",
+    "unexpected": "S’ha produït un error inesperat.",
     "invalidLoginResponse": "Resposta d’inici de sessió no vàlida: falta el token.",
     "requestFailed": "Error en la petició",
     "serverConnection": "Error de connexió amb el servidor",
