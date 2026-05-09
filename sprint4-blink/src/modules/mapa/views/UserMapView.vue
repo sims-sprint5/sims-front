@@ -96,7 +96,7 @@
                 </p>
 
                 <p class="mt-3 rounded-lg bg-base px-3 py-2 text-sm text-muted">
-                  {{ quickReservationVehicleName }} · {{ t('reservations.selectDates') }}
+                  {{ quickReservationVehicleName }} · {{ t('reservations.selectDates') }} · {{ t('reservations.pricePerHour') }}
                 </p>
 
               

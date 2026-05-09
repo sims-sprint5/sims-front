@@ -43,10 +43,9 @@
       <div class="space-y-2">
         <p class="text-xs font-medium uppercase text-muted">{{ $t('reservations.myReservations.status') }}</p>
         <span
-          class="inline-flex rounded-full px-3 py-1 text-xs font-semibold"
-          :class="`bg-status-${getReservationDisplayStatus(reservation)}-bg text-status-${getReservationDisplayStatus(reservation)}-text`"
+          class="inline-flex rounded-full px-3 py-1 text-xs font-semibold bg-emerald-100 text-emerald-800"
         >
-          {{ $t(`reservations.status.${getReservationDisplayStatus(reservation)}`) }}
+          Completat
         </span>
       </div>
 
@@ -115,22 +114,5 @@ const canCancelReservation = (reservation: ReservationLog): boolean => {
   
   // Can only be cancelled if it hasn't started yet
   return startDate > now;
-};
-
-const getReservationDisplayStatus = (reservation: ReservationLog): string => {
-  const now = new Date();
-  const startDate = new Date(reservation.start_at);
-  const endDate = new Date(reservation.end_at);
-  
-  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
-    return reservation.status;
-  }
-  
-  // If it has already started and hasn't finished, it is in progress
-  if (startDate <= now && now < endDate) {
-    return 'in_progress';
-  }
-  
-  return reservation.status;
 };
 </script>

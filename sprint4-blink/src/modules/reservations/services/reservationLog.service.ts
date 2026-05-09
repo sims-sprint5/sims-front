@@ -77,8 +77,8 @@ function normalizeLogs(raw: any): ReservationLog[] {
 }
 
 function filterToCurrentUserReservations(logs: ReservationLog[]): ReservationLog[] {
-  const currentUser = authService.getUser();
-  const currentUserId = Number(currentUser?.id ?? 0);
+  const currentUser = authService.getUser() as any;
+  const currentUserId = Number(currentUser?.id ?? currentUser?.user_id ?? 0);
   const currentUserName = String(currentUser?.name ?? '').trim().toLowerCase();
 
   if ((!Number.isFinite(currentUserId) || currentUserId <= 0) && !currentUserName) {
@@ -104,7 +104,8 @@ async function fetchReservationsListRaw(page: number, perPage: number): Promise<
     pushReservationDebug('reservations.fetch.primary', { page, perPage, raw });
     return raw;
   } catch (error: any) {
-    const userId = Number(authService.getUser()?.id ?? 0);
+    const $u: any = authService.getUser() || {};
+    const userId = Number($u?.id ?? $u?.user_id ?? 0);
     const shouldFallback = Number.isFinite(userId) && userId > 0;
 
     pushReservationDebug('reservations.fetch.primary.error', {
@@ -127,7 +128,8 @@ async function fetchReservationsListRaw(page: number, perPage: number): Promise<
 
 async function fetchMyReservationsListRaw(page: number, perPage: number): Promise<any> {
   const query = buildQuery({ page, per_page: perPage });
-  const userId = Number(authService.getUser()?.id ?? 0);
+  const $u: any = authService.getUser() || {};
+  const userId = Number($u?.id ?? $u?.user_id ?? 0);
 
   if (Number.isFinite(userId) && userId > 0) {
     try {
@@ -232,6 +234,11 @@ export const reservationLogService = {
     };
     const raw = await apiClient.post<any>('/v1/reservations', payload);
     return normalizeLog(raw?.data ?? raw);
+  },
+
+  async toggleVehicle(reservationId: number, action: 'on' | 'off'): Promise<any> {
+    const raw = await apiClient.post<any>(`/v1/reservations/${reservationId}/vehicle/${action}`, {});
+    return raw;
   },
 
   async updateReservationStatus(reservationId: number, status: ReservationStatus): Promise<ReservationLog> {

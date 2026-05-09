@@ -13,14 +13,15 @@ export interface RegisterData {
 }
 
 export interface User {
-  id: number;
+  id?: number;
+  user_id?: number;
   name: string;
   email: string;
   phone: string;
   role: string;
-  email_verified_at: string | null;
-  created_at: string;
-  updated_at: string;
+  email_verified_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface AuthResponse {

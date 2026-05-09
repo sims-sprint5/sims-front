@@ -28,11 +28,10 @@
         <span
           class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
           :class="{
-            'bg-amber-100 text-warning-dark': getReservationDisplayStatus(item) === 'pending',
-            'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
-            'bg-emerald-100 text-emerald-800': item.status === 'active',
-            'bg-blue-100 text-blue-800': item.status === 'completed',
-            'bg-red-100 text-red-800': item.status === 'cancelled',
+            'bg-emerald-100 text-emerald-800': getReservationDisplayStatus(item) === 'completed',
+            'bg-blue-100 text-blue-800': getReservationDisplayStatus(item) === 'in_progress',
+            'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending' || getReservationDisplayStatus(item) === 'active',
+            'bg-red-100 text-red-800': getReservationDisplayStatus(item) === 'cancelled'
           }"
         >
           {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
@@ -51,6 +50,26 @@
 
       <template #cell-actions="{ item }">
         <div class="flex gap-2 justify-end">
+          <template v-if="isActionAllowed(item)">
+            <BaseTooltip :text="$t('reservations.table.startVehicle')">
+              <button
+                @click="toggleVehicle(item, 'on')"
+                :disabled="isVehicleLoading"
+                class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <PowerIcon class="w-5 h-5" />
+              </button>
+            </BaseTooltip>
+            <BaseTooltip :text="$t('reservations.table.stopVehicle')">
+              <button
+                @click="toggleVehicle(item, 'off')"
+                :disabled="isVehicleLoading"
+                class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <PauseCircleIcon class="w-5 h-5" />
+              </button>
+            </BaseTooltip>
+          </template>
           <BaseTooltip :text="$t('common.view')">
             <button
               @click="$emit('view-vehicle', item)"
@@ -114,11 +133,10 @@
           <span
             class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold mt-1"
             :class="{
-              'bg-amber-100 text-warning-dark': getReservationDisplayStatus(item) === 'pending',
-              'bg-cyan-100 text-cyan-800': getReservationDisplayStatus(item) === 'in_progress',
-              'bg-emerald-100 text-emerald-800': item.status === 'active',
-              'bg-blue-100 text-blue-800': item.status === 'completed',
-              'bg-red-100 text-red-800': item.status === 'cancelled',
+              'bg-emerald-100 text-emerald-800': getReservationDisplayStatus(item) === 'completed',
+              'bg-blue-100 text-blue-800': getReservationDisplayStatus(item) === 'in_progress',
+              'bg-amber-100 text-amber-800': getReservationDisplayStatus(item) === 'pending' || getReservationDisplayStatus(item) === 'active',
+              'bg-red-100 text-red-800': getReservationDisplayStatus(item) === 'cancelled'
             }"
           >
             {{ $t(`reservations.status.${getReservationDisplayStatus(item)}`) }}
@@ -137,6 +155,24 @@
       </div>
 
       <!-- Actions -->
+      <div v-if="isActionAllowed(item)" class="flex gap-2 mb-2">
+        <button
+          @click="toggleVehicle(item, 'on')"
+          :disabled="isVehicleLoading"
+          class="flex-1 p-2 bg-green-600 text-white text-sm font-medium hover:bg-green-700 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <PowerIcon class="w-4 h-4" />
+          {{ $t('reservations.table.startVehicle') }}
+        </button>
+        <button
+          @click="toggleVehicle(item, 'off')"
+          :disabled="isVehicleLoading"
+          class="flex-1 p-2 bg-red-600 text-white text-sm font-medium hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <PauseCircleIcon class="w-4 h-4" />
+          {{ $t('reservations.table.stopVehicle') }}
+        </button>
+      </div>
       <div class="flex gap-2">
         <BaseTooltip :text="$t('common.view')" :full-width="true">
           <button
@@ -169,19 +205,36 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { EyeIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { EyeIcon, TrashIcon, PowerIcon, PauseCircleIcon } from '@heroicons/vue/24/outline';
 
 import { BaseTable, BaseTooltip } from '@/components/base';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types';
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
+import { useToast } from '@/shared/composables/useToast';
+import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 
 interface Props {
   reservations?: ReservationLog[];
   loading?: boolean;
 }
+
+const toast = useToast();
+const isVehicleLoading = ref(false);
+
+const toggleVehicle = async (item: ReservationLog, action: 'on' | 'off') => {
+  isVehicleLoading.value = true;
+  try {
+    await reservationLogService.toggleVehicle(item.id, action);
+    toast.success(action === 'on' ? t('reservations.toast.startSuccess') : t('reservations.toast.stopSuccess'));
+  } catch (error) {
+    toast.error(action === 'on' ? t('reservations.toast.startError') : t('reservations.toast.stopError'));
+  } finally {
+    isVehicleLoading.value = false;
+  }
+};
 
 withDefaults(defineProps<Props>(), {
   reservations: () => [],
@@ -198,9 +251,22 @@ defineEmits<{
 const { t } = useI18n();
 const { formatDateTime: _ } = useDateFormatter();
 
+// Parse string dates robustly (Safari compatibility and UTC enforcement)
+const parseApiDate = (dateStr: string): Date => {
+  if (!dateStr) return new Date(NaN);
+  let iso = dateStr.trim();
+  if (iso.includes(' ') && !iso.includes('T')) {
+    iso = iso.replace(' ', 'T');
+    if (!iso.endsWith('Z') && !/[+-]\d{2}(:?\d{2})?$/.test(iso)) {
+      iso += 'Z';
+    }
+  }
+  return new Date(iso);
+};
+
 const formatDateCustom = (dateStr: string): string => {
   if (!dateStr) return '';
-  const date = new Date(dateStr);
+  const date = parseApiDate(dateStr);
   if (Number.isNaN(date.getTime())) return '';
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -227,17 +293,29 @@ const canCancelReservation = (item: ReservationLog): boolean => {
   
   // Cannot be cancelled if it has already started
   const now = new Date();
-  const startDate = new Date(item.start_at);
+  const startDate = parseApiDate(item.start_at);
   if (Number.isNaN(startDate.getTime())) return false;
   
   // Can only be cancelled if it hasn't started yet
   return startDate > now;
 };
 
+const isActionAllowed = (item: ReservationLog): boolean => {
+  const now = new Date();
+  const startDate = parseApiDate(item.start_at);
+  const endDate = parseApiDate(item.end_at);
+  
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return false;
+  }
+  
+  return startDate <= now && now <= endDate;
+};
+
 const getReservationDisplayStatus = (item: ReservationLog): string => {
   const now = new Date();
-  const startDate = new Date(item.start_at);
-  const endDate = new Date(item.end_at);
+  const startDate = parseApiDate(item.start_at);
+  const endDate = parseApiDate(item.end_at);
   
   if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
     return item.status;

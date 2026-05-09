@@ -327,6 +327,7 @@
     "createTitle": "Crear reserva",
     "createDescription": "Selecciona las fechas para registrar la nueva reserva.",
     "selectDates": "Indica una fecha de inicio y una de fin para guardar la reserva.",
+    "pricePerHour": "Precio: 5€ por hora",
     "table": {
       "id": "ID",
       "logType": "Tipo de log",
@@ -341,7 +342,9 @@
       "expired": "Vencido",
       "renew": "Renovar",
       "actions": "Acciones",
-      "deleteReservation": "Eliminar reserva"
+      "deleteReservation": "Eliminar reserva",
+      "startVehicle": "Arrancar",
+      "stopVehicle": "Parar"
     },
     "form": {
       "userId": "ID de usuario",
@@ -386,7 +389,11 @@
     "toast": {
       "created": "Reserva creada correctamente",
       "updated": "Reserva actualizada correctamente",
-      "deleted": "Reserva eliminada correctamente"
+      "deleted": "Reserva eliminada correctamente",
+      "startSuccess": "¡Vehículo arrancado correctamente!",
+      "stopSuccess": "¡Vehículo parado correctamente!",
+      "startError": "Error al arrancar el vehículo.",
+      "stopError": "Error al parar el vehículo."
     },
     "reserveAndPay": "Reservar y pagar",
     "occupancyCalendar": "Calendario de ocupación",
