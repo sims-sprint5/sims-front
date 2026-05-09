@@ -514,6 +514,12 @@
         "off": "Vehicle aturat correctament."
       },
       "error": "Error en comunicar-se amb el vehicle."
+    },
+    "temperature": {
+      "title": "Temperatura del Vehicle",
+      "refresh": "Actualitzar",
+      "noData": "Sense dades de temperatura",
+      "voltage": "Voltatge"
     }
   },
   "table": {

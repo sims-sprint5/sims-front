@@ -97,8 +97,11 @@
 
       </ul>
 
+      <!-- Vehicle Control Widget (temperature + start/stop) -->
+      <VehicleControlWidget :is-collapsed="isCollapsed" class="mt-auto" />
+
       <!-- Theme Switcher -->
-      <div class="w-full flex justify-center mt-auto mb-4">
+      <div class="w-full flex justify-center mb-4">
         <button
           @click="toggleTheme"
           :title="isCollapsed ? t('common.themeToggle') : undefined"
@@ -171,6 +174,7 @@ import { superadminAuthService } from '@/modules/superadmin/services/superadmin-
 import { BaseTooltip } from '@/components/base'
 import { isAdminRole } from '@/shared/utils/roleUtils'
 import { useTheme } from '@/shared/composables/useTheme'
+import VehicleControlWidget from '@/layouts/components/VehicleControlWidget.vue'
 import {
   Cog6ToothIcon,
   HomeIcon,

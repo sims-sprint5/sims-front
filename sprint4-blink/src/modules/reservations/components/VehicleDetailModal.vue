@@ -56,6 +56,26 @@
         </p>
       </div>
 
+      <!-- Temperature sensor widget (only during active reservation) -->
+      <div v-if="isReservationActive" class="rounded-lg border border-default bg-surface p-4">
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-xs font-semibold uppercase text-muted">{{ $t('reservations.temperature.title') }}</p>
+          <button
+            class="text-xs text-primary hover:underline disabled:opacity-50"
+            :disabled="temperatureLoading"
+            @click="fetchTemperature"
+          >{{ temperatureLoading ? '...' : $t('reservations.temperature.refresh') }}</button>
+        </div>
+        <div v-if="temperature" class="flex items-end gap-1">
+          <span class="text-4xl font-bold text-main">{{ temperature.temperature_c.toFixed(1) }}</span>
+          <span class="mb-1 text-lg text-muted">°C</span>
+        </div>
+        <div v-else-if="!temperatureLoading" class="text-sm text-muted">{{ $t('reservations.temperature.noData') }}</div>
+        <div v-if="temperature" class="mt-1 text-xs text-muted">
+          {{ $t('reservations.temperature.voltage') }}: {{ temperature.voltage.toFixed(2) }}V
+        </div>
+      </div>
+
       <!-- Actuator: Start / Stop (only during active reservation period) -->
       <div v-if="isReservationActive" class="rounded-lg border border-default bg-surface p-4">
         <p class="mb-3 text-xs font-semibold uppercase text-muted">{{ $t('reservations.actuator.title') }}</p>
@@ -125,17 +145,34 @@ const { formatDateTime: _ } = useDateFormatter();
 const currentTime = ref(new Date());
 const actuatorLoading = ref(false);
 const pendingAction = ref<'on' | 'off' | null>(null);
+const temperature = ref<{ temperature_c: number; voltage: number; adc_value: number; timestamp: string } | null>(null);
+const temperatureLoading = ref(false);
 let clockInterval: ReturnType<typeof setInterval> | null = null;
+let tempInterval: ReturnType<typeof setInterval> | null = null;
 
 onMounted(() => {
   clockInterval = setInterval(() => {
     currentTime.value = new Date();
   }, 30_000);
+  if (isReservationActive.value) {
+    fetchTemperature();
+    tempInterval = setInterval(fetchTemperature, 30_000);
+  }
 });
 
 onBeforeUnmount(() => {
   if (clockInterval) clearInterval(clockInterval);
+  if (tempInterval) clearInterval(tempInterval);
 });
+
+async function fetchTemperature() {
+  temperatureLoading.value = true;
+  try {
+    temperature.value = await reservationLogService.getLatestTemperature(props.reservation.id);
+  } finally {
+    temperatureLoading.value = false;
+  }
+}
 
 const isReservationActive = computed(() => {
   if (props.reservation.status === 'cancelled') return false;

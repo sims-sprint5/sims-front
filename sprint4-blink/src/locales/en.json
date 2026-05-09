@@ -514,6 +514,12 @@
         "off": "Vehicle stopped successfully."
       },
       "error": "Error communicating with the vehicle."
+    },
+    "temperature": {
+      "title": "Vehicle Temperature",
+      "refresh": "Refresh",
+      "noData": "No temperature data",
+      "voltage": "Voltage"
     }
   },
   "table": {

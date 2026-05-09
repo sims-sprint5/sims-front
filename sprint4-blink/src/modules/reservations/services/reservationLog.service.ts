@@ -332,6 +332,21 @@ export const reservationLogService = {
     return { message: raw?.message ?? '' };
   },
 
+  async getLatestTemperature(reservationId: number): Promise<{ temperature_c: number; voltage: number; adc_value: number; timestamp: string } | null> {
+    try {
+      const raw = await apiClient.get<any>(`/v1/reservations/${reservationId}/temperature`);
+      if (!raw?.temperature_c) return null;
+      return {
+        temperature_c: Number(raw.temperature_c),
+        voltage: Number(raw.voltage),
+        adc_value: Number(raw.adc_value),
+        timestamp: String(raw.timestamp ?? ''),
+      };
+    } catch {
+      return null;
+    }
+  },
+
   async deleteReservation(reservationId: number): Promise<{ message: string; vehicle_id: number }> {
     const raw = await apiClient.delete<any>(`/v1/reservations/${reservationId}`);
     return {

@@ -514,6 +514,12 @@
         "off": "Vehículo detenido correctamente."
       },
       "error": "Error al comunicarse con el vehículo."
+    },
+    "temperature": {
+      "title": "Temperatura del Vehículo",
+      "refresh": "Actualizar",
+      "noData": "Sin datos de temperatura",
+      "voltage": "Voltaje"
     }
   },
   "table": {
