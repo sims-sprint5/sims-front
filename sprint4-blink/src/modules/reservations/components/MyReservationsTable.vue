@@ -199,8 +199,6 @@ import { BaseTable, BaseTooltip } from '@/components/base';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
 import type { ReservationLog } from '@/modules/reservations/types/reservationLog.types';
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
-import { useToast } from '@/shared/composables/useToast';
-import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
 import VehicleControlModal from '@/modules/reservations/components/VehicleControlModal.vue';
 
 interface Props {
@@ -208,7 +206,6 @@ interface Props {
   loading?: boolean;
 }
 
-const toast = useToast();
 const controlReservation = ref<ReservationLog | null>(null);
 
 withDefaults(defineProps<Props>(), {
