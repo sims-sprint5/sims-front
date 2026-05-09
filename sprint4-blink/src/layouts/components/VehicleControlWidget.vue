@@ -8,14 +8,14 @@
         </span>
         <button
           class="flex h-7 w-7 items-center justify-center rounded-full bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
-          :disabled="actionLoading"
-          :title="$t('reservations.actuator.start')"
+          :disabled="actionLoading || !isWithinPeriod"
+          :title="isWithinPeriod ? $t('reservations.actuator.start') : $t('reservations.actuator.notStarted')"
           @click="handleAction('on')"
         >▶</button>
         <button
           class="flex h-7 w-7 items-center justify-center rounded-full bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
-          :disabled="actionLoading"
-          :title="$t('reservations.actuator.stop')"
+          :disabled="actionLoading || !isWithinPeriod"
+          :title="isWithinPeriod ? $t('reservations.actuator.stop') : $t('reservations.actuator.notStarted')"
           @click="handleAction('off')"
         >■</button>
       </div>
@@ -37,10 +37,11 @@
 
       <!-- Actuator buttons -->
       <p class="mb-1.5 text-xs font-semibold uppercase text-white/50">{{ $t('reservations.actuator.title') }}</p>
+      <p v-if="!isWithinPeriod" class="mb-1.5 text-xs text-yellow-400/70">{{ $t('reservations.actuator.notStarted') }}</p>
       <div class="flex gap-2">
         <button
           class="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-green-600 py-2 text-xs font-semibold text-white hover:bg-green-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="actionLoading"
+          :disabled="actionLoading || !isWithinPeriod"
           @click="handleAction('on')"
         >
           <span v-if="actionLoading && pendingAction === 'on'" class="h-3 w-3 animate-spin rounded-full border border-white border-t-transparent" />
@@ -49,7 +50,7 @@
         </button>
         <button
           class="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-red-600 py-2 text-xs font-semibold text-white hover:bg-red-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="actionLoading"
+          :disabled="actionLoading || !isWithinPeriod"
           @click="handleAction('off')"
         >
           <span v-if="actionLoading && pendingAction === 'off'" class="h-3 w-3 animate-spin rounded-full border border-white border-t-transparent" />
@@ -71,7 +72,7 @@ defineProps<{ isCollapsed: boolean }>();
 
 const { t } = useI18n();
 const toast = useToast();
-const { hasActiveReservation, temperature, temperatureLoading, actionLoading, sendAction } = useVehicleControl();
+const { hasActiveReservation, isWithinPeriod, temperature, temperatureLoading, actionLoading, sendAction } = useVehicleControl();
 
 const pendingAction = ref<'on' | 'off' | null>(null);
 

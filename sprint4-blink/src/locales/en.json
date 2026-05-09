@@ -513,7 +513,8 @@
         "on": "Vehicle started successfully.",
         "off": "Vehicle stopped successfully."
       },
-      "error": "Error communicating with the vehicle."
+      "error": "Error communicating with the vehicle.",
+      "notStarted": "The reservation has not started yet."
     },
     "temperature": {
       "title": "Vehicle Temperature",

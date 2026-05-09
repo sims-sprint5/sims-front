@@ -18,8 +18,13 @@ let tempInterval: ReturnType<typeof setInterval> | null = null;
 let resInterval: ReturnType<typeof setInterval> | null = null;
 let instanceCount = 0;
 
-function isActive(r: ReservationLog): boolean {
-  if (r.status === 'cancelled') return false;
+// Show the widget for any reservation that is pending or active (not cancelled/completed).
+// Buttons remain visible; the backend enforces the time window restriction.
+function isRelevant(r: ReservationLog): boolean {
+  return r.status !== 'cancelled' && r.status !== 'completed';
+}
+
+export function isWithinPeriod(r: ReservationLog): boolean {
   const now = new Date();
   const start = new Date(r.start_at);
   const end = new Date(r.end_at);
@@ -29,7 +34,7 @@ function isActive(r: ReservationLog): boolean {
 async function refreshActiveReservation() {
   try {
     const reservations = await reservationLogService.getMyReservations(1, 50);
-    activeReservation.value = reservations.find(isActive) ?? null;
+    activeReservation.value = reservations.find(isRelevant) ?? null;
   } catch {
     activeReservation.value = null;
   }
@@ -85,6 +90,9 @@ export function useVehicleControl() {
     temperatureLoading: computed(() => temperatureLoading.value),
     actionLoading: computed(() => actionLoading.value),
     hasActiveReservation: computed(() => activeReservation.value !== null),
+    isWithinPeriod: computed(() =>
+      activeReservation.value !== null && isWithinPeriod(activeReservation.value),
+    ),
     sendAction,
     refreshTemperature,
   };
