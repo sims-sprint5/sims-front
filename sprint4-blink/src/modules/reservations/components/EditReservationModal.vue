@@ -109,18 +109,23 @@ const formatToLocal = (isoDate: string): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-// Convert datetime-local back to ISO format to send to the backend
-// Backend expects: 2026-04-26T18:00:00 (no milliseconds or Z)
 const formatToISO = (localDate: string): string => {
   if (!localDate) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
   const date = new Date(localDate);
+  if (Number.isNaN(date.getTime())) return localDate;
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  const month = pad(date.getMonth() + 1);
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  const seconds = pad(date.getSeconds());
+  const offsetMinutes = -date.getTimezoneOffset();
+  const sign = offsetMinutes >= 0 ? '+' : '-';
+  const absOffset = Math.abs(offsetMinutes);
+  const offsetHours = pad(Math.floor(absOffset / 60));
+  const offsetMins = pad(absOffset % 60);
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMins}`;
 };
 
 const formData = reactive({
