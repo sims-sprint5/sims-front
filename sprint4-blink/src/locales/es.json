@@ -514,7 +514,9 @@
         "off": "Vehículo detenido correctamente."
       },
       "error": "Error al comunicarse con el vehículo.",
-      "notStarted": "La reserva aún no ha comenzado."
+      "notStarted": "La reserva aún no ha comenzado.",
+      "control": "Controles del vehículo",
+      "openControl": "Controlar vehículo"
     },
     "temperature": {
       "title": "Temperatura del Vehículo",

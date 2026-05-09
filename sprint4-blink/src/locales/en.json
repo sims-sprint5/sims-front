@@ -514,7 +514,9 @@
         "off": "Vehicle stopped successfully."
       },
       "error": "Error communicating with the vehicle.",
-      "notStarted": "The reservation has not started yet."
+      "notStarted": "The reservation has not started yet.",
+      "control": "Vehicle controls",
+      "openControl": "Control vehicle"
     },
     "temperature": {
       "title": "Vehicle Temperature",

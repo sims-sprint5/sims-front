@@ -514,7 +514,9 @@
         "off": "Vehicle aturat correctament."
       },
       "error": "Error en comunicar-se amb el vehicle.",
-      "notStarted": "La reserva encara no ha començat."
+      "notStarted": "La reserva encara no ha començat.",
+      "control": "Controls del vehicle",
+      "openControl": "Controlar vehicle"
     },
     "temperature": {
       "title": "Temperatura del Vehicle",

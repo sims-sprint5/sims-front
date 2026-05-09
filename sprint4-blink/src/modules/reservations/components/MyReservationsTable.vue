@@ -1,4 +1,12 @@
 <template>
+  <!-- Vehicle Control Modal -->
+  <VehicleControlModal
+    v-if="controlReservation"
+    :show="!!controlReservation"
+    :reservation="controlReservation"
+    @close="controlReservation = null"
+  />
+
   <!-- Desktop: Normal table -->
   <div class="hidden md:block">
     <BaseTable
@@ -50,26 +58,14 @@
 
       <template #cell-actions="{ item }">
         <div class="flex gap-2 justify-end">
-          <template v-if="isActionAllowed(item)">
-            <BaseTooltip :text="$t('reservations.table.startVehicle')">
-              <button
-                @click="toggleVehicle(item, 'on')"
-                :disabled="isVehicleLoading"
-                class="p-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <PowerIcon class="w-5 h-5" />
-              </button>
-            </BaseTooltip>
-            <BaseTooltip :text="$t('reservations.table.stopVehicle')">
-              <button
-                @click="toggleVehicle(item, 'off')"
-                :disabled="isVehicleLoading"
-                class="p-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <PauseCircleIcon class="w-5 h-5" />
-              </button>
-            </BaseTooltip>
-          </template>
+          <BaseTooltip v-if="canControlVehicle(item)" :text="$t('reservations.actuator.openControl')">
+            <button
+              @click="controlReservation = item"
+              class="p-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition-colors"
+            >
+              <CpuChipIcon class="w-5 h-5" />
+            </button>
+          </BaseTooltip>
           <BaseTooltip :text="$t('common.view')">
             <button
               @click="$emit('view-vehicle', item)"
@@ -155,25 +151,15 @@
       </div>
 
       <!-- Actions -->
-      <div v-if="isActionAllowed(item)" class="flex gap-2 mb-2">
-        <button
-          @click="toggleVehicle(item, 'on')"
-          :disabled="isVehicleLoading"
-          class="flex-1 p-2 bg-green-600 text-white text-sm font-medium hover:bg-green-700 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <PowerIcon class="w-4 h-4" />
-          {{ $t('reservations.table.startVehicle') }}
-        </button>
-        <button
-          @click="toggleVehicle(item, 'off')"
-          :disabled="isVehicleLoading"
-          class="flex-1 p-2 bg-red-600 text-white text-sm font-medium hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <PauseCircleIcon class="w-4 h-4" />
-          {{ $t('reservations.table.stopVehicle') }}
-        </button>
-      </div>
       <div class="flex gap-2">
+        <button
+          v-if="canControlVehicle(item)"
+          @click="controlReservation = item"
+          class="flex-1 p-2 bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 rounded-lg transition-colors flex items-center justify-center gap-2"
+        >
+          <CpuChipIcon class="w-4 h-4" />
+          {{ $t('reservations.actuator.openControl') }}
+        </button>
         <BaseTooltip :text="$t('common.view')" :full-width="true">
           <button
             @click="$emit('view-vehicle', item)"
@@ -207,7 +193,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { EyeIcon, TrashIcon, PowerIcon, PauseCircleIcon } from '@heroicons/vue/24/outline';
+import { EyeIcon, TrashIcon, CpuChipIcon } from '@heroicons/vue/24/outline';
 
 import { BaseTable, BaseTooltip } from '@/components/base';
 import type { TableColumn } from '@/components/base/BaseTable.vue';
@@ -215,6 +201,7 @@ import type { ReservationLog } from '@/modules/reservations/types/reservationLog
 import { useDateFormatter } from '@/shared/composables/useDateFormatter';
 import { useToast } from '@/shared/composables/useToast';
 import { reservationLogService } from '@/modules/reservations/services/reservationLog.service';
+import VehicleControlModal from '@/modules/reservations/components/VehicleControlModal.vue';
 
 interface Props {
   reservations?: ReservationLog[];
@@ -222,19 +209,7 @@ interface Props {
 }
 
 const toast = useToast();
-const isVehicleLoading = ref(false);
-
-const toggleVehicle = async (item: ReservationLog, action: 'on' | 'off') => {
-  isVehicleLoading.value = true;
-  try {
-    await reservationLogService.toggleVehicle(item.id, action);
-    toast.success(action === 'on' ? t('reservations.toast.startSuccess') : t('reservations.toast.stopSuccess'));
-  } catch (error) {
-    toast.error(action === 'on' ? t('reservations.toast.startError') : t('reservations.toast.stopError'));
-  } finally {
-    isVehicleLoading.value = false;
-  }
-};
+const controlReservation = ref<ReservationLog | null>(null);
 
 withDefaults(defineProps<Props>(), {
   reservations: () => [],
@@ -300,16 +275,8 @@ const canCancelReservation = (item: ReservationLog): boolean => {
   return startDate > now;
 };
 
-const isActionAllowed = (item: ReservationLog): boolean => {
-  const now = new Date();
-  const startDate = parseApiDate(item.start_at);
-  const endDate = parseApiDate(item.end_at);
-  
-  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
-    return false;
-  }
-  
-  return startDate <= now && now <= endDate;
+const canControlVehicle = (item: ReservationLog): boolean => {
+  return item.status !== 'cancelled' && item.status !== 'completed';
 };
 
 const getReservationDisplayStatus = (item: ReservationLog): string => {
