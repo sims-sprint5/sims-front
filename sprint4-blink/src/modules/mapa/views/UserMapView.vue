@@ -5,11 +5,15 @@
         <div class="absolute top-3 right-3 z-[1000]">
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-inverse shadow hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            class="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 sm:px-4 text-sm font-medium text-inverse shadow hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 min-h-[40px]"
             @click="openReservationPanel"
             :aria-label="t('mapa.openReservationPanel')"
           >
-            {{ t('mapa.openReservationPanel') }}
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span class="hidden sm:inline">{{ t('mapa.openReservationPanel') }}</span>
+            <span class="sm:hidden">{{ t('reservations.buttons.reserveButton') }}</span>
           </button>
         </div>
 
@@ -45,11 +49,13 @@
             </h2>
             <button
               type="button"
-              class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary"
+              class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted hover:bg-surface-dark focus:outline-none focus:ring-2 focus:ring-primary"
               @click="closeReservationPanel"
               :aria-label="t('mapa.closeReservationPanel')"
             >
-              X
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
@@ -716,6 +722,10 @@ const filterVehiclesForUserMap = async (
       const vehicleId = Number(v.vehicle_id ?? v.id)
       if (!Number.isFinite(vehicleId)) continue
 
+      // Never show maintenance, inactive or out-of-service vehicles to normal users
+      const earlyStatus = String(v.status ?? '').trim().toLowerCase()
+      if (earlyStatus === 'maintenance' || earlyStatus === 'inactive' || earlyStatus === 'out_of_service' || earlyStatus === 'rented') continue
+
       // Consider only reservations that are active NOW (start <= now < end).
       const activeNowReservations = (v.calendar_reservations ?? []).filter((cr) => {
         const s = parseDate(cr.start_date)
@@ -1036,9 +1046,17 @@ onMounted(async () => {
         .filter((id) => Number.isFinite(id)),
     )
 
-    const visibleVehicles = isAdminRole
-      ? vehicles
-      : await filterVehiclesForUserMap(vehicles, myReservedVehicleIds, currentUserId, currentUserName)
+    let visibleVehicles: Vehicle[]
+    if (isAdminRole) {
+      visibleVehicles = vehicles
+    } else if (myReservedVehicleIds.size > 0) {
+      // User has active reservations — only show their reserved car(s)
+      visibleVehicles = vehicles
+        .filter((v) => myReservedVehicleIds.has(Number(v.vehicle_id ?? v.id)))
+        .map((v) => ({ ...v, status: 'reserved' }))
+    } else {
+      visibleVehicles = await filterVehiclesForUserMap(vehicles, myReservedVehicleIds, currentUserId, currentUserName)
+    }
     mapVehicles.value = visibleVehicles
 
     renderGeofences(geofences)

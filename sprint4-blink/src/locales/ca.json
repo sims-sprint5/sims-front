@@ -104,6 +104,22 @@
     "backDashboard": "Tornar al tauler",
     "goLogin": "Anar a iniciar sessió"
   },
+  "notFound": {
+    "title": "Pàgina no trobada",
+    "message": "La pàgina que busques no existeix o ha estat moguda.",
+    "backHome": "Tornar a l'inici",
+    "goBack": "Tornar enrere",
+    "goLogin": "Anar a iniciar sessió"
+  },
+  "serverError": {
+    "title": "Error del servidor",
+    "titleUnavailable": "Servei no disponible",
+    "titleTimeout": "Temps d'espera esgotat",
+    "message": "S'ha produït un error inesperat. Si us plau, torna-ho a intentar.",
+    "messageUnavailable": "El servei no està disponible en aquest moment. Estem treballant per resoldre-ho.",
+    "messageTimeout": "El servidor ha trigat massa a respondre. Comprova la connexió i torna-ho a intentar.",
+    "reload": "Recarregar pàgina"
+  },
   "dashboard": {
     "title": "Tauler",
     "welcome": "Benvingut/da al Tauler!",

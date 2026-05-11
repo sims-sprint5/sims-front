@@ -39,6 +39,24 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'unauthorized.title',
     },
   },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: () => import('@/shared/views/NotFoundView.vue'),
+    meta: {
+      requiresAuth: false,
+      titleKey: 'notFound.title',
+    },
+  },
+  {
+    path: '/error',
+    name: 'ServerError',
+    component: () => import('@/shared/views/ServerErrorView.vue'),
+    meta: {
+      requiresAuth: false,
+      titleKey: 'serverError.title',
+    },
+  },
   ...settingsRoutes,
   ...usersRoutes,
   ...vehiclesRoutes,
@@ -48,7 +66,12 @@ const routes: RouteRecordRaw[] = [
   ...superadminRoutes,
   {
     path: '/:pathMatch(.*)*',
-    redirect: () => (getCurrentTenant() === 'central' ? '/superadmin/login' : '/login'),
+    name: 'CatchAll',
+    component: () => import('@/shared/views/NotFoundView.vue'),
+    meta: {
+      requiresAuth: false,
+      titleKey: 'notFound.title',
+    },
   },
 ];
 
@@ -157,7 +180,11 @@ router.beforeEach((to, _from, next) => {
     ((to.meta.requiresAdmin as boolean | undefined) ? ['admin', 'superadmin'] : undefined);
 
   if (allowedRoles?.length) {
-    // At this point, unauthenticated users were already redirected above.
+    // If not authenticated, send to login (not unauthorized — user may have been logged out by token expiry)
+    if (!isAuthenticated) {
+      next({ name: isAccessingFromSuperadminHost ? 'SuperadminLogin' : 'Login' });
+      return;
+    }
     if (!user || !hasAllowedRole(user.role, allowedRoles)) {
       next({ name: 'Unauthorized' });
       return;

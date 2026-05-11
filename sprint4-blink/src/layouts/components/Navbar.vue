@@ -29,6 +29,8 @@ const maintenanceVehicles = ref(0);
 const inactiveVehicles = ref(0);
 const isAdminUser = ref(false);
 
+const isSuperAdmin = computed(() => user.value?.role === 'superadmin');
+
 const handleMenuClick = () => {
     emit('toggleMenu');
 };
@@ -44,7 +46,9 @@ const userInitials = computed(() => {
 
 async function loadVehicleStats() {
     try {
-        const isAdmin = user.value?.role === 'admin' || user.value?.role === 'superadmin';
+        if (isSuperAdmin.value) return;
+
+        const isAdmin = user.value?.role === 'admin';
         isAdminUser.value = isAdmin;
 
         if (isAdmin) {
@@ -70,23 +74,18 @@ async function loadVehicleStats() {
                 return statusKey === 'inactive';
             }).length;
         } else {
-            // Normal user: only see available + reserved vehicles
+            // Normal user: count only available/active — matches what the map shows
+            // (vehicles reserved by others are hidden on the map, so we exclude 'reserved' here)
             const response = await vehicleService.getVehiclesCalendar(1, 200);
             const vehicles = Array.isArray(response?.data) ? response.data : [];
-            
-            // Total: only available and reserved (excludes maintenance, inactive, out_of_service, rented)
-            const validStatuses = vehicles.filter((v) => {
-                const statusKey = (v.status ?? '').trim().toLowerCase();
-                return statusKey === 'available' || statusKey === 'reserved' || statusKey === 'active';
-            });
-            totalVehicles.value = validStatuses.length;
-            
-            // Available: only available or active
-            availableVehicles.value = validStatuses.filter((v) => {
+
+            const availCount = vehicles.filter((v) => {
                 const statusKey = (v.status ?? '').trim().toLowerCase();
                 return statusKey === 'available' || statusKey === 'active';
             }).length;
-            
+
+            totalVehicles.value = availCount;
+            availableVehicles.value = availCount;
             maintenanceVehicles.value = 0;
             inactiveVehicles.value = 0;
         }
@@ -130,8 +129,8 @@ onMounted(() => {
 
             <!-- User info & Statistics -->
             <div v-if="user?.name" class="flex items-center gap-2 sm:gap-6">
-                <!-- Vehicle Statistics -->
-                <div class="flex items-center gap-1 sm:gap-4 px-2 sm:px-4 py-2 bg-base rounded-lg border border-nav">
+                <!-- Vehicle Statistics (hidden for superadmin) -->
+                <div v-if="!isSuperAdmin" class="flex items-center gap-1 sm:gap-4 px-2 sm:px-4 py-2 bg-base rounded-lg border border-nav">
                     <!-- Total Vehicles -->
                     <div class="flex items-center gap-1 sm:flex-col sm:text-center">
                         <div class="text-xs font-medium text-muted">{{ t('nav.stats.totalVehicles') }}</div>

@@ -104,6 +104,22 @@
     "backDashboard": "Back to dashboard",
     "goLogin": "Go to sign in"
   },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you are looking for does not exist or has been moved.",
+    "backHome": "Back to home",
+    "goBack": "Go back",
+    "goLogin": "Go to sign in"
+  },
+  "serverError": {
+    "title": "Server error",
+    "titleUnavailable": "Service unavailable",
+    "titleTimeout": "Request timed out",
+    "message": "An unexpected error occurred. Please try again.",
+    "messageUnavailable": "The service is currently unavailable. We are working to fix it.",
+    "messageTimeout": "The server took too long to respond. Check your connection and try again.",
+    "reload": "Reload page"
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome to the Dashboard!",

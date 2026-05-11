@@ -104,6 +104,22 @@
     "backDashboard": "Volver al dashboard",
     "goLogin": "Ir a iniciar sesión"
   },
+  "notFound": {
+    "title": "Página no encontrada",
+    "message": "La página que buscas no existe o ha sido movida.",
+    "backHome": "Volver al inicio",
+    "goBack": "Volver atrás",
+    "goLogin": "Ir a iniciar sesión"
+  },
+  "serverError": {
+    "title": "Error del servidor",
+    "titleUnavailable": "Servicio no disponible",
+    "titleTimeout": "Tiempo de espera agotado",
+    "message": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.",
+    "messageUnavailable": "El servicio no está disponible en este momento. Estamos trabajando para resolverlo.",
+    "messageTimeout": "El servidor tardó demasiado en responder. Comprueba tu conexión e inténtalo de nuevo.",
+    "reload": "Recargar página"
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "¡Bienvenido/a al Dashboard!",

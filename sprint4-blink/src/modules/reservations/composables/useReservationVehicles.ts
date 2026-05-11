@@ -166,14 +166,32 @@ function toCardModel(v: Vehicle, now: Date): ReservationVehicleCardModel {
     model: v.model,
     available: state.isAvailableNow,
     nextAvailableAt: v.next_available_at ?? null,
-    calendarReservations: Array.isArray(v.calendar_reservations)
-      ? v.calendar_reservations.map((reservation) => ({
-          startDate: reservation.start_date,
-          endDate: reservation.end_date,
-          userName: reservation.user_name,
-          status: reservation.status,
-        }))
-      : [],
+    calendarReservations: (() => {
+      const slots = Array.isArray(v.calendar_reservations)
+        ? v.calendar_reservations.map((reservation) => ({
+            startDate: reservation.start_date,
+            endDate: reservation.end_date,
+            userName: reservation.user_name,
+            status: reservation.status,
+          }))
+        : [];
+      // If the vehicle is reserved via next_reservation but calendar_reservations is empty,
+      // add next_reservation as a synthetic slot so the calendar shows occupied dates.
+      if (v.next_reservation?.start_date && v.next_reservation?.end_date) {
+        const alreadyCovered = slots.some(
+          (s) => s.startDate === v.next_reservation!.start_date && s.endDate === v.next_reservation!.end_date,
+        );
+        if (!alreadyCovered) {
+          slots.push({
+            startDate: v.next_reservation.start_date,
+            endDate: v.next_reservation.end_date,
+            userName: v.next_reservation.user_name,
+            status: undefined,
+          });
+        }
+      }
+      return slots;
+    })(),
     description,
     specs: {
       seatsLabel: v.license_plate ? `License: ${v.license_plate}` : undefined,
